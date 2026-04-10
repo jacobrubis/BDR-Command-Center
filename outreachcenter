@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outreach Center — ServiceNow BDR</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+:root{
+  --ink:#032D42;--ink-nav:#01161f;--ink-mid:#043d5a;--ink-lt:#044355;
+  --wasabi:#63DF4E;--wdk:#4ab83a;
+  --white:#fff;--bg:#F4F4F4;
+  --s50:#f8fafc;--s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;
+  --s400:#94a3b8;--s500:#64748b;--s600:#475569;--s700:#334155;
+  --s800:#1e293b;--s900:#0f172a;
+  --b50:#eff6ff;--b100:#dbeafe;--b500:#3b82f6;--b600:#2563eb;
+  --g50:#f0fdf4;--g100:#dcfce7;--g500:#22c55e;--g600:#16a34a;
+  --a50:#fffbeb;--a100:#fef3c7;--a500:#f59e0b;--a600:#d97706;
+  --r50:#fff1f2;--r100:#ffe4e6;--r500:#ef4444;--r600:#dc2626;
+  --p50:#faf5ff;--p500:#a855f7;--p600:#9333ea;
+  /* Workspace tokens */
+  --sn-blue:#032D42;--sn-green:#63DF4E;--sn-teal:#044355;--sn-mint:#81B5A1;
+  --sn-lgray:#F4F4F4;--sn-mgray:#D3D3D3;
+  --surface:#fff;--border:#E2E8ED;--border2:#CBD5DC;
+  --text:#032D42;--text2:#4A6070;--text3:#8FA3B1;
+  --green-dim:rgba(99,223,78,.12);--blue-dim:rgba(3,45,66,.07);
+  --red:#D93025;--red-dim:rgba(217,48,37,.1);
+  --amber:#B45309;--amber-dim:rgba(180,83,9,.1);
+  --purple:#5B21B6;--purple-dim:rgba(91,33,182,.1);
+  --r:8px;--r2:5px;
+  --shadow:0 1px 3px rgba(3,45,66,.08),0 1px 2px rgba(3,45,66,.06);
+  --shadow2:0 4px 12px rgba(3,45,66,.1);
+  --font:'DM Sans','Calibri',sans-serif;--mono:'DM Mono',monospace;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--sn-mgray);border-radius:2px;}
+
+/* ── GLOBAL NAV ── */
+.gnav{height:44px;background:var(--ink-nav);display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:400;border-bottom:1px solid rgba(255,255,255,.06);}
+.gnav-logo{display:flex;align-items:center;padding:0 14px;height:44px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.gnav-tabs{display:flex;align-items:center;}
+.gnav-tab{display:flex;align-items:center;height:44px;padding:0 13px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.gnav-tab:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);}
+.gnav-pill-wrap{flex:1;display:flex;justify-content:center;}
+.gnav-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);cursor:pointer;}
+.gnav-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--wasabi);}
+.gnav-r{display:flex;align-items:center;gap:2px;padding:0 10px;}
+.gnav-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:rgba(255,255,255,.45);cursor:pointer;font-size:13px;border:none;background:transparent;}
+.gnav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
+.gnav-av{width:28px;height:28px;background:var(--wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ink);cursor:pointer;margin-left:4px;}
+
+/* ── DARK SIDEBAR ── */
+.sbar{position:fixed;top:44px;left:0;bottom:0;width:44px;background:#0d1f2b;border-right:1px solid rgba(255,255,255,.05);z-index:300;display:flex;flex-direction:column;overflow:hidden;transition:width .22s cubic-bezier(.4,0,.2,1);}
+.sbar:hover{width:180px;box-shadow:4px 0 20px rgba(0,0,0,.25);}
+.sbar-sec{padding:10px 0 4px;}
+.sbar-lbl{font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;white-space:nowrap;opacity:0;transition:opacity .15s .05s;}
+.sbar:hover .sbar-lbl{opacity:1;}
+.sbar-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:background .12s,color .12s;text-decoration:none;white-space:nowrap;}
+.sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.sbar-item.on{color:var(--wasabi);border-left-color:var(--wasabi);background:rgba(99,223,78,.06);font-weight:500;}
+.sbar-ic{width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;}
+.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);opacity:0;transition:opacity .1s;flex-shrink:0;}
+.sbar:hover .sb{opacity:1;}
+.sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
+.sdiv{height:1px;background:rgba(255,255,255,.06);margin:5px 10px;}
+.sbar-footer{padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);margin-top:auto;white-space:nowrap;opacity:0;transition:opacity .15s;}
+.sbar:hover .sbar-footer{opacity:1;}
+
+/* ── MAIN SHELL ── */
+.main{margin-top:44px;margin-left:44px;height:calc(100vh - 44px);display:flex;flex-direction:column;overflow:hidden;}
+
+/* ── WORKSPACE TOOLBAR (secondary actions) ── */
+.ws-toolbar{height:46px;background:var(--sn-blue);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.08);}
+.ws-ctx{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.03em;}
+.ws-title{font-size:13px;font-weight:600;color:#fff;letter-spacing:.01em;}
+.ws-sep{width:1px;height:18px;background:rgba(255,255,255,.18);}
+.ws-right{margin-left:auto;display:flex;align-items:center;gap:7px;}
+.save-ind{font-size:10px;color:rgba(255,255,255,.45);font-family:var(--mono);}
+.tb-btn{padding:5px 12px;border-radius:var(--r2);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s;}
+.tb-btn-primary{background:var(--sn-green);color:var(--sn-blue);border:none;}
+.tb-btn-primary:hover{background:#7AE966;}
+.tb-btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);}
+.tb-btn-ghost:hover{background:rgba(255,255,255,.18);}
+
+/* ── WORKSPACE BODY ── */
+.ws-body{display:flex;flex:1;overflow:hidden;}
+
+/* ── WORKSPACE LIGHT SIDEBAR ── */
+.ws-sidebar{width:216px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;}
+.sb-logo-area{padding:12px 14px 10px;border-bottom:1px solid var(--border);}
+.sb-logo-text{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);}
+.sb-sec{padding:10px 8px 6px;}
+.sb-lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);padding:0 6px 7px;}
+.nav-btn{display:flex;align-items:center;gap:9px;width:100%;padding:7px 8px;border-radius:var(--r);cursor:pointer;border:1px solid transparent;margin-bottom:1px;background:none;transition:all .12s;text-align:left;font-family:var(--font);}
+.nav-btn:hover{background:var(--sn-lgray);}
+.nav-btn.active{background:var(--green-dim);border-color:rgba(99,223,78,.35);}
+.nav-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.nav-lbl{font-size:12px;font-weight:500;color:var(--text);flex:1;}
+.nav-sub{font-size:10px;color:var(--text3);margin-top:1px;}
+.nav-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;}
+.nb-g{background:var(--green-dim);color:#1a7a00;}
+.nb-a{background:var(--amber-dim);color:var(--amber);}
+.nb-r{background:var(--red-dim);color:var(--red);}
+.nb-b{background:var(--blue-dim);color:var(--sn-blue);}
+.ae-pod-btn{display:flex;align-items:center;gap:8px;width:100%;padding:6px 8px;border-radius:var(--r);cursor:pointer;border:1px solid transparent;margin-bottom:1px;background:none;transition:all .12s;}
+.ae-pod-btn:hover{background:var(--sn-lgray);}
+.ae-pod-btn.active{background:var(--green-dim);border-color:rgba(99,223,78,.35);}
+.ae-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;border:1.5px solid transparent;}
+.ae-pod-name{font-size:11px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ae-pod-ct{font-size:10px;color:var(--text3);}
+.ae-active-dot{width:6px;height:6px;border-radius:50%;background:var(--sn-green);flex-shrink:0;}
+
+/* ── WORKSPACE CONTENT ── */
+.ws-content{flex:1;overflow-y:auto;padding:20px 24px;background:var(--sn-lgray);}
+
+/* ── WORKSPACE COMPONENTS ── */
+.pill{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.pill-g{background:rgba(26,122,0,.1);color:#1a7a00;}
+.pill-a{background:var(--amber-dim);color:var(--amber);}
+.pill-r{background:var(--red-dim);color:var(--red);}
+.pill-b{background:var(--blue-dim);color:var(--sn-blue);}
+.pill-p{background:var(--purple-dim);color:var(--purple);}
+.pill-t{background:rgba(4,67,85,.1);color:var(--sn-teal);}
+.pill-m{background:#EAEAEA;color:var(--text2);}
+.btn{padding:6px 14px;border-radius:var(--r2);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s;}
+.btn-primary{background:var(--sn-blue);color:#fff;border:none;}
+.btn-primary:hover{background:var(--sn-teal);}
+.btn-green{background:var(--sn-green);color:var(--sn-blue);border:none;}
+.btn-green:hover{background:#7AE966;}
+.btn-ghost{background:var(--surface);color:var(--text2);border:1px solid var(--border2);}
+.btn-ghost:hover{background:var(--sn-lgray);}
+.btn-sm{padding:4px 10px;font-size:11px;}
+.btn-icon{width:26px;height:26px;border-radius:var(--r2);background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:var(--text3);transition:all .12s;flex-shrink:0;}
+.btn-icon:hover{background:var(--sn-lgray);border-color:var(--border2);color:var(--text);}
+.btn-icon.del:hover{border-color:rgba(217,48,37,.3);color:var(--red);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow);}
+.card-head{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--surface);}
+.card-head-accent{border-top:3px solid var(--sn-blue);}
+.card-title{font-size:13px;font-weight:600;color:var(--text);flex:1;}
+.card-body{padding:14px 16px;}
+.tabs{display:flex;gap:2px;margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:3px;overflow-x:auto;box-shadow:var(--shadow);}
+.tab{padding:6px 12px;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text3);white-space:nowrap;transition:all .12s;border:1px solid transparent;background:none;font-family:var(--font);}
+.tab:hover{color:var(--text2);background:var(--sn-lgray);}
+.tab.active{background:var(--sn-blue);color:#fff;border-color:var(--sn-blue);}
+.page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
+.page-title{font-size:20px;font-weight:700;color:var(--sn-blue);letter-spacing:-.02em;}
+.page-sub{font-size:11px;color:var(--text3);margin-top:3px;}
+.hd-acts{display:flex;gap:8px;}
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;position:relative;overflow:hidden;box-shadow:var(--shadow);}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.kpi-b::after{background:var(--sn-blue);}
+.kpi-g::after{background:var(--sn-green);}
+.kpi-a::after{background:#D97706;}
+.kpi-r::after{background:var(--red);}
+.kpi-p::after{background:var(--purple);}
+.kpi-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);}
+.kpi-val{font-size:24px;font-weight:700;margin:4px 0 2px;letter-spacing:-.02em;color:var(--sn-blue);}
+.kpi-sub{font-size:10px;color:var(--text3);}
+.form-row{margin-bottom:12px;}
+.form-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:4px;display:block;}
+.form-input{width:100%;padding:8px 10px;background:#F4F4F4;border:1px solid var(--border2);border-radius:var(--r2);color:var(--text);font-size:13px;font-family:var(--font);}
+.form-input:focus{outline:none;border-color:var(--sn-blue);background:var(--surface);}
+.form-select{width:100%;padding:8px 10px;background:#F4F4F4;border:1px solid var(--border2);border-radius:var(--r2);color:var(--text);font-size:13px;font-family:var(--font);}
+.form-select:focus{outline:none;border-color:var(--sn-blue);}
+.form-textarea{width:100%;padding:8px 10px;background:#F4F4F4;border:1px solid var(--border2);border-radius:var(--r2);color:var(--text);font-size:12px;font-family:var(--font);resize:vertical;min-height:70px;}
+.form-textarea:focus{outline:none;border-color:var(--sn-blue);background:var(--surface);}
+.form-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.cb-row{display:flex;align-items:center;gap:7px;padding:5px 0;cursor:pointer;}
+.cb-row input{accent-color:var(--sn-blue);width:14px;height:14px;}
+.cb-row span{font-size:12px;color:var(--text2);}
+.modal-bg{position:fixed;inset:0;background:rgba(3,45,66,.5);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(3px);}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);width:500px;max-width:96vw;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow2);}
+.modal.wide{width:680px;}
+.modal-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:2;}
+.modal-title{font-size:15px;font-weight:700;color:var(--sn-blue);}
+.modal-close{width:26px;height:26px;border-radius:50%;background:#F4F4F4;border:none;color:var(--text2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.modal-body{padding:18px 20px;}
+.modal-foot{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:var(--surface);}
+.toast{position:fixed;bottom:20px;right:20px;padding:9px 15px;background:var(--sn-blue);color:#fff;border-radius:var(--r);font-size:12px;font-weight:600;z-index:1000;transform:translateY(50px);opacity:0;transition:all .22s;pointer-events:none;box-shadow:var(--shadow2);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.ok{background:var(--sn-teal);}
+.slide{position:fixed;top:44px;right:0;bottom:0;width:min(920px,calc(100vw - 260px));background:var(--surface);border-left:1px solid var(--border);z-index:500;overflow-y:auto;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 20px rgba(3,45,66,.1);}
+.slide.open{transform:translateX(0);}
+.slide-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;position:sticky;top:0;background:var(--surface);z-index:5;}
+.slide-body{padding:18px;}
+.sdot{width:9px;height:9px;border-radius:50%;background:var(--sn-mgray);cursor:pointer;transition:all .15s;flex-shrink:0;border:1.5px solid var(--border2);}
+.sdot.done{background:var(--sn-green);border-color:#45b834;box-shadow:0 0 0 2px rgba(99,223,78,.2);}
+.sdot.curr{background:#D97706;border-color:#B45309;}
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);text-align:left;padding:0 10px 9px 0;border-bottom:2px solid var(--border);}
+.tbl td{padding:9px 10px 9px 0;border-bottom:1px solid var(--border);vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:#F4F4F4;}
+.crow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.crow:last-child{border-bottom:none;}
+.cav{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.todo-item{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);}
+.todo-item:last-child{border-bottom:none;}
+.todo-chk{width:15px;height:15px;border:1.5px solid var(--border2);border-radius:3px;flex-shrink:0;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .15s;}
+.todo-chk.done{background:var(--green-dim);border-color:#45b834;color:#1a7a00;}
+.note-block{border-left:3px solid #D97706;background:rgba(180,83,9,.04);border-radius:0 var(--r2) var(--r2) 0;padding:10px 13px;margin-bottom:9px;}
+.note-block:last-child{margin-bottom:0;}
+.sec-hd{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g32{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
+.summary-output{background:var(--sn-blue);color:#fff;border-radius:var(--r);padding:20px;font-size:13px;line-height:1.8;font-family:var(--font);}
+.summary-section-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#63DF4E !important;margin-top:16px;margin-bottom:6px;border-top:1px solid rgba(99,223,78,.2);padding-top:12px;}
+.summary-loading{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.6);font-size:12px;}
+.spinner{width:16px;height:16px;border:2px solid rgba(99,223,78,.3);border-top-color:var(--sn-green);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ae-chips{display:flex;flex-wrap:wrap;gap:4px;}
+.ae-chip{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;border:1px solid var(--border2);}
+.link-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.link-card{padding:11px 13px;background:#F4F4F4;border:1px solid var(--border);border-radius:var(--r2);cursor:pointer;transition:all .15s;}
+.link-card:hover{border-color:var(--sn-blue);background:var(--surface);}
+.date-pill{display:inline-block;font-size:10px;background:#F4F4F4;border:1px solid var(--border);border-radius:4px;padding:2px 5px;font-family:var(--mono);color:var(--text2);}
+.sn-footer{text-align:center;padding:16px 0 4px;font-size:9px;color:var(--text3);}
+</style>
+</head>
+<body>
+
+<!-- ── GLOBAL NAV ── -->
+<nav class="gnav">
+  <div class="gnav-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" width="108" height="17" viewBox="0 0 132 20">
+      <path d="M32.022,6.391a5.626,5.626,0,0,0-3.61,1.3V6.523H25.119V19.35h3.425v-8.2a4.073,4.073,0,0,1,3.109-1.588,3.494,3.494,0,0,1,1.374.206V6.479a5.851,5.851,0,0,0-1.005-.088" fill="#fff" fill-rule="evenodd"/>
+      <path d="M2.16,15.436a5.369,5.369,0,0,0,3.5,1.269c.922,0,1.633-.45,1.633-1.084,0-1.931-6.191-1.243-6.191-5.369,0-2.459,2.371-3.993,4.9-3.993a7.9,7.9,0,0,1,4.32,1.3L8.72,10.04a4.3,4.3,0,0,0-2.45-.872c-.948,0-1.739.37-1.739,1.031,0,1.666,6.192,1.005,6.192,5.448,0,2.46-2.4,3.967-5.085,3.967A8.815,8.815,0,0,1,.5,17.9Z" fill="#fff" fill-rule="evenodd"/>
+      <path d="M23.657,12.817c0-3.57-2.5-6.558-6.034-6.558-3.794,0-6.218,3.12-6.218,6.691A6.4,6.4,0,0,0,18.1,19.614a6.919,6.919,0,0,0,5.243-2.3l-1.95-1.957a4.515,4.515,0,0,1-3.214,1.481A3.36,3.36,0,0,1,14.725,13.8h8.853A5.735,5.735,0,0,0,23.657,12.817Zm-8.774-1.533a2.775,2.775,0,0,1,2.74-2.248,2.552,2.552,0,0,1,2.53,2.248Z" fill="#fff" fill-rule="evenodd"/>
+      <polygon points="41.19 14.351 44.694 6.523 48.252 6.523 42.376 19.35 40.005 19.35 34.129 6.523 37.686 6.523 41.19 14.351" fill="#fff" fill-rule="evenodd"/>
+      <path d="M51.128.5A2.2,2.2,0,1,1,48.888,2.7,2.2,2.2,0,0,1,51.128.5" fill="#fff" fill-rule="evenodd"/>
+      <rect x="49.415" y="6.523" width="3.425" height="12.827" fill="#fff"/>
+      <path d="M67,16.731a6.766,6.766,0,0,1-5.8,2.883,6.68,6.68,0,1,1,.026-13.355,6.808,6.808,0,0,1,5.375,2.565l-2.424,2.142a3.7,3.7,0,0,0-2.951-1.534A3.433,3.433,0,0,0,57.78,12.95a3.383,3.383,0,0,0,3.531,3.49,3.741,3.741,0,0,0,3.056-1.692Z" fill="#fff" fill-rule="evenodd"/>
+      <path d="M79.442,17.313a6.918,6.918,0,0,1-5.243,2.3,6.4,6.4,0,0,1-6.692-6.664c0-3.571,2.424-6.691,6.218-6.691,3.53,0,6.033,2.988,6.033,6.558a5.635,5.635,0,0,1-.079.979H70.826a3.36,3.36,0,0,0,3.452,3.041,4.52,4.52,0,0,0,3.215-1.481Zm-3.188-6.029a2.551,2.551,0,0,0-2.529-2.248,2.774,2.774,0,0,0-2.74,2.248Z" fill="#fff" fill-rule="evenodd"/>
+      <path d="M81.12,19.35V6.523h3.293V7.554a5.625,5.625,0,0,1,3.609-1.295,5.747,5.747,0,0,1,4.427,2.063,6.482,6.482,0,0,1,1.317,4.5V19.35H90.341v-6.8a3.11,3.11,0,0,0-.764-2.407,2.69,2.69,0,0,0-1.923-.714,4.076,4.076,0,0,0-3.109,1.587V19.35Z" fill="#fff" fill-rule="evenodd"/>
+      <path d="M102.586,6.259A7.5,7.5,0,0,0,97.419,19.21a1.481,1.481,0,0,0,1.926.1,5.355,5.355,0,0,1,6.394,0,1.485,1.485,0,0,0,1.937-.113,7.5,7.5,0,0,0-5.09-12.94M102.542,17.5a3.637,3.637,0,0,1-3.734-3.733,3.734,3.734,0,1,1,7.468,0,3.637,3.637,0,0,1-3.734,3.733" fill="#62d84e" fill-rule="evenodd"/>
+      <polygon points="116.788 19.35 114.237 19.35 109.15 6.523 112.57 6.523 115.359 13.853 118.094 6.523 120.952 6.523 123.662 13.853 126.475 6.523 129.896 6.523 124.809 19.35 122.258 19.35 119.523 12.046 116.788 19.35" fill="#fff" fill-rule="evenodd"/>
+    </svg>
+  </div>
+  <div class="gnav-tabs">
+    <span class="gnav-tab">Favorites</span>
+    <span class="gnav-tab">History</span>
+    <span class="gnav-tab">Workspaces</span>
+    <span class="gnav-tab" style="padding:0 10px">⋮</span>
+  </div>
+  <div class="gnav-pill-wrap">
+    <div class="gnav-pill"><div class="gnav-pill-dot"></div>Sales CRM BDR Landing Page ⌄</div>
+  </div>
+  <div class="gnav-r">
+    <button class="gnav-btn" onclick="window.location='index.html'" title="Command Center">⌂</button>
+    <button class="gnav-btn">＋</button>
+    <button class="gnav-btn">🔔</button>
+    <div class="gnav-av">JR</div>
+  </div>
+</nav>
+
+<!-- ── DARK SIDEBAR ── -->
+<aside class="sbar">
+  <div class="sbar-sec">
+    <span class="sbar-lbl">My Work</span>
+    <a href="index.html"           class="sbar-item"  title="Command Center"><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="outreach-center.html" class="sbar-item on" title="Outreach Center"><span class="sbar-ic">📋</span>Outreach Center</a>
+    <a href="buying-groups.html"   class="sbar-item"  title="Buying Groups"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"           class="sbar-item"  title="Leads"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#"                    class="sbar-item"  title="Tasks"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Customers</span>
+    <a href="#"                    class="sbar-item"  title="Accounts"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="#"                    class="sbar-item"  title="Contacts"><span class="sbar-ic">👥</span>Contacts</a>
+    <a href="opportunities.html"   class="sbar-item"  title="Opportunities"><span class="sbar-ic">💼</span>Opportunities</a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Marketing</span>
+    <a href="#"                    class="sbar-item"  title="Campaigns"><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="#"                    class="sbar-item"  title="Reports"><span class="sbar-ic">📊</span>Reports</a>
+  </div>
+  <div class="sbar-footer">ServiceNow Confidential</div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- Workspace toolbar -->
+  <div class="ws-toolbar">
+    <span class="ws-title">Outreach Center</span>
+    <div class="ws-sep"></div>
+    <span class="ws-ctx">GBA Commercial Illinois &amp; Midwest · Q2 FY26</span>
+    <div class="ws-right">
+      <span class="save-ind" id="save-ind">● saved</span>
+      <button class="tb-btn tb-btn-ghost" onclick="exportData()">⬆ Export</button>
+      <label class="tb-btn tb-btn-ghost" style="cursor:pointer"><input type="file" accept=".json" style="display:none" onchange="importData(this)">⬇ Import</label>
+      <button class="tb-btn tb-btn-ghost" onclick="resetData()" style="color:rgba(255,160,160,.8)">↺ Reset</button>
+      <button class="tb-btn tb-btn-ghost" onclick="openQuickAdd()">+ Quick Add</button>
+      <button class="tb-btn tb-btn-primary" onclick="nav('summary',null)">📋 Generate Summary</button>
+    </div>
+  </div>
+
+  <!-- Workspace body -->
+  <div class="ws-body">
+
+    <!-- Light workspace sidebar -->
+    <aside class="ws-sidebar">
+      <div class="sb-logo-area">
+        <div class="sb-logo-text">Pod Workspace</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">Jacob Rubis · BDR</div>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-lbl">Workspace</div>
+        <button class="nav-btn active" data-nav="overview" onclick="nav('overview',this)">
+          <div class="nav-icon" style="background:var(--blue-dim)">📊</div>
+          <span class="nav-lbl">Overview</span>
+        </button>
+        <button class="nav-btn" data-nav="todos" onclick="nav('todos',this)">
+          <div class="nav-icon" style="background:var(--red-dim)">✅</div>
+          <span class="nav-lbl">To Do</span>
+          <span class="nav-badge nb-r" id="nb-t">0</span>
+        </button>
+        <button class="nav-btn" data-nav="activity" onclick="nav('activity',this)">
+          <div class="nav-icon" style="background:rgba(3,45,66,.08)">📝</div>
+          <span class="nav-lbl">Activity Log</span>
+        </button>
+        <button class="nav-btn" data-nav="campaigns" onclick="nav('campaigns',this)">
+          <div class="nav-icon" style="background:var(--blue-dim)">📣</div>
+          <span class="nav-lbl">Campaigns</span>
+          <span class="nav-badge nb-b" id="nb-c">0</span>
+        </button>
+        <button class="nav-btn" data-nav="accounts" onclick="nav('accounts',this)">
+          <div class="nav-icon" style="background:var(--green-dim)">🏢</div>
+          <span class="nav-lbl">Accounts</span>
+          <span class="nav-badge nb-g" id="nb-a">0</span>
+        </button>
+        <button class="nav-btn" data-nav="notes" onclick="nav('notes',this)">
+          <div class="nav-icon" style="background:var(--amber-dim)">📌</div>
+          <span class="nav-lbl">Important Notes</span>
+        </button>
+        <button class="nav-btn" data-nav="links" onclick="nav('links',this)">
+          <div class="nav-icon" style="background:var(--blue-dim)">🔗</div>
+          <span class="nav-lbl">Quick Links</span>
+        </button>
+        <button class="nav-btn" data-nav="events" onclick="nav('events',this)">
+          <div class="nav-icon" style="background:rgba(91,33,182,.08)">🗓</div>
+          <span class="nav-lbl">Upcoming Events</span>
+        </button>
+        <button class="nav-btn" data-nav="recap" onclick="nav('recap',this)">
+          <div class="nav-icon" style="background:rgba(180,83,9,.08)">📊</div>
+          <span class="nav-lbl">Recap</span>
+        </button>
+        <button class="nav-btn" data-nav="summary" onclick="nav('summary',this)" style="border-top:1px solid var(--border);margin-top:6px;padding-top:10px">
+          <div class="nav-icon" style="background:var(--green-dim)">📋</div>
+          <div style="flex:1;text-align:left">
+            <div class="nav-lbl">Biweekly Summary</div>
+            <div class="nav-sub">Generate for 1:1</div>
+          </div>
+        </button>
+      </div>
+      <div class="sb-sec" style="flex:1">
+        <div class="sb-lbl">AE Pods</div>
+        <div id="ae-pods-sb"></div>
+      </div>
+      <div class="sb-sec">
+        <button class="nav-btn" data-nav="oneons" onclick="nav('oneons',this)">
+          <div class="nav-icon" style="background:var(--purple-dim)">🗓</div>
+          <span class="nav-lbl">1:1s</span>
+        </button>
+        <button class="nav-btn" data-nav="wins" onclick="nav('wins',this)">
+          <div class="nav-icon" style="background:rgba(26,122,0,.1)">🏆</div>
+          <span class="nav-lbl">Wins</span>
+          <span class="nav-badge nb-g" id="nb-wins"></span>
+        </button>
+      </div>
+      <div style="padding:10px 12px;border-top:1px solid var(--border)">
+        <div style="font-size:9px;color:var(--text3)">ServiceNow Confidential</div>
+      </div>
+    </aside>
+
+    <!-- Dynamic content -->
+    <main class="ws-content" id="ws-main"></main>
+
+  </div>
+</div>
+
+<!-- Slide panel -->
+<div class="slide" id="slide">
+  <div class="slide-hd">
+    <div style="flex:1">
+      <div id="slide-title" style="font-size:15px;font-weight:700;color:var(--sn-blue)"></div>
+      <div id="slide-sub" style="font-size:10px;color:var(--text3);margin-top:2px"></div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="closeSlide()">Close ✕</button>
+  </div>
+  <div class="slide-body" id="slide-body"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="modal-root"></div>
+
+<script>
+// ── localStorage SHIM (replaces Claude's window.storage API) ──────────────
+window.storage = {
+  get: async function(key) {
+    var val = localStorage.getItem(key);
+    if (val === null) throw new Error('Key not found: ' + key);
+    return { key: key, value: val };
+  },
+  set: async function(key, value) {
+    localStorage.setItem(key, value);
+    return { key: key, value: value };
+  },
+  delete: async function(key) {
+    localStorage.removeItem(key);
+    return { key: key, deleted: true };
+  }
+};
+
+// ── SEED DATA (pre-loads your real data on first visit) ───────────────────
+var SEED_JSON = {"_v":1,"_exported":"2026-04-10","_app":"BDR_AE_Workspace","campaigns":[{"id":"mpa2f2hg","name":"Mikaela - Veza News - Installs","product":"Veza","totalSteps":5,"status":"Active","accountMotion":"customer","aes":["mikaela"],"acctIds":["2nxw6tzx","5x5bnced","cd0955ng","fgcg5hg2","eja0v7os"],"buyingGroups":[],"jobLevels":[],"notes":"","sourceSheetUrl":"https://servicenow-my.sharepoint.com/personal/jacob_rubis_servicenow_com/Documents/Mikaela-Veza.xlsx","contactCount":30,"stepCounts":{},"sentLog":{"1":{"date":"2026-04-06"}},"completedAt":"","createdAt":"2026-04-06","steps":[{"type":"email","emailNum":1},{"type":"call","notes":"","sendDate":"2026-04-07"},{"type":"email","emailNum":2},{"type":"call","notes":"","sendDate":"2026-04-09"},{"type":"email","emailNum":3}],"emails":{"1":{"subject":"identity security / veza news","body":"Hi [Name],\n\nI am part of the ServiceNow Account team supporting [COMPANY]. As a strategic customer of ours, I want to make you aware of the recent developments to our Security and Risk portfolio.\n\nServiceNow closed the acquisition of Veza on March 2nd. Veza gives security and risk teams real-time visibility into who and what has access to critical systems, including AI agents, and routes remediation directly through ServiceNow workflows. For organizations already on the platform, it closes a gap that usually requires a separate point solution today.\n\nOpen to a 30-minute conversation to learn what it can do?","sendDate":"2026-03-31"},"2":{"subject":"non-human access / AI agent risk","body":"Hi [Name],\n\nMost identity programs were built around human accounts. Joiner, mover, leaver. Periodic access reviews. That model was built for a world where users were people.\n\nAI agents don't follow that pattern. They accumulate permissions quickly, don't trigger the same governance workflows, and are harder to audit after the fact.\n\nIf that's a gap you're thinking about at [Company], we'd be happy to connect. Open to it?","sendDate":"2026-04-09"},"3":{"subject":"last check in","body":"Hi [Name],\n\nWanted to send one last email in case it got buried.\n\nWe've been having a specific conversation with security leaders around our acquisition of Veza and what native identity governance in ServiceNow means for teams managing that through a separate tool. Happy to carve out 30 minutes if it's relevant.\n\nLet me know if you're open to learning more.","sendDate":"2026-04-14"}}},{"id":"bqf3a7mv","name":"Seamus - ITAM - Installs","product":"ITAM","totalSteps":4,"status":"Active","accountMotion":"both","aes":["seamus"],"acctIds":["6bfny2y1","wnxsv4in","9d7qbdvr"],"buyingGroups":["IT"],"jobLevels":[],"notes":"","sourceSheetUrl":"MS Loop","contactCount":81,"stepCounts":{},"sentLog":{"1":{"date":"2026-04-06"},"2":{"date":"2026-04-06"},"3":{"date":"2026-04-07"}},"completedAt":"","createdAt":"2026-04-06","steps":[{"type":"email","emailNum":1},{"type":"email","emailNum":2},{"type":"email","emailNum":3},{"type":"email","emailNum":4}],"emails":{"1":{"subject":"","body":"","sendDate":"2026-03-25"},"2":{"subject":"","body":"","sendDate":"2026-03-31"},"3":{"subject":"","body":"","sendDate":"2026-04-06"},"4":{"subject":"","body":"","sendDate":"2026-04-09"}}},{"id":"sm99s88w","name":"Platform Sequence - NNL","product":"Platform","totalSteps":5,"status":"Active","accountMotion":"both","aes":["tony","jeff","riley","katie","brian","seamus","mikaela"],"acctIds":[],"buyingGroups":["IT"],"jobLevels":["Manager & Below"],"notes":"","sourceSheetUrl":"Microsoft Loop","contactCount":369,"stepCounts":{},"sentLog":{"1":{"date":"2026-04-06"},"2":{"date":"2026-04-06"},"3":{"date":"2026-04-08"}},"completedAt":"","createdAt":"2026-04-06","steps":[{"type":"email","emailNum":1},{"type":"email","emailNum":2},{"type":"email","emailNum":3},{"type":"email","emailNum":4},{"type":"email","emailNum":5}],"emails":{"1":{"subject":"","body":"","sendDate":"2026-03-27"},"2":{"subject":"","body":"","sendDate":"2026-03-31"},"3":{"subject":"","body":"","sendDate":"2026-04-08"},"4":{"subject":"","body":"","sendDate":"2026-04-13"},"5":{"subject":"","body":"","sendDate":"2026-04-16"}}},{"id":"cdzmrkf8","name":"AICT/EW/AW","product":"AI Control Tower, EmployeeWorks, Autonomous Workforce","totalSteps":5,"status":"Active","accountMotion":"both","aes":["tony","jeff","riley","katie","brian","seamus","mikaela"],"acctIds":[],"buyingGroups":[],"jobLevels":[],"notes":"","sourceSheetUrl":"Microsoft Loop","contactCount":182,"stepCounts":{},"sentLog":{"1":{"date":"2026-04-06"},"2":{"date":"2026-04-06"},"3":{"date":"2026-04-06"},"4":{"date":"2026-04-09"}},"completedAt":"","createdAt":"2026-04-06","steps":[{"type":"email","emailNum":1},{"type":"email","emailNum":2},{"type":"email","emailNum":3},{"type":"email","emailNum":4},{"type":"email","emailNum":5}],"emails":{"1":{"subject":"","body":"","sendDate":"2026-03-25"},"2":{"subject":"","body":"","sendDate":"2026-03-30"},"3":{"subject":"","body":"","sendDate":"2026-04-02"},"4":{"subject":"","body":"","sendDate":"2026-04-08"},"5":{"subject":"","body":"","sendDate":"2026-04-14"}}},{"id":"ajuz1eql","name":"OT","product":"Operational Technology","totalSteps":5,"status":"Active","accountMotion":"both","aes":["jeff","riley","brian","seamus"],"acctIds":["j8apzfsc"],"buyingGroups":["IT"],"jobLevels":[],"notes":"","sourceSheetUrl":"","contactCount":18,"stepCounts":{},"sentLog":{},"completedAt":"","createdAt":"2026-04-06","steps":[{"type":"email","emailNum":1},{"type":"email","emailNum":2},{"type":"email","emailNum":3},{"type":"email","emailNum":4},{"type":"email","emailNum":5}],"emails":{"1":{"subject":"when a line goes down","body":"Hi [First Name],\nWhen something fails on the floor, how much of your response time is actually spent diagnosing rather than fixing?\nMost reliability teams I talk to have the tools to record what happened. Fewer have a fast way to see what assets were involved, what their current state was, and what else in the environment might be connected to the same failure.\nIs that something your team runs into?","sendDate":"2026-04-08"},"2":{"subject":"still on spreadsheets","body":"Hi [First Name],\nYour CMMS tracks work orders. Your ERP tracks asset value. Neither one tells you which devices on your network missed a maintenance window last month, or flags a vulnerability that came in when a contractor connected a laptop to your floor.\nThat gap is where most unplanned downtime starts.\nIs that a problem your team has solved, or still working around?","sendDate":"2026-04-13"},"3":{"subject":"one view, every asset","body":"Hi [First Name],\nThe way most reliability teams describe the ideal state: one accurate view of every OT asset, tied to the process it supports, with maintenance and vulnerability response running off that same data.\nThat is what ServiceNow OT Management does.\nWorth 20 minutes to see if it fits what you're dealing with?","sendDate":"2026-04-16"},"4":{"subject":"cost of one hour","body":"Hi [First Name],\n92% of unplanned downtime events last more than an hour and cost up to $700,000 each.\nThe part that stands out: the time is not lost fixing the problem. It is lost finding it.\nIs your team already building a case internally to get ahead of this?","sendDate":"2026-04-21"},"5":{"subject":"right time or not","body":"Hi [First Name],\nLast note from me.\nIs OT visibility or unplanned downtime something your team is actively working on, or is the timing just not right?\nEither way, happy to come back when it makes more sense.","sendDate":"2026-04-24"}}}],"accounts":[{"id":"ofdp16v2","name":"Sub-Zero Group Inc","acctNum":"ACCT0005141","type":"customer","aeId":"tony","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"aprq8ehs","name":"Badger Meter, Inc.","acctNum":"ACCT0014611","type":"newlogo","aeId":"tony","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"yqvzdlo6","name":"Charter Manufacturing Co Inc","acctNum":"ACCT0030341","type":"newlogo","aeId":"tony","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"1vx2cfq8","name":"Cielo Talent","acctNum":"ACCT0095526","type":"newlogo","aeId":"tony","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"3k5g9atp","name":"Batteries Plus LLC","acctNum":"ACCT0017716","type":"newlogo","aeId":"tony","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"ywqbspyb","name":"Green Bay Packaging Inc","acctNum":"ACCT0003970","type":"newlogo","aeId":"tony","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"gy1zixre","name":"Chicago Mercantile Exchange Inc","acctNum":"ACCT0001297","type":"customer","aeId":"jeff","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"9j3l95ni","name":"Videojet Technologies Inc","acctNum":"ACCT0014587","type":"customer","aeId":"jeff","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"xz7gxh7y","name":"Quinnox Inc.","acctNum":"ACCT0057163","type":"newlogo","aeId":"jeff","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"j8apzfsc","name":"Portillos Restaurant Group, Inc.","acctNum":"ACCT0057037","type":"newlogo","aeId":"jeff","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"1bs4vglc","name":"Promega Corp","acctNum":"ACCT0006557","type":"newlogo","aeId":"jeff","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"df0mxwt3","name":"Kirkland & Ellis LLP","acctNum":"ACCT0009891","type":"customer","aeId":"riley","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"ngqh7bi7","name":"GATX Corporation","acctNum":"ACCT0001328","type":"customer","aeId":"riley","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"0yrt9l8u","name":"Echo Global Logistics, Inc.","acctNum":"ACCT0014681","type":"customer","aeId":"riley","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"bboew7j9","name":"Federal Home Loan Bank Of Chicago","acctNum":"ACCT0008964","type":"customer","aeId":"riley","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"4vljkn5j","name":"Parts Town LLC","acctNum":"ACCT0075638","type":"newlogo","aeId":"riley","status":"Do Not Contact","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"ki4u43r9","name":"Amsted Industries Inc","acctNum":"ACCT0001265","type":"newlogo","aeId":"riley","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"thd98bx7","name":"Hollister Incorporated","acctNum":"ACCT0010725","type":"customer","aeId":"katie","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"4hd7g07u","name":"Madison Air","acctNum":"ACCT0257133","type":"newlogo","aeId":"katie","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"0cm1epd6","name":"Circana","acctNum":"ACCT0017466","type":"newlogo","aeId":"katie","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"5iupgwhh","name":"BlueCross BlueShield Association","acctNum":"ACCT0008067","type":"customer","aeId":"brian","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"gaf1fzt1","name":"Crash Champions","acctNum":"ACCT0169536","type":"customer","aeId":"brian","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"0xcco5d0","name":"AIT Worldwide Logistics","acctNum":"ACCT0020235","type":"customer","aeId":"brian","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"qh274ap6","name":"Advanced Technology Services, Inc.","acctNum":"ACCT0000691","type":"newlogo","aeId":"brian","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"wrvk3vbm","name":"Gerber Collision And Glass","acctNum":"ACCT0069648","type":"newlogo","aeId":"brian","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"76d5aooi","name":"Eversana","acctNum":"ACCT0133138","type":"customer","aeId":"seamus","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"6bfny2y1","name":"DMI Inc","acctNum":"ACCT0024135","type":"customer","aeId":"seamus","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"9d7qbdvr","name":"TTX Company","acctNum":"ACCT0010571","type":"customer","aeId":"seamus","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"wnxsv4in","name":"Stepan Co","acctNum":"ACCT0001401","type":"customer","aeId":"seamus","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"30gi37ni","name":"Hub Group Inc","acctNum":"ACCT0001337","type":"newlogo","aeId":"seamus","status":"Do Not Contact","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"7wr3rmhj","name":"Atkore International","acctNum":"ACCT0053058","type":"newlogo","aeId":"seamus","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"21j564pw","name":"CCC Intelligent Solutions","acctNum":"ACCT0226120","type":"customer","aeId":"mikaela","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"2nxw6tzx","name":"Consilio LLC","acctNum":"ACCT0091709","type":"customer","aeId":"mikaela","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"5x5bnced","name":"Invenergy LLC","acctNum":"ACCT0085692","type":"customer","aeId":"mikaela","status":"Do Not Contact","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"cd0955ng","name":"Netrix LLC","acctNum":"ACCT0220203","type":"customer","aeId":"mikaela","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"fgcg5hg2","name":"SDI Presence LLC","acctNum":"ACCT0140234","type":"customer","aeId":"mikaela","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"eja0v7os","name":"ThoughtWorks Inc","acctNum":"ACCT0018101","type":"customer","aeId":"mikaela","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":false},{"id":"ua5kpwht","name":"S&S Activewear","acctNum":"ACCT0130492","type":"newlogo","aeId":"mikaela","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true},{"id":"slk2wcfo","name":"Lyra Technology Group","acctNum":"ACCT0216135","type":"newlogo","aeId":"mikaela","status":"\u2014","notes":"","acctPlanUrl":"","renewalDate":"","bigBet":true}],"todos":{"tony":[{"id":"881lo8ef","label":"Go after BadgerMeter based on the account plan","due":"","priority":"Med","account":"","done":false,"_from1on1":true},{"id":"wdi73x4q","label":"Send Email 5 - AICT/EW/AW","due":"2026-04-10","priority":"Med","account":"AICT/EW/AW","done":false,"_campId":"cdzmrkf8","_step":5,"_isCampEmail":true,"_aeId":"tony","_aeName":"Tony, Jeff, Riley, Katie, Brian, Seamus, Mikaela","_allAeIds":["tony","jeff","riley","katie","brian","seamus","mikaela"]}],"jeff":[{"id":"odwpvzcn","label":"Send Email 1 - OT","due":"2026-04-08","priority":"Med","account":"OT","done":false,"_campId":"ajuz1eql","_step":1,"_isCampEmail":true,"_aeId":"jeff","_aeName":"Jeff, Riley, Brian, Seamus","_allAeIds":["jeff","riley","brian","seamus"]}],"riley":[],"katie":[],"brian":[{"id":"wb5hp6rd","label":"MAT Holdings Account Plan","due":"2026-04-07","priority":"Med","account":"","done":true,"_aeId":"brian","_aeName":"Brian"}],"seamus":[{"id":"5cid8zml","label":"Hub Group - IT Contacts and Messaging","due":"","priority":"Med","account":"","done":false,"_from1on1":true},{"id":"t1dy9bgl","label":"Send Email 4 - Seamus ITAM Installs","due":"2026-04-09","priority":"Med","account":"Seamus - ITAM - Installs","done":false,"_campId":"bqf3a7mv","_step":4,"_isCampEmail":true,"_aeId":"seamus","_aeName":"Seamus","_allAeIds":["seamus"]}],"mikaela":[{"id":"h9wkq647","label":"Send Email 2 - Mikaela Veza News","due":"2026-04-08","priority":"Med","account":"Mikaela - Veza News - Installs","done":false,"_campId":"mpa2f2hg","_step":3,"_isCampEmail":true,"_aeId":"mikaela","_aeName":"Mikaela","_allAeIds":["mikaela"]}],"general":[{"id":"j9bjc1uh","label":"Manufacturing OT Messaging","due":"","priority":"Med","account":"","done":false,"_from1on1":true,"_aeId":"general","_aeName":"General","accounts":[]}]},"notes":{"tony":[],"jeff":[],"riley":[{"id":"k964u0be","date":"2026-04-08","author":"Jacob","text":"No outreach to Parts Town"}],"katie":[],"brian":[{"id":"lzlpnae7","date":"2026-04-07","author":"Jacob","text":"Addison Group - Haven't Had CIO for a Year - Need one for a convo"},{"id":"39pqrwjz","date":"2026-04-07","author":"Jacob","text":"Breakthru Bev - Hold Off on Prospecting - Stage 6"}],"seamus":[],"mikaela":[]},"oneons":{"tony":[{"id":"r2s7gn0r","date":"2026-04-07","body":"Tony talked with the Batteries Plus CISO, he denied going to K26, he has a good relationship with the CISO\n\nTony got a deal reg from CDW for Batteries Plus for Contact Center AI Project","actionItems":["Go after BadgerMeter based on the account plan","Account Plan Green Bay Packaging (prospect)","Batteries Plus Account Plan (prospect)"],"pinnedNote":""}],"jeff":[],"riley":[],"katie":[],"brian":[{"id":"4rqj10qw","date":"2026-04-07","body":"Mat Holdings\nAdvanced Technology Services\nBoyd Group/Gerber\n\nEmployeeWorks - Moveworks, Separate IT and HR\n\nAICT, MW, and AW","actionItems":["TeamLinks - Put Brian in a chat","Hit up Wade, he had an excel document going for TL"],"pinnedNote":"Addison Group - Haven't Had CIO for a Year\n\nBreakthru Bev - Hold Off on Prospecting - Stage 6"}],"seamus":[{"id":"xw86ai1w","date":"2026-04-06","body":"On Site with Stepan April 7th\n\nAnything works for New Logos, let's just try and get anything on the books","actionItems":["Manufacturing OT Messaging","Manufacturing OT List Build","Hub Group - IT Contacts and Messaging"],"pinnedNote":""}],"mikaela":[]},"links":{"tony":[],"jeff":[],"riley":[],"katie":[],"brian":[],"seamus":[],"mikaela":[]},"events":[],"wins":[],"activity":[{"id":"8m8u0iiy","date":"2026-04-07","createdAt":"2026-04-07T22:15:28.164Z","type":"LinkedIn Touches","note":"Connected with note, pointing back to email","acctId":"","aeId":"mikaela","campId":"mpa2f2hg"}]};
+
+// ── CONSTANTS ─────────────────────────────────────────────────────────────
+const AES=[
+  {id:'tony',   name:'Tony Riebel',      init:'Tony',   color:'#032D42',bg:'rgba(3,45,66,0.1)'},
+  {id:'jeff',   name:'Jeff Wuestenfeld', init:'Jeff',   color:'#044355',bg:'rgba(4,67,85,0.1)'},
+  {id:'riley',  name:'Riley Scott',      init:'Riley',  color:'#B45309',bg:'rgba(180,83,9,0.1)'},
+  {id:'katie',  name:'Katie Schneider',  init:'Katie',  color:'#5B21B6',bg:'rgba(91,33,182,0.1)'},
+  {id:'brian',  name:'Brian Disher',     init:'Brian',  color:'#D93025',bg:'rgba(217,48,37,0.1)'},
+  {id:'seamus', name:'Seamus Donovan',   init:'Seamus', color:'#1a7a00',bg:'rgba(26,122,0,0.1)'},
+  {id:'mikaela',name:'Mikaela Youpa',    init:'Mikaela',color:'#0369A1',bg:'rgba(3,105,161,0.1)'},
+];
+const AV_STYLES=[
+  {bg:'rgba(3,45,66,0.1)',c:'#032D42'},{bg:'rgba(4,67,85,0.1)',c:'#044355'},
+  {bg:'rgba(180,83,9,0.1)',c:'#B45309'},{bg:'rgba(91,33,182,0.1)',c:'#5B21B6'},
+  {bg:'rgba(217,48,37,0.1)',c:'#D93025'},{bg:'rgba(26,122,0,0.1)',c:'#1a7a00'},
+  {bg:'rgba(3,105,161,0.1)',c:'#0369A1'},
+];
+const CAMP_STATUSES=['Active','Complete'];
+const ACCT_STATUSES=['—','Greenlight','Sensitive','Do Not Contact'];
+const PRIORITIES=['High','Med','Low'];
+const LINK_TYPES=['Account Plan','Research','Exec Brief','Brief','OneNote','Playbook','Tool','Other'];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let S={campaigns:[],accounts:[],todos:{},notes:{},oneons:{},links:{},events:[],wins:[],activity:[]};
+let currentNav='overview';
+let filterAE='all';
+let saveTimer=null;
+
+// ── STORAGE ───────────────────────────────────────────────────────────────
+async function loadAll(){
+  const keys=[['camps','campaigns'],['accounts','accounts'],['todos','todos'],['notes','notes'],['oneons','oneons'],['links','links'],['events','events'],['wins','wins'],['activity','activity']];
+  for(const [k,prop] of keys){
+    try{const r=await window.storage.get('bdr2_'+k);if(r)S[prop]=JSON.parse(r.value);}
+    catch(e){}
+  }
+  try{
+    const er=await window.storage.get('bdr2_emails');
+    if(er){const emailStore=JSON.parse(er.value);S.campaigns.forEach(c=>{if(emailStore[c.id])c.emails=emailStore[c.id];});}
+  }catch(e){}
+  S.campaigns.forEach(c=>{delete c.contacts;if(!c.emails)c.emails={};if(!c.stepCounts)c.stepCounts={};});
+  if(!S.events)S.events=[];
+  if(!S.wins)S.wins=[];
+  if(!S.activity)S.activity=[];
+  ensureAEData();
+}
+
+const _dirty=new Set();
+function markDirty(...keys){keys.forEach(k=>_dirty.add(k));}
+
+async function saveAll(){
+  if(!_dirty.size){setSaveInd('● saved');return;}
+  setSaveInd('saving…');
+  const campsLite=S.campaigns.map(({emails:_e,...rest})=>rest);
+  const emailStore={};
+  S.campaigns.forEach(c=>{if(c.emails&&Object.keys(c.emails).length)emailStore[c.id]=c.emails;});
+  const allPairs={
+    bdr2_camps:campsLite,bdr2_emails:emailStore,bdr2_accounts:S.accounts,
+    bdr2_todos:S.todos,bdr2_notes:S.notes,bdr2_oneons:S.oneons,
+    bdr2_links:S.links,bdr2_events:S.events||[],bdr2_wins:S.wins||[],bdr2_activity:S.activity||[],
+  };
+  const toSave=[..._dirty].filter(k=>allPairs[k]);
+  _dirty.clear();
+  let errors=0;
+  for(const key of toSave){
+    try{await window.storage.set(key,JSON.stringify(allPairs[key]));}
+    catch(e){errors++;_dirty.add(key);}
+  }
+  setSaveInd(errors===0?'● saved':'⚠ save error');
+  if(errors)setTimeout(saveAll,3000);
+}
+
+function scheduleSave(delay){markDirty('bdr2_camps','bdr2_emails','bdr2_todos','bdr2_accounts','bdr2_notes','bdr2_oneons','bdr2_links','bdr2_events');clearTimeout(saveTimer);setSaveInd('· unsaved');saveTimer=setTimeout(saveAll,delay||2000);}
+function scheduleSaveNow(){markDirty('bdr2_camps','bdr2_emails','bdr2_todos','bdr2_accounts','bdr2_notes','bdr2_oneons','bdr2_links','bdr2_events');clearTimeout(saveTimer);setSaveInd('· unsaved');saveTimer=setTimeout(saveAll,300);}
+function _saveHelper(keys,delay){if(!window._undoSnap)window._undoSnap=snapshotState();markDirty(...keys);clearTimeout(saveTimer);setSaveInd('· unsaved');saveTimer=setTimeout(saveAll,delay||1500);}
+function saveCamps(){_saveHelper(['bdr2_camps','bdr2_emails']);}
+function saveAccounts(){_saveHelper(['bdr2_accounts']);}
+function saveTodos(){_saveHelper(['bdr2_todos'],2500);}
+function saveActivity(){_saveHelper(['bdr2_activity']);}
+function saveNotes(){_saveHelper(['bdr2_notes']);}
+function saveOneons(){_saveHelper(['bdr2_oneons']);}
+function saveLinks(){_saveHelper(['bdr2_links']);}
+function saveEvents(){_saveHelper(['bdr2_events']);}
+function saveWins(){_saveHelper(['bdr2_wins']);}
+function setSaveInd(t){const el=document.getElementById('save-ind');if(el)el.textContent=t;}
+function ensureAEData(){AES.forEach(ae=>{if(!S.todos[ae.id])S.todos[ae.id]=[];if(!S.notes[ae.id])S.notes[ae.id]=[];if(!S.oneons[ae.id])S.oneons[ae.id]=[];if(!S.links[ae.id])S.links[ae.id]=[];});if(!S.todos['general'])S.todos['general']=[];}
+
+// ── SEED DATA LOADER ──────────────────────────────────────────────────────
+async function seedIfEmpty(){
+  let hasCamps=false;
+  try{const r=await window.storage.get('bdr2_camps');if(r&&JSON.parse(r.value).length>0)hasCamps=true;}catch(e){}
+  if(hasCamps)return;
+  if(!SEED_JSON||!SEED_JSON.campaigns)return;
+  const data=SEED_JSON;
+  if(Array.isArray(data.campaigns)){
+    S.campaigns=data.campaigns.map(c=>({
+      id:c.id||uid(),name:c.name||'Unnamed',product:c.product||'',totalSteps:c.totalSteps||5,
+      status:c.status||'Active',accountMotion:c.accountMotion||'both',aes:c.aes||[],
+      acctIds:c.acctIds||[],buyingGroups:c.buyingGroups||[],jobLevels:c.jobLevels||[],
+      notes:c.notes||'',sourceSheetUrl:c.sourceSheetUrl||'',contactCount:c.contactCount||0,
+      stepCounts:c.stepCounts||{},sentLog:c.sentLog||{},emails:c.emails||{},
+      completedAt:c.completedAt||'',createdAt:c.createdAt||today(),steps:c.steps||[],
+    }));
+  }
+  if(Array.isArray(data.accounts))S.accounts=data.accounts;
+  if(data.todos&&typeof data.todos==='object')S.todos=data.todos;
+  if(data.notes&&typeof data.notes==='object')S.notes=data.notes;
+  if(data.oneons&&typeof data.oneons==='object')S.oneons=data.oneons;
+  if(data.links&&typeof data.links==='object')S.links=data.links;
+  if(Array.isArray(data.events))S.events=data.events;
+  if(Array.isArray(data.wins))S.wins=data.wins;
+  if(Array.isArray(data.activity))S.activity=data.activity;
+  ensureAEData();
+  markDirty('bdr2_camps','bdr2_emails','bdr2_accounts','bdr2_todos','bdr2_notes','bdr2_oneons','bdr2_links','bdr2_events','bdr2_wins','bdr2_activity');
+  await saveAll();
+  toast('✓ Your workspace data loaded','ok');
+}
+
+// ── UNDO SYSTEM ───────────────────────────────────────────────────────────
+function snapshotState(){return JSON.stringify({campaigns:S.campaigns,accounts:S.accounts,todos:S.todos,notes:S.notes,oneons:S.oneons,links:S.links,events:S.events,wins:S.wins,activity:S.activity});}
+function showUndoBar(label,snap,seconds){const existing=document.getElementById('undo-bar');if(existing)existing.remove();if(window._undoTimer)clearInterval(window._undoTimer);window._undoSnapshot=snap;const bar=document.createElement('div');bar.id='undo-bar';bar.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;align-items:center;gap:10px;padding:10px 14px;background:#032D42;color:#fff;border-radius:5px;box-shadow:0 4px 20px rgba(3,45,66,0.3);font-size:12px;';bar.innerHTML=`<span style="opacity:.85">${label}</span><span id="undo-timer" style="font-size:11px;opacity:.55;min-width:18px;text-align:center">${seconds}s</span><button onclick="applyUndo()" style="padding:4px 12px;background:#63DF4E;color:#032D42;border:none;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer">Undo</button>`;document.body.appendChild(bar);let remaining=seconds;window._undoTimer=setInterval(()=>{remaining--;const el=document.getElementById('undo-timer');if(el)el.textContent=remaining+'s';if(remaining<=0){clearInterval(window._undoTimer);document.getElementById('undo-bar')?.remove();window._undoSnapshot=null;}},1000);}
+function applyUndo(){if(!window._undoSnapshot)return;try{const prev=JSON.parse(window._undoSnapshot);if(prev.campaigns)S.campaigns=prev.campaigns;if(prev.accounts)S.accounts=prev.accounts;if(prev.todos)S.todos=prev.todos;if(prev.notes)S.notes=prev.notes;if(prev.oneons)S.oneons=prev.oneons;if(prev.links)S.links=prev.links;if(prev.events)S.events=prev.events;if(prev.wins)S.wins=prev.wins;if(prev.activity)S.activity=prev.activity;markDirty('bdr2_camps','bdr2_emails','bdr2_accounts','bdr2_todos','bdr2_notes','bdr2_oneons','bdr2_links','bdr2_events','bdr2_wins','bdr2_activity');saveAll();renderPage();clearInterval(window._undoTimer);document.getElementById('undo-bar')?.remove();window._undoSnapshot=null;toast('Undone','ok');}catch(e){toast('Undo failed');}}
+function undoReset(){applyUndo();}
+function withUndo(label,fn){window._undoSnap=snapshotState();fn();if(window._undoSnap){showUndoBar(label,window._undoSnap,5);window._undoSnap=null;}}
+
+// ── UTILITIES ─────────────────────────────────────────────────────────────
+const uid=()=>Math.random().toString(36).slice(2,10);
+const today=()=>new Date().toISOString().slice(0,10);
+const todayStr=today;
+function fmtDate(d){if(!d)return '—';return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+function fmtDateLong(d){if(!d)return '—';return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});}
+function initials(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+function avS(i){const s=AV_STYLES[i%AV_STYLES.length];return `background:${s.bg};color:${s.c};`;}
+function aeById(id){return AES.find(a=>a.id===id);}
+function isOverdue(d){return d&&d<today();}
+function statusPill(s){const m={'Active':'pill-b','Paused':'pill-m','Responded':'pill-g','Converted':'pill-t','Complete':'pill-t','Bounced':'pill-r','Healthy':'pill-g','Expand':'pill-b','At Risk':'pill-r','Stalled':'pill-m','Research':'pill-p','In Motion':'pill-a','In Sequence':'pill-b','Meeting Booked':'pill-g','Closed Won':'pill-t'};return `<span class="pill ${m[s]||'pill-m'}">${s}</span>`;}
+function priClass(p){return p==='High'?'pill-r':p==='Med'?'pill-a':'pill-m';}
+function aeBubbles(ids){return (ids||[]).slice(0,4).map(id=>{const ae=aeById(id);return ae?`<div title="${ae.name}" style="width:18px;height:18px;border-radius:50%;background:${ae.bg};color:${ae.color};display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;border:1px solid rgba(3,45,66,0.15)">${ae.init.slice(0,1)}</div>`:''}).join('');}
+function twoWeeksAgo(){const d=new Date();d.setDate(d.getDate()-14);return d.toISOString().slice(0,10);}
+
+// ── NAV ───────────────────────────────────────────────────────────────────
+function nav(page,btn){currentNav=page;document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));const t=btn||document.querySelector(`[data-nav="${page}"]`);if(t)t.classList.add('active');filterAE='all';renderPage();}
+function renderPage(undoLabel){updateBadges();renderAEPods();const pages={overview:renderOverview,campaigns:renderCampaigns,accounts:renderAccounts,oneons:renderOneons,todos:renderTodos,notes:renderNotes,links:renderLinks,summary:renderSummaryPage,events:renderEvents,recap:renderRecap,wins:renderWins,activity:renderActivity};const el=document.getElementById('ws-main');if(el)el.innerHTML=(pages[currentNav]||renderOverview)();if(window._undoSnap){showUndoBar(undoLabel||'Saved',window._undoSnap,5);window._undoSnap=null;}}
+function updateBadges(){const nc=document.getElementById('nb-c');const na=document.getElementById('nb-a');const nt=document.getElementById('nb-t');if(nc)nc.textContent=S.campaigns.length;if(na)na.textContent=S.accounts.length;if(nt)nt.textContent=AES.reduce((n,ae)=>n+(S.todos[ae.id]||[]).filter(t=>!t.done).length,0);}
+
+// ── AE PODS ───────────────────────────────────────────────────────────────
+function renderAEPods(){const el=document.getElementById('ae-pods-sb');if(!el)return;el.innerHTML=AES.map(ae=>{const camps=S.campaigns.filter(c=>(c.aes||[]).includes(ae.id)).length;const accts=S.accounts.filter(a=>a.aeId===ae.id).length;const sel=filterAE===ae.id;return `<button class="ae-pod-btn${sel?' active':''}" onclick="filterByAE('${ae.id}')"><div class="ae-av" style="background:${ae.bg};color:${ae.color};border-color:${ae.color+'40'}">${ae.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div><div style="flex:1;min-width:0"><div class="ae-pod-name">${ae.name.split(' ')[0]} ${ae.name.split(' ')[1]}</div><div class="ae-pod-ct">${accts} acct${accts!==1?'s':''} · ${camps} camp${camps!==1?'s':''}</div></div>${sel?'<div class="ae-active-dot"></div>':''}</button>`;}).join('');}
+function filterByAE(id){filterAE=filterAE===id?'all':id;renderPage();}
+function aeTabs(active,fn){return `<div class="tabs"><button class="tab${active==='all'?' active':''}" onclick="${fn}('all')">All AEs</button>${AES.map(ae=>`<button class="tab${active===ae.id?' active':''}" onclick="${fn}('${ae.id}')">${ae.name.split(' ')[0]}</button>`).join('')}</div>`;}
+
+// ── OVERVIEW ──────────────────────────────────────────────────────────────
+function renderOverview(){
+  const fa=filterAE;const camps=fa==='all'?S.campaigns:S.campaigns.filter(c=>(c.aes||[]).includes(fa));const accts=fa==='all'?S.accounts:S.accounts.filter(a=>a.aeId===fa);
+  const allTodosRaw=[...AES,{id:'general',name:'General'}].flatMap(ae=>(S.todos[ae.id]||[]).map(t=>({...t,_aeId:t._aeId||ae.id,_aeName:t._aeName||ae.name})));
+  const seen=new Set();const todos=allTodosRaw.filter(t=>{if(seen.has(t.id))return false;seen.add(t.id);return true;}).filter(t=>{if(fa==='all')return true;if(t._isCampEmail)return(t._allAeIds||[t._aeId]).includes(fa);return t._aeId===fa;});
+  const open=todos.filter(t=>!t.done);const activeCamps=camps.filter(c=>c.status==='Active');
+  const campTasks=open.filter(t=>t._isCampEmail&&t.due).sort((a,b)=>a.due.localeCompare(b.due));
+  const genTasks=open.filter(t=>!t._isCampEmail).sort((a,b)=>(a.due||'9').localeCompare(b.due||'9'));
+  const overdue=open.filter(t=>t.due&&isOverdue(t.due)).length;
+  const nn=fa==='all'?AES.flatMap(ae=>(S.notes[ae.id]||[]).map(n=>({...n,_ae:ae}))):(S.notes[fa]||[]).map(n=>({...n,_ae:aeById(fa)}));
+  const rn=[...nn].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3);
+  const ae=fa!=='all'?aeById(fa):null;
+  let html=`<div class="page-hd"><div><div class="page-title">${ae?ae.name+' — Pod':'Commercial Illinois &amp; Midwest'}</div><div class="page-sub">Q2 FY26 · ${accts.length} accounts · ${open.length} open tasks</div></div><div class="hd-acts"><button class="btn btn-ghost btn-sm" onclick="openQuickAdd()">+ Quick Add</button><button class="btn btn-primary btn-sm" onclick="nav('summary',null)">📋 Generate Summary</button></div></div>${aeTabs(fa,'setOvF')}<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:start">`;
+  // Campaign tasks
+  html+=`<div><div class="card"><div class="card-head card-head-accent"><span style="font-size:14px">📧</span><div class="card-title">Campaign Tasks</div><span style="font-size:11px;color:var(--text3)">${campTasks.length} due</span><button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="todoTab='campaign';nav('todos',null)">All →</button></div><div style="padding:0">`;
+  if(!campTasks.length)html+=`<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">No campaign tasks due.</div>`;
+  else campTasks.slice(0,8).forEach(t=>{const od=isOverdue(t.due);html+=`<div class="todo-item" style="padding:9px 14px;border-bottom:1px solid var(--border)"><div class="todo-chk" onclick="toggleTodo('${t._aeId}','${t.id}')"></div><div style="flex:1;min-width:0"><div style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.label}</div><div style="font-size:10px;color:${od?'var(--red)':'var(--text3)'}">${t._aeName?t._aeName+' · ':''}${od?'Overdue':'Due '+fmtDate(t.due)}</div></div></div>`;});
+  html+=`</div></div></div>`;
+  // General tasks
+  html+=`<div><div class="card"><div class="card-head card-head-accent"><span style="font-size:14px">✅</span><div class="card-title">To Do</div>${overdue?`<span style="font-size:10px;padding:1px 7px;border-radius:10px;background:rgba(217,48,37,0.08);color:var(--red);font-weight:600">${overdue} overdue</span>`:''}<div style="display:flex;gap:5px;margin-left:auto"><button class="btn btn-ghost btn-sm" onclick="openAddTodo()">+ Add</button><button class="btn btn-ghost btn-sm" onclick="nav('todos',null)">All →</button></div></div><div style="padding:0">`;
+  if(!genTasks.length)html+=`<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">Nothing to do.</div>`;
+  else genTasks.slice(0,8).forEach(t=>{const od=t.due&&isOverdue(t.due);html+=`<div class="todo-item" style="padding:9px 14px;border-bottom:1px solid var(--border)"><div class="todo-chk${t.done?' done':''}" onclick="toggleTodo('${t._aeId}','${t.id}')">${t.done?'✓':''}</div><div style="flex:1;min-width:0"><div style="font-size:12px;color:${t.done?'var(--text3)':'var(--text)'};text-decoration:${t.done?'line-through':'none'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.label}</div><div style="font-size:10px;color:${od?'var(--red)':'var(--text3)'}">${t._aeName?t._aeName+' · ':''}${t.due?(od?'Overdue':'Due '+fmtDate(t.due)):'No due date'}</div></div><span class="pill ${priClass(t.priority)}" style="flex-shrink:0">${t.priority}</span></div>`;});
+  html+=`</div></div></div>`;
+  // Campaigns + notes
+  html+=`<div style="display:flex;flex-direction:column;gap:14px"><div class="card"><div class="card-head" style="background:linear-gradient(135deg,#032D42,#064663);padding:12px 14px"><div style="flex:1"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.6);margin-bottom:2px">Active Campaigns</div><div style="font-size:28px;font-weight:800;color:#fff;line-height:1">${activeCamps.length}</div><div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:2px">${camps.filter(c=>c.status==='Complete').length} completed</div></div><button class="btn btn-sm" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);font-size:10px" onclick="nav('campaigns',null)">View All →</button></div><div style="max-height:280px;overflow-y:auto">`;
+  if(!activeCamps.length)html+=`<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">No active campaigns.<br><br><button class="btn btn-primary btn-sm" onclick="openAddCampaign()">+ New Campaign</button></div>`;
+  else activeCamps.forEach(c=>{const sentCount=Object.keys(c.sentLog||{}).length;html+=`<div style="padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer" onclick="openCampSlide('${c.id}','details')"><div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="font-size:12px;font-weight:700;color:var(--sn-blue);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.name}</div>${aeBubbles(c.aes)}</div><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden"><div style="height:100%;width:${Math.round(sentCount/(c.totalSteps||5)*100)}%;background:var(--sn-blue);border-radius:2px"></div></div><span style="font-size:10px;color:var(--text3)">${sentCount}/${c.totalSteps||5}</span></div><div style="font-size:10px;color:var(--text3);margin-top:3px">${c.contactCount||0} contacts · ${c.product||'—'}</div></div>`;});
+  html+=`</div></div>`;
+  // Pinned notes
+  html+=`<div class="card"><div class="card-head card-head-accent"><span style="font-size:14px">📌</span><div class="card-title">Pinned Notes</div><div style="display:flex;gap:5px;margin-left:auto"><button class="btn btn-ghost btn-sm" onclick="openAddNote()">+ Add</button><button class="btn btn-ghost btn-sm" onclick="nav('notes',null)">All →</button></div></div><div class="card-body">`;
+  if(!rn.length)html+=`<div style="text-align:center;padding:14px;color:var(--text3);font-size:12px">No notes pinned.</div>`;
+  else rn.forEach(n=>{html+=`<div class="note-block"><div style="display:flex;gap:6px;margin-bottom:4px"><span style="font-size:10px;color:var(--amber);font-weight:700">${n.author||'Jacob'}</span><span style="font-size:10px;color:var(--text3)">${fmtDate(n.date)}${n._ae?' · '+n._ae.name.split(' ')[0]:''}</span></div><div style="font-size:12px;color:var(--text2);line-height:1.6">${n.text.length>120?n.text.slice(0,120)+'…':n.text}</div></div>`;});
+  html+=`</div></div></div></div>`;return html;
+}
+function setOvF(id){filterAE=id;renderPage();}
+
+// ── CAMPAIGNS ─────────────────────────────────────────────────────────────
+let campAEF='all';
+function renderCampaigns(){
+  campAEF=filterAE;const camps=campAEF==='all'?S.campaigns:S.campaigns.filter(c=>(c.aes||[]).includes(campAEF));
+  let html=`<div class="page-hd"><div><div class="page-title">Campaigns</div><div class="page-sub">Email copy, send dates, and step tracking</div></div><div class="hd-acts"><button class="btn btn-primary btn-sm" onclick="openAddCampaign()">+ New Campaign</button></div></div>${aeTabs(campAEF,'setCampAEF')}`;
+  if(!camps.length)return html+`<div class="card"><div class="card-body"><div style="text-align:center;padding:30px;color:var(--text3);font-size:12px">No campaigns yet.</div></div></div>`;
+  const active=camps.filter(c=>c.status!=='Complete');const completed=camps.filter(c=>c.status==='Complete');
+  function renderCard(c){
+    const stepsArr=c.steps&&c.steps.length?c.steps:Array.from({length:c.totalSteps||3},(_,i)=>({type:'email',emailNum:i+1}));
+    const sentLog=c.sentLog||{};const total=c.contactCount||0;const isComplete=c.status==='Complete';
+    const SMETA={email:{icon:'📧',label:'Email',color:'var(--sn-blue)',bg:'rgba(3,45,66,0.06)'},call:{icon:'📞',label:'Call',color:'#0369A1',bg:'rgba(3,105,161,0.06)'},linkedin:{icon:'🔗',label:'LinkedIn',color:'#5B21B6',bg:'rgba(91,33,182,0.06)'},voicemail:{icon:'📱',label:'Voicemail',color:'#0369A1',bg:'rgba(3,105,161,0.06)'}};
+    const progressDots=stepsArr.map((_,i)=>{const isSent=!!(sentLog[i+1]);const m=SMETA[stepsArr[i]?.type]||SMETA.email;return `<div title="Step ${i+1}${isSent?' — sent':''}" style="width:10px;height:10px;border-radius:50%;background:${isSent?'#1a7a00':'transparent'};border:1.5px solid ${isSent?'#1a7a00':m.color};flex-shrink:0"></div>`;}).join('');
+    const sentCount=Object.values(sentLog).filter(Boolean).length;const allSent=stepsArr.every((_,i)=>!!(sentLog[i+1]));
+    return `<div class="card" style="margin-bottom:10px"><div onclick="campToggleExpand('${c.id}',this)" style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none" class="card-head card-head-accent"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div class="card-title" style="margin:0">${c.name}</div>${statusPill(c.status)}<div style="display:flex;gap:2px">${(c.aes||[]).map(id=>{const a=aeById(id);return a?`<span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;border:1px solid ${a.color+'30'};background:${a.bg};color:${a.color}">${a.init}</span>`:''}).join('')}</div></div><div style="display:flex;align-items:center;gap:8px;margin-top:6px"><div style="display:flex;gap:4px">${progressDots}</div><span style="font-size:10px;color:var(--text3)">${sentCount}/${stepsArr.length} steps · ${total} contacts${c.product?' · '+c.product:''}</span></div></div><div style="display:flex;gap:4px;flex-shrink:0" onclick="event.stopPropagation()"><div class="btn-icon" onclick="openCampSlide('${c.id}','emails')">✎</div><div class="btn-icon del" onclick="deleteCampConfirm('${c.id}')">×</div></div><span class="camp-chevron" style="font-size:11px;color:var(--text3)">▶</span></div><div class="camp-body" style="display:none"><div style="padding:12px 14px;display:flex;gap:8px;overflow-x:auto;border-top:1px solid var(--border)">${stepsArr.map((step,i)=>{const sm=SMETA[step.type]||SMETA.email;const isEmail=step.type==='email';const eIdx=step.emailNum||i+1;const em=isEmail?(c.emails||{})[eIdx]:null;const sentEntry=sentLog[i+1];const isSent=!!sentEntry;return `<div style="flex-shrink:0;width:175px;border:1px solid ${isSent?'rgba(26,122,0,0.3)':'var(--border)'};border-radius:var(--r2);padding:9px 11px;background:${isSent?'rgba(26,122,0,0.04)':sm.bg}"><div style="display:flex;align-items:center;gap:5px;margin-bottom:5px"><span style="font-size:11px;font-weight:700;color:${sm.color}">${sm.icon} ${sm.label}${isEmail?' '+eIdx:''}</span>${isSent?`<span class="pill pill-g" style="font-size:9px">sent</span>`:''}</div><div style="font-size:10px;color:var(--text2);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${isEmail?(em?.subject||'No copy yet'):(step.notes?.slice(0,26)||'No notes')}</div><div style="display:flex;align-items:center;gap:5px"><label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:11px;color:${isSent?'#1a7a00':'var(--text2)'}"><input type="checkbox" ${isSent?'checked':''} onchange="toggleStepSent('${c.id}',${i+1},this.checked)" style="accent-color:#1a7a00;width:13px;height:13px">${isSent?'Sent':'Mark sent'}</label>${isEmail?`<div class="btn-icon" style="width:20px;height:20px;font-size:10px;margin-left:auto" onclick="viewCampEmail('${c.id}',${eIdx})">👁</div>`:''}</div></div>`;}).join('')}</div><div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:var(--text3)">Contacts:</span><input type="number" min="0" class="form-input" style="width:70px;padding:4px 7px;font-size:12px" value="${total}" onchange="updateCampCount('${c.id}','contactCount',parseInt(this.value)||0)"></div><div style="margin-left:auto;display:flex;gap:6px">${allSent&&!isComplete?`<button class="btn btn-sm" style="background:#1a7a00;color:#fff;border:none" onclick="completeCampaign('${c.id}')">✓ Complete</button>`:''}${c.sourceSheetUrl?`<a href="${c.sourceSheetUrl}" target="_blank" class="btn btn-ghost btn-sm" style="text-decoration:none;color:#0369A1">📊 Sheet ↗</a>`:''}</div></div></div></div>`;
+  }
+  if(active.length)active.forEach(c=>{html+=renderCard(c);});else html+=`<div class="card"><div class="card-body"><div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">No active campaigns.</div></div></div>`;
+  if(completed.length){html+=`<div style="margin-top:10px"><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'':'none'" style="width:100%;display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);cursor:pointer;font-size:12px;font-weight:600;color:var(--text2)"><span>▶</span>Completed (${completed.length})</button><div style="display:none">${completed.map(c=>renderCard(c)).join('')}</div></div>`;}
+  return html;
+}
+function campToggleExpand(campId,el){const card=el.closest('.card');if(!card)return;const body=card.querySelector('.camp-body');const chev=card.querySelector('.camp-chevron');if(!body)return;const open=body.style.display==='none'||body.style.display==='';body.style.display=open?'block':'none';if(chev)chev.textContent=open?'▼':'▶';}
+function setCampAEF(id){campAEF=id;filterAE=id;renderPage();}
+function completeCampaign(id){const c=S.campaigns.find(x=>x.id===id);if(!c)return;withUndo('Campaign completed',()=>{c.status='Complete';c.completedAt=today();markDirty('bdr2_camps');window._undoSnap=snapshotState();scheduleSaveNow();renderPage('Campaign completed');});}
+function updateCampCount(campId,field,val){const c=S.campaigns.find(x=>x.id===campId);if(!c)return;c[field]=val;markDirty('bdr2_camps');clearTimeout(saveTimer);setSaveInd('· unsaved');saveTimer=setTimeout(saveAll,3000);}
+function deleteCampConfirm(id){const c=S.campaigns.find(x=>x.id===id);if(!c)return;if(!confirm(`Delete "${c.name}"?`))return;withUndo('Campaign deleted',()=>{S.campaigns=S.campaigns.filter(x=>x.id!==id);AES.forEach(ae=>{if(S.todos[ae.id])S.todos[ae.id]=S.todos[ae.id].filter(t=>t._campId!==id);});saveCamps();saveTodos();renderPage('Campaign deleted');});}
+function toggleStepSent(campId,step,checked){const c=S.campaigns.find(x=>x.id===campId);if(!c)return;if(!c.sentLog)c.sentLog={};if(checked){c.sentLog[step]={date:today()};}else{delete c.sentLog[step];}saveCamps();renderPage();toast(checked?'Step '+step+' marked sent':'Step '+step+' unmarked',checked?'ok':'');}
+function viewCampEmail(campId,step){const c=S.campaigns.find(x=>x.id===campId);if(!c)return;const em=(c.emails||{})[step];if(!em||(!em.subject&&!em.body)){toast('No email written for step '+step+' yet');return;}window._previewCopyText=(em.subject?'Subject: '+em.subject+'\n\n':'')+em.body;showModal('Email '+step+' — '+c.name,`<div style="margin-bottom:12px;padding:10px 12px;background:var(--bg2);border-radius:var(--r2)"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:4px">Subject</div><div style="font-size:13px;font-weight:600;color:var(--sn-blue)">${em.subject||'<span style="color:var(--text3);font-weight:400">No subject</span>'}</div></div><div style="padding:13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);font-size:13px;color:var(--text);line-height:1.8;white-space:pre-wrap;max-height:320px;overflow-y:auto">${em.body||'<span style="color:var(--text3);font-style:italic">No body yet.</span>'}</div><div style="margin-top:10px;display:flex;gap:8px"><button class="btn btn-green btn-sm" onclick="navigator.clipboard.writeText(window._previewCopyText||'').then(()=>toast('Copied','ok'))">Copy</button><button class="btn btn-ghost btn-sm" onclick="closeModal();openCampSlide('${campId}','emails')">Edit →</button></div>`,null,true);}
+
+// ── CAMPAIGN SLIDE ────────────────────────────────────────────────────────
+function openAddCampaign(){
+  const aeChecks=AES.map(ae=>`<label class="cb-row"><input type="checkbox" name="ae-cb" value="${ae.id}"><span>${ae.name}</span></label>`).join('');
+  showModal('New Campaign',`<div class="form-row"><label class="form-label">Campaign Name *</label><input class="form-input" id="m-cn" placeholder="Veza Awareness Q2"></div><div class="form-row"><label class="form-label">Product / Focus</label><input class="form-input" id="m-cp" placeholder="Veza, ITAM, Now Assist…"></div><div class="form-2"><div class="form-row"><label class="form-label">Emails</label><select class="form-select" id="m-emails"><option>3</option><option>4</option><option>5</option></select></div><div class="form-row"><label class="form-label">Include Calls?</label><select class="form-select" id="m-calls"><option value="no">No</option><option value="yes">Yes — between emails</option></select></div></div><div class="form-row"><label class="form-label">Source Sheet URL</label><input class="form-input" id="m-csheet" placeholder="https://…"></div><div class="form-row"><label class="form-label">Assign to AEs</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:4px">${aeChecks}</div></div><div class="form-row"><label class="form-label">Notes</label><textarea class="form-textarea" id="m-cnotes" placeholder="ICP, messaging angle, strategy…"></textarea></div>`,()=>{
+    const name=document.getElementById('m-cn').value.trim();if(!name){toast('Name required');return;}
+    const emailCount=parseInt(document.getElementById('m-emails').value);const addCalls=document.getElementById('m-calls').value==='yes';
+    const steps=[];for(let e=1;e<=emailCount;e++){steps.push({type:'email',emailNum:e});if(e<emailCount&&addCalls)steps.push({type:'call',notes:''});}
+    const aes=[...document.querySelectorAll('input[name="ae-cb"]:checked')].map(i=>i.value);
+    withUndo('Campaign added',()=>{S.campaigns.push({id:uid(),name,product:document.getElementById('m-cp').value,totalSteps:steps.length,steps,status:'Active',accountMotion:'both',aes,acctIds:[],notes:document.getElementById('m-cnotes').value,sourceSheetUrl:document.getElementById('m-csheet').value,contactCount:0,stepCounts:{},emails:{},createdAt:today()});saveCamps();closeModal();renderPage('Campaign added');toast(name+' created','ok');});
+  });
+}
+function openCampSlide(id,tab){
+  const c=S.campaigns.find(x=>x.id===id);if(!c)return;if(!c.emails)c.emails={};
+  const showTab=tab||'emails';const stepsArr=c.steps&&c.steps.length?c.steps:Array.from({length:c.totalSteps||3},(_,i)=>({type:'email',emailNum:i+1}));
+  if(!c.steps||!c.steps.length)c.steps=stepsArr;
+  document.getElementById('slide-title').textContent=c.name;document.getElementById('slide-sub').textContent=(c.product||'Campaign')+' · '+stepsArr.length+'-step sequence';
+  const SMETA={email:{icon:'📧',label:'Email'},call:{icon:'📞',label:'Call'},voicemail:{icon:'📱',label:'Voicemail'},linkedin:{icon:'🔗',label:'LinkedIn'}};
+  function buildStep(step,idx){
+    const meta=SMETA[step.type]||SMETA.email;const isEmail=step.type==='email';const eIdx=step.emailNum||idx+1;const em=isEmail?(c.emails[eIdx]||{}):{};const hasCopy=isEmail?!!(em.subject||em.body):!!(step.notes);
+    return `<div style="border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:8px"><div onclick="seqToggle(${idx})" style="padding:9px 13px;background:rgba(3,45,66,0.04);display:flex;align-items:center;gap:8px;cursor:pointer"><div style="width:22px;height:22px;border-radius:50%;background:rgba(3,45,66,0.12);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--sn-blue)">${idx+1}</div><span style="font-size:12px;font-weight:700;color:var(--sn-blue)">${meta.icon} ${meta.label}${isEmail?' '+eIdx:''}</span>${hasCopy?`<span style="font-size:10px;color:#1a7a00">✓ written</span>`:`<span style="font-size:10px;color:var(--text3)">no copy</span>`}${isEmail?`<span style="font-size:10px;color:var(--text3);margin-left:auto" id="sl-chars-${eIdx}">${(em.body||'').length} chars</span>`:''}<span id="seq-toggle-${idx}" style="font-size:10px;color:var(--text3);margin-left:${isEmail?'4px':'auto'}">▶</span><button onclick="event.stopPropagation();seqRemoveStep('${id}',${idx})" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px">×</button></div><div id="seq-body-${idx}" style="padding:11px 13px;display:none">${isEmail?`<div style="display:grid;grid-template-columns:1fr 180px;gap:10px;margin-bottom:8px"><div><label class="form-label">Subject</label><input class="form-input" id="sl-subj-${eIdx}" value="${(em.subject||'').replace(/"/g,'&quot;')}" placeholder="Subject…" style="font-size:12px"></div><div><label class="form-label">Send Date</label><input type="date" class="form-input" id="sl-date-${eIdx}" value="${em.sendDate||''}" style="font-size:12px"></div></div><label class="form-label">Email Body</label><textarea class="form-textarea" id="sl-body-${eIdx}" style="min-height:160px;font-size:12px;line-height:1.6" oninput="document.getElementById('sl-chars-${eIdx}').textContent=this.value.length+' chars'">${em.body||''}</textarea>${hasCopy?`<div style="margin-top:8px"><button class="btn btn-green btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('sl-body-${eIdx}').value).then(()=>toast('Copied','ok'))">📋 Copy</button></div>`:''}`:
+    `<div class="form-row"><label class="form-label">Send Date</label><input type="date" class="form-input" id="sl-sdate-${idx}" value="${step.sendDate||''}" style="max-width:180px"></div><label class="form-label">Notes</label><textarea class="form-textarea" id="sl-notes-${idx}" style="min-height:80px">${step.notes||''}</textarea>`}</div></div>`;
+  }
+  let emailsTab=`<div style="margin-bottom:10px;padding:9px 11px;background:var(--blue-dim);border-radius:var(--r2);font-size:11px;color:var(--sn-blue)">Use <code>[Name]</code> and <code>[Company]</code> tokens. Set send dates to auto-create tasks.</div><div id="seq-list">${stepsArr.map((s,i)=>buildStep(s,i)).join('')}</div><div style="border:1px dashed var(--border);border-radius:var(--r2);padding:10px 14px;margin-bottom:12px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text3);margin-bottom:8px">+ Add Step</div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" onclick="seqAddStep('${id}','email')">📧 Email</button><button class="btn btn-ghost btn-sm" onclick="seqAddStep('${id}','call')">📞 Call</button><button class="btn btn-ghost btn-sm" onclick="seqAddStep('${id}','linkedin')">🔗 LinkedIn</button><button class="btn btn-ghost btn-sm" onclick="seqAddStep('${id}','voicemail')">📱 Voicemail</button></div></div><button class="btn btn-primary btn-sm" onclick="saveCampEmails('${id}')">Save Sequence</button>`;
+  const checks=AES.map(ae=>`<label class="cb-row"><input type="checkbox" id="sl-ae-${ae.id}" ${(c.aes||[]).includes(ae.id)?'checked':''}><span>${ae.name}</span></label>`).join('');
+  let detailsTab=`<div class="form-row"><label class="form-label">Name</label><input class="form-input" id="sl-cn" value="${c.name}"></div><div class="form-2"><div class="form-row"><label class="form-label">Product</label><input class="form-input" id="sl-cp" value="${c.product||''}"></div><div class="form-row"><label class="form-label">Status</label><select class="form-select" id="sl-cs">${CAMP_STATUSES.map(s=>`<option${s===c.status?' selected':''}>${s}</option>`)}</select></div></div><div class="form-row"><label class="form-label">Source Sheet</label><div style="display:flex;gap:6px"><input class="form-input" id="sl-sheet" value="${c.sourceSheetUrl||''}" style="flex:1">${c.sourceSheetUrl?`<a href="${c.sourceSheetUrl}" target="_blank" class="btn btn-ghost btn-sm" style="text-decoration:none">↗</a>`:''}</div></div><div class="form-row"><label class="form-label">AEs</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:4px">${checks}</div></div><div class="form-row"><label class="form-label">Notes</label><textarea class="form-textarea" id="sl-cn2">${c.notes||''}</textarea></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px"><button class="btn btn-primary btn-sm" onclick="saveCampDetails('${id}')">Save</button><button class="btn btn-sm" style="background:rgba(217,48,37,0.08);color:var(--red);border:1px solid rgba(217,48,37,0.2);font-size:11px" onclick="closeSlide();deleteCampConfirm('${id}')">🗑 Delete</button></div>`;
+  document.getElementById('slide-body').innerHTML=`<div style="display:flex;gap:2px;margin-bottom:16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:3px"><button class="tab${showTab==='emails'?' active':''}" id="sl-tab-emails" onclick="slideSwitchTab('emails')" style="flex:1">Email Sequence</button><button class="tab${showTab==='details'?' active':''}" id="sl-tab-details" onclick="slideSwitchTab('details')" style="flex:1">Campaign Details</button></div><div id="sl-emails" style="display:${showTab==='emails'?'':'none'}">${emailsTab}</div><div id="sl-details" style="display:${showTab==='details'?'':'none'}">${detailsTab}</div>`;
+  document.getElementById('slide').classList.add('open');
+}
+function slideSwitchTab(tab){document.getElementById('sl-emails').style.display=tab==='emails'?'':'none';document.getElementById('sl-details').style.display=tab==='details'?'':'none';document.getElementById('sl-tab-emails').className='tab'+(tab==='emails'?' active':'');document.getElementById('sl-tab-details').className='tab'+(tab==='details'?' active':'');}
+function seqToggle(idx){const b=document.getElementById('seq-body-'+idx);const t=document.getElementById('seq-toggle-'+idx);if(!b)return;const open=b.style.display==='none'||!b.style.display;b.style.display=open?'block':'none';if(t)t.textContent=open?'▼':'▶';}
+function seqAddStep(campId,type){const c=S.campaigns.find(x=>x.id===campId);if(!c)return;if(!c.steps||!c.steps.length)c.steps=Array.from({length:c.totalSteps||3},(_,i)=>({type:'email',emailNum:i+1}));if(type==='email'){const used=c.steps.filter(s=>s.type==='email').map(s=>s.emailNum||0);let n=1;while(used.includes(n))n++;c.steps.push({type:'email',emailNum:n});}else c.steps.push({type,notes:''});c.totalSteps=c.steps.length;saveCamps();openCampSlide(campId,'emails');}
+function seqRemoveStep(campId,idx){const c=S.campaigns.find(x=>x.id===campId);if(!c||!c.steps)return;if(c.steps.length<=1){toast('Must have at least 1 step');return;}c.steps.splice(idx,1);c.totalSteps=c.steps.length;saveCamps();openCampSlide(campId,'emails');}
+function saveCampEmails(id){const c=S.campaigns.find(x=>x.id===id);if(!c)return;if(!c.emails)c.emails={};const stepsArr=c.steps&&c.steps.length?c.steps:Array.from({length:c.totalSteps||3},(_,i)=>({type:'email',emailNum:i+1}));stepsArr.forEach((step,idx)=>{if(step.type==='email'){const eIdx=step.emailNum||idx+1;c.emails[eIdx]={subject:document.getElementById('sl-subj-'+eIdx)?.value||'',body:document.getElementById('sl-body-'+eIdx)?.value||'',sendDate:document.getElementById('sl-date-'+eIdx)?.value||''};}else{step.notes=document.getElementById('sl-notes-'+idx)?.value||'';step.sendDate=document.getElementById('sl-sdate-'+idx)?.value||'';}});c.steps=stepsArr;c.totalSteps=stepsArr.length;syncCampEmailTodos(c);saveCamps();toast('Sequence saved','ok');}
+function saveCampDetails(id){const c=S.campaigns.find(x=>x.id===id);if(!c)return;c.name=document.getElementById('sl-cn').value;c.product=document.getElementById('sl-cp').value;c.status=document.getElementById('sl-cs').value;c.sourceSheetUrl=document.getElementById('sl-sheet').value;c.notes=document.getElementById('sl-cn2').value;c.aes=AES.filter(ae=>document.getElementById('sl-ae-'+ae.id)?.checked).map(ae=>ae.id);saveCamps();renderPage();toast('Saved','ok');document.getElementById('slide-title').textContent=c.name;}
+function syncCampEmailTodos(c){const stepsArr=c.steps&&c.steps.length?c.steps:[];const assignedAEs=c.aes&&c.aes.length?c.aes:[AES[0].id];const primaryAE=assignedAEs[0];const aeNames=assignedAEs.map(id=>aeById(id)?.name.split(' ')[0]).filter(Boolean);const TLABELS={email:'📧 Send Email',call:'📞 Call',linkedin:'🔗 LinkedIn',voicemail:'📱 Voicemail'};const doneByStep={};[...AES.map(ae=>ae.id),'general'].forEach(aeId=>{(S.todos[aeId]||[]).forEach(t=>{if(t._campId===c.id&&t._isCampEmail&&t.done)doneByStep[t._step]=true;});});[...AES.map(ae=>ae.id),'general'].forEach(aeId=>{if(!S.todos[aeId])return;S.todos[aeId]=S.todos[aeId].filter(t=>!(t._campId===c.id&&t._isCampEmail));});if(!S.todos[primaryAE])S.todos[primaryAE]=[];stepsArr.forEach((step,idx)=>{const stepNum=idx+1;const isEmail=step.type==='email';const eIdx=isEmail?(step.emailNum||stepNum):null;const sendDate=isEmail?((c.emails||{})[eIdx]?.sendDate||''):(step.sendDate||'');if(!sendDate)return;const label=`${TLABELS[step.type]||'📋 Step'} ${isEmail?eIdx:'(Step '+stepNum+')'} — ${c.name}`;S.todos[primaryAE].push({id:uid(),label,due:sendDate,priority:'Med',account:c.name,accounts:aeNames,done:doneByStep[stepNum]||false,_campId:c.id,_step:stepNum,_isCampEmail:true,_aeId:primaryAE,_aeName:aeNames.join(', '),_allAeIds:assignedAEs});});}
+
+// ── WINS ──────────────────────────────────────────────────────────────────
+function renderWins(){
+  const wins=[...(S.wins||[])].sort((a,b)=>b.date.localeCompare(a.date));const wAEF=filterAE;const filtered=wAEF==='all'?wins:wins.filter(w=>w.aeId===wAEF);const total=filtered.reduce((s,w)=>s+(parseFloat(w.pipeline)||0),0);
+  let html=`<div class="page-hd"><div><div class="page-title">Wins</div><div class="page-sub">${filtered.length} meeting${filtered.length!==1?'s':''} booked${total?' · $'+total.toLocaleString():''}</div></div><div class="hd-acts"><button class="btn btn-primary btn-sm" onclick="openAddWin()">+ Log Win</button></div></div>${aeTabs(wAEF,'setWinsAEF')}`;
+  if(!filtered.length)return html+`<div class="card"><div class="card-body"><div style="text-align:center;padding:40px;color:var(--text3);font-size:12px">No wins logged yet.<br><br><button class="btn btn-primary btn-sm" onclick="openAddWin()">Log your first win →</button></div></div></div>`;
+  const byMonth={};filtered.forEach(w=>{const m=w.date.slice(0,7);if(!byMonth[m])byMonth[m]=[];byMonth[m].push(w);});
+  Object.entries(byMonth).sort((a,b)=>b[0].localeCompare(a[0])).forEach(([month,mwins])=>{
+    const label=new Date(month+'-15').toLocaleDateString('en-US',{month:'long',year:'numeric'});html+=`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:8px 0 6px">${label} · ${mwins.length} win${mwins.length!==1?'s':''}</div>`;
+    mwins.forEach(w=>{const ae=aeById(w.aeId);const acct=S.accounts.find(a=>a.id===w.acctId);const camp=S.campaigns.find(c=>c.id===w.campId);html+=`<div class="card" style="margin-bottom:8px"><div class="card-head" style="padding:12px 16px;border-top:3px solid #1a7a00"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px"><span style="font-size:13px;font-weight:700;color:var(--sn-blue)">${w.contactName}</span>${w.contactTitle?`<span style="font-size:11px;color:var(--text2)">${w.contactTitle}</span>`:''} ${acct?`<span style="font-size:11px;font-weight:600;color:var(--text2)">${acct.name}</span>`:''} ${ae?`<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:${ae.bg};color:${ae.color}">${ae.init}</span>`:''}<span style="font-size:10px;color:var(--text3)">${fmtDate(w.date)}</span>${w.pipeline?`<span style="font-size:11px;font-weight:700;color:#1a7a00">$${Number(w.pipeline).toLocaleString()}</span>`:''}</div>${camp?`<div style="font-size:10px;color:var(--text3)">via ${camp.name}</div>`:''} ${w.notes?`<div style="font-size:11px;color:var(--text2);margin-top:5px;line-height:1.5">${w.notes}</div>`:''}</div><div style="display:flex;gap:4px"><div class="btn-icon" onclick="editWin('${w.id}')">✎</div><div class="btn-icon del" onclick="deleteWin('${w.id}')">×</div></div></div></div>`;});
+  });return html;
+}
+function setWinsAEF(id){filterAE=id;renderPage();}
+function openAddWin(){
+  const aeOpts=AES.map(ae=>`<option value="${ae.id}"${filterAE===ae.id?' selected':''}>${ae.name}</option>`).join('');const acctOpts=[...S.accounts].sort((a,b)=>a.name.localeCompare(b.name)).map(a=>`<option value="${a.id}">${a.name}</option>`).join('');const campOpts=[...S.campaigns].sort((a,b)=>a.name.localeCompare(b.name)).map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  showModal('Log a Win',`<div class="form-2"><div class="form-row"><label class="form-label">Contact Name *</label><input class="form-input" id="w-name" placeholder="Sarah Chen"></div><div class="form-row"><label class="form-label">Title</label><input class="form-input" id="w-title" placeholder="VP of IT"></div></div><div class="form-2"><div class="form-row"><label class="form-label">Account</label><select class="form-select" id="w-acct"><option value="">— None —</option>${acctOpts}</select></div><div class="form-row"><label class="form-label">AE *</label><select class="form-select" id="w-ae"><option value="">— Select —</option>${aeOpts}</select></div></div><div class="form-2"><div class="form-row"><label class="form-label">Campaign</label><select class="form-select" id="w-camp"><option value="">— None —</option>${campOpts}</select></div><div class="form-row"><label class="form-label">Date</label><input type="date" class="form-input" id="w-date" value="${today()}"></div></div><div class="form-row"><label class="form-label">Pipeline Value</label><input class="form-input" id="w-pipeline" placeholder="45000"></div><div class="form-row"><label class="form-label">Notes</label><textarea class="form-textarea" id="w-notes" style="min-height:60px" placeholder="How it came in, context…"></textarea></div>`,()=>{
+    const name=document.getElementById('w-name').value.trim();const aeId=document.getElementById('w-ae').value;if(!name){toast('Contact name required');return;}if(!aeId){toast('AE required');return;}
+    if(!S.wins)S.wins=[];S.wins.push({id:uid(),date:document.getElementById('w-date').value,contactName:name,contactTitle:document.getElementById('w-title').value,aeId,acctId:document.getElementById('w-acct').value,campId:document.getElementById('w-camp').value,pipeline:document.getElementById('w-pipeline').value.replace(/[^0-9.]/g,''),notes:document.getElementById('w-notes').value});
+    saveWins();closeModal();nav('wins',null);toast('Win logged!','ok');
+  });
+}
+function editWin(id){const w=S.wins?.find(x=>x.id===id);if(!w)return;const aeOpts=AES.map(ae=>`<option value="${ae.id}"${ae.id===w.aeId?' selected':''}>${ae.name}</option>`).join('');const acctOpts=[...S.accounts].sort((a,b)=>a.name.localeCompare(b.name)).map(a=>`<option value="${a.id}"${a.id===w.acctId?' selected':''}>${a.name}</option>`).join('');showModal('Edit Win',`<div class="form-row"><label class="form-label">Contact Name</label><input class="form-input" id="w-name" value="${w.contactName}"></div><div class="form-2"><div class="form-row"><label class="form-label">Account</label><select class="form-select" id="w-acct"><option value="">—</option>${acctOpts}</select></div><div class="form-row"><label class="form-label">AE</label><select class="form-select" id="w-ae">${aeOpts}</select></div></div><div class="form-row"><label class="form-label">Pipeline</label><input class="form-input" id="w-pipeline" value="${w.pipeline||''}"></div><div class="form-row"><label class="form-label">Notes</label><textarea class="form-textarea" id="w-notes">${w.notes||''}</textarea></div>`,()=>{w.contactName=document.getElementById('w-name').value;w.aeId=document.getElementById('w-ae').value;w.acctId=document.getElementById('w-acct').value;w.pipeline=document.getElementById('w-pipeline').value;w.notes=document.getElementById('w-notes').value;saveWins();closeModal();renderPage('Win updated');});}
+function deleteWin(id){withUndo('Win deleted',()=>{S.wins=(S.wins||[]).filter(x=>x.id!==id);saveWins();renderPage('Win deleted');});}
+
+// ── ACCOUNTS ──────────────────────────────────────────────────────────────
+let acctAEF='all',acctTypeF='all',acctSearch='',acctBigBet=false;
+function renderAccounts(){
+  acctAEF=filterAE;let accts=S.accounts;if(acctAEF!=='all')accts=accts.filter(a=>a.aeId===acctAEF);if(acctTypeF!=='all')accts=accts.filter(a=>a.type===acctTypeF);if(acctBigBet)accts=accts.filter(a=>a.bigBet);if(acctSearch){const q=acctSearch.toLowerCase();accts=accts.filter(a=>a.name.toLowerCase().includes(q)||(a.acctNum||'').toLowerCase().includes(q));}
+  let html=`<div class="page-hd"><div><div class="page-title">Accounts</div><div class="page-sub">${accts.length} shown · ${S.accounts.filter(a=>a.type==='customer').length} customers · ${S.accounts.filter(a=>a.type==='newlogo').length} new logos</div></div><div class="hd-acts"><button class="btn btn-primary btn-sm" onclick="openAddAcct()">+ Add Account</button></div></div>${aeTabs(acctAEF,'setAcctAEF')}<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap"><div class="tabs" style="margin-top:0;flex:1"><button class="tab${acctTypeF==='all'&&!acctBigBet?' active':''}" onclick="acctBigBet=false;setAcctTypeF('all')">All</button><button class="tab${acctTypeF==='customer'?' active':''}" onclick="acctBigBet=false;setAcctTypeF('customer')">Customers</button><button class="tab${acctTypeF==='newlogo'?' active':''}" onclick="acctBigBet=false;setAcctTypeF('newlogo')">New Logos</button><button class="tab${acctBigBet?' active':''}" onclick="acctBigBet=!acctBigBet;acctTypeF='all';document.getElementById('ws-main').innerHTML=renderAccounts()">⭐ Big Bets</button></div><div style="position:relative;flex-shrink:0"><input id="acct-search" class="form-input" value="${acctSearch.replace(/"/g,'&quot;')}" placeholder="Search…" oninput="acctSearch=this.value;document.getElementById('acct-cards').innerHTML=buildAcctCards()" style="width:200px;padding-left:26px;font-size:12px"><span style="position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--text3);pointer-events:none">🔍</span></div></div><div id="acct-cards">`;
+  html+=buildAcctCards();html+=`</div>`;return html;
+}
+function buildAcctCards(){let accts=S.accounts;if(acctAEF!=='all')accts=accts.filter(a=>a.aeId===acctAEF);if(acctTypeF!=='all')accts=accts.filter(a=>a.type===acctTypeF);if(acctBigBet)accts=accts.filter(a=>a.bigBet);if(acctSearch){const q=acctSearch.toLowerCase();accts=accts.filter(a=>a.name.toLowerCase().includes(q)||(a.acctNum||'').toLowerCase().includes(q));}if(!accts.length)return`<div class="card"><div class="card-body"><div style="text-align:center;padding:30px;color:var(--text3);font-size:12px">No accounts found.</div></div></div>`;return accts.map((a,i)=>{const ae=aeById(a.aeId);return `<div class="card" style="margin-bottom:6px"><div class="card-head" style="padding:10px 14px;border-top:3px solid var(--sn-blue)"><div class="cav" style="${avS(i)};width:30px;height:30px;font-size:10px">${initials(a.name)}</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:var(--sn-blue)">${a.name}</div><div style="font-size:10px;color:var(--text3);margin-top:1px">${a.type==='customer'?'Customer':'New Logo'}${ae?' · '+ae.name:''}${a.acctNum?' · '+a.acctNum:''}</div>${a.notes?`<div style="font-size:11px;color:var(--text2);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:500px">${a.notes}</div>`:''}</div>${a.bigBet?`<span style="font-size:10px;padding:2px 9px;border-radius:10px;background:rgba(180,83,9,0.1);color:#B45309;font-weight:700;flex-shrink:0">⭐ Big Bet</span>`:''} ${statusPill(a.status)}<div class="btn-icon" onclick="openAcctSlide('${a.id}')">↗</div><div class="btn-icon del" onclick="delAcct('${a.id}')">×</div></div></div>`;}).join('');}
+function setAcctAEF(id){acctAEF=id;filterAE=id;acctSearch='';renderPage();}
+function setAcctTypeF(t){acctTypeF=t;document.getElementById('ws-main').innerHTML=renderAccounts();}
+function openAddAcct(){const aeOpts=AES.map(ae=>`<option value="${ae.id}">${ae.name}</option>`).join('');showModal('Add Account',`<div class="form-2"><div class="form-row"><label class="form-label">Account Name *</label><input class="form-input" id="m-an" placeholder="Batteries Plus"></div><div class="form-row"><label class="form-label">Account Number</label><input class="form-input" id="m-anum" placeholder="ACCT123456"></div></div><div class="form-2"><div class="form-row"><label class="form-label">Type</label><select class="form-select" id="m-at"><option value="customer">Customer</option><option value="newlogo">New Logo</option></select></div><div class="form-row"><label class="form-label">AE Owner</label><select class="form-select" id="m-aae"><option value="">— Select —</option>${aeOpts}</select></div></div><div class="form-row"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="m-bigbet" style="width:15px;height:15px;accent-color:var(--sn-blue)"><span class="form-label" style="margin:0">Big Bet Account</span></label></div>`,()=>{const name=document.getElementById('m-an').value.trim();if(!name){toast('Account name required');return;}S.accounts.push({id:uid(),name,acctNum:document.getElementById('m-anum').value.trim(),type:document.getElementById('m-at').value,aeId:document.getElementById('m-aae').value,status:'—',notes:'',acctPlanUrl:'',renewalDate:'',bigBet:document.getElementById('m-bigbet').checked});saveAccounts();closeModal();renderPage();toast('Account added','ok');});}
+function openAcctSlide(id){const a=S.accounts.find(x=>x.id===id);if(!a)return;const ae=aeById(a.aeId);document.getElementById('slide-title').textContent=a.name;document.getElementById('slide-sub').textContent=(a.type==='customer'?'Customer':'New Logo')+(ae?' · '+ae.name:'');const aeOpts=AES.map(x=>`<option value="${x.id}"${x.id===a.aeId?' selected':''}>${x.name}</option>`).join('');document.getElementById('slide-body').innerHTML=`<div class="form-2"><div class="form-row"><label class="form-label">Account Number</label><input class="form-input" id="sl-anum" value="${a.acctNum||''}"></div><div class="form-row"><label class="form-label">Account Name</label><input class="form-input" id="sl-aname" value="${a.name}"></div></div><div class="form-2"><div class="form-row"><label class="form-label">Type</label><select class="form-select" id="sl-at"><option value="customer"${a.type==='customer'?' selected':''}>Customer</option><option value="newlogo"${a.type==='newlogo'?' selected':''}>New Logo</option></select></div><div class="form-row"><label class="form-label">AE Owner</label><select class="form-select" id="sl-aae">${aeOpts}</select></div></div><div class="form-row"><label class="form-label">Account Plan URL</label><input class="form-input" id="sl-apu" value="${a.acctPlanUrl||''}" placeholder="https://…"></div><div class="form-row"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="sl-bigbet" ${a.bigBet?'checked':''} style="width:15px;height:15px;accent-color:var(--sn-blue)"><span class="form-label" style="margin:0">Big Bet Account</span></label></div><div class="form-row"><label class="form-label">Notes</label><textarea class="form-textarea" id="sl-ano">${a.notes||''}</textarea></div><button class="btn btn-primary btn-sm" onclick="saveAcctSlide('${id}')">Save</button>`;document.getElementById('slide').classList.add('open');}
+function saveAcctSlide(id){const a=S.accounts.find(x=>x.id===id);if(!a)return;a.acctNum=document.getElementById('sl-anum').value.trim();a.name=document.getElementById('sl-aname').value.trim()||a.name;a.type=document.getElementById('sl-at').value;a.aeId=document.getElementById('sl-aae').value;a.acctPlanUrl=document.getElementById('sl-apu').value;a.bigBet=document.getElementById('sl-bigbet').checked;a.notes=document.getElementById('sl-ano').value;saveAccounts();closeSlide();renderPage('Account saved');toast('Saved','ok');}
+function delAcct(id){withUndo('Account deleted',()=>{S.accounts=S.accounts.filter(x=>x.id!==id);saveAccounts();renderPage('Account deleted');});}
+
+// ── 1:1S ──────────────────────────────────────────────────────────────────
+let oneonAEF='all';
+function renderOneons(){oneonAEF=filterAE;const ae=aeById(oneonAEF);const all=oneonAEF==='all'?AES.flatMap(a=>(S.oneons[a.id]||[]).map(o=>({...o,_ae:a}))):(S.oneons[oneonAEF]||[]).map(o=>({...o,_ae:ae}));const sorted=[...all].sort((a,b)=>b.date.localeCompare(a.date));let html=`<div class="page-hd"><div><div class="page-title">1:1s</div><div class="page-sub">${sorted.length} notes logged</div></div><div class="hd-acts"><button class="btn btn-primary btn-sm" onclick="openAdd1on1()">+ Add Note</button></div></div>${aeTabs(oneonAEF,'setOneonAEF')}`;if(!sorted.length)return html+`<div class="card"><div class="card-body"><div style="text-align:center;padding:30px;color:var(--text3);font-size:12px">No 1:1 notes yet.</div></div></div>`;sorted.forEach(o=>{const actionItems=(o.actionItems||[]).filter(Boolean);html+=`<div class="card"><div class="card-head card-head-accent"><div style="flex:1"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:14px;font-weight:700;color:var(--sn-blue)">${fmtDate(o.date)}</span>${o._ae?`<span class="pill" style="background:${o._ae.bg};color:${o._ae.color};border:1px solid ${o._ae.color+'30'}">${o._ae.name.split(' ')[0]}</span>`:''}</div></div><div class="btn-icon" onclick="editOneon('${o._ae?.id}','${o.id}')">✎</div><div class="btn-icon del" onclick="delOneon('${o._ae?.id}','${o.id}')">×</div></div><div class="card-body">${o.body?`<div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:${actionItems.length||o.pinnedNote?'12px':'0'}">${o.body}</div>`:''} ${actionItems.length?`<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px">Action Items</div>${actionItems.map(a=>`<div style="display:flex;align-items:flex-start;gap:7px;padding:4px 0"><span style="color:var(--sn-blue);font-weight:700;flex-shrink:0">→</span><span style="font-size:12px;color:var(--text2)">${a}</span></div>`).join('')}</div>`:''} ${o.pinnedNote?`<div style="padding:8px 12px;background:rgba(180,83,9,0.06);border-left:3px solid var(--amber);border-radius:0 var(--r2) var(--r2) 0;margin-top:8px"><div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;margin-bottom:3px">📌 Pinned</div><div style="font-size:12px;color:var(--text2)">${o.pinnedNote}</div></div>`:''}</div></div>`;});return html;}
+function setOneonAEF(id){oneonAEF=id;filterAE=id;renderPage();}
+function openAdd1on1(){const aeOpts=AES.map(ae=>`<option value="${ae.id}">${ae.name}</option>`).join('');showModal('Add 1:1 Note',`<div class="form-2"><div class="form-row"><label class="form-label">Date</label><input type="date" class="form-input" id="m-od" value="${today()}"></div><div class="form-row"><label class="form-label">AE *</label><select class="form-select" id="m-oae">${aeOpts}</select></div></div><div class="form-row"><label class="form-label">Notes</label><textarea class="form-textarea" id="m-ob" style="min-height:90px" placeholder="What was discussed…"></textarea></div><div class="form-row"><label class="form-label">Action Items <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">— auto-creates tasks</span></label><div id="action-items-list"><div style="display:flex;gap:6px"><span style="color:var(--sn-blue);font-weight:700;flex-shrink:0;margin-top:8px">→</span><input class="form-input action-item-input" placeholder="Action item…" style="flex:1"></div></div><button type="button" class="btn btn-ghost btn-sm" style="margin-top:7px" onclick="addAIRow()">+ Add another</button></div><div class="form-row"><label class="form-label">Pinned Note</label><input class="form-input pinned-note-input" placeholder="Important context to keep top of mind…"></div>`,()=>{const aeId=document.getElementById('m-oae').value;const body=document.getElementById('m-ob').value.trim();const actionItems=[...document.querySelectorAll('.action-item-input')].map(i=>i.value.trim()).filter(Boolean);const pinnedNote=document.querySelector('.pinned-note-input')?.value.trim()||'';if(!body&&!actionItems.length&&!pinnedNote){toast('Add at least a note or action item');return;}S.oneons[aeId].unshift({id:uid(),date:document.getElementById('m-od').value,body,actionItems,pinnedNote});saveOneons();if(actionItems.length){if(!S.todos[aeId])S.todos[aeId]=[];actionItems.forEach(item=>{S.todos[aeId].push({id:uid(),label:item,due:'',priority:'Med',account:'',done:false,_from1on1:true,_aeId:aeId,_aeName:aeById(aeId)?.name.split(' ')[0]||''});});saveTodos();}if(pinnedNote){if(!S.notes[aeId])S.notes[aeId]=[];S.notes[aeId].push({id:uid(),date:document.getElementById('m-od').value,author:'Jacob',text:pinnedNote});saveNotes();}closeModal();renderPage('1:1 note added');toast('1:1 saved'+(actionItems.length?' · '+actionItems.length+' task'+(actionItems.length!==1?'s':'')+' created':''),'ok');});}
+function addAIRow(){const list=document.getElementById('action-items-list');if(!list)return;const row=document.createElement('div');row.style.cssText='display:flex;gap:6px;margin-top:4px';row.innerHTML=`<span style="color:var(--sn-blue);font-weight:700;flex-shrink:0;margin-top:8px">→</span><input class="form-input action-item-input" placeholder="Another action item…" style="flex:1">`;list.appendChild(row);row.querySelector('input').focus();}
+function editOneon(aeId,id){const o=(S.oneons[aeId]||[]).find(x=>x.id===id);if(!o)return;const ae=aeById(aeId);const actionRows=(o.actionItems||[]).map(a=>`<div style="display:flex;gap:6px;margin-top:4px"><span style="color:var(--sn-blue);font-weight:700;flex-shrink:0;margin-top:8px">→</span><input class="form-input action-item-input" value="${a.replace(/"/g,'&quot;')}" style="flex:1"><div class="btn-icon del" onclick="this.parentElement.remove()" style="flex-shrink:0;margin-top:4px">×</div></div>`).join('') ||`<div style="display:flex;gap:6px;margin-top:4px"><span style="color:var(--sn-blue);font-weight:700;flex-shrink:0;margin-top:8px">→</span><input class="form-input action-item-input" placeholder="Add action item…" style="flex:1"></div>`;showModal('Edit 1:1',`<div class="form-row"><label class="form-label">Date</label><input type="date" class="form-input" id="m-od" value="${o.date}"></div><div class="form-row"><label class="form-label">AE</label><input class="form-input" value="${ae?.name||''}" disabled></div><div class="form-row"><label class="form-label">Notes</label><textarea class="form-textarea" id="m-ob" style="min-height:90px">${o.body||''}</textarea></div><div class="form-row"><label class="form-label">Action Items</label><div id="action-items-list">${actionRows}</div><button type="button" class="btn btn-ghost btn-sm" style="margin-top:7px" onclick="addAIRow()">+ Add</button></div><div class="form-row"><label class="form-label">Pinned Note</label><textarea class="form-textarea" id="m-pin" style="min-height:60px">${o.pinnedNote||''}</textarea></div>`,()=>{o.date=document.getElementById('m-od').value;o.body=document.getElementById('m-ob').value;o.actionItems=[...document.querySelectorAll('.action-item-input')].map(i=>i.value.trim()).filter(Boolean);o.pinnedNote=document.getElementById('m-pin').value.trim();saveOneons();closeModal();renderPage('1:1 updated');toast('Updated','ok');});}
+function delOneon(aeId,id){withUndo('1:1 deleted',()=>{S.oneons[aeId]=(S.oneons[aeId]||[]).filter(x=>x.id!==id);saveOneons();renderPage('Note deleted');});}
+
+// ── TODOS ─────────────────────────────────────────────────────────────────
+let todoAEF='all',todoTab='general';
+function renderTodos(){
+  todoAEF=filterAE;const allBuckets=[...AES.map(ae=>({id:ae.id,name:ae.name.split(' ')[0]})),{id:'general',name:'General'}];const all=allBuckets.flatMap(ae=>(S.todos[ae.id]||[]).map(t=>({...t,_aeId:t._aeId||ae.id,_aeName:t._aeName||ae.name})));const seen=new Set();const deduped=all.filter(t=>{if(seen.has(t.id))return false;seen.add(t.id);return true;});
+  const filtered=todoAEF==='all'?deduped:todoAEF==='general'?deduped.filter(t=>t._aeId==='general'&&!t._isCampEmail):deduped.filter(t=>t._isCampEmail?(t._allAeIds||[t._aeId]).includes(todoAEF):t._aeId===todoAEF);
+  const campTasks=filtered.filter(t=>t._isCampEmail);const generalTasks=filtered.filter(t=>!t._isCampEmail);const shown=todoTab==='campaign'?campTasks:generalTasks;const open=shown.filter(t=>!t.done).sort((a,b)=>(a.due||'9').localeCompare(b.due||'9'));const done=shown.filter(t=>t.done);const overdue=open.filter(t=>t.due&&isOverdue(t.due));
+  let html=`<div class="page-hd"><div><div class="page-title">To Do</div><div class="page-sub">${open.length} open · ${overdue.length} overdue</div></div><div class="hd-acts">${todoTab==='general'?'<button class="btn btn-primary btn-sm" onclick="openAddTodo()">+ Add Task</button>':''}</div></div><div class="tabs"><button class="tab${todoAEF==='all'?' active':''}" onclick="setTodoAEF('all')">All AEs</button>${AES.map(ae=>`<button class="tab${todoAEF===ae.id?' active':''}" onclick="setTodoAEF('${ae.id}')">${ae.name.split(' ')[0]}</button>`).join('')}<button class="tab${todoAEF==='general'?' active':''}" onclick="setTodoAEF('general')" style="border-left:1px solid var(--border);margin-left:4px;padding-left:12px">General</button></div><div style="display:flex;gap:2px;margin-bottom:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:3px;max-width:320px"><button class="tab${todoTab==='general'?' active':''}" onclick="todoTab='general';renderPage()" style="flex:1">To Do (${generalTasks.filter(t=>!t.done).length})</button><button class="tab${todoTab==='campaign'?' active':''}" onclick="todoTab='campaign';renderPage()" style="flex:1">Campaign Tasks (${campTasks.filter(t=>!t.done).length})</button></div>`;
+  if(overdue.length)html+=`<div class="card" style="border-color:rgba(217,48,37,.25)"><div class="card-head" style="border-top:3px solid var(--red)"><span>⚠️</span><div class="card-title" style="color:var(--red)">Overdue (${overdue.length})</div></div><div class="card-body">${overdue.map(t=>todoRow(t)).join('')}</div></div>`;
+  html+=`<div class="card"><div class="card-head card-head-accent"><span>▶</span><div class="card-title">Upcoming (${open.filter(t=>!isOverdue(t.due)).length})</div></div><div class="card-body">${open.filter(t=>!isOverdue(t.due)).map(t=>todoRow(t)).join('')||'<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">Nothing upcoming.</div>'}</div></div>`;
+  if(done.length)html+=`<div class="card"><div class="card-head card-head-accent"><span>✓</span><div class="card-title">Done (${done.length})</div><div class="btn-icon del" onclick="clearDone()">🗑</div></div><div class="card-body">${done.slice(-8).reverse().map(t=>todoRow(t)).join('')}</div></div>`;
+  return html;
+}
+function todoRow(t){const od=!t.done&&t.due&&isOverdue(t.due);const badge=t._isCampEmail?`<span class="pill pill-b" style="font-size:9px;padding:1px 6px">📧 Step ${t._step}</span>`:'';return `<div class="todo-item"><div class="todo-chk${t.done?' done':''}" onclick="toggleTodo('${t._aeId}','${t.id}')">${t.done?'✓':''}</div><div style="flex:1;min-width:0"><div style="font-size:12px;color:${t.done?'var(--text3)':'var(--text)'};text-decoration:${t.done?'line-through':'none'};display:flex;align-items:center;gap:6px;flex-wrap:wrap">${t.label} ${badge}</div><div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap">${t._aeName?`<span style="font-size:10px;color:var(--text3)">${t._aeName}</span>`:''} ${t.due?`<span style="color:${od?'var(--red)':'var(--text3)'};font-size:10px">${od?'Overdue':'Due '+fmtDate(t.due)}</span>`:`<span style="font-size:10px;color:var(--text3)">No due date</span>`}</div></div><span class="pill ${priClass(t.priority)}">${t.priority}</span><div class="btn-icon del" onclick="delTodo('${t._aeId}','${t.id}')">×</div></div>`;}
+function setTodoAEF(id){todoAEF=id;filterAE=id==='general'?'all':id;renderPage();}
+function toggleTodo(aeId,id){const t=(S.todos[aeId]||[]).find(x=>x.id===id);if(t){t.done=!t.done;saveTodos();renderPage(t.done?'Task done':'Task reopened');}}
+function delTodo(aeId,id){withUndo('Task deleted',()=>{S.todos[aeId]=(S.todos[aeId]||[]).filter(x=>x.id!==id);saveTodos();renderPage('Task deleted');});}
+function clearDone(){AES.forEach(ae=>{S.todos[ae.id]=(S.todos[ae.id]||[]).filter(t=>!t.done);});scheduleSave();renderPage();}
+function openAddTodo(){const aeOpts=AES.map(ae=>`<option value="${ae.id}"${ae.id===(todoAEF==='all'||todoAEF==='general'?'':todoAEF)?' selected':''}>${ae.name}</option>`).join('');showModal('Add Task',`<div class="form-row"><label class="form-label">Task *</label><input class="form-input" id="m-tl" placeholder="What needs to happen?"></div><div class="form-row"><label class="form-label">Assign to AE</label><select class="form-select" id="m-tae"><option value="">— General —</option>${aeOpts}</select></div><div class="form-2"><div class="form-row"><label class="form-label">Due Date</label><input type="date" class="form-input" id="m-td" value="${today()}"></div><div class="form-row"><label class="form-label">Priority</label><select class="form-select" id="m-tp"><option>High</option><option selected>Med</option><option>Low</option></select></div></div>`,()=>{const label=document.getElementById('m-tl').value.trim();if(!label){toast('Required');return;}const aeId=document.getElementById('m-tae').value||'general';if(!S.todos[aeId])S.todos[aeId]=[];withUndo('Task added',()=>{S.todos[aeId].push({id:uid(),label,due:document.getElementById('m-td').value,priority:document.getElementById('m-tp').value,done:false,_aeId:aeId,_aeName:aeId==='general'?'General':aeById(aeId)?.name.split(' ')[0]||''});saveTodos();closeModal();renderPage('Task added');});});}
+
+// ── NOTES ─────────────────────────────────────────────────────────────────
+let notesAEF='all';
+function renderNotes(){notesAEF=filterAE;const all=notesAEF==='all'?AES.flatMap(ae=>(S.notes[ae.id]||[]).map(n=>({...n,_ae:ae}))):(S.notes[notesAEF]||[]).map(n=>({...n,_ae:aeById(notesAEF)}));const sorted=[...all].sort((a,b)=>b.date.localeCompare(a.date));let html=`<div class="page-hd"><div><div class="page-title">Important Notes</div><div class="page-sub">${sorted.length} pinned</div></div><div class="hd-acts"><button class="btn btn-primary btn-sm" onclick="openAddNote()">+ Pin Note</button></div></div>${aeTabs(notesAEF,'setNotesAEF')}`;if(!sorted.length)return html+`<div class="card"><div class="card-body"><div style="text-align:center;padding:30px;color:var(--text3);font-size:12px">No notes pinned.</div></div></div>`;sorted.forEach(n=>{html+=`<div class="card"><div class="card-head card-head-accent"><span style="font-size:16px">📌</span><div style="flex:1"><div style="font-size:11px;color:var(--amber);font-weight:700">${n.author}${n._ae?' · '+n._ae.name.split(' ')[0]:''}</div><div style="font-size:10px;color:var(--text3)">${fmtDate(n.date)}</div></div><div class="btn-icon" onclick="editNote('${n._ae?.id}','${n.id}')">✎</div><div class="btn-icon del" onclick="delNote('${n._ae?.id}','${n.id}')">×</div></div><div class="card-body"><div style="font-size:13px;color:var(--text2);line-height:1.7">${n.text}</div></div></div>`;});return html;}
+function setNotesAEF(id){notesAEF=id;filterAE=id;renderPage();}
+function openAddNote(){const aeOpts=AES.map(ae=>`<option value="${ae.id}"${ae.id===(notesAEF==='all'?AES[0].id:notesAEF)?' selected':''}>${ae.name}</option>`).join('');showModal('Pin Note',`<div class="form-2"><div class="form-row"><label class="form-label">Date</label><input type="date" class="form-input" id="m-nd" value="${today()}"></div><div class="form-row"><label class="form-label">AE</label><select class="form-select" id="m-nae">${aeOpts}</select></div></div><div class="form-row"><label class="form-label">Note *</label><textarea class="form-textarea" id="m-nt" style="min-height:90px" placeholder="Important context…"></textarea></div>`,()=>{const text=document.getElementById('m-nt').value.trim();const aeId=document.getElementById('m-nae').value;if(!text){toast('Required');return;}withUndo('Note pinned',()=>{S.notes[aeId].push({id:uid(),date:document.getElementById('m-nd').value,author:'Jacob',text});saveNotes();closeModal();renderPage('Note pinned');});});}
+function editNote(aeId,id){const n=(S.notes[aeId]||[]).find(x=>x.id===id);if(!n)return;showModal('Edit Note',`<div class="form-row"><label class="form-label">Note</label><textarea class="form-textarea" id="m-nt" style="min-height:90px">${n.text}</textarea></div>`,()=>{n.text=document.getElementById('m-nt').value;saveNotes();closeModal();renderPage();toast('Updated','ok');});}
+function delNote(aeId,id){S.notes[aeId]=(S.notes[aeId]||[]).filter(x=>x.id!==id);saveNotes();renderPage();}
+
+// ── LINKS ─────────────────────────────────────────────────────────────────
+let linksAEF='all';
+function renderLinks(){linksAEF=filterAE;const all=linksAEF==='all'?AES.flatMap(ae=>(S.links[ae.id]||[]).map(l=>({...l,_ae:ae}))):(S.links[linksAEF]||[]).map(l=>({...l,_ae:aeById(linksAEF)}));let html=`<div class="page-hd"><div><div class="page-title">Quick Links</div><div class="page-sub">${all.length} links saved</div></div><div class="hd-acts"><button class="btn btn-primary btn-sm" onclick="openAddLink()">+ Add Link</button></div></div>${aeTabs(linksAEF,'setLinksAEF')}`;if(!all.length)return html+`<div class="card"><div class="card-body"><div style="text-align:center;padding:30px;color:var(--text3);font-size:12px">No links yet. Add account plans, research docs, etc.</div></div></div>`;const byTag={};all.forEach(l=>{const t=l.account||'General';if(!byTag[t])byTag[t]=[];byTag[t].push(l);});Object.entries(byTag).forEach(([tag,lnks])=>{html+=`<div class="card"><div class="card-head card-head-accent"><span>🔗</span><div class="card-title">${tag}</div></div><div class="card-body"><div class="link-grid">${lnks.map(l=>`<div class="link-card" onclick="window.open('${l.url}','_blank')"><div style="font-size:13px;font-weight:600;color:var(--sn-blue)">${l.name}</div><div style="font-size:10px;color:var(--text3);margin-top:2px">${l.type}${l._ae?' · '+l._ae.name.split(' ')[0]:''}</div><div style="display:flex;justify-content:flex-end;margin-top:6px"><div class="btn-icon del" onclick="event.stopPropagation();delLink('${l._ae?.id}','${l.id}')">×</div></div></div>`).join('')}</div></div></div>`;});return html;}
+function setLinksAEF(id){linksAEF=id;filterAE=id;renderPage();}
+function openAddLink(){const aeOpts=AES.map(ae=>`<option value="${ae.id}"${ae.id===(linksAEF==='all'?AES[0].id:linksAEF)?' selected':''}>${ae.name}</option>`).join('');showModal('Add Quick Link',`<div class="form-row"><label class="form-label">Name *</label><input class="form-input" id="m-ln" placeholder="Hub Group Account Research"></div><div class="form-row"><label class="form-label">URL *</label><input class="form-input" id="m-lu" placeholder="https://…"></div><div class="form-2"><div class="form-row"><label class="form-label">Account / Group</label><input class="form-input" id="m-la" placeholder="Hub Group"></div><div class="form-row"><label class="form-label">Type</label><select class="form-select" id="m-lt">${LINK_TYPES.map(t=>`<option>${t}</option>`).join('')}</select></div></div><div class="form-row"><label class="form-label">AE</label><select class="form-select" id="m-lae">${aeOpts}</select></div>`,()=>{const name=document.getElementById('m-ln').value.trim(),url=document.getElementById('m-lu').value.trim();if(!name||!url){toast('Name and URL required');return;}const aeId=document.getElementById('m-lae').value;S.links[aeId].push({id:uid(),name,url,account:document.getElementById('m-la').value||'General',type:document.getElementById('m-lt').value});saveLinks();closeModal();renderPage();toast('Link added','ok');});}
+function delLink(aeId,id){S.links[aeId]=(S.links[aeId]||[]).filter(x=>x.id!==id);saveLinks();renderPage();}
+
+// ── EVENTS ────────────────────────────────────────────────────────────────
+function renderEvents(){const evts=(S.events||[]).sort((a,b)=>a.date.localeCompare(b.date));const upcoming=evts.filter(e=>e.date>=today());const past=evts.filter(e=>e.date<today());let html=`<div class="page-hd"><div><div class="page-title">Events</div><div class="page-sub">${upcoming.length} upcoming · ${past.length} past</div></div><div class="hd-acts"><button class="btn btn-primary btn-sm" onclick="openAddEvent()">+ Add Event</button></div></div>`;if(!evts.length)return html+`<div class="card"><div class="card-body"><div style="text-align:center;padding:30px;color:var(--text3);font-size:12px">No events yet. Add marketing events, webinars, and field events.</div></div></div>`;if(upcoming.length){html+=`<div class="card" style="margin-bottom:14px"><div class="card-head card-head-accent"><span>📅</span><div class="card-title">Upcoming (${upcoming.length})</div></div><div class="card-body">`;upcoming.forEach((e,i)=>{html+=eventRow(e,false);});html+=`</div></div>`;}if(past.length){html+=`<div class="card"><div class="card-head card-head-accent"><span>✓</span><div class="card-title" style="color:var(--text3)">Past (${past.length})</div></div><div class="card-body">`;past.slice(-10).reverse().forEach((e,i)=>{html+=eventRow(e,true);});html+=`</div></div>`;}return html;}
+function eventRow(e,past){const daysUntil=!past?Math.ceil((new Date(e.date+'T12:00:00')-new Date())/864e5):null;const urgency=daysUntil!==null&&daysUntil<=7?'var(--red)':daysUntil!==null&&daysUntil<=14?'var(--amber)':'var(--sn-blue)';return `<div class="crow" style="align-items:flex-start;padding:11px 0;opacity:${past?'0.6':'1'}"><div style="min-width:52px;text-align:center;padding-top:2px"><div style="font-size:18px;font-weight:700;color:${urgency}">${new Date(e.date+'T12:00:00').getDate()}</div><div style="font-size:10px;color:var(--text3)">${new Date(e.date+'T12:00:00').toLocaleDateString('en-US',{month:'short'})}</div></div><div style="flex:1;min-width:0;padding-left:10px"><div style="font-size:13px;font-weight:600;color:var(--sn-blue)">${e.url?`<a href="${e.url}" target="_blank" style="color:var(--sn-blue);text-decoration:none">${e.title} ↗</a>`:e.title}</div><div style="font-size:11px;color:var(--text2);margin-top:3px">${e.virtual?'💻 Virtual':'📍 '+e.location}</div>${!past&&daysUntil!==null?`<div style="font-size:10px;color:${urgency};margin-top:3px;font-weight:600">${daysUntil===0?'Today':daysUntil===1?'Tomorrow':daysUntil+' days away'}</div>`:''}</div><div style="display:flex;gap:5px"><div class="btn-icon" onclick="editEvent('${e.id}')">✎</div><div class="btn-icon del" onclick="deleteEvent('${e.id}')">×</div></div></div>`;}
+function openAddEvent(){showModal('Add Event',`<div class="form-row"><label class="form-label">Event Title *</label><input class="form-input" id="e-title" placeholder="ServiceNow World Forum Chicago"></div><div class="form-2"><div class="form-row"><label class="form-label">Date *</label><input type="date" class="form-input" id="e-date" value="${today()}"></div><div class="form-row"><label class="form-label">Industry</label><input class="form-input" id="e-ind" placeholder="Healthcare, Finance…"></div></div><div class="form-row"><label class="form-label">Location</label><div style="display:flex;gap:8px;align-items:center;margin-top:4px"><label class="cb-row"><input type="checkbox" id="e-virt"><span>Virtual</span></label><input class="form-input" id="e-loc" placeholder="Chicago, IL" style="flex:1"></div></div><div class="form-row"><label class="form-label">Link</label><input class="form-input" id="e-url" placeholder="https://…"></div><div class="form-row"><label class="form-label">Notes</label><textarea class="form-textarea" id="e-notes" style="min-height:60px"></textarea></div>`,()=>{const title=document.getElementById('e-title').value.trim();const date=document.getElementById('e-date').value;if(!title||!date){toast('Title and date required');return;}if(!S.events)S.events=[];S.events.push({id:uid(),title,date,industry:document.getElementById('e-ind').value,virtual:document.getElementById('e-virt').checked,location:document.getElementById('e-loc').value,url:document.getElementById('e-url').value,notes:document.getElementById('e-notes').value});saveEvents();closeModal();renderPage();toast('Event added','ok');});}
+function editEvent(id){const e=(S.events||[]).find(x=>x.id===id);if(!e)return;showModal('Edit Event',`<div class="form-row"><label class="form-label">Title</label><input class="form-input" id="e-title" value="${e.title}"></div><div class="form-2"><div class="form-row"><label class="form-label">Date</label><input type="date" class="form-input" id="e-date" value="${e.date}"></div><div class="form-row"><label class="form-label">Industry</label><input class="form-input" id="e-ind" value="${e.industry||''}"></div></div><div class="form-row"><label class="form-label">Location</label><div style="display:flex;gap:8px;align-items:center;margin-top:4px"><label class="cb-row"><input type="checkbox" id="e-virt" ${e.virtual?'checked':''}><span>Virtual</span></label><input class="form-input" id="e-loc" value="${e.location||''}" style="flex:1"></div></div><div class="form-row"><label class="form-label">Link</label><input class="form-input" id="e-url" value="${e.url||''}"></div><div class="form-row"><label class="form-label">Notes</label><textarea class="form-textarea" id="e-notes" style="min-height:60px">${e.notes||''}</textarea></div>`,()=>{e.title=document.getElementById('e-title').value.trim();e.date=document.getElementById('e-date').value;e.industry=document.getElementById('e-ind').value;e.virtual=document.getElementById('e-virt').checked;e.location=document.getElementById('e-loc').value;e.url=document.getElementById('e-url').value;e.notes=document.getElementById('e-notes').value;saveEvents();closeModal();renderPage();toast('Updated','ok');});}
+function deleteEvent(id){S.events=S.events.filter(x=>x.id!==id);saveEvents();renderPage();}
+
+// ── RECAP ─────────────────────────────────────────────────────────────────
+function renderRecap(){const now=new Date();const firstOfMonth=new Date(now.getFullYear(),now.getMonth(),1).toISOString().slice(0,10);const lastOfMonth=new Date(now.getFullYear(),now.getMonth()+1,0).toISOString().slice(0,10);return `<div class="page-hd"><div><div class="page-title">Recap</div><div class="page-sub">Campaign and account activity summary by date range</div></div></div><div class="card" style="margin-bottom:16px"><div class="card-body" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:8px"><label class="form-label" style="margin:0">From</label><input type="date" id="recap-from" class="form-input" value="${firstOfMonth}" style="width:150px"><label class="form-label" style="margin:0">To</label><input type="date" id="recap-to" class="form-input" value="${lastOfMonth}" style="width:150px"></div><div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm" onclick="setRecapRange('month')">This Month</button><button class="btn btn-ghost btn-sm" onclick="setRecapRange('lastmonth')">Last Month</button><button class="btn btn-ghost btn-sm" onclick="setRecapRange('q')">This Quarter</button><button class="btn btn-ghost btn-sm" onclick="buildRecapOutput()">Build Report</button></div></div></div><div id="recap-body">${buildRecapBody(firstOfMonth,lastOfMonth)}</div>`;}
+function setRecapRange(preset){const now=new Date();let from,to;if(preset==='month'){from=new Date(now.getFullYear(),now.getMonth(),1);to=new Date(now.getFullYear(),now.getMonth()+1,0);}else if(preset==='lastmonth'){from=new Date(now.getFullYear(),now.getMonth()-1,1);to=new Date(now.getFullYear(),now.getMonth(),0);}else if(preset==='q'){const q=Math.floor(now.getMonth()/3);from=new Date(now.getFullYear(),q*3,1);to=new Date(now.getFullYear(),q*3+3,0);}const fmt=d=>d.toISOString().slice(0,10);const f=document.getElementById('recap-from');const t=document.getElementById('recap-to');if(f)f.value=fmt(from);if(t)t.value=fmt(to);buildRecapOutput();}
+function buildRecapOutput(){const from=document.getElementById('recap-from')?.value||'';const to=document.getElementById('recap-to')?.value||'';const el=document.getElementById('recap-body');if(el)el.innerHTML=buildRecapBody(from,to);}
+function buildRecapBody(from,to){if(!from||!to)return '';const activeCamps=S.campaigns.filter(c=>Object.values(c.sentLog||{}).some(v=>v.date&&v.date>=from&&v.date<=to));if(!activeCamps.length)return `<div class="card"><div class="card-body"><div style="text-align:center;padding:30px;color:var(--text3);font-size:12px">No campaign activity in this range. Mark steps as sent in Campaigns to track here.</div></div></div>`;const totalContacts=activeCamps.reduce((s,c)=>s+c.contactCount,0);const totalMeetings=(S.wins||[]).filter(w=>w.date>=from&&w.date<=to).length;const totalPipeline=(S.wins||[]).filter(w=>w.date>=from&&w.date<=to).reduce((s,w)=>s+(parseFloat(w.pipeline)||0),0);let html=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px"><div class="kpi kpi-b"><div class="kpi-lbl">Campaigns</div><div class="kpi-val">${activeCamps.length}</div></div><div class="kpi kpi-g"><div class="kpi-lbl">Contacts Touched</div><div class="kpi-val">${totalContacts}</div></div><div class="kpi kpi-p"><div class="kpi-lbl">Meetings Booked</div><div class="kpi-val">${totalMeetings}</div></div><div class="kpi kpi-g"><div class="kpi-lbl">Pipeline</div><div class="kpi-val" style="font-size:${totalPipeline>=100000?'18px':'24px'}">${totalPipeline?'$'+totalPipeline.toLocaleString():'—'}</div></div></div><div class="card"><div class="card-head card-head-accent"><span>📣</span><div class="card-title">By Campaign</div></div><div class="card-body">`;activeCamps.forEach(c=>{const sentInRange=Object.entries(c.sentLog||{}).filter(([,v])=>v.date&&v.date>=from&&v.date<=to);const emailsInRange=sentInRange.length*(c.contactCount||0);const campWins=(S.wins||[]).filter(w=>w.campId===c.id&&w.date>=from&&w.date<=to);html+=`<div style="padding:12px 0;border-bottom:1px solid var(--border)"><div style="display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap"><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--sn-blue);margin-bottom:3px">${c.name}</div><div style="font-size:11px;color:var(--text3)">${c.product||''} · ${sentInRange.map(([s,v])=>`Step ${s} ${fmtDate(v.date)}`).join(' · ')}</div></div><div style="display:flex;gap:16px;text-align:center"><div><div style="font-size:18px;font-weight:700;color:var(--sn-blue)">${c.contactCount||0}</div><div style="font-size:10px;color:var(--text3)">contacts</div></div><div><div style="font-size:18px;font-weight:700;color:var(--sn-blue)">${emailsInRange}</div><div style="font-size:10px;color:var(--text3)">emails</div></div>${campWins.length?`<div><div style="font-size:18px;font-weight:700;color:#1a7a00">${campWins.length}</div><div style="font-size:10px;color:var(--text3)">meetings</div></div>`:''}</div></div></div>`;});html+=`</div></div>`;return html;}
+
+// ── ACTIVITY ──────────────────────────────────────────────────────────────
+function renderActivity(){const acts=[...(S.activity||[])].sort((a,b)=>b.date.localeCompare(a.date)||b.createdAt.localeCompare(a.createdAt));const fAEA=filterAE;const filtered=fAEA==='all'?acts:acts.filter(a=>a.aeId===fAEA);let html=`<div class="page-hd"><div><div class="page-title">Activity Log</div><div class="page-sub">${filtered.length} entries</div></div><div class="hd-acts"><button class="btn btn-primary btn-sm" onclick="openAddActivity()">+ Log Activity</button></div></div>${aeTabs(fAEA,'setActivityAEF')}`;if(!filtered.length)return html+`<div class="card"><div class="card-body"><div style="text-align:center;padding:40px;color:var(--text3);font-size:12px">No activity logged yet.<br><br><button class="btn btn-primary btn-sm" onclick="openAddActivity()">Log your first activity →</button></div></div></div>`;const byDate={};filtered.forEach(a=>{if(!byDate[a.date])byDate[a.date]=[];byDate[a.date].push(a);});Object.keys(byDate).sort((a,b)=>b.localeCompare(a)).forEach(date=>{html+=`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:8px 0 5px">${fmtDateLong(date)}</div>`;byDate[date].forEach(a=>{const ae=aeById(a.aeId);const acct=S.accounts.find(x=>x.id===a.acctId);const camp=S.campaigns.find(x=>x.id===a.campId);const tColors={Calls:'#0369A1','LinkedIn Touches':'#0369A1','One Off Emails':'#1a7a00'};const color=tColors[a.type]||'var(--text3)';html+=`<div class="card" style="margin-bottom:6px"><div class="card-head" style="padding:10px 14px;border-left:3px solid ${color}"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px"><span style="font-size:11px;font-weight:700;padding:1px 8px;border-radius:10px;background:${color}18;color:${color}">${a.type}</span>${acct?`<span style="font-size:12px;font-weight:600;color:var(--sn-blue)">${acct.name}</span>`:''} ${camp?`<span style="font-size:11px;color:var(--text3)">via ${camp.name}</span>`:''} ${ae?`<span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;background:${ae.bg};color:${ae.color}">${ae.init}</span>`:''}</div><div style="font-size:12px;color:var(--text2);line-height:1.5">${a.note}</div></div><div class="btn-icon del" onclick="deleteActivity('${a.id}')">×</div></div></div>`;});});return html;}
+function setActivityAEF(id){filterAE=id;renderPage();}
+function openAddActivity(){const aeOpts=[...AES].sort((a,b)=>a.name.localeCompare(b.name)).map(ae=>`<option value="${ae.id}"${filterAE===ae.id?' selected':''}>${ae.name}</option>`).join('');const acctOpts=[...S.accounts].sort((a,b)=>a.name.localeCompare(b.name)).map(a=>`<option value="${a.id}">${a.name}</option>`).join('');const campOpts=[...S.campaigns].sort((a,b)=>a.name.localeCompare(b.name)).map(c=>`<option value="${c.id}">${c.name}</option>`).join('');showModal('Log Activity',`<div class="form-2"><div class="form-row"><label class="form-label">Type *</label><select class="form-select" id="act-type"><option>Calls</option><option>LinkedIn Touches</option><option>One Off Emails</option></select></div><div class="form-row"><label class="form-label">Date</label><input type="date" class="form-input" id="act-date" value="${today()}"></div></div><div class="form-row"><label class="form-label">Note *</label><textarea class="form-textarea" id="act-note" style="min-height:70px" placeholder="Called IT personas at Consilio about the Veza campaign…"></textarea></div><div class="form-2"><div class="form-row"><label class="form-label">Account</label><select class="form-select" id="act-acct"><option value="">— None —</option>${acctOpts}</select></div><div class="form-row"><label class="form-label">AE</label><select class="form-select" id="act-ae"><option value="">— None —</option>${aeOpts}</select></div></div><div class="form-row"><label class="form-label">Campaign</label><select class="form-select" id="act-camp"><option value="">— None —</option>${campOpts}</select></div>`,()=>{const note=document.getElementById('act-note').value.trim();if(!note){toast('Note required');return;}if(!S.activity)S.activity=[];S.activity.push({id:uid(),date:document.getElementById('act-date').value,createdAt:new Date().toISOString(),type:document.getElementById('act-type').value,note,acctId:document.getElementById('act-acct').value,aeId:document.getElementById('act-ae').value,campId:document.getElementById('act-camp').value});saveActivity();closeModal();renderPage('Activity logged');});}
+function deleteActivity(id){withUndo('Activity deleted',()=>{S.activity=S.activity.filter(x=>x.id!==id);saveActivity();renderPage('Activity deleted');});}
+
+// ── BIWEEKLY SUMMARY ──────────────────────────────────────────────────────
+function renderSummaryPage(){const aeOpts=AES.map(ae=>`<option value="${ae.id}">${ae.name}</option>`).join('');const defFrom=new Date(Date.now()-14*864e5).toISOString().slice(0,10);return `<div class="page-hd"><div><div class="page-title">Biweekly Summary Generator</div><div class="page-sub">Build a 1:1-ready update for any AE</div></div></div><div class="card" style="margin-bottom:14px"><div class="card-head card-head-accent"><span>⚙️</span><div class="card-title">Configure Summary</div></div><div class="card-body"><div class="form-row"><label class="form-label">For which AE?</label><select class="form-select" id="sum-ae" style="max-width:280px">${aeOpts}</select></div><div class="form-row"><label class="form-label">Date Range</label><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase">From</span><input type="date" class="form-input" id="sum-from" value="${defFrom}" style="width:160px"><span style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase">To</span><input type="date" class="form-input" id="sum-to" value="${today()}" style="width:160px"></div><div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm" onclick="setSumRange(14)">Last 2 Weeks</button><button class="btn btn-ghost btn-sm" onclick="setSumRange(7)">Last Week</button><button class="btn btn-ghost btn-sm" onclick="setSumRange(0)">All Time</button></div></div></div><div class="form-row"><label class="form-label">Add context (optional)</label><textarea class="form-textarea" id="sum-ctx" placeholder="Upcoming events, blockers, asks for the AE…" style="min-height:60px"></textarea></div><button class="btn btn-primary" onclick="generateSummary()" id="sum-btn">Generate Summary →</button></div></div><div id="summary-result"></div>`;}
+function setSumRange(days){const to=today();const from=days===0?'2020-01-01':new Date(Date.now()-days*864e5).toISOString().slice(0,10);const f=document.getElementById('sum-from');const t=document.getElementById('sum-to');if(f)f.value=from;if(t)t.value=to;}
+async function generateSummary(){const aeId=document.getElementById('sum-ae').value;const fromDate=document.getElementById('sum-from')?.value||new Date(Date.now()-14*864e5).toISOString().slice(0,10);const toDate=document.getElementById('sum-to')?.value||today();const ctx=document.getElementById('sum-ctx')?.value?.trim()||'';const ae=aeById(aeId);if(!ae)return;const btn=document.getElementById('sum-btn');if(btn){btn.disabled=true;btn.textContent='Generating…';}const el=document.getElementById('summary-result');if(!el){if(btn){btn.disabled=false;btn.textContent='Generate Summary →';}return;}el.innerHTML=`<div class="card"><div class="card-body"><div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.6);font-size:12px;background:var(--sn-blue);padding:20px;border-radius:var(--r)"><div style="width:16px;height:16px;border:2px solid rgba(99,223,78,0.3);border-top-color:#63DF4E;border-radius:50%;animation:spin .8s linear infinite"></div>Building summary for ${ae.name}…</div></div></div>`;const reset=()=>{if(btn){btn.disabled=false;btn.textContent='Generate Summary →';}};try{const aeCamps=S.campaigns.filter(c=>(c.aes||[]).includes(aeId));const aeAccts=S.accounts.filter(a=>a.aeId===aeId);const aeTodos=(S.todos[aeId]||[]);const aeWins=(S.wins||[]).filter(w=>w.aeId===aeId&&w.date>=fromDate);const recentOneons=(S.oneons[aeId]||[]).filter(o=>o.date>=fromDate).sort((a,b)=>b.date.localeCompare(a.date));const dataBlock=`AE: ${ae.name}\nPeriod: ${fromDate} to ${toDate}\n\nCAMPAIGNS:\n${aeCamps.map(c=>{const sentInRange=Object.entries(c.sentLog||{}).filter(([,v])=>v.date&&v.date>=fromDate&&v.date<=toDate);const recentEmails=sentInRange.length*(c.contactCount||0);return `${c.name} (${c.product||'no product'}): ${c.contactCount} contacts, ${Object.keys(c.sentLog||{}).length}/${c.totalSteps||5} steps, ${recentEmails} emails sent this period`;}).join('\n')||'No campaigns'}\n\nMEETINGS BOOKED (${aeWins.length}):\n${aeWins.map(w=>`${w.contactName}${w.contactTitle?' ('+w.contactTitle+')':''} at ${S.accounts.find(a=>a.id===w.acctId)?.name||'unknown'}${w.pipeline?' — $'+Number(w.pipeline).toLocaleString():''}`).join('\n')||'None'}\n\nACCOUNTS: ${aeAccts.length} total (${aeAccts.filter(a=>a.type==='customer').length} customers, ${aeAccts.filter(a=>a.type==='newlogo').length} new logos)\n\nTASKS OPEN: ${aeTodos.filter(t=>!t.done).length}\n\nRECENT 1:1 NOTES:\n${recentOneons.map(o=>`${o.date}: ${o.body}`).join('\n')||'None'}\n\nADDITIONAL CONTEXT: ${ctx||'None'}`;const resp=await Promise.race([fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:`You are helping Jacob Rubis, a BDR at ServiceNow, prepare a biweekly 1:1 update for an AE. Write a concise, direct summary the AE will actually read. Use ALL CAPS for section headers. Use bullet points starting with - for content. No filler. Sections: WHAT I DID FOR YOU, CAMPAIGNS STATUS, MEETINGS BOOKED, TASKS, WHAT I NEED FROM YOU, COMING UP.`,messages:[{role:'user',content:dataBlock}]})}),new Promise((_,rej)=>setTimeout(()=>rej(new Error('Timeout')),30000))]);if(!resp.ok)throw new Error('API '+resp.status);const data=await resp.json();const text=data.content?.map(b=>b.text||'').join('')||'';if(!text)throw new Error('Empty response');const formatted=text.replace(/^([A-Z][A-Z\s&:()—\-]{3,})$/gm,h=>`<div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#63DF4E;margin-top:16px;margin-bottom:6px;border-top:1px solid rgba(99,223,78,0.2);padding-top:12px">${h.trim()}</div>`).replace(/^[\-•]\s+(.+)$/gm,'<div style="display:flex;gap:8px;margin:3px 0;font-size:13px;color:#fff;line-height:1.6"><span style="color:#63DF4E;flex-shrink:0">•</span><span>$1</span></div>').replace(/#{1,6}\s*/g,'').replace(/\*\*(.+?)\*\*/g,'$1').replace(/\n{2,}/g,'').replace(/\n/g,'');el.innerHTML=`<div class="card"><div class="card-head card-head-accent"><span>📋</span><div class="card-title">Summary — ${ae.name}</div><span class="pill pill-m">${fmtDate(fromDate)} – ${fmtDate(toDate)}</span><button class="btn btn-ghost btn-sm" onclick="copySummary()">Copy</button><button class="btn btn-primary btn-sm" onclick="generateSummary()">Regenerate</button></div><div class="card-body"><div style="background:var(--sn-blue);color:#fff;border-radius:var(--r);padding:20px;font-size:13px;line-height:1.8;font-family:var(--font)" id="summary-text">${formatted}</div></div></div>`;reset();}catch(e){el.innerHTML=`<div class="card"><div class="card-head card-head-accent"><span>⚠️</span><div class="card-title">AI unavailable — ${e.message}</div></div><div class="card-body"><div style="font-size:12px;color:var(--text2)">Check your network connection or try again. Your workspace data is intact.</div></div></div>`;reset();}}
+function copySummary(){const el=document.getElementById('summary-text');if(!el)return;const text=el.innerText||el.textContent||'';navigator.clipboard.writeText(text).then(()=>toast('Copied to clipboard','ok')).catch(()=>{const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Copied','ok');});}
+
+// ── QUICK ADD ─────────────────────────────────────────────────────────────
+function openQuickAdd(){showModal('Quick Add',`<p style="font-size:12px;color:var(--text2);margin-bottom:12px">What do you want to add?</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-ghost" style="padding:13px;text-align:left" onclick="closeModal();openAddCampaign()">📣 New Campaign</button><button class="btn btn-ghost" style="padding:13px;text-align:left" onclick="closeModal();openAddAcct()">🏢 Account</button><button class="btn btn-ghost" style="padding:13px;text-align:left" onclick="closeModal();openAdd1on1()">🗓 1:1 Note</button><button class="btn btn-ghost" style="padding:13px;text-align:left" onclick="closeModal();openAddTodo()">✅ Task</button><button class="btn btn-ghost" style="padding:13px;text-align:left" onclick="closeModal();openAddNote()">📌 Important Note</button><button class="btn btn-ghost" style="padding:13px;text-align:left" onclick="closeModal();openAddWin()">🏆 Log Win</button></div>`,null,true);}
+
+// ── MODAL / TOAST / SLIDE ─────────────────────────────────────────────────
+function showModal(title,body,onSave,noSave,wide){document.getElementById('modal-root').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal${wide?' wide':''}"><div class="modal-hd"><div class="modal-title">${title}</div><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body">${body}</div>${!noSave?`<div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="window._ms&&window._ms()">Save</button></div>`:''}</div></div>`;window._ms=onSave;}
+function closeModal(){document.getElementById('modal-root').innerHTML='';window._ms=null;}
+function closeSlide(){document.getElementById('slide').classList.remove('open');}
+let _tt;function toast(msg,type){const el=document.getElementById('toast');if(!el)return;el.textContent=msg;el.className='toast'+(type==='ok'?' ok':'');setTimeout(()=>el.classList.add('show'),10);clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),2500);}
+
+// ── EXPORT / IMPORT ───────────────────────────────────────────────────────
+function exportData(){const json=JSON.stringify({_v:1,_exported:today(),_app:'BDR_AE_Workspace',...S},null,2);showModal('Export Data',`<div style="margin-bottom:10px;padding:9px 12px;background:var(--blue-dim);border-radius:var(--r2);font-size:11px;color:var(--sn-blue)">Copy all and save as <strong>BDR_Workspace_${today()}.json</strong>.</div><textarea id="export-ta" readonly style="width:100%;height:220px;font-family:var(--mono);font-size:10px;border:1px solid var(--border);border-radius:var(--r2);padding:8px;resize:vertical;color:var(--text2)"></textarea><div style="margin-top:8px"><button class="btn btn-primary btn-sm" onclick="document.getElementById('export-ta').select();document.execCommand('copy');toast('Copied','ok')">Copy All</button></div>`,null,true);setTimeout(()=>{const ta=document.getElementById('export-ta');if(ta){ta.value=json;ta.select();}},50);}
+function importData(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{try{const data=JSON.parse(e.target.result);if(!data._app||data._app!=='BDR_AE_Workspace'){toast('Invalid file — must be a BDR Workspace export');return;}if(Array.isArray(data.campaigns))S.campaigns=data.campaigns;if(Array.isArray(data.accounts))S.accounts=data.accounts;if(data.todos)S.todos=data.todos;if(data.notes)S.notes=data.notes;if(data.oneons)S.oneons=data.oneons;if(data.links)S.links=data.links;if(Array.isArray(data.events))S.events=data.events;if(Array.isArray(data.wins))S.wins=data.wins;if(Array.isArray(data.activity))S.activity=data.activity;ensureAEData();markDirty('bdr2_camps','bdr2_emails','bdr2_accounts','bdr2_todos','bdr2_notes','bdr2_oneons','bdr2_links','bdr2_events','bdr2_wins');saveAll();renderPage();toast('✓ Imported '+S.campaigns.length+' campaigns, '+S.accounts.length+' accounts','ok');}catch(err){toast('Import failed: '+err.message);}};reader.readAsText(file);input.value='';}
+function resetData(){if(!confirm('Delete ALL workspace data? This cannot be undone.\n\nExport a backup first if needed.'))return;const pw=prompt('Enter password to confirm reset:');if(pw!=='RESET'){toast('Incorrect — type RESET to confirm');return;}S.campaigns=[];S.accounts=[];S.wins=[];S.events=[];S.activity=[];AES.forEach(ae=>{S.todos[ae.id]=[];S.notes[ae.id]=[];S.oneons[ae.id]=[];S.links[ae.id]=[];});markDirty('bdr2_camps','bdr2_emails','bdr2_accounts','bdr2_todos','bdr2_notes','bdr2_oneons','bdr2_links','bdr2_events','bdr2_wins','bdr2_activity');saveAll();renderPage();toast('Workspace reset','ok');}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+async function init(){await loadAll();await seedIfEmpty();renderAEPods();renderPage();}
+init();
+
+</script>
+</body>
+</html>
