@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Accounts — BDR Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#032D42;--ink-nav:#01161f;--ink-mid:#043d5a;
+  --wasabi:#63DF4E;--wdk:#4ab83a;
+  --white:#fff;--bg:#f1f5f9;
+  --s50:#f8fafc;--s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;
+  --s400:#94a3b8;--s500:#64748b;--s600:#475569;--s700:#334155;--s800:#1e293b;--s900:#0f172a;
+  --b50:#eff6ff;--b600:#2563eb;
+  --g50:#f0fdf4;--g500:#22c55e;--g600:#16a34a;
+  --a50:#fffbeb;--a500:#f59e0b;--a600:#d97706;
+  --r50:#fff1f2;--r500:#ef4444;--r600:#dc2626;
+  --p50:#faf5ff;--p500:#a855f7;
+  --sh-xs:0 1px 2px rgba(0,0,0,.05);--sh-sm:0 1px 3px rgba(0,0,0,.10);
+}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--s800);font-size:13px;line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--s300);border-radius:2px;}
+
+/* NAV */
+.gnav{height:44px;background:var(--ink-nav);display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:300;border-bottom:1px solid rgba(255,255,255,.06);}
+.gnav-logo{display:flex;align-items:center;padding:0 14px;height:44px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.gnav-tabs{display:flex;align-items:center;}
+.gnav-tab{display:flex;align-items:center;height:44px;padding:0 13px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.gnav-tab:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);}
+.gnav-pill-wrap{flex:1;display:flex;justify-content:center;}
+.gnav-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);}
+.gnav-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--wasabi);}
+.gnav-r{display:flex;align-items:center;gap:2px;padding:0 10px;}
+.gnav-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:rgba(255,255,255,.45);font-size:13px;border:none;background:transparent;cursor:pointer;}
+.gnav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
+.gnav-av{width:28px;height:28px;background:var(--wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ink);cursor:pointer;margin-left:4px;}
+
+/* SIDEBAR */
+.sbar{position:fixed;top:44px;left:0;bottom:0;width:44px;background:#0d1f2b;border-right:1px solid rgba(255,255,255,.05);z-index:200;display:flex;flex-direction:column;overflow:hidden;transition:width .22s cubic-bezier(.4,0,.2,1);}
+.sbar:hover{width:180px;box-shadow:4px 0 20px rgba(0,0,0,.25);}
+.sbar-sec{padding:10px 0 4px;}
+.sbar-lbl{font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;white-space:nowrap;opacity:0;transition:opacity .15s .05s;}
+.sbar:hover .sbar-lbl{opacity:1;}
+.sbar-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:background .12s,color .12s;text-decoration:none;white-space:nowrap;}
+.sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.sbar-item.on{color:var(--wasabi);border-left-color:var(--wasabi);background:rgba(99,223,78,.06);font-weight:500;}
+.sbar-ic{width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;}
+.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);opacity:0;transition:opacity .1s;flex-shrink:0;}
+.sbar:hover .sb{opacity:1;}
+.sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
+.sdiv{height:1px;background:rgba(255,255,255,.06);margin:5px 10px;}
+.sbar-footer{padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);margin-top:auto;white-space:nowrap;opacity:0;transition:opacity .15s;}
+.sbar:hover .sbar-footer{opacity:1;}
+
+/* LAYOUT */
+.main{margin-top:44px;margin-left:44px;min-height:calc(100vh - 44px);display:flex;flex-direction:column;}
+.page-hdr{background:var(--white);border-bottom:1px solid var(--s200);padding:16px 22px 0;position:sticky;top:44px;z-index:100;}
+.phdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
+.phdr-name{font-size:22px;font-weight:700;color:var(--s900);letter-spacing:-.02em;}
+.phdr-sub{font-size:12px;color:var(--s500);margin-top:2px;}
+.phdr-acts{display:flex;align-items:center;gap:7px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;transition:.12s;white-space:nowrap;}
+.btn-g{background:transparent;color:var(--s600);border-color:var(--s200);}
+.btn-g:hover{background:var(--s50);border-color:var(--s300);}
+.btn-p{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.btn-p:hover{background:var(--ink-mid);}
+.btn-sm{font-size:11px;padding:4px 10px;}
+
+/* KPI */
+.kpi-row{display:flex;gap:8px;margin-bottom:10px;}
+.kpi{flex:1;background:var(--s50);border:1px solid var(--s200);border-radius:8px;padding:9px 12px;}
+.kpi-lbl{font-size:10px;color:var(--s500);font-weight:500;margin-bottom:1px;}
+.kpi-val{font-size:18px;font-weight:700;color:var(--s900);font-family:'DM Mono',monospace;}
+.kpi-sub{font-size:10px;color:var(--s400);margin-top:1px;}
+
+/* TABS */
+.page-tabs{display:flex;}
+.ptab{padding:8px 14px;font-size:12px;font-weight:500;color:var(--s500);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;display:flex;align-items:center;gap:5px;}
+.ptab:hover{color:var(--s800);}
+.ptab.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:600;}
+.ptab .ct{font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;background:var(--s100);color:var(--s500);}
+.ptab.on .ct{background:rgba(3,45,66,.1);color:var(--ink);}
+
+/* BODY */
+.page-body{flex:1;padding:14px 22px 48px;display:flex;flex-direction:column;gap:12px;}
+
+/* FILTER BAR */
+.filter-bar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.fsearch{position:relative;flex:1;min-width:180px;max-width:280px;}
+.fsearch input{width:100%;padding:7px 10px 7px 30px;border:1px solid var(--s200);border-radius:7px;font-size:12px;font-family:inherit;background:var(--white);color:var(--s800);outline:none;}
+.fsearch input:focus{border-color:var(--s400);}
+.fsearch svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--s400);pointer-events:none;}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:5px 11px;border-radius:20px;border:1px solid var(--s200);background:var(--white);cursor:pointer;color:var(--s600);transition:.1s;white-space:nowrap;}
+.chip:hover{border-color:var(--s300);background:var(--s50);}
+.chip.on{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.filter-info{margin-left:auto;font-size:11px;color:var(--s400);}
+
+/* TABLE */
+.tbl-wrap{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);}
+.tbl-scroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:700px;}
+thead th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);padding:9px 12px;text-align:left;border-bottom:1px solid var(--s200);background:var(--s50);white-space:nowrap;cursor:pointer;user-select:none;}
+thead th:hover{color:var(--s700);}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--s100);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--s50);}
+.acct-name{font-size:13px;font-weight:600;color:var(--s900);}
+.acct-num{font-size:10px;color:var(--s400);font-family:'DM Mono',monospace;margin-top:1px;}
+.ae-dot{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;}
+.type-pill{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;}
+.tp-c{background:var(--g50);color:var(--g600);}
+.tp-n{background:var(--b50);color:var(--b600);}
+.bb-star{font-size:13px;cursor:default;}
+.dnc-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;background:var(--r50);color:var(--r600);}
+.note-txt{font-size:11px;color:var(--s500);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tbl-footer{padding:10px 14px;font-size:11px;color:var(--s400);border-top:1px solid var(--s100);}
+
+/* AE STYLE chip when active */
+.chip[data-ae].on{color:#fff;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(2px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn .12s ease;}
+</style>
+</head>
+<body>
+
+<nav class="gnav">
+  <div class="gnav-logo">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="5" fill="#63DF4E"/><rect x="7" y="7" width="18" height="18" rx="3" fill="#032D42"/><rect x="11" y="11" width="10" height="10" rx="1.5" fill="#63DF4E"/></svg>
+  </div>
+  <div class="gnav-tabs">
+    <span class="gnav-tab">Favorites</span><span class="gnav-tab">History</span><span class="gnav-tab">Workspaces</span>
+  </div>
+  <div class="gnav-pill-wrap">
+    <div class="gnav-pill"><div class="gnav-pill-dot"></div>GBA Commercial Illinois &amp; Midwest · Q2 FY26</div>
+  </div>
+  <div class="gnav-r">
+    <button class="gnav-btn">🔍</button><button class="gnav-btn">🔔</button><button class="gnav-btn">⚙️</button>
+    <div class="gnav-av">JR</div>
+  </div>
+</nav>
+
+<aside class="sbar">
+  <div class="sbar-sec">
+    <span class="sbar-lbl">My Work</span>
+    <a href="index.html" class="sbar-item"><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="outreach-center.html" class="sbar-item"><span class="sbar-ic">📋</span>Outreach Center</a>
+    <a href="buying-groups.html" class="sbar-item"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html" class="sbar-item"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#" class="sbar-item"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Customers</span>
+    <a href="accounts.html" class="sbar-item on"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="#" class="sbar-item"><span class="sbar-ic">👥</span>Contacts</a>
+    <a href="opportunities.html" class="sbar-item"><span class="sbar-ic">💼</span>Opportunities</a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Reports</span>
+    <a href="book-of-business.html" class="sbar-item"><span class="sbar-ic">📖</span>Book of Business</a>
+    <a href="ae-alignment.html" class="sbar-item"><span class="sbar-ic">🤝</span>AE Alignment</a>
+    <a href="#" class="sbar-item"><span class="sbar-ic">📊</span>Reports</a>
+  </div>
+  <div class="sbar-footer">ServiceNow Confidential</div>
+</aside>
+
+<div class="main">
+  <div class="page-hdr">
+    <div class="phdr-top">
+      <div>
+        <div style="font-size:11px;color:var(--s400);margin-bottom:2px">Friday, April 10, 2026</div>
+        <div class="phdr-name">Accounts</div>
+        <div class="phdr-sub">GBA Commercial Illinois &amp; Midwest · All accounts across the pod</div>
+      </div>
+      <div class="phdr-acts">
+        <button class="btn btn-g btn-sm">⬇ Export</button>
+        <button class="btn btn-p btn-sm">+ Add Account</button>
+      </div>
+    </div>
+
+    <div class="kpi-row" id="kpiRow"></div>
+
+    <div class="page-tabs">
+      <button class="ptab on" onclick="switchTab('all',this)">All <span class="ct" id="ct-all">—</span></button>
+      <button class="ptab" onclick="switchTab('customer',this)">Customers <span class="ct" id="ct-customer">—</span></button>
+      <button class="ptab" onclick="switchTab('newlogo',this)">New Logos <span class="ct" id="ct-newlogo">—</span></button>
+      <button class="ptab" onclick="switchTab('bigbet',this)">⭐ Big Bets <span class="ct" id="ct-bigbet">—</span></button>
+      <button class="ptab" onclick="switchTab('dnc',this)">🚫 Do Not Contact <span class="ct" id="ct-dnc">—</span></button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <!-- FILTERS -->
+    <div class="filter-bar">
+      <div class="fsearch">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="searchInput" type="text" placeholder="Search accounts or account number…" oninput="render()">
+      </div>
+      <div id="aeChips" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+      <span class="filter-info" id="filterInfo"></span>
+    </div>
+
+    <!-- TABLE -->
+    <div class="tbl-wrap">
+      <div class="tbl-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortBy('name')">Account ↕</th>
+              <th onclick="sortBy('aeId')">AE ↕</th>
+              <th onclick="sortBy('type')">Type ↕</th>
+              <th style="text-align:center">Big Bet</th>
+              <th>Status / Notes</th>
+              <th style="color:transparent">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="tbl-footer" id="tblFooter"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const ACCOUNTS=[{"id":"fsry6xlk","name":"Milwaukee Electric Tool Corp","acctNum":"ACCT0017921","type":"customer","aeId":"tony","status":"—","bigBet":false},{"id":"6n6u30ot","name":"Tegria Services Group - US, Inc.","acctNum":"ACCT0095732","type":"customer","aeId":"tony","status":"—","bigBet":false},{"id":"ofdp16v2","name":"Sub-Zero Group Inc","acctNum":"ACCT0005141","type":"customer","aeId":"tony","status":"—","bigBet":false},{"id":"whkmpe08","name":"Michael Best & Friedrich LLP","acctNum":"ACCT0017858","type":"customer","aeId":"tony","status":"—","bigBet":false},{"id":"sykploa1","name":"Sargento Foods Inc","acctNum":"ACCT0017379","type":"customer","aeId":"tony","status":"—","bigBet":false},{"id":"zfyw4v8h","name":"Faith Technologies Inc","acctNum":"ACCT0054846","type":"customer","aeId":"tony","status":"—","bigBet":false},{"id":"79sdgqdd","name":"JJ Keller & Associates Inc","acctNum":"ACCT0017724","type":"customer","aeId":"tony","status":"—","bigBet":false},{"id":"e6652rki","name":"Blain Supply Inc","acctNum":"ACCT0065997","type":"customer","aeId":"tony","status":"—","bigBet":false},{"id":"nj95czxk","name":"Duluth Trading Co LLC","acctNum":"ACCT0091517","type":"customer","aeId":"tony","status":"—","bigBet":false},{"id":"n55xvu89","name":"Sensient Technologies Corp","acctNum":"ACCT0001552","type":"customer","aeId":"tony","status":"—","bigBet":false},{"id":"iipklrgb","name":"Rite-Hite Holding Corp","acctNum":"ACCT0062757","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"yqvzdlo6","name":"Charter Manufacturing Co Inc","acctNum":"ACCT0030341","type":"newlogo","aeId":"tony","status":"—","bigBet":true},{"id":"1vx2cfq8","name":"Cielo Talent","acctNum":"ACCT0095526","type":"newlogo","aeId":"tony","status":"—","bigBet":true},{"id":"aprq8ehs","name":"Badger Meter, Inc.","acctNum":"ACCT0014611","type":"newlogo","aeId":"tony","status":"—","bigBet":true},{"id":"4y9fss1g","name":"The Boldt Group Inc","acctNum":"ACCT0014625","type":"newlogo","aeId":"tony","status":"—","bigBet":true},{"id":"k2lhlh2v","name":"Alliance Laundry Systems LLC","acctNum":"ACCT0052857","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"3k5g9atp","name":"Batteries Plus LLC","acctNum":"ACCT0017716","type":"newlogo","aeId":"tony","status":"—","bigBet":true},{"id":"48li708v","name":"Mayville Engineering Company, Inc.","acctNum":"ACCT0056221","type":"newlogo","aeId":"tony","status":"—","bigBet":true},{"id":"4pp5a3uv","name":"Waupaca Foundry Inc","acctNum":"ACCT0062808","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"3vy1lac6","name":"Kerry Inc","acctNum":"ACCT0052650","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"ryxdnfek","name":"Green Bay Packers Inc","acctNum":"ACCT0150419","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"fny4sqbi","name":"Alta Resources","acctNum":"ACCT0039551","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"mjln5acj","name":"Chief Industries Inc","acctNum":"ACCT0006587","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"pld832ce","name":"Hydrite Chemical Co","acctNum":"ACCT0017856","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"al2hckp2","name":"Jack Link's Beef Jerky","acctNum":"ACCT0067791","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"fq9d8h02","name":"Wis-Pak Inc","acctNum":"ACCT0042836","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"kdpr7ej7","name":"Alro Steel Corp","acctNum":"ACCT0019354","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"l3wgncxr","name":"Festival Foods","acctNum":"ACCT0101876","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"atkk7bgf","name":"Colony Brands Inc","acctNum":"ACCT0017557","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"erb55x8o","name":"Sendik's Food Market","acctNum":"ACCT0066971","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"s0s8041q","name":"Grede Holdings, LLC.","acctNum":"ACCT0003969","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"jnkhm40n","name":"Ariens","acctNum":"ACCT0037655","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"q7ui20ui","name":"Roehl Transport Inc.","acctNum":"ACCT0057334","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"kpcpf1th","name":"Strattec Security Corp","acctNum":"ACCT0019155","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"2e6iqp40","name":"Marathon Cheese Corp","acctNum":"ACCT0119820","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"1t5yda1i","name":"Astronautics Corporation of America","acctNum":"ACCT0017447","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"ywqbspyb","name":"Green Bay Packaging Inc","acctNum":"ACCT0003970","type":"newlogo","aeId":"tony","status":"—","bigBet":true},{"id":"czey4emq","name":"Air Wisconsin Airlines Corporation","acctNum":"ACCT0008151","type":"newlogo","aeId":"tony","status":"—","bigBet":false},{"id":"gy1zixre","name":"Chicago Mercantile Exchange Inc","acctNum":"ACCT0001297","type":"customer","aeId":"jeff","status":"—","bigBet":false},{"id":"26uuhldj","name":"Sidley Austin LLP","acctNum":"ACCT0001392","type":"customer","aeId":"jeff","status":"—","bigBet":false},{"id":"t8asbxuk","name":"Insurance Auto Auctions Inc","acctNum":"ACCT0039465","type":"customer","aeId":"jeff","status":"—","bigBet":false},{"id":"x0xnah6s","name":"A.T. Kearney Inc","acctNum":"ACCT0010655","type":"customer","aeId":"jeff","status":"—","bigBet":false},{"id":"jar9mrls","name":"Amrize Cement Inc","acctNum":"ACCT0240730","type":"customer","aeId":"jeff","status":"—","bigBet":false},{"id":"7bwv2r7d","name":"CF Industries Enterprises, LLC","acctNum":"ACCT0001296","type":"customer","aeId":"jeff","status":"—","bigBet":false},{"id":"4thupkqw","name":"Athletico Management, LLC","acctNum":"ACCT0040513","type":"customer","aeId":"jeff","status":"—","bigBet":false},{"id":"ywzqdojx","name":"Ritchie Bros. Auctioneers (Canada) Ltd.","acctNum":"ACCT0010587","type":"customer","aeId":"jeff","status":"—","bigBet":false},{"id":"9j3l95ni","name":"Videojet Technologies Inc","acctNum":"ACCT0014587","type":"customer","aeId":"jeff","status":"—","bigBet":true},{"id":"kkrfgm7f","name":"Holcim Building Envelope","acctNum":"ACCT0226475","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"3njj0lx2","name":"Veralto","acctNum":"ACCT0218250","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"xz7gxh7y","name":"Quinnox Inc.","acctNum":"ACCT0057163","type":"newlogo","aeId":"jeff","status":"—","bigBet":true},{"id":"52v78y4v","name":"Amrize","acctNum":"ACCT0240697","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"j8apzfsc","name":"Portillo's Restaurant Group, Inc.","acctNum":"ACCT0057037","type":"newlogo","aeId":"jeff","status":"—","bigBet":true},{"id":"f1bmg7oy","name":"RB Global Inc","acctNum":"ACCT0218008","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"1bs4vglc","name":"Promega Corp","acctNum":"ACCT0006557","type":"newlogo","aeId":"jeff","status":"—","bigBet":true},{"id":"e26lykoc","name":"American Ordnance LLC","acctNum":"ACCT0052906","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"ln43lpyq","name":"Equity Lifestyle Properties Inc","acctNum":"ACCT0014696","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"kx1xtzs6","name":"Morse Automotive Corp","acctNum":"ACCT0056448","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"8ck7e6ng","name":"Clover Technologies Group LLC","acctNum":"ACCT0037136","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"bmdfxkpe","name":"Optimas OE Solutions LLC","acctNum":"ACCT0085555","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"a0floxra","name":"Total Administrative Services Corp","acctNum":"ACCT0097382","type":"newlogo","aeId":"jeff","status":"—","bigBet":true},{"id":"ytoqjnyk","name":"Ozinga Brothers Inc","acctNum":"ACCT0065402","type":"newlogo","aeId":"jeff","status":"—","bigBet":true},{"id":"1l12q6gi","name":"Cardinal Logistics Management Inc","acctNum":"ACCT0053475","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"by23kyy5","name":"Wilton Brands LLC","acctNum":"ACCT0058834","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"izoues5z","name":"ABT Electronics Inc","acctNum":"ACCT0014593","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"s4zpm4cf","name":"Trustmark Insurance Company","acctNum":"ACCT0261194","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"v5ft7tk1","name":"Seko Logistics","acctNum":"ACCT0092863","type":"newlogo","aeId":"jeff","status":"—","bigBet":true},{"id":"88766qhl","name":"Gilster-Mary Lee Corporation","acctNum":"ACCT0002041","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"3z3rxkpp","name":"Simonton Holdings Inc","acctNum":"ACCT0052617","type":"newlogo","aeId":"jeff","status":"—","bigBet":false},{"id":"df0mxwt3","name":"Kirkland & Ellis LLP","acctNum":"ACCT0009891","type":"customer","aeId":"riley","status":"—","bigBet":false},{"id":"8demkwmf","name":"Huron Consulting Group Inc","acctNum":"ACCT0005123","type":"customer","aeId":"riley","status":"—","bigBet":false},{"id":"h828ft68","name":"Paylocity Corporation","acctNum":"ACCT0063499","type":"customer","aeId":"riley","status":"—","bigBet":false},{"id":"bboew7j9","name":"Federal Home Loan Bank Of Chicago","acctNum":"ACCT0008964","type":"customer","aeId":"riley","status":"—","bigBet":false},{"id":"0yrt9l8u","name":"Echo Global Logistics, Inc.","acctNum":"ACCT0014681","type":"customer","aeId":"riley","status":"—","bigBet":false},{"id":"qofehn2w","name":"Afni Inc","acctNum":"ACCT0000521","type":"customer","aeId":"riley","status":"—","bigBet":false},{"id":"gzk1hbsr","name":"Wheatland Tube, LLC","acctNum":"ACCT0005624","type":"customer","aeId":"riley","status":"—","bigBet":false},{"id":"ngqh7bi7","name":"GATX Corporation","acctNum":"ACCT0001328","type":"customer","aeId":"riley","status":"—","bigBet":true},{"id":"xemacqc3","name":"Foremost Farms USA Cooperative","acctNum":"ACCT0001483","type":"customer","aeId":"riley","status":"—","bigBet":false},{"id":"wnnflwgt","name":"Convergint Technologies LLC","acctNum":"ACCT0038901","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"m7m5qrqf","name":"Crescent Electric Supply Co","acctNum":"ACCT0054409","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"y7c1fb8e","name":"National Veterans Museum Inc","acctNum":"ACCT0257894","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"4azx8er6","name":"Winston & Strawn LLP","acctNum":"ACCT0005470","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"qgo9w1uu","name":"United Center Joint Venture","acctNum":"ACCT0014896","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"4vljkn5j","name":"Parts Town LLC","acctNum":"ACCT0075638","type":"newlogo","aeId":"riley","status":"Do Not Contact","bigBet":true},{"id":"qsm1o4io","name":"Verano Holdings LLC","acctNum":"ACCT0206509","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"uwu646t9","name":"Mitutoyo America Corp","acctNum":"ACCT0258166","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"7lnlmtzd","name":"First Hospitality Group Inc","acctNum":"ACCT0054905","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"6nzlfnvo","name":"BDT Partners, L.P.","acctNum":"ACCT0228116","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"2buwv1ny","name":"Cgi Manufacturing Holdings LLC","acctNum":"ACCT0258712","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"ki4u43r9","name":"Amsted Industries Inc","acctNum":"ACCT0001265","type":"newlogo","aeId":"riley","status":"—","bigBet":true},{"id":"ffjfmrih","name":"Climate Pros LLC","acctNum":"ACCT0176748","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"4dn1p2ok","name":"Wilson Sporting Goods Co","acctNum":"ACCT0058831","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"55wgnb4s","name":"Heart Of America Management LLC","acctNum":"ACCT0055354","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"p6opij1w","name":"FTD Companies Inc","acctNum":"ACCT0026253","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"5g523312","name":"Ag Processing Inc","acctNum":"ACCT0001121","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"r80d70bq","name":"Serta Inc","acctNum":"ACCT0002048","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"73klricm","name":"Sirva Inc","acctNum":"ACCT0011090","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"hwqgg0jt","name":"PLZ Corp","acctNum":"ACCT0188683","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"hdhqgmid","name":"Dot Foods Inc","acctNum":"ACCT0001308","type":"newlogo","aeId":"riley","status":"—","bigBet":true},{"id":"90lktmtw","name":"ITS Technologies & Logistics LLC","acctNum":"ACCT0055666","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"20pzqpza","name":"Robertshaw Controls Co","acctNum":"ACCT0038436","type":"newlogo","aeId":"riley","status":"—","bigBet":false},{"id":"thd98bx7","name":"Hollister Incorporated","acctNum":"ACCT0010725","type":"customer","aeId":"katie","status":"—","bigBet":false},{"id":"80eut6r1","name":"Clayco Construction Co Inc","acctNum":"ACCT0014920","type":"customer","aeId":"katie","status":"—","bigBet":false},{"id":"615pvxnk","name":"Sysmex America, Inc.","acctNum":"ACCT0021264","type":"customer","aeId":"katie","status":"—","bigBet":false},{"id":"j39qpxqd","name":"Griffith Foods Inc","acctNum":"ACCT0000717","type":"customer","aeId":"katie","status":"—","bigBet":false},{"id":"eo0pfrtd","name":"S&C Electric Co","acctNum":"ACCT0010853","type":"customer","aeId":"katie","status":"—","bigBet":false},{"id":"duzjht9i","name":"Output Service Group, Inc.","acctNum":"ACCT0166443","type":"customer","aeId":"katie","status":"—","bigBet":false},{"id":"9shgeass","name":"Rogers Memorial Hospital Inc","acctNum":"ACCT0179386","type":"customer","aeId":"katie","status":"—","bigBet":false},{"id":"7fnyin87","name":"Weber-Stephen Products LLC","acctNum":"ACCT0027602","type":"customer","aeId":"katie","status":"—","bigBet":false},{"id":"y21kcx2g","name":"Marksman Titan Security Group","acctNum":"ACCT0233516","type":"customer","aeId":"katie","status":"—","bigBet":false},{"id":"lexsa4wz","name":"Titan Intl Inc","acctNum":"ACCT0002035","type":"customer","aeId":"katie","status":"—","bigBet":false},{"id":"4hd7g07u","name":"Madison Air","acctNum":"ACCT0257133","type":"newlogo","aeId":"katie","status":"—","bigBet":true},{"id":"0cm1epd6","name":"Circana","acctNum":"ACCT0017466","type":"newlogo","aeId":"katie","status":"—","bigBet":true},{"id":"ngtgqdey","name":"Johnson Service Group JSG","acctNum":"ACCT0195428","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"r9xk5488","name":"Redbox Automated Retail LLC","acctNum":"ACCT0068336","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"mhwu5tdx","name":"Akorn Inc","acctNum":"ACCT0052806","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"u3srfby3","name":"infoGROUP Inc.","acctNum":"ACCT0005680","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"fflp7j73","name":"Coleman Cable Inc","acctNum":"ACCT0014655","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"1l9cmx8t","name":"Medix","acctNum":"ACCT0187420","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"8eri8ldr","name":"Czarnowski Display Service Inc","acctNum":"ACCT0054444","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"0va8avut","name":"NCH Marketing Services Inc","acctNum":"ACCT0146509","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"3hjkvej5","name":"Fort Dearborn Co","acctNum":"ACCT0140601","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"akl1jzt9","name":"Tootsie Roll Industries Inc","acctNum":"ACCT0014892","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"djla6m1i","name":"Godfather's Pizza Inc","acctNum":"ACCT0055109","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"5z3a8lbq","name":"United Temps Inc","acctNum":"ACCT0058524","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"kigbz4wx","name":"Andy Frain Services Inc","acctNum":"ACCT0052944","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"b4fjps8z","name":"Sparton Corporation","acctNum":"ACCT0057762","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"03sevuge","name":"Marcus Evans Inc","acctNum":"ACCT0048235","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"spnw48ue","name":"DQS Inc","acctNum":"ACCT0160357","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"zxlud89g","name":"Prism Companies Inc","acctNum":"ACCT0057088","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"yxep8ri5","name":"Healthcare Linen Services Group","acctNum":"ACCT0235887","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"ay3xl7pb","name":"Heartland Food LLC","acctNum":"ACCT0055356","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"kwpes3mw","name":"Rosemont Exposition Services Inc","acctNum":"ACCT0057379","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"z06nksg4","name":"Tennis Corp Of America","acctNum":"ACCT0058072","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"kg0osee1","name":"Martin & Bayley Inc","acctNum":"ACCT0014790","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"nbucesl4","name":"Medela Inc USA","acctNum":"ACCT0068167","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"5evxaqdg","name":"AFFINA","acctNum":"ACCT0017606","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"pw6f5f38","name":"Allnet Air","acctNum":"ACCT0135588","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"rvxvvg53","name":"MedSpeed","acctNum":"ACCT0224905","type":"newlogo","aeId":"katie","status":"—","bigBet":true},{"id":"n7yy8srq","name":"Harting, Inc of North America","acctNum":"ACCT0014727","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"ktulqret","name":"Inland Real Estate Group Of Companies Inc","acctNum":"ACCT0017455","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"cslzonky","name":"Spreetail","acctNum":"ACCT0168335","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"igj4jad7","name":"Lawson Products Inc","acctNum":"ACCT0002018","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"bmhs3ems","name":"Rockton Health Physicians","acctNum":"ACCT0001383","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"72nht41z","name":"Flat Out Crazy, LLC","acctNum":"ACCT0054923","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"r1iu1udw","name":"Biaggi's Ristorante Italiano LLC","acctNum":"ACCT0053226","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"6iw8btp0","name":"Royal Management Corp","acctNum":"ACCT0057397","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"61lsm44x","name":"LACOSTA Inc","acctNum":"ACCT0055891","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"4rpa6xjm","name":"B&R Stores Inc","acctNum":"ACCT0053107","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"jvja7dqb","name":"OccuVAX LLC","acctNum":"ACCT0071033","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"sii9zjqd","name":"Neisewander Enterprises Inc","acctNum":"ACCT0056551","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"h1fyjgf0","name":"Chicago Sun-Times Features Inc","acctNum":"ACCT0053689","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"y48vx7yg","name":"Seasons Hospice & Palliative Care","acctNum":"ACCT0144166","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"7cc78jx7","name":"KemperSports Inc","acctNum":"ACCT0055787","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"554hxixg","name":"Covenant Security Services Ltd","acctNum":"ACCT0054382","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"w99zhj1s","name":"Highland Ventures Ltd","acctNum":"ACCT0181668","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"r199fqxg","name":"Quantum Foods, LLC","acctNum":"ACCT0057154","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"23pm11eu","name":"Readerlink LLC","acctNum":"ACCT0057198","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"lrha5f7i","name":"Vi Living","acctNum":"ACCT0092704","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"njae8ne8","name":"Community Care Systems Inc","acctNum":"ACCT0054038","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"xhymif9s","name":"Per Mar Security and Research Corp","acctNum":"ACCT0007171","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"6pmfdalh","name":"Footprint Retail Services","acctNum":"ACCT0144158","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"m2zi6kj6","name":"Omaha World Herald Co","acctNum":"ACCT0033590","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"yjrish0g","name":"Swissotel Management Corp","acctNum":"ACCT0057999","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"ejiqflbh","name":"Cooper's Hawk Winery & Restaurant LLC","acctNum":"ACCT0132508","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"kccovjl8","name":"Pennant Partners","acctNum":"ACCT0015981","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"89qqunwq","name":"Heritage Enterprises Inc","acctNum":"ACCT0055379","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"fjrs6n0c","name":"Cosatech, Inc.","acctNum":"ACCT0054184","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"dqi4guqx","name":"Superior Consolidated Industries Inc","acctNum":"ACCT0046124","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"gvr62chx","name":"Stats Perform","acctNum":"ACCT0097685","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"v11291t7","name":"Accretive Solutions Inc","acctNum":"ACCT0020203","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"ubp2a0i9","name":"Innerworkings, Inc.","acctNum":"ACCT0014744","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"ybwac5te","name":"Symbria","acctNum":"ACCT0144160","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"qwj4e91b","name":"Portfolio Hotels & Resorts LLC","acctNum":"ACCT0057036","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"6g0s2rqp","name":"Baker's Supermarkets Inc","acctNum":"ACCT0053121","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"wnt782yh","name":"System Software Associates Inc Del","acctNum":"ACCT0058011","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"qvn2l6mg","name":"Kemin Industries Inc","acctNum":"ACCT0085914","type":"newlogo","aeId":"katie","status":"—","bigBet":true},{"id":"w703qnni","name":"Olin Brass","acctNum":"ACCT0040490","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"yji897p0","name":"Tecta America Corp","acctNum":"ACCT0058050","type":"newlogo","aeId":"katie","status":"—","bigBet":true},{"id":"17e69lum","name":"Montclair Hotels LLC","acctNum":"ACCT0056430","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"4bc39grb","name":"MacLean-Fogg Co","acctNum":"ACCT0006239","type":"newlogo","aeId":"katie","status":"—","bigBet":false},{"id":"5iupgwhh","name":"BlueCross BlueShield Association","acctNum":"ACCT0008067","type":"customer","aeId":"brian","status":"—","bigBet":false},{"id":"2ote67cz","name":"US LBM LLC","acctNum":"ACCT0058547","type":"customer","aeId":"brian","status":"—","bigBet":false},{"id":"0xcco5d0","name":"AIT Worldwide Logistics","acctNum":"ACCT0020235","type":"customer","aeId":"brian","status":"—","bigBet":false},{"id":"wk0sdphk","name":"Sentinel Technologies, Inc","acctNum":"ACCT0022103","type":"customer","aeId":"brian","status":"—","bigBet":false},{"id":"fngu4zv2","name":"West Monroe Partners LLC.","acctNum":"ACCT0147132","type":"customer","aeId":"brian","status":"—","bigBet":false},{"id":"30gjnh5r","name":"Cloud5 Communications","acctNum":"ACCT0135693","type":"customer","aeId":"brian","status":"—","bigBet":false},{"id":"gaf1fzt1","name":"Crash Champions","acctNum":"ACCT0169536","type":"customer","aeId":"brian","status":"—","bigBet":false},{"id":"688hx0z4","name":"Culligan International Company","acctNum":"ACCT0014667","type":"customer","aeId":"brian","status":"—","bigBet":false},{"id":"qh274ap6","name":"Advanced Technology Services, Inc.","acctNum":"ACCT0000691","type":"newlogo","aeId":"brian","status":"—","bigBet":true},{"id":"glnaj3bn","name":"North American Lighting Inc","acctNum":"ACCT0092119","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"6yo8b5ne","name":"Digital Management LLC","acctNum":"ACCT0156499","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"zgjf06ek","name":"Montway Auto Transport","acctNum":"ACCT0252628","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"4ilu7y3v","name":"Seyfarth Shaw LLP","acctNum":"ACCT0008078","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"dwez812j","name":"Ball Horticultural Company","acctNum":"ACCT0053128","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"2991i2nb","name":"Addison Group","acctNum":"ACCT0052759","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"2hain4g2","name":"SCIH Salt Holdings Inc.","acctNum":"ACCT0092110","type":"newlogo","aeId":"brian","status":"—","bigBet":true},{"id":"yw4oixnc","name":"Breakthru Beverage Group","acctNum":"ACCT0098250","type":"newlogo","aeId":"brian","status":"Do Not Contact","bigBet":true},{"id":"z5r16iy0","name":"Curran Group, Inc.","acctNum":"ACCT0054437","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"35dape8r","name":"Digital Management Inc. Enterprise Services Group (FedRAMP)","acctNum":"ACCT0142690","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"c30hmf7u","name":"Evraz Inc NA","acctNum":"ACCT0010251","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"7wjl9p69","name":"Federal Signal Corporation","acctNum":"ACCT0001321","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"oivqdvh1","name":"Sentinel Technologies, Inc - Powers Health","acctNum":"ACCT0242050","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"rvv6ilvm","name":"Hartmarx Corp","acctNum":"ACCT0002043","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"fptc3llm","name":"Inotiv Inc","acctNum":"ACCT0258711","type":"newlogo","aeId":"brian","status":"—","bigBet":true},{"id":"9nnq372f","name":"Waldinger Corp","acctNum":"ACCT0006603","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"nj0l1l2o","name":"MAT Holdings Inc","acctNum":"ACCT0092150","type":"newlogo","aeId":"brian","status":"—","bigBet":true},{"id":"o030t8pb","name":"Coveris","acctNum":"ACCT0095162","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"z37y3x83","name":"Quench USA Inc","acctNum":"ACCT0170252","type":"newlogo","aeId":"brian","status":"—","bigBet":true},{"id":"cein3dhp","name":"Corelle Brands","acctNum":"ACCT0219548","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"yr1gllfr","name":"Peer Bearing Co","acctNum":"ACCT0061266","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"4tnwcvsr","name":"Elkay Manufacturing Co","acctNum":"ACCT0014687","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"wrvk3vbm","name":"Gerber Collision And Glass - ITSM","acctNum":"ACCT0069648","type":"newlogo","aeId":"brian","status":"—","bigBet":true},{"id":"v0oda74r","name":"Orion Steel Group LLC","acctNum":"ACCT0261514","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"uvbttupj","name":"The Planet Group","acctNum":"ACCT0230592","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"jfgdblam","name":"Baird & Warner","acctNum":"ACCT0145481","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"makqyljj","name":"Hugo Technologies Inc","acctNum":"ACCT0187005","type":"newlogo","aeId":"brian","status":"—","bigBet":false},{"id":"76d5aooi","name":"Eversana","acctNum":"ACCT0133138","type":"customer","aeId":"seamus","status":"—","bigBet":false},{"id":"wxhy4z3u","name":"Tate & Lyle Inc","acctNum":"ACCT0005228","type":"customer","aeId":"seamus","status":"—","bigBet":false},{"id":"6bfny2y1","name":"DMI Inc","acctNum":"ACCT0024135","type":"customer","aeId":"seamus","status":"—","bigBet":false},{"id":"9d7qbdvr","name":"TTX Company","acctNum":"ACCT0010571","type":"customer","aeId":"seamus","status":"—","bigBet":false},{"id":"wnxsv4in","name":"Stepan Co","acctNum":"ACCT0001401","type":"customer","aeId":"seamus","status":"—","bigBet":false},{"id":"2p2poqq9","name":"Primient","acctNum":"ACCT0169529","type":"customer","aeId":"seamus","status":"—","bigBet":false},{"id":"ejeaeu71","name":"HydraForce Inc","acctNum":"ACCT0046540","type":"customer","aeId":"seamus","status":"—","bigBet":false},{"id":"o4hibn0y","name":"DMI Inc (FedRAMP)","acctNum":"ACCT0225907","type":"customer","aeId":"seamus","status":"—","bigBet":false},{"id":"qoe804iw","name":"Center for Better Aging at St Bernard Hospital","acctNum":"ACCT0225337","type":"customer","aeId":"seamus","status":"—","bigBet":false},{"id":"jxtoczls","name":"Charter Next Generation","acctNum":"ACCT0242257","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"30gi37ni","name":"Hub Group Inc","acctNum":"ACCT0001337","type":"newlogo","aeId":"seamus","status":"Do Not Contact","bigBet":true},{"id":"exqot55b","name":"SRAM LLC","acctNum":"ACCT0057801","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"956jlwo2","name":"ENTRUST Solutions Group","acctNum":"ACCT0227035","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"dpwmr2cs","name":"CDW - Interface","acctNum":"ACCT0224730","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"tw9rvrh0","name":"Encore Event Technologies","acctNum":"ACCT0135702","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"lvwmtopk","name":"Henry Crown And Co","acctNum":"ACCT0055376","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"wl4o0t8u","name":"Amsive LLC","acctNum":"ACCT0227343","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"lvadypp9","name":"Flying Food Fare Inc","acctNum":"ACCT0054939","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"o36bdhh3","name":"Duncan Aviation","acctNum":"ACCT0031171","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"0gsib6e4","name":"VCNA Prairie, LLC","acctNum":"ACCT0235984","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"720kc2bq","name":"Advanced Converting Works","acctNum":"ACCT0235749","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"pxl8y5le","name":"Merieux NutriSciences","acctNum":"ACCT0146885","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"7wr3rmhj","name":"Atkore International","acctNum":"ACCT0053058","type":"newlogo","aeId":"seamus","status":"—","bigBet":true},{"id":"ibxf8ffh","name":"Echo Inc","acctNum":"ACCT0054690","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"7y7f5z6x","name":"Bottleneck Management","acctNum":"ACCT0227346","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"gcdulymv","name":"Flying Food Group LLC","acctNum":"ACCT0054940","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"cchqwe2u","name":"Lakeshore Recycling Systems","acctNum":"ACCT0203110","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"hrenrntp","name":"Cheetah Digital","acctNum":"ACCT0130871","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"3eqosk0b","name":"AMC Care Home Medical Retail","acctNum":"ACCT0002997","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"ch3bvrxa","name":"Omron Management Center Of America Inc","acctNum":"ACCT0092272","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"58a5hun0","name":"Inventus Power Inc","acctNum":"ACCT0055510","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"7eae68dz","name":"Innovative Staff Solutions, Inc.","acctNum":"ACCT0235969","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"aow1uuwq","name":"Glanbia Nutritionals","acctNum":"ACCT0227049","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"sw19e6ox","name":"Edsal Manufacturing Co Inc","acctNum":"ACCT0054710","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"obft4gs2","name":"Superior Bulk Logistics Inc","acctNum":"ACCT0057978","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"bbpj1uhl","name":"Staff Management SMX","acctNum":"ACCT0215916","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"8b1swsdb","name":"Wilton Holdings Inc","acctNum":"ACCT0058835","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"plnajwcd","name":"Schawk Inc","acctNum":"ACCT0002042","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"nfa38s94","name":"Wilton Industries Inc","acctNum":"ACCT0042933","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"7s2vw8li","name":"The AZEK Company Inc","acctNum":"ACCT0226441","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"swis0y3a","name":"Mid-America Carpenters Regional Council","acctNum":"ACCT0258775","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"plfjb3ke","name":"CB2","acctNum":"ACCT0225080","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"pt2v2pgo","name":"Enesco LLC","acctNum":"ACCT0047898","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"vtpwk1jd","name":"The Scion Group LLC","acctNum":"ACCT0227381","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"xqihbxts","name":"Community First Healthcare Of Illinois, Inc.","acctNum":"ACCT0235826","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"wvt3cx5f","name":"Filtration Group Corp","acctNum":"ACCT0044949","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"07ko90d5","name":"Scholle Corporation","acctNum":"ACCT0013362","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"k99mhsqj","name":"Morton Buildings, Inc.","acctNum":"ACCT0235943","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"edq8l35c","name":"Champion Laboratories Inc","acctNum":"ACCT0053652","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"q4949qd5","name":"Davis-Standard Holdings Inc","acctNum":"ACCT0063704","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"vx4wmxer","name":"PCS Phosphate Co Inc","acctNum":"ACCT0012926","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"vvtnyowt","name":"SunSource","acctNum":"ACCT0045640","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"t12k5hpw","name":"Beltone","acctNum":"ACCT0227703","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"e06wa97k","name":"Ironform","acctNum":"ACCT0033137","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"qe9z9v8p","name":"PPC Flexible Packaging LLC","acctNum":"ACCT0258681","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"0dezsgim","name":"Bergstrom Inc.","acctNum":"ACCT0053210","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"zgb8h3fv","name":"Senior Flexonics","acctNum":"ACCT0140461","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"47ikuokw","name":"Klein Tools Inc","acctNum":"ACCT0041031","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"hnkvbmwu","name":"Crown Golf Properties LP","acctNum":"ACCT0054418","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"mhqd5q58","name":"Niemann Foods Foundation","acctNum":"ACCT0014814","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"lbbtxn2y","name":"Fresenius Kabi USA LLC","acctNum":"ACCT0070928","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"oygc8o35","name":"Numeric Technologies Inc","acctNum":"ACCT0226646","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"w0i871xm","name":"Vesuvius Crucible Co","acctNum":"ACCT0058601","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"xivp2t7u","name":"Tempel Steel Co","acctNum":"ACCT0058065","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"cwaij3o3","name":"Pepper Construction Group, LLC","acctNum":"ACCT0002014","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"n03do2sw","name":"Wanxiang America Corp","acctNum":"ACCT0058685","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"ebke1lrw","name":"BCD Meetings & Events","acctNum":"ACCT0227030","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"jbed8clx","name":"Heidrick & Struggles Intl Inc","acctNum":"ACCT0002019","type":"newlogo","aeId":"seamus","status":"—","bigBet":true},{"id":"crpvcnl9","name":"Univar Solutions USA LLC","acctNum":"ACCT0258789","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"cemvd2pe","name":"Sargent & Lundy LLC","acctNum":"ACCT0017376","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"xdxs57vl","name":"Lettuce Entertain You Enterprises Inc","acctNum":"ACCT0006238","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"xrp5zag7","name":"Rockford Health System","acctNum":"ACCT0008076","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"9k823zk9","name":"Primary Products Ingredients Americas LLC","acctNum":"ACCT0258707","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"peilajfu","name":"Ryerson Inc.","acctNum":"ACCT0001385","type":"newlogo","aeId":"seamus","status":"—","bigBet":true},{"id":"2m4urwq1","name":"Civc Partners LP","acctNum":"ACCT0047981","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"mnkbl4ji","name":"John Crane Inc","acctNum":"ACCT0061299","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"s9ciqntp","name":"Airlite Plastics Co","acctNum":"ACCT0041256","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"hc1hwiud","name":"Paper Source LLC","acctNum":"ACCT0226913","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"cvirm252","name":"Heritage-Crystal Clean Inc","acctNum":"ACCT0048141","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"ylu7b0ba","name":"Diverzify","acctNum":"ACCT0228362","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"wlgjmybo","name":"Heartland Veterinary Partners","acctNum":"ACCT0216265","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"gqt4uibc","name":"Motor Coach Industries Intl Inc","acctNum":"ACCT0001990","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"3gfrlnei","name":"Lettuce Entertain You Too Inc","acctNum":"ACCT0055985","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"plbj54ff","name":"A&R Logistics Inc","acctNum":"ACCT0063175","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"qlep3ggx","name":"HAVI Logistics","acctNum":"ACCT0211362","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"8c7pov88","name":"Sherman Health Systems","acctNum":"ACCT0016038","type":"newlogo","aeId":"seamus","status":"—","bigBet":false},{"id":"21j564pw","name":"CCC Intelligent Solutions","acctNum":"ACCT0226120","type":"customer","aeId":"mikaela","status":"—","bigBet":false},{"id":"2nxw6tzx","name":"Consilio LLC","acctNum":"ACCT0091709","type":"customer","aeId":"mikaela","status":"—","bigBet":false},{"id":"nsdonzpv","name":"Delta Dental","acctNum":"ACCT0014578","type":"customer","aeId":"mikaela","status":"—","bigBet":false},{"id":"5x5bnced","name":"Invenergy LLC","acctNum":"ACCT0085692","type":"customer","aeId":"mikaela","status":"Do Not Contact","bigBet":true},{"id":"6si3wr3a","name":"K2 Services LLC","acctNum":"ACCT0089092","type":"customer","aeId":"mikaela","status":"—","bigBet":false},{"id":"cd0955ng","name":"Netrix LLC","acctNum":"ACCT0220203","type":"customer","aeId":"mikaela","status":"—","bigBet":false},{"id":"5s893tfm","name":"Resource Point of Sale LLC","acctNum":"ACCT0092367","type":"customer","aeId":"mikaela","status":"—","bigBet":false},{"id":"fgcg5hg2","name":"SDI Presence LLC","acctNum":"ACCT0140234","type":"customer","aeId":"mikaela","status":"—","bigBet":false},{"id":"eja0v7os","name":"ThoughtWorks Inc","acctNum":"ACCT0018101","type":"customer","aeId":"mikaela","status":"—","bigBet":false},{"id":"09xvkoh6","name":"Bswift LLC","acctNum":"ACCT0186999","type":"newlogo","aeId":"mikaela","status":"—","bigBet":true},{"id":"q30hk5ru","name":"Fellowes Inc","acctNum":"ACCT0017475","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"rjsyjvkp","name":"Help At Home Inc","acctNum":"ACCT0047466","type":"newlogo","aeId":"mikaela","status":"—","bigBet":true},{"id":"h5tklmm4","name":"IMEG Corp","acctNum":"ACCT0197324","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"db0p9zbx","name":"Royal Cyber Inc","acctNum":"ACCT0093363","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"ua5kpwht","name":"S&S Activewear","acctNum":"ACCT0130492","type":"newlogo","aeId":"mikaela","status":"—","bigBet":true},{"id":"4apqs8ni","name":"ThoughtFocus, Inc.","acctNum":"ACCT0139268","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"jjl0w8tt","name":"Vistex","acctNum":"ACCT0130858","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"49mw7k9b","name":"Alden Management Services, Inc.","acctNum":"ACCT0052821","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"izrmu2n1","name":"CIeNET","acctNum":"ACCT0135587","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"6fcr07m8","name":"Empire Today LLC","acctNum":"ACCT0014951","type":"newlogo","aeId":"mikaela","status":"—","bigBet":true},{"id":"jgoz6u2x","name":"Enlivant","acctNum":"ACCT0091325","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"iboc13yt","name":"Franklin Energy Services","acctNum":"ACCT0122971","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"dfv0kvxe","name":"GoHealth Inc","acctNum":"ACCT0258695","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"mwqs72ye","name":"Graycor Inc","acctNum":"ACCT0055164","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"1yn88wpy","name":"Hearthside Food Solutions LLC","acctNum":"ACCT0055355","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"k45xr5lq","name":"Heartland Express Inc","acctNum":"ACCT0003800","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"kc74ac25","name":"Heniff Transportation Systems LLC","acctNum":"ACCT0179823","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"slk2wcfo","name":"Lyra Technology Group","acctNum":"ACCT0216135","type":"newlogo","aeId":"mikaela","status":"—","bigBet":true},{"id":"6knopxgz","name":"Mario Tricoci's Hair Salon & Day Spa","acctNum":"ACCT0056171","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"xwd8ev9n","name":"Mizkan Americas","acctNum":"ACCT0110301","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"oblf9x1i","name":"Newly Weds Foods, Inc.","acctNum":"ACCT0014813","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"7dpwptvq","name":"Searle","acctNum":"ACCT0002034","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"7durkfb6","name":"SigmaTron International, Inc.","acctNum":"ACCT0057644","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"dxdszpki","name":"Springfield Clinic LLP","acctNum":"ACCT0057793","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"xqj6da0b","name":"Sterigenics US LLC","acctNum":"ACCT0057912","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"rht56u5n","name":"The Plus Group Inc","acctNum":"ACCT0058199","type":"newlogo","aeId":"mikaela","status":"—","bigBet":false},{"id":"sqqi3ebu","name":"Applied Systems Inc","acctNum":"ACCT0052983","type":"newlogo","aeId":"seamus","status":"—","bigBet":true},{"id":"mvtlg3nq","name":"Cars.com","acctNum":"ACCT0013986","type":"newlogo","aeId":"seamus","status":"—","bigBet":true}];
+
+const AE_STYLES = {
+  tony:    {bg:'rgba(3,45,66,.12)',   color:'#032D42', hex:'#032D42',   label:'Tony'},
+  jeff:    {bg:'rgba(4,67,85,.12)',   color:'#044355', hex:'#044355',   label:'Jeff'},
+  riley:   {bg:'rgba(180,83,9,.12)', color:'#B45309', hex:'#B45309',   label:'Riley'},
+  katie:   {bg:'rgba(91,33,182,.12)',color:'#5B21B6', hex:'#5B21B6',   label:'Katie'},
+  brian:   {bg:'rgba(217,48,37,.12)',color:'#D93025', hex:'#D93025',   label:'Brian'},
+  seamus:  {bg:'rgba(26,122,0,.12)', color:'#1a7a00', hex:'#1a7a00',   label:'Seamus'},
+  mikaela:{bg:'rgba(3,105,161,.12)',color:'#0369A1', hex:'#0369A1',   label:'Mikaela'},
+};
+
+let activeTab = 'all';
+let activeAE = 'all';
+let sortCol = 'name';
+let sortDir = 1;
+
+function getFiltered() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  return ACCOUNTS.filter(a => {
+    if (activeTab === 'customer' && a.type !== 'customer') return false;
+    if (activeTab === 'newlogo' && a.type !== 'newlogo') return false;
+    if (activeTab === 'bigbet' && !a.bigBet) return false;
+    if (activeTab === 'dnc' && a.status !== 'Do Not Contact') return false;
+    if (activeAE !== 'all' && a.aeId !== activeAE) return false;
+    if (q && !a.name.toLowerCase().includes(q) && !a.acctNum.toLowerCase().includes(q)) return false;
+    return true;
+  }).sort((a, b) => {
+    let av = a[sortCol] || '', bv = b[sortCol] || '';
+    if (typeof av === 'boolean') av = av ? 0 : 1;
+    if (typeof bv === 'boolean') bv = bv ? 0 : 1;
+    return sortDir * (av < bv ? -1 : av > bv ? 1 : 0);
+  });
+}
+
+function render() {
+  const rows = getFiltered();
+  document.getElementById('filterInfo').textContent = rows.length + ' accounts';
+  document.getElementById('tblFooter').textContent = 'Showing ' + rows.length + ' of ' + ACCOUNTS.length + ' accounts';
+
+  // Tab counts
+  ['all','customer','newlogo','bigbet','dnc'].forEach(t => {
+    const savedTab = activeTab;
+    activeTab = t;
+    const savedAE = activeAE;
+    const c = ACCOUNTS.filter(a => {
+      if (t === 'customer' && a.type !== 'customer') return false;
+      if (t === 'newlogo' && a.type !== 'newlogo') return false;
+      if (t === 'bigbet' && !a.bigBet) return false;
+      if (t === 'dnc' && a.status !== 'Do Not Contact') return false;
+      if (savedAE !== 'all' && a.aeId !== savedAE) return false;
+      return true;
+    }).length;
+    activeTab = savedTab;
+    const el = document.getElementById('ct-' + t);
+    if (el) el.textContent = c;
+  });
+
+  if (!rows.length) {
+    document.getElementById('tbody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--s400)">No accounts match this filter.</td></tr>';
+    return;
+  }
+
+  document.getElementById('tbody').innerHTML = rows.map(a => {
+    const ae = AE_STYLES[a.aeId] || {bg:'var(--s100)',color:'var(--s600)',label:a.aeId};
+    const typePill = a.type === 'customer'
+      ? '<span class="type-pill tp-c">Customer</span>'
+      : '<span class="type-pill tp-n">New Logo</span>';
+    const isDNC = a.status === 'Do Not Contact';
+    let statusCell = '';
+    if (isDNC) {
+      statusCell = '<span class="dnc-tag">🚫 Do Not Contact</span>';
+    } else if (a.notes) {
+      statusCell = '<div class="note-txt" title="' + a.notes.replace(/"/g,"'") + '">' + a.notes + '</div>';
+    } else {
+      statusCell = '<span style="color:var(--s300);font-size:11px">—</span>';
+    }
+
+    return '<tr class="fade-in">' +
+      '<td><div class="acct-name">' + a.name + (isDNC ? ' <span style="font-size:10px;color:var(--r500)">🚫</span>' : '') + '</div><div class="acct-num">' + a.acctNum + '</div></td>' +
+      '<td><div style="display:flex;align-items:center;gap:6px"><div class="ae-dot" style="background:' + ae.bg + ';color:' + ae.color + '">' + ae.label.slice(0,2).toUpperCase() + '</div><span style="font-size:11px;color:var(--s600)">' + ae.label + '</span></div></td>' +
+      '<td>' + typePill + '</td>' +
+      '<td style="text-align:center">' + (a.bigBet ? '<span class="bb-star" title="Big Bet">⭐</span>' : '<span style="color:var(--s200)">·</span>') + '</td>' +
+      '<td>' + statusCell + '</td>' +
+      '<td style="text-align:right"><button class="btn btn-g btn-sm" style="font-size:10px">View</button></td>' +
+    '</tr>';
+  }).join('');
+}
+
+function renderKPIs() {
+  const total = ACCOUNTS.length;
+  const customers = ACCOUNTS.filter(a => a.type === 'customer').length;
+  const newlogos = ACCOUNTS.filter(a => a.type === 'newlogo').length;
+  const bigbets = ACCOUNTS.filter(a => a.bigBet).length;
+  const dnc = ACCOUNTS.filter(a => a.status === 'Do Not Contact').length;
+  const aeCounts = {};
+  ACCOUNTS.forEach(a => aeCounts[a.aeId] = (aeCounts[a.aeId] || 0) + 1);
+  const topAE = Object.entries(aeCounts).sort((a,b) => b[1]-a[1])[0];
+  const topAELabel = AE_STYLES[topAE[0]] ? AE_STYLES[topAE[0]].label : topAE[0];
+
+  document.getElementById('kpiRow').innerHTML = [
+    {lbl:'Total Accounts', val:total, sub:'Across all 7 AEs'},
+    {lbl:'Customers', val:customers, sub:Math.round(customers/total*100)+'% of territory'},
+    {lbl:'New Logos', val:newlogos, sub:Math.round(newlogos/total*100)+'% of territory'},
+    {lbl:'Big Bets', val:bigbets, sub:'Prioritized pursuit accounts'},
+    {lbl:'Do Not Contact', val:dnc, sub:'Flagged by AE — skip outreach'},
+  ].map(k => '<div class="kpi"><div class="kpi-lbl">' + k.lbl + '</div><div class="kpi-val">' + k.val + '</div><div class="kpi-sub">' + k.sub + '</div></div>').join('');
+}
+
+function renderAEChips() {
+  const AEs = ['tony','jeff','riley','katie','brian','seamus','mikaela'];
+  const chips = AEs.map(ae => {
+    const s = AE_STYLES[ae];
+    const isOn = activeAE === ae;
+    const style = isOn ? 'background:' + s.hex + ';border-color:' + s.hex + ';color:#fff;' : '';
+    return '<button class="chip ' + (isOn ? 'on' : '') + '" data-ae="' + ae + '" onclick="setAE(\'' + ae + '\')" style="' + style + '"><span class="chip-dot" style="background:' + s.color + '"></span>' + s.label + '</button>';
+  }).join('');
+  const allOn = activeAE === 'all';
+  document.getElementById('aeChips').innerHTML = chips +
+    '<button class="chip ' + (allOn ? 'on' : '') + '" onclick="setAE(\'all\')">All AEs</button>';
+}
+
+function switchTab(tab, btn) {
+  activeTab = tab;
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  render();
+}
+
+function setAE(ae) {
+  activeAE = ae;
+  renderAEChips();
+  render();
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = 1; }
+  render();
+}
+
+renderKPIs();
+renderAEChips();
+render();
+</script>
+</body>
+</html>
