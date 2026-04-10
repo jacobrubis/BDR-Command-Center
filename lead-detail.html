@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Detail — BDR Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+:root{
+  --ink:#032D42;--ink-nav:#01161f;--ink-mid:#043d5a;
+  --wasabi:#63DF4E;--wdk:#4ab83a;
+  --white:#fff;--bg:#f1f5f9;
+  --s50:#f8fafc;--s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;
+  --s400:#94a3b8;--s500:#64748b;--s600:#475569;--s700:#334155;
+  --s800:#1e293b;--s900:#0f172a;
+  --b50:#eff6ff;--b500:#3b82f6;--b600:#2563eb;
+  --g50:#f0fdf4;--g100:#dcfce7;--g500:#22c55e;--g600:#16a34a;
+  --a50:#fffbeb;--a100:#fef3c7;--a500:#f59e0b;--a600:#d97706;
+  --r50:#fff1f2;--r100:#ffe4e6;--r500:#ef4444;--r600:#dc2626;
+  --p50:#faf5ff;--p500:#a855f7;--p600:#9333ea;
+  --sh-xs:0 1px 2px rgba(0,0,0,.05);
+  --sh-sm:0 1px 3px rgba(0,0,0,.10),0 1px 2px rgba(0,0,0,.06);
+  --sh-md:0 4px 12px rgba(0,0,0,.08);
+  --r:6px;--rmd:8px;--rlg:12px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--s800);font-size:13px;line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--s300);border-radius:2px;}
+
+/* ── TOP NAV ── */
+.gnav{height:44px;background:var(--ink-nav);display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:300;border-bottom:1px solid rgba(255,255,255,.06);}
+.gnav-logo{display:flex;align-items:center;padding:0 14px;height:44px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.gnav-tabs{display:flex;align-items:center;}
+.gnav-tab{display:flex;align-items:center;height:44px;padding:0 13px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.gnav-tab:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);}
+.gnav-pill-wrap{flex:1;display:flex;justify-content:center;}
+.gnav-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);}
+.gnav-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--wasabi);}
+.gnav-r{display:flex;align-items:center;gap:2px;padding:0 10px;}
+.gnav-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:rgba(255,255,255,.45);font-size:13px;border:none;background:transparent;cursor:pointer;}
+.gnav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
+.gnav-av{width:28px;height:28px;background:var(--wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ink);cursor:pointer;margin-left:4px;}
+
+/* ── SIDEBAR ── */
+.sbar{position:fixed;top:44px;left:0;bottom:0;width:44px;background:#0d1f2b;border-right:1px solid rgba(255,255,255,.05);z-index:200;display:flex;flex-direction:column;overflow:hidden;transition:width .22s cubic-bezier(.4,0,.2,1);}
+.sbar:hover{width:180px;box-shadow:4px 0 20px rgba(0,0,0,.25);}
+.sbar-sec{padding:10px 0 4px;}
+.sbar-lbl{font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;white-space:nowrap;opacity:0;transition:opacity .15s .05s;}
+.sbar:hover .sbar-lbl{opacity:1;}
+.sbar-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:background .12s,color .12s;text-decoration:none;white-space:nowrap;}
+.sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.sbar-item.on{color:var(--wasabi);border-left-color:var(--wasabi);background:rgba(99,223,78,.06);font-weight:500;}
+.sbar-ic{width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;}
+.sbar-item.on .sbar-ic::after{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--wasabi);margin:1px auto 0;}
+.sbar:hover .sbar-item.on .sbar-ic::after{display:none;}
+.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);opacity:0;transition:opacity .1s;flex-shrink:0;}
+.sbar:hover .sb{opacity:1;}
+.sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
+.sdiv{height:1px;background:rgba(255,255,255,.06);margin:5px 10px;}
+.sbar-footer{padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);margin-top:auto;white-space:nowrap;opacity:0;transition:opacity .15s;}
+.sbar:hover .sbar-footer{opacity:1;}
+
+/* ── LAYOUT ── */
+.main{margin-top:44px;margin-left:44px;min-height:calc(100vh - 44px);}
+
+/* ── RECORD HEADER ── */
+.rec-hdr{background:var(--white);border-bottom:1px solid var(--s200);padding:0 24px;position:sticky;top:44px;z-index:100;}
+.rec-hdr-top{display:flex;align-items:center;gap:12px;padding:12px 0 0;}
+.breadcrumb{font-size:11px;color:var(--s400);display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.breadcrumb a{color:var(--s400);}
+.breadcrumb a:hover{color:var(--b600);}
+.breadcrumb .sep{color:var(--s300);}
+.rec-av{width:38px;height:38px;background:linear-gradient(135deg,var(--ink),var(--ink-mid));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--wasabi);flex-shrink:0;}
+.rec-id{font-size:11px;flex:1;min-width:0;}
+.rec-name-row{display:flex;align-items:center;gap:8px;margin-bottom:2px;}
+.rec-name{font-size:18px;font-weight:700;color:var(--s900);letter-spacing:-.02em;}
+.rec-badge{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;background:var(--s100);color:var(--s500);padding:2px 7px;border-radius:3px;border:1px solid var(--s200);}
+.rec-mono{font-size:10px;font-family:'DM Mono',monospace;color:var(--s400);}
+.rec-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.rec-meta-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--s500);}
+.rec-meta-item a{color:var(--b600);}
+.rec-meta-dot{width:3px;height:3px;border-radius:50%;background:var(--s300);}
+.rec-acts{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 12px;border-radius:var(--r);cursor:pointer;border:1px solid;transition:.12s;}
+.btn-g{background:transparent;color:var(--s600);border-color:var(--s200);}
+.btn-g:hover{background:var(--s50);border-color:var(--s300);}
+.btn-p{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.btn-p:hover{background:var(--ink-mid);}
+.btn-w{background:var(--wasabi);color:var(--ink);border-color:var(--wasabi);font-weight:600;}
+.btn-w:hover{background:var(--wdk);}
+.btn-sm{font-size:11px;padding:5px 11px;}
+
+/* STATUS BAR */
+.status-bar{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--s100);margin-top:10px;flex-wrap:wrap;}
+.status-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;cursor:pointer;border:1px solid;}
+.sp-open{background:var(--b50);color:var(--b600);border-color:var(--b500);}
+.sp-working{background:var(--a50);color:var(--a600);border-color:var(--a500);opacity:.5;font-weight:400;}
+.sp-qualified{background:var(--g50);color:var(--g600);border-color:var(--g500);opacity:.5;font-weight:400;}
+.sp-dq{background:var(--r50);color:var(--r600);border-color:var(--r500);opacity:.5;font-weight:400;}
+.sp-dot{width:6px;height:6px;border-radius:50%;}
+.owner-chip{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--s600);padding:3px 8px 3px 4px;border-radius:20px;border:1px solid var(--s200);background:var(--s50);}
+.owner-av{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--white);}
+.score-chip{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;border:1px solid #fde68a;}
+
+/* TAB NAV */
+.tab-nav{display:flex;border-top:1px solid var(--s100);margin:0 -24px;padding:0 24px;overflow-x:auto;}
+.tab-nav::-webkit-scrollbar{height:0;}
+.tab-it{display:flex;align-items:center;gap:5px;padding:9px 13px;font-size:12px;font-weight:500;color:var(--s500);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:.1s;user-select:none;}
+.tab-it:hover{color:var(--s700);}
+.tab-it.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:600;}
+.tab-it.research{color:var(--wdk);background:rgba(99,223,78,.03);}
+.tab-it.research.on{color:var(--wdk);border-bottom-color:var(--wasabi);}
+.tab-ct{font-size:10px;font-weight:700;padding:1px 5px;border-radius:10px;background:var(--s100);color:var(--s500);}
+.tab-it.on .tab-ct{background:var(--ink);color:var(--white);}
+
+/* PAGE BODY */
+.page-body{display:grid;grid-template-columns:250px 1fr 340px;gap:14px;padding:14px 24px 48px;align-items:start;}
+
+/* PANELS */
+.panel{background:var(--white);border:1px solid var(--s200);border-radius:var(--rlg);overflow:hidden;box-shadow:var(--sh-xs);margin-bottom:12px;}
+.panel-hd{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--s100);}
+.panel-title{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--s400);}
+.panel-act{font-size:11px;color:var(--b600);cursor:pointer;font-weight:500;}
+.panel-act:hover{text-decoration:underline;}
+
+/* SCORE RING */
+.score-section{padding:14px 15px;border-bottom:1px solid var(--s100);display:flex;align-items:center;gap:13px;}
+.score-ring-wrap{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;}
+.score-ring-wrap::before{content:'';position:absolute;inset:5px;background:var(--white);border-radius:50%;z-index:1;}
+.score-inner{position:relative;z-index:2;text-align:center;}
+.score-num{font-size:15px;font-weight:700;color:var(--s800);line-height:1;font-family:'DM Mono',monospace;}
+.score-denom{font-size:8px;color:var(--s400);}
+.score-details{flex:1;}
+.score-lbl{font-size:12px;font-weight:600;color:var(--s700);margin-bottom:1px;}
+.score-sub{font-size:10px;color:var(--s400);}
+.score-bars{display:flex;flex-direction:column;gap:4px;margin-top:6px;}
+.sbar-row{display:flex;align-items:center;gap:6px;}
+.sbar-lbl2{font-size:10px;color:var(--s400);width:58px;flex-shrink:0;}
+.sbar-track{flex:1;height:4px;background:var(--s100);border-radius:2px;overflow:hidden;}
+.sbar-fill{height:100%;border-radius:2px;}
+.sbar-val{font-size:10px;font-weight:600;color:var(--s500);width:20px;text-align:right;}
+
+/* FIELD GROUPS */
+.fg{padding:11px 15px;border-bottom:1px solid var(--s100);}
+.fg:last-child{border-bottom:none;}
+.fg-lbl{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--s400);margin-bottom:7px;}
+.fr{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:3px 0;min-height:24px;}
+.fl{font-size:11px;color:var(--s400);flex-shrink:0;min-width:85px;padding-top:1px;}
+.fv{font-size:12px;color:var(--s700);font-weight:500;text-align:right;flex:1;line-height:1.4;}
+.fv.link{color:var(--b600);cursor:pointer;}
+.fv.link:hover{text-decoration:underline;}
+.ftag{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;}
+.ftag-blue{background:var(--b50);color:var(--b600);}
+.ftag-green{background:var(--g50);color:var(--g600);}
+.ftag-amber{background:var(--a50);color:#92400e;}
+.ftag-ink{background:rgba(3,45,66,.07);color:var(--ink);}
+.ftag-gray{background:var(--s100);color:var(--s600);}
+
+/* BU STRIP */
+.bu-strip{display:flex;flex-wrap:wrap;gap:5px;padding:11px 15px;border-bottom:1px solid var(--s100);}
+.bu-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:4px;cursor:pointer;transition:.1s;}
+.bu-active{background:rgba(3,45,66,.08);color:var(--ink);border:1px solid rgba(3,45,66,.15);}
+.bu-inactive{background:var(--s50);color:var(--s400);border:1px solid var(--s100);}
+
+/* ENGAGEMENT GRID */
+.eng-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 15px;}
+.eng-stat{background:var(--s50);border-radius:var(--rmd);padding:10px 11px;border:1px solid var(--s100);}
+.eng-stat.hl{background:rgba(3,45,66,.04);border-color:rgba(3,45,66,.1);}
+.eng-num{font-size:20px;font-weight:700;color:var(--s800);line-height:1;margin-bottom:3px;font-family:'DM Mono',monospace;}
+.eng-stat.hl .eng-num{color:var(--ink);}
+.eng-lbl{font-size:10px;color:var(--s400);font-weight:500;}
+
+/* AI CARD */
+.ai-card{border-radius:var(--rlg);padding:15px 17px;margin-bottom:12px;background:linear-gradient(135deg,#021e2e 0%,var(--ink) 60%,#054060 100%);border:1px solid rgba(99,223,78,.2);position:relative;overflow:hidden;}
+.ai-card::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(99,223,78,.1) 0%,transparent 70%);pointer-events:none;}
+.ai-card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.ai-lbl{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--wasabi);}
+.ai-pulse{width:7px;height:7px;background:var(--wasabi);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.85);}}
+.ai-card-btns{display:flex;gap:5px;}
+.ai-btn{font-size:11px;font-weight:500;padding:3px 10px;border-radius:4px;cursor:pointer;border:1px solid;font-family:inherit;transition:.1s;}
+.ai-btn-out{background:transparent;color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.15);}
+.ai-btn-out:hover{background:rgba(255,255,255,.06);}
+.ai-btn-solid{background:var(--wasabi);color:var(--ink);border-color:var(--wasabi);font-weight:600;}
+.ai-btn-solid:hover{background:var(--wdk);}
+.ai-summary{font-size:12px;color:rgba(255,255,255,.75);line-height:1.65;margin-bottom:12px;}
+.ai-summary strong{color:var(--wasabi);font-weight:600;}
+.ai-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.ai-tag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:3px;letter-spacing:.03em;}
+.ai-tag-green{background:rgba(99,223,78,.12);color:var(--wasabi);border:1px solid rgba(99,223,78,.2);}
+.ai-tag-blue{background:rgba(74,179,232,.12);color:#7dd3fc;border:1px solid rgba(74,179,232,.2);}
+.ai-tag-amber{background:rgba(245,166,35,.12);color:#fcd34d;border:1px solid rgba(245,166,35,.2);}
+.ai-tag-red{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.2);}
+
+/* NBA CARD */
+.nba-card{background:var(--white);border:1px solid var(--s200);border-radius:var(--rlg);padding:13px 15px;margin-bottom:12px;box-shadow:var(--sh-xs);}
+.nba-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
+.nba-title{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--s500);}
+.nba-items{display:flex;flex-direction:column;gap:6px;}
+.nba-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--rmd);border:1px solid var(--s100);background:var(--s50);cursor:pointer;transition:.1s;}
+.nba-item:hover{border-color:var(--s200);background:var(--white);box-shadow:var(--sh-xs);}
+.nba-item.primary{background:var(--ink);border-color:var(--ink);}
+.nba-item.primary:hover{background:var(--ink-mid);}
+.nba-ic{width:28px;height:28px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.nba-ic-g{background:var(--g50);}
+.nba-ic-b{background:var(--b50);}
+.nba-ic-a{background:var(--a50);}
+.nba-ic-w{background:rgba(255,255,255,.15);}
+.nba-text{flex:1;min-width:0;}
+.nba-action{font-size:12px;font-weight:600;color:var(--s700);}
+.nba-item.primary .nba-action{color:var(--white);}
+.nba-sub{font-size:10px;color:var(--s400);}
+.nba-item.primary .nba-sub{color:rgba(255,255,255,.5);}
+.nba-cta{font-size:11px;font-weight:600;padding:4px 10px;border-radius:var(--r);flex-shrink:0;}
+.nba-cta-w{background:var(--wasabi);color:var(--ink);}
+.nba-cta-g{background:var(--s100);color:var(--s600);}
+.nba-cta-wg{background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);}
+
+/* TIMELINE */
+.tl-panel{background:var(--white);border:1px solid var(--s200);border-radius:var(--rlg);overflow:hidden;box-shadow:var(--sh-xs);}
+.tl-hd{display:flex;align-items:center;gap:10px;padding:11px 15px;border-bottom:1px solid var(--s100);}
+.tl-title{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--s500);flex:1;}
+.tl-filters{display:flex;gap:3px;}
+.tlfil{font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;cursor:pointer;border:1px solid transparent;background:transparent;color:var(--s400);font-family:inherit;transition:.1s;}
+.tlfil:hover{color:var(--s600);background:var(--s50);}
+.tlfil.on{background:var(--s100);color:var(--s700);border-color:var(--s200);}
+.tl-compose{margin:11px 15px;display:flex;align-items:center;gap:8px;}
+.compose-in{flex:1;height:32px;background:var(--s50);border:1px solid var(--s200);border-radius:var(--rmd);padding:0 12px;font-family:inherit;font-size:12px;color:var(--s600);outline:none;}
+.compose-in:focus{border-color:var(--ink);background:var(--white);}
+.tl-items{max-height:440px;overflow-y:auto;padding:0 15px 12px;}
+.tl-date-lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s400);padding:8px 0 4px;display:flex;align-items:center;gap:8px;}
+.tl-date-lbl::after{content:'';flex:1;height:1px;background:var(--s100);}
+.tl-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--s50);cursor:pointer;transition:.1s;}
+.tl-item:hover{background:var(--s50);margin:0 -4px;padding:8px 4px;border-radius:var(--r);border-bottom-color:transparent;}
+.tl-item:last-child{border-bottom:none;}
+.tl-ic{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px;}
+.tl-email{background:var(--b50);color:var(--b500);}
+.tl-call{background:var(--g50);color:var(--g600);}
+.tl-li{background:#e0f2fe;color:#0284c7;}
+.tl-note{background:var(--a50);color:#b45309;}
+.tl-event{background:var(--p50);color:var(--p500);}
+.tl-body{flex:1;min-width:0;}
+.tl-row{display:flex;align-items:center;gap:6px;margin-bottom:2px;}
+.tl-type{font-size:11px;font-weight:600;color:var(--s600);}
+.tl-dir{font-size:10px;color:var(--s400);}
+.tl-st{font-size:10px;font-weight:500;padding:1px 5px;border-radius:3px;}
+.tl-st-closed{background:var(--g50);color:var(--g600);}
+.tl-st-open{background:var(--b50);color:var(--b500);}
+.tl-preview{font-size:11px;color:var(--s600);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.tl-meta{display:flex;align-items:center;gap:5px;margin-top:3px;}
+.tl-time{font-size:10px;color:var(--s400);font-family:'DM Mono',monospace;}
+.tl-rep{font-size:10px;color:var(--s400);}
+
+/* RESEARCH PANEL */
+.rp{background:var(--white);border:1px solid rgba(99,223,78,.3);border-radius:var(--rlg);overflow:hidden;box-shadow:0 0 0 1px rgba(99,223,78,.08),var(--sh-xs);margin-bottom:12px;}
+.rp-hd{background:linear-gradient(135deg,var(--ink) 0%,#043d5a 100%);padding:11px 15px;display:flex;align-items:center;justify-content:space-between;}
+.rp-title{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--wasabi);}
+.rp-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:.04em;}
+.rp-stale{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.2);}
+.rp-fresh{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.2);}
+.rp-warn{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:var(--rmd);padding:9px 12px;margin:10px 15px;display:flex;align-items:flex-start;gap:8px;}
+.rp-warn-title{font-size:11px;font-weight:600;color:#92400e;margin-bottom:2px;}
+.rp-warn-sub{font-size:10px;color:#b45309;}
+.rp-body{padding:13px 15px;}
+.rp-date{font-size:10px;color:var(--s400);margin-bottom:10px;}
+.rp-sec{margin-bottom:10px;}
+.rp-sec-title{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--s400);margin-bottom:5px;}
+.rp-bullets{display:flex;flex-direction:column;gap:4px;}
+.rp-bullet{display:flex;gap:7px;align-items:flex-start;font-size:11px;color:var(--s600);line-height:1.45;}
+.rp-bullet::before{content:'→';color:var(--wdk);font-size:11px;flex-shrink:0;font-weight:700;}
+.rp-bullet strong{color:var(--s700);font-weight:600;}
+.rp-cta{display:flex;align-items:center;gap:6px;padding:10px 15px;border-top:1px solid var(--s100);font-size:11px;color:var(--ink);font-weight:600;cursor:pointer;transition:.1s;background:var(--s50);}
+.rp-cta:hover{background:var(--s100);}
+.rp-cta-ic{width:22px;height:22px;background:var(--wasabi);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink);flex-shrink:0;}
+
+/* PIPELINE ROWS */
+.pl-row{display:flex;align-items:flex-start;gap:8px;padding:9px 15px;border-bottom:1px solid var(--s50);}
+.pl-row:last-child{border-bottom:none;}
+.pl-lbl{font-size:11px;color:var(--s400);min-width:90px;flex-shrink:0;padding-top:1px;}
+.pl-val{font-size:12px;color:var(--s700);font-weight:500;flex:1;text-align:right;}
+.pl-val.link{color:var(--b600);cursor:pointer;}
+
+/* FORECAST */
+.fstage-row{display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.fstage-dots{display:flex;gap:4px;flex:1;}
+.fsdot{height:5px;flex:1;border-radius:3px;background:var(--s100);}
+.fsdot.filled{background:var(--ink);}
+.fsdot.active{background:var(--wasabi);}
+.fdate{background:var(--s50);border:1px solid var(--s200);border-radius:var(--r);padding:8px 11px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+.fdate:hover{border-color:var(--s300);}
+.fdate-lbl{font-size:10px;color:var(--s400);margin-bottom:2px;}
+.fdate-val{font-size:12px;font-weight:600;color:var(--s700);}
+
+/* WHO KNOWS WHOM */
+.wkw-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--s50);border-radius:var(--rmd);border:1px solid var(--s100);}
+
+
+/* PRE-CALL TALKING POINTS */
+.pct-card{background:var(--white);border:1px solid var(--s200);border-radius:var(--rlg);overflow:hidden;box-shadow:var(--sh-xs);margin-bottom:12px;}
+.pct-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;cursor:pointer;user-select:none;border-bottom:1px solid var(--s100);transition:.12s;}
+.pct-hd:hover{background:var(--s50);}
+.pct-title-row{display:flex;align-items:center;gap:8px;}
+.pct-main-title{font-size:12px;font-weight:700;color:var(--s800);}
+.pct-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;background:rgba(3,45,66,.07);color:var(--ink);}
+.pct-arrow{font-size:11px;color:var(--s400);transition:.2s;}
+.pct-body{border-top:1px solid var(--s100);}
+.pct-section{border-bottom:1px solid var(--s100);}
+.pct-section:last-child{border-bottom:none;}
+.pct-sec-hd{display:flex;align-items:center;justify-content:space-between;padding:9px 15px;cursor:pointer;font-size:11px;font-weight:600;color:var(--s600);background:var(--s50);transition:.1s;}
+.pct-sec-hd:hover{color:var(--s800);background:var(--s100);}
+.pct-sec-title{display:flex;align-items:center;gap:6px;}
+.pct-sec-body{display:none;padding:10px 15px;background:var(--white);}
+.pct-sec-body.open{display:block;}
+.pct-script{font-size:12px;color:var(--s700);line-height:1.65;font-style:italic;padding:10px 13px;background:rgba(3,45,66,.03);border-left:3px solid var(--ink);border-radius:0 6px 6px 0;}
+.pct-item{display:flex;gap:7px;align-items:flex-start;font-size:12px;color:var(--s600);line-height:1.5;padding:5px 0;border-bottom:1px solid var(--s50);}
+.pct-item:last-child{border-bottom:none;}
+.pct-item::before{content:'→';color:var(--wdk);font-weight:700;flex-shrink:0;}
+/* LEAD SOURCE CARD */
+.src-card-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+/* FRESHNESS BAR */
+.freshness-block{padding:11px 15px;border-bottom:1px solid var(--s100);background:var(--s50);}
+.freshness-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.freshness-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);}
+.freshness-age{font-size:11px;font-weight:600;}
+.freshness-track{height:6px;background:var(--s200);border-radius:3px;overflow:visible;position:relative;margin-bottom:4px;}
+.freshness-fill{height:100%;border-radius:3px;position:relative;}
+.freshness-midpoint{position:absolute;left:50%;top:-3px;width:2px;height:12px;background:var(--s300);border-radius:1px;}
+.freshness-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--s400);margin-bottom:5px;}
+.freshness-note{font-size:10px;font-weight:600;padding:4px 9px;border-radius:5px;display:inline-flex;}
+.fn-ok{background:var(--g50);color:var(--g600);}
+.fn-warn{background:var(--a50);color:var(--a600);}
+.fn-danger{background:var(--r50);color:var(--r600);}
+/* PRODUCT OWNERSHIP */
+.po-product{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--s100);}
+.po-product:last-child{border-bottom:none;}
+.po-name{font-size:12px;font-weight:600;color:var(--s800);}
+.po-meta{font-size:10px;color:var(--s400);margin-top:1px;}
+.po-pill{font-size:10px;font-weight:600;padding:3px 9px;border-radius:8px;}
+.po-owned{background:var(--g50);color:var(--g600);border:1px solid rgba(22,163,74,.2);}
+.po-target{background:rgba(3,45,66,.07);color:var(--ink);border:1px solid rgba(3,45,66,.15);}
+.po-none{background:var(--s100);color:var(--s400);}
+
+
+/* DRAFT EMAIL CARD */
+.email-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(3px);}
+.email-card{background:var(--white);border-radius:var(--rlg);width:min(560px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+.email-card-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--s200);background:var(--s50);}
+.email-card-title{font-size:13px;font-weight:700;color:var(--s900);}
+.email-close{width:26px;height:26px;border-radius:50%;background:var(--s200);border:none;color:var(--s600);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.email-to-bar{padding:10px 18px;border-bottom:1px solid var(--s200);display:flex;align-items:center;gap:8px;font-size:12px;}
+.email-body-wrap{padding:16px 18px;}
+.email-body{width:100%;min-height:200px;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--s800);line-height:1.7;resize:none;background:transparent;}
+.email-actions{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid var(--s200);background:var(--s50);}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn .2s ease forwards;}
+</style>
+</head>
+<body>
+
+<!-- ── TOP NAV ── -->
+<nav class="gnav">
+  <div class="gnav-logo">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="5" fill="#63DF4E"/>
+      <rect x="7" y="7" width="18" height="18" rx="3" fill="#032D42"/>
+      <rect x="11" y="11" width="10" height="10" rx="1.5" fill="#63DF4E"/>
+    </svg>
+  </div>
+  <div class="gnav-tabs">
+    <span class="gnav-tab">Favorites</span>
+    <span class="gnav-tab">History</span>
+    <span class="gnav-tab">Workspaces</span>
+    <span class="gnav-tab" style="padding:0 10px">⋮</span>
+  </div>
+  <div class="gnav-pill-wrap">
+    <div class="gnav-pill">
+      <div class="gnav-pill-dot"></div>
+      <span>GBA Commercial Illinois &amp; Midwest · Q2 FY26</span>
+    </div>
+  </div>
+  <div class="gnav-r">
+    <button class="gnav-btn">🔍</button>
+    <button class="gnav-btn">🔔</button>
+    <button class="gnav-btn">⚙️</button>
+    <div class="gnav-av">JR</div>
+  </div>
+</nav>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sbar">
+  <div class="sbar-sec">
+    <span class="sbar-lbl">My Work</span>
+    <a href="index.html"           class="sbar-item"    title="Command Center"><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="outreach-center.html" class="sbar-item"    title="Outreach Center"><span class="sbar-ic">📋</span>Outreach Center</a>
+    <a href="buying-groups.html"   class="sbar-item"    title="Buying Groups"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"           class="sbar-item on" title="Leads"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#"                    class="sbar-item"    title="Tasks"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Customers</span>
+    <a href="#"                    class="sbar-item"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="#"                    class="sbar-item"><span class="sbar-ic">👥</span>Contacts</a>
+    <a href="opportunities.html"   class="sbar-item"><span class="sbar-ic">💼</span>Opportunities</a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Marketing</span>
+    <a href="#"                    class="sbar-item"><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="#"                    class="sbar-item"><span class="sbar-ic">📊</span>Reports</a>
+  </div>
+  <div class="sbar-footer">ServiceNow Confidential</div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+  <div class="rec-hdr" id="recHdr">
+    <!-- rendered by JS -->
+  </div>
+  <div class="page-body" id="pageBody">
+    <!-- rendered by JS -->
+  </div>
+</div>
+
+<script>
+// ── LEAD DATA ─────────────────────────────────────────────────────────────
+const AE_STYLES = {
+  Tony:    {bg:'rgba(3,45,66,0.1)',   color:'#032D42', hex:'#032D42'},
+  Jeff:    {bg:'rgba(4,67,85,0.1)',   color:'#044355', hex:'#044355'},
+  Riley:   {bg:'rgba(180,83,9,0.1)',  color:'#B45309', hex:'#B45309'},
+  Katie:   {bg:'rgba(91,33,182,0.1)', color:'#5B21B6', hex:'#5B21B6'},
+  Brian:   {bg:'rgba(217,48,37,0.1)', color:'#D93025', hex:'#D93025'},
+  Seamus:  {bg:'rgba(26,122,0,0.1)',  color:'#1a7a00', hex:'#1a7a00'},
+  Mikaela: {bg:'rgba(3,105,161,0.1)', color:'#0369A1', hex:'#0369A1'},
+};
+
+const LEADS = [
+  {id:'LD-48291', name:'Brandon Joyce',     title:'VP of IT',            company:'Sub-Zero Group Inc.',       source:'Webinar',    campaign:'HRSD K25 Demo',       product:'HR Service Delivery',      slaHours:5,   ae:'Tony',    status:'critical', received:'Apr 10', email:'brandon.joyce@subzero.com',            phone:'+1 608-271-2233', state:'WI - Wisconsin', territory:'COMMIDW-TER-1', leadRating:'MQL', memberStatus:'Attended',      mostRecentBU:'Employee Workflows',  parentAccount:'Sub-Zero Group',                notes:'Attended HRSD live demo at K25. 3 email opens on follow-up sequence. High engagement. Sub-Zero is a customer — expansion opportunity.'},
+  {id:'LD-48302', name:'Dylan Blumenberg',  title:'Director of IT Ops',  company:'FTI Consulting',            source:'Webinar',    campaign:'IT Leader Webinar',   product:'ITSM + Now Assist',        slaHours:9,   ae:'Jeff',    status:'critical', received:'Apr 10', email:'d.blumenberg@fticonsulting.com',        phone:'+1 312-759-8100', state:'IL - Illinois',  territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Attended',      mostRecentBU:'ITSM',                parentAccount:'FTI Consulting',                notes:'Registered and attended live IT webinar. Opened 3 follow-up emails. FTI is a new logo target. Jeff has existing CxO relationship.'},
+  {id:'LD-48315', name:'Sarah Mitchell',    title:'CIO',                 company:'Paylocity Corporation',     source:'Demo',       campaign:'Now Assist Demo',     product:'Now Assist for ITSM',      slaHours:2,   ae:'Riley',   status:'critical', received:'Apr 10', email:'sarah.mitchell@paylocity.com',          phone:'+1 847-463-5000', state:'IL - Illinois',  territory:'COMMIDW-TER-3', leadRating:'MQL', memberStatus:'Downloaded',    mostRecentBU:'ITSM',                parentAccount:'Paylocity Corporation',          notes:'Inbound demo request submitted via servicenow.com. CIO-level. Paylocity is an existing customer on ITSM Pro — expansion into Now Assist.'},
+  {id:'LD-48327', name:'Marcus Webb',       title:'VP of Technology',    company:'Ritchie Bros. Auctioneers', source:'Field Event',campaign:'ChiTech Spring 2026', product:'ITOM AIOps',               slaHours:-3,  ae:'Jeff',    status:'critical', received:'Apr 9',  email:'mwebb@rbauction.com',                  phone:'+1 312-900-5540', state:'IL - Illinois',  territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Visited Booth', mostRecentBU:'ITOM',                parentAccount:'Ritchie Bros. Auctioneers',      notes:'Met at ChiTech conference. Expressed interest in ITOM. SLA expired — needs immediate outreach. Jeff to lead.'},
+  {id:'LD-48338', name:'Kevin Ostrander',   title:'IT Director',         company:'Sargento Foods Inc.',       source:'Content',    campaign:'ITAM Whitepaper',     product:'ITAM + HAM',               slaHours:6,   ae:'Tony',    status:'critical', received:'Apr 10', email:'kostrander@sargento.com',               phone:'+1 920-893-8484', state:'WI - Wisconsin', territory:'COMMIDW-TER-1', leadRating:'MQL', memberStatus:'Downloaded',    mostRecentBU:'ITSM',                parentAccount:'Sargento Foods',                notes:'Downloaded ITAM whitepaper + HAM ebook in same session. Sargento is existing customer. Expansion play.'},
+  {id:'LD-48341', name:'Priya Nair',        title:'CISO',                company:'Eversana',                  source:'Webinar',    campaign:'Veza Security Brief', product:'Veza Identity Governance', slaHours:7,   ae:'Seamus',  status:'critical', received:'Apr 10', email:'pnair@eversana.com',                   phone:'+1 262-373-9555', state:'WI - Wisconsin', territory:'COMMIDW-TER-6', leadRating:'MQL', memberStatus:'Attended',      mostRecentBU:'Security Operations', parentAccount:'Eversana',                      notes:'Attended Veza post-acquisition webinar. CISO role — security buying group. Eversana is a Seamus customer.'},
+  {id:'LD-48352', name:'Robert Kim',        title:'Head of IT Security', company:'DMI Inc.',                  source:'Contact Us', campaign:'Organic Search',      product:'Security Operations',      slaHours:-6,  ae:'Seamus',  status:'critical', received:'Apr 9',  email:'r.kim@dminc.com',                      phone:'+1 301-944-4600', state:'IL - Illinois',  territory:'COMMIDW-TER-6', leadRating:'MQL', memberStatus:'Downloaded',    mostRecentBU:'Security Operations', parentAccount:'DMI Inc.',                      notes:'Inbound inquiry via web form. Already in a SecOps conversation with Seamus via the ITAM campaign. High intent signal.'},
+  {id:'LD-48101', name:'Jennifer Torres',   title:'IT Director',         company:'Kirkland & Ellis LLP',      source:'Webinar',    campaign:'Legal IT Webinar',    product:'ITSM Pro',                 slaHours:null,ae:'Riley',   status:'responded',received:'Apr 5',  email:'jennifer.torres@kirkland.com',          phone:'+1 312-862-2000', state:'IL - Illinois',  territory:'COMMIDW-TER-3', leadRating:'MQL', memberStatus:'Attended',      mostRecentBU:'ITSM',                parentAccount:'Kirkland & Ellis',              notes:'Replied to Email 1 in Platform sequence. Expressed interest in ITSM Pro for legal workflow automation.', respondedMsg:'Interested in how you handle matter management integrations — can we set up 20 minutes?'},
+  {id:'LD-48112', name:'Michael Chang',     title:'VP of IT',            company:'GATX Corporation',          source:'Field Event',campaign:'MidwestTech Summit',  product:'ITOM AIOps',               slaHours:null,ae:'Riley',   status:'responded',received:'Apr 4',  email:'mchang@gatx.com',                      phone:'+1 312-621-6200', state:'IL - Illinois',  territory:'COMMIDW-TER-3', leadRating:'MQL', memberStatus:'Visited Booth', mostRecentBU:'ITOM',                parentAccount:'GATX Corporation',              notes:'Event follow-up response. GATX already on ITSM — Michael flagged alert fatigue in rail ops.', respondedMsg:'We are dealing with 3,000 alerts a day across our operations centers. What does the AIOps ROI look like for a company our size?'},
+  {id:'LD-47981', name:'Lisa Park',         title:'CHRO',                company:'Crash Champions',           source:'Demo',       campaign:'Now Assist HR',       product:'Now Assist for HR',        slaHours:null,ae:'Brian',   status:'booked',   received:'Mar 31', email:'lisa.park@crashchampions.com',          phone:'+1 844-272-7480', state:'IL - Illinois',  territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Attended',      mostRecentBU:'Employee Workflows', parentAccount:'Crash Champions',               notes:'Meeting booked for Now Assist HR demo. CHRO + VP IT confirmed for April 17.', meetingDate:'Apr 17, 2026 · 10am'},
+  {id:'LD-48201', name:'Amanda Foster',     title:'Dir. of HR Systems',  company:'Quinnox Inc.',              source:'Webinar',    campaign:'EW HR Webinar',       product:'Employee Workflows',       slaHours:18,  ae:'Jeff',    status:'open',     received:'Apr 9',  email:'amanda.foster@quinnox.com',             phone:'+1 630-572-8800', state:'IL - Illinois',  territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Attended',      mostRecentBU:'Employee Workflows', parentAccount:'Quinnox Inc.',                  notes:'Attended EW webinar live. HR Systems director — key buying group member. Quinnox is Jeff big bet new logo.'},
+  {id:'LD-48281', name:'Eric Sandoval',     title:'CTO',                 company:'West Monroe Partners',      source:'Content',    campaign:'AI Readiness Guide',  product:'Now Assist + AICT',        slaHours:72,  ae:'Brian',   status:'open',     received:'Apr 7',  email:'esandoval@westmonroe.com',              phone:'+1 312-282-7200', state:'IL - Illinois',  territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Downloaded',    mostRecentBU:'AI Platform Foundation',parentAccount:'West Monroe Partners',           notes:'Downloaded AI readiness guide and executive AI brief in same session. CTO at consulting firm — potential partner angle.'},
+];
+
+const TIMELINE_TEMPLATES = {
+  'Attended':      [{type:'Event',       icon:'tl-event', dir:'Inbound',  st:'closed', preview:'Attended {campaign} — registered and confirmed session attendance', outcome:'✓ Attended',             dt:-30, rep:'Marketing Automation'},
+                    {type:'Email',       icon:'tl-email', dir:'Outbound', st:'closed', preview:'Follow-up: Thank you for attending {campaign} — Hi {first}, We appreciated having you with us...', outcome:'✓ Opened', dt:-28, rep:'Jacob Rubis'},
+                    {type:'Phone Call',  icon:'tl-call',  dir:'Outbound', st:'closed', preview:'Follow-up call — {campaign} attendee outreach', outcome:'📵 No Answer',        dt:-27, rep:'Jacob Rubis'},
+                    {type:'Email',       icon:'tl-email', dir:'Outbound', st:'closed', preview:'Re: {campaign} — Hi {first}, wanted to follow up on my note from earlier this week...', outcome:'✓ Opened', dt:-14, rep:'Jacob Rubis'},
+                    {type:'Phone Call',  icon:'tl-call',  dir:'Outbound', st:'closed', preview:'Outbound call — {product} discovery', outcome:'📵 No Answer',                 dt:-12, rep:'Jacob Rubis'},
+                    {type:'LinkedIn',    icon:'tl-li',    dir:'Outbound', st:'closed', preview:'LinkedIn connection request sent — Step 3 of campaign sequence', outcome:null, dt:-10, rep:'svc_outreachprod'},
+                    {type:'Email',       icon:'tl-email', dir:'Outbound', st:'open',   preview:'Checking in — {first}, wanted to resurface my earlier note about {product}...', outcome:null, dt:-1, rep:'Jacob Rubis'}],
+  'Visited Booth': [{type:'Field Event', icon:'tl-event', dir:'Inbound',  st:'closed', preview:'Visited ServiceNow booth at {campaign} — badge scan captured', outcome:'✓ Scanned',                dt:-20, rep:'Marketing Automation'},
+                    {type:'Email',       icon:'tl-email', dir:'Outbound', st:'closed', preview:'Great meeting you at {campaign}! Hi {first}, it was great connecting — here is what we discussed...', outcome:'✓ Opened', dt:-18, rep:'Jacob Rubis'},
+                    {type:'Phone Call',  icon:'tl-call',  dir:'Outbound', st:'closed', preview:'Follow-up call after {campaign}', outcome:'✓ Connected',                       dt:-16, rep:'Jacob Rubis'},
+                    {type:'Email',       icon:'tl-email', dir:'Outbound', st:'closed', preview:'{product} resources — {first}, as promised from our conversation at the event...', outcome:'✓ Opened', dt:-8, rep:'Jacob Rubis'}],
+  'Downloaded':    [{type:'Content',     icon:'tl-event', dir:'Inbound',  st:'closed', preview:'Downloaded {campaign} — content asset accessed via servicenow.com', outcome:'✓ Downloaded',          dt:-18, rep:'Marketing Automation'},
+                    {type:'Email',       icon:'tl-email', dir:'Outbound', st:'closed', preview:'{first}, more on {product} — you recently downloaded our guide. Here are 2 more resources...', outcome:'✓ Opened', dt:-16, rep:'Jacob Rubis'},
+                    {type:'Phone Call',  icon:'tl-call',  dir:'Outbound', st:'closed', preview:'Follow-up on content download — {product}', outcome:'📵 No Answer',             dt:-14, rep:'Jacob Rubis'},
+                    {type:'Email',       icon:'tl-email', dir:'Outbound', st:'open',   preview:'Quick question — {first}, I noticed you explored our {product} content recently...', outcome:null, dt:-2, rep:'Jacob Rubis'}],
+};
+
+
+
+function getTalkingPoints(l) {
+  const OWNED = {
+    'Sub-Zero Group Inc.':  {prods:['ITSM Pro','Service Portal'], competitors:{HR:'Workday'}, bgSignals:['Multiple contacts from Sub-Zero engaging with HR content this quarter','Brandon is the only confirmed lead — expand outreach to CHRO and VP HR','Buying group for IT BU has 3 confirmed members, HR buying group not yet mapped']},
+    'Paylocity Corporation':{prods:['ITSM Pro','ITOM Visibility'], competitors:{}, bgSignals:['CIO-level engagement — strong Economic Buyer signal','No other contacts in the buying group yet — this is the first thread']},
+    'GATX Corporation':     {prods:['ITSM Enterprise','ITOM Health','CMDB'], competitors:{AIOps:'Datadog'}, bgSignals:['Michael Chang is a confirmed buying group member — VP of IT, high engagement','3,000 alerts/day confirmed as a pain point directly by the contact','AE Riley has existing relationship with GATX leadership']},
+    'Crash Champions':      {prods:['ITSM Standard'], competitors:{HR:'ADP'}, bgSignals:['CHRO Lisa Park has a confirmed meeting April 17 — warm buying group','VP IT also confirmed for the meeting — dual Economic Buyer signal']},
+    'Eversana':             {prods:['ITSM Pro'], competitors:{Security:'Okta'}, bgSignals:['Priya Nair is CISO — single thread, buying group not yet mapped','Post-acquisition signal — identity governance is a timely topic across the org']},
+    'Kirkland & Ellis LLP': {prods:['ITSM Pro'], competitors:{}, bgSignals:['Jennifer Torres replied to outreach — warm lead, buying group not mapped','Legal IT service desk is well-established — expansion conversation, not net new']},
+  };
+  const acct = OWNED[l.company] || {prods:[], competitors:{}, bgSignals:[]};
+  const isCustomer = acct.prods.length > 0;
+
+  // Products section
+  const productPoints = [];
+  if (isCustomer) {
+    productPoints.push(`<strong>Owns:</strong> ${acct.prods.join(', ')} — reference the existing relationship, ask how the platform is performing`);
+    const notOwned = [l.product].filter(p => !acct.prods.some(op => p.toLowerCase().includes(op.toLowerCase().split(' ')[0])));
+    if (notOwned.length) productPoints.push(`<strong>Does not own:</strong> ${notOwned.join(', ')} — this is what we are selling. Frame as expansion, not replacement`);
+  } else {
+    productPoints.push(`<strong>No existing ServiceNow footprint</strong> — new logo. Position the platform story, not a single product`);
+    productPoints.push(`<strong>Selling into:</strong> ${l.product} — lead with the business problem, not the product name`);
+  }
+  const compNames = Object.values(acct.competitors);
+  if (compNames.length) productPoints.push(`<strong>Incumbent competitor:</strong> ${Object.entries(acct.competitors).map(([fn,n])=>`${n} (${fn})`).join(', ')} — do not pitch against it, ask what gaps they are running into`);
+
+  // Account signals section
+  const signalPoints = acct.bgSignals.length ? acct.bgSignals : [
+    `No confirmed buying group members yet — ${l.name} is the first thread into ${l.company}`,
+    `Map the org after this call: ask who else is involved in technology and ${l.mostRecentBU.toLowerCase()} decisions`,
+  ];
+
+  // Lead source section
+  const sourcePoints = [];
+  const sourceMessages = {
+    'Attended':      [`${l.name} attended <strong>${l.campaign}</strong> — live session attendance is high intent. They carved out time for this`, `Ask: what specifically stood out to you in the demo — was it the employee portal, the case management, or the reporting?`, `Ask: is this tied to an active initiative, or were you exploring to get ahead of a potential need?`],
+    'Visited Booth': [`${l.name} stopped at the ServiceNow booth at <strong>${l.campaign}</strong> and initiated the scan — they drove the interaction`, `Reference the event directly. Ask what brought them to the session and what they were hoping to find`, `Ask: did anything from the conversation stick, or do you want to pick up where we left off?`],
+    'Downloaded':    [`${l.name} downloaded <strong>${l.campaign}</strong> from servicenow.com — someone went looking for this content specifically`, `Ask: what prompted the search — are you in the early stages of evaluating options, or is there a specific project behind this?`, `Ask: did the content answer what you were looking for, or were there gaps?`],
+    'Contact Us':    [`${l.name} submitted a <strong>Contact Us form</strong> — the most direct inbound signal. They asked to be contacted`, `Keep the opener simple: you are calling because they reached out. Ask what prompted the inquiry`, `Ask: what does the timeline look like on your end — are you exploring, or is there something more immediate driving this?`],
+  };
+  (sourceMessages[l.memberStatus] || sourceMessages['Downloaded']).forEach(p => sourcePoints.push(p));
+
+  // Job title section
+  const t = l.title;
+  const isCLevel   = /cio|cto|ciso|ceo|chief|president|evp/i.test(t);
+  const isVP       = /\bvp\b|vice president|svp/i.test(t);
+  const isDir      = /director|head of/i.test(t);
+  const isIT       = /it |information tech|infrastructure|service desk|operations|technology/i.test(t);
+  const isHR       = /hr|human resources|people|chro|hris|talent/i.test(t);
+  const isSecurity = /ciso|security|risk|compliance|grc/i.test(t);
+
+  const titlePoints = [];
+  if (isCLevel) {
+    titlePoints.push(`<strong>${t}</strong> — executive level. Do not open with product. Ask what their team is trying to accomplish in the next two quarters and where the friction is`);
+    titlePoints.push(`Ask: who on your team would own the day-to-day evaluation if we moved forward?`);
+    titlePoints.push(`Ask: is budget earmarked for this area, or would this require a new conversation internally?`);
+  } else if (isVP) {
+    titlePoints.push(`<strong>${t}</strong> — VP level. They translate strategy into execution. Ask about team efficiency, delivery pressure, and what manual work is slowing them down`);
+    titlePoints.push(`Ask: what does success look like for your team in the next 6 months, and what is the biggest thing getting in the way?`);
+    if (isIT && l.mostRecentBU === 'Employee Workflows') {
+      titlePoints.push(`Note: IT VP engaging with HR content is a cross-functional signal. Ask who on the HR side is involved — there may be a joint evaluation happening`);
+    }
+  } else if (isDir) {
+    titlePoints.push(`<strong>${t}</strong> — Director level. Operational driver, likely the internal champion. They feel the pain directly and will own the implementation`);
+    titlePoints.push(`Ask: walk me through how this process works today — where does it break down most often?`);
+    titlePoints.push(`Ask: if you had this solved, what would change for your team week to week?`);
+  } else {
+    titlePoints.push(`<strong>${t}</strong> — practitioner or manager level. Ask what a typical week looks like and where the most time gets wasted`);
+    titlePoints.push(`Ask: is there someone above you who would need to be involved in a decision like this?`);
+  }
+
+  return { products: productPoints, signals: signalPoints, source: sourcePoints, title: titlePoints };
+}
+
+function getTimeline(lead) {
+  const tpl = TIMELINE_TEMPLATES[lead.memberStatus] || TIMELINE_TEMPLATES['Downloaded'];
+  const now = new Date('2026-04-10');
+  const first = lead.name.split(' ')[0];
+  return tpl.map(t => {
+    const d = new Date(now);
+    d.setDate(d.getDate() + t.dt);
+    const preview = t.preview.replace('{campaign}', lead.campaign).replace('{product}', lead.product).replace(/{first}/g, first);
+    return {...t, date: d, preview};
+  }).sort((a,b) => b.date - a.date);
+}
+
+function formatDate(d) {
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+
+function slaText(h) {
+  if(h===null) return {t:'—', cls:'', col:'var(--s400)'};
+  if(h<0) return {t:`OVERDUE ${Math.abs(h)}h`, cls:'', col:'var(--r600)'};
+  if(h<=4) return {t:`${h}h remaining`, cls:'', col:'var(--r500)'};
+  if(h<=8) return {t:`${h}h remaining`, cls:'', col:'var(--a600)'};
+  return {t:`${h}h remaining`, cls:'', col:'var(--g600)'};
+}
+
+const BU_COLORS = {
+  'ITSM':'#1d4ed8','ITOM':'#0e7490','Employee Workflows':'#7e22ce',
+  'Security Operations':'#dc2626','Creator App Engine':'#c2410c',
+  'Workflow Data Fabric':'#15803d','AI Platform Foundation':'#6d28d9',
+  'Customer Service':'#0369a1','All BUs':'#475569'
+};
+const BU_BG = {
+  'ITSM':'#eff6ff','ITOM':'rgba(6,182,212,.1)','Employee Workflows':'#faf5ff',
+  'Security Operations':'#fff1f2','Creator App Engine':'#fff7ed',
+  'Workflow Data Fabric':'#f0fdf4','AI Platform Foundation':'#f5f3ff',
+  'Customer Service':'#eff6ff','All BUs':'#f8fafc'
+};
+
+function aiSummary(l) {
+  const sla = l.slaHours !== null ? (l.slaHours < 0 ? `SLA window expired ${Math.abs(l.slaHours)}h ago — <strong>immediate action required</strong>.` : `SLA window closes in <strong>${l.slaHours}h</strong>.`) : 'SLA met.';
+  const statusMap = {critical:'SLA-critical lead',open:'open lead',responded:'lead who has replied',booked:'lead with a confirmed meeting',nurture:'lead in nurture track',dead:'disqualified lead'};
+  return `${l.name} is a <strong>${statusMap[l.status]||'lead'}</strong> from ${l.company} — ${l.title} in ${l.state}. Source: <strong>${l.source} · ${l.campaign}</strong>. Primary product interest is <strong>${l.product}</strong> with Most Recent BU tagged as ${l.mostRecentBU}. ${sla} ${l.notes}${l.respondedMsg ? ` Most recent reply: "${l.respondedMsg}"` : ''} <strong>Priority: advance this lead</strong> before it cools.`;
+}
+
+function aiTags(l) {
+  const tags = [];
+  if(l.memberStatus==='Attended') tags.push({t:'✓ Event Attended',cls:'ai-tag-green'});
+  if(l.memberStatus==='Downloaded') tags.push({t:'⬇ Content Engaged',cls:'ai-tag-blue'});
+  if(l.memberStatus==='Visited Booth') tags.push({t:'🏪 Booth Visit',cls:'ai-tag-blue'});
+  if(l.slaHours!==null&&l.slaHours<0) tags.push({t:'🔴 SLA Expired',cls:'ai-tag-red'});
+  else if(l.slaHours!==null&&l.slaHours<=8) tags.push({t:`⏰ ${l.slaHours}h SLA Window`,cls:'ai-tag-amber'});
+  if(l.status==='responded') tags.push({t:'💬 Replied to Outreach',cls:'ai-tag-green'});
+  if(l.status==='booked') tags.push({t:'📅 Meeting Confirmed',cls:'ai-tag-green'});
+  tags.push({t:`🏢 ${l.source}`,cls:'ai-tag-blue'});
+  tags.push({t:`📦 ${l.product}`,cls:'ai-tag-blue'});
+  return tags;
+}
+
+function nbaItems(l) {
+  const items = [];
+  if(l.status==='critical'||l.status==='open') {
+    items.push({primary:true,  ic:'nba-ic-w', icon:'📞', action:'Schedule Discovery Call', sub:`${l.source} signal + ${l.memberStatus.toLowerCase()} — reach out now`, cta:'nba-cta-wg', ctaLabel:'Start →'});
+    items.push({primary:false, ic:'nba-ic-g', icon:'✉️', action:`Send ${l.product} Follow-Up`, sub:`Reference ${l.campaign} — use AI to draft`, cta:'nba-cta-g', ctaLabel:'Draft'});
+    items.push({primary:false, ic:'nba-ic-b', icon:'💼', action:'Connect on LinkedIn', sub:'No LinkedIn connection yet — sequence step 3', cta:'nba-cta-g', ctaLabel:'Send'});
+    items.push({primary:false, ic:'nba-ic-a', icon:'🎯', action:'Add to Buying Group', sub:`${l.mostRecentBU} buying group match — map now`, cta:'nba-cta-g', ctaLabel:'Map'});
+  } else if(l.status==='responded') {
+    items.push({primary:true,  ic:'nba-ic-w', icon:'📅', action:'Book Discovery Call', sub:`Lead replied: "${(l.respondedMsg||'').slice(0,60)}…"`, cta:'nba-cta-wg', ctaLabel:'Book →'});
+    items.push({primary:false, ic:'nba-ic-g', icon:'✉️', action:'Send Meeting Confirmation', sub:'Lock in date, time, and agenda', cta:'nba-cta-g', ctaLabel:'Send'});
+    items.push({primary:false, ic:'nba-ic-b', icon:'📋', action:'Build Discovery Prep Brief', sub:'Prepare SPICED questions for call', cta:'nba-cta-g', ctaLabel:'Build'});
+  } else if(l.status==='booked') {
+    items.push({primary:true,  ic:'nba-ic-w', icon:'📋', action:'Prep Discovery Brief', sub:`Meeting confirmed: ${l.meetingDate||''}`, cta:'nba-cta-wg', ctaLabel:'Prep →'});
+    items.push({primary:false, ic:'nba-ic-b', icon:'🤝', action:'Loop in AE: '+l.ae, sub:'Share lead context before the call', cta:'nba-cta-g', ctaLabel:'Share'});
+    items.push({primary:false, ic:'nba-ic-a', icon:'🎯', action:'Map to Buying Group', sub:`${l.mostRecentBU} role coverage incomplete`, cta:'nba-cta-g', ctaLabel:'Map'});
+  }
+  return items;
+}
+
+function researchBullets(l) {
+  const companyMap = {
+    'Sub-Zero Group Inc.': {overview:['<strong>Sub-Zero Group Inc</strong> — premium appliance manufacturer, ~4,200 employees, HQ Madison WI','Revenue ~$800M; private, family-owned since 1945','IT org running SAP + legacy ITSM stack; aging service desk infrastructure'],signals:['<strong>Hiring:</strong> 3 open IT Service Desk roles — suggests platform pain','<strong>Initiative:</strong> Digital workplace transformation in 2024 company update','<strong>Event:</strong> Contact attended K25 — HRSD session engagement noted'],pain:['IT and HR service delivery fragmented across legacy tools','Cross-functional requests managed manually; no unified portal']},
+    'default': {overview:[`<strong>${l.company}</strong> — mid-market enterprise; established business with active IT/operations footprint`,'IT org evaluating modern service management and workflow automation','Existing ServiceNow footprint or adjacent technology stack in place'],signals:[`<strong>${l.memberStatus}:</strong> ${l.campaign} — high-intent interaction signal`,`<strong>Product interest:</strong> ${l.product} — maps to active buying initiative`,'<strong>Timing:</strong> Q2 FY26 budget cycle in progress — good timing signal'],pain:[`Manual workflows and disconnected systems in ${l.mostRecentBU.replace('Employee Workflows','HR')} function`,'Limited visibility and reporting across service operations']}
+  };
+  return companyMap[l.company] || companyMap['default'];
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function renderPage() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  const l = LEADS.find(x => x.id === id) || LEADS[0];
+  window._currentLead = l;
+  document.title = `${l.name} — Lead Detail`;
+
+  const initials = l.name.split(' ').map(w=>w[0]).join('').slice(0,2);
+  const slaInfo = slaText(l.slaHours);
+  const ae = AE_STYLES[l.ae] || {hex:'#032D42'};
+
+  // Source card display
+  const SRC_DISPLAY = {
+    Webinar:      {icon:'🎙️', bg:'#eff6ff',  badgeBg:'#dbeafe',  badgeColor:'#1d4ed8'},
+    Demo:         {icon:'🖥️', bg:'#f0fdf4',  badgeBg:'#dcfce7',  badgeColor:'#15803d'},
+    'Field Event':{icon:'🎪', bg:'#faf5ff',  badgeBg:'#ede9fe',  badgeColor:'#7c3aed'},
+    Content:      {icon:'📄', bg:'#fffbeb',  badgeBg:'#fef3c7',  badgeColor:'#92400e'},
+    'Contact Us': {icon:'📬', bg:'#fff7ed',  badgeBg:'#fed7aa',  badgeColor:'#c2410c'},
+    Partner:      {icon:'🤝', bg:'#fdf4ff',  badgeBg:'#fae8ff',  badgeColor:'#86198f'},
+  };
+  const srcD = SRC_DISPLAY[l.source] || {icon:'📋', bg:'var(--s50)', badgeBg:'var(--s100)', badgeColor:'var(--s600)'};
+  const srcBg = srcD.bg, srcIcon = srcD.icon, srcBadgeBg = srcD.badgeBg, srcBadgeColor = srcD.badgeColor;
+
+  // Pre-call talking points
+  const tp = getTalkingPoints(l);
+
+  // Research freshness (90-day quarterly cycle)
+  const ageDays = 14;
+  const maxDays = 90;
+  const freshPct = Math.min(100, Math.round(ageDays / maxDays * 100));
+  const freshColor = ageDays < 30 ? 'var(--g500)' : ageDays < 60 ? 'var(--a500)' : 'var(--r500)';
+  const freshLabel = ageDays < 30 ? `Fresh — ${ageDays} days old` : ageDays < 60 ? `Getting stale — ${ageDays} days old` : 'Outdated — refresh now';
+  const quarterLabel = ageDays < 30 ? 'Q2 FY26 · Current' : ageDays < 60 ? 'Q2 FY26 · Aging' : 'Q1 FY26 · Expired';
+  const daysLeft = maxDays - ageDays;
+  const fnCls = daysLeft < 20 ? 'fn-danger' : daysLeft < 45 ? 'fn-warn' : 'fn-ok';
+
+  // Product ownership by account
+  // BU Portfolio: {workflow, health:'red'|'orange'|null, bu, cacv, nnacv}
+  const PRODUCT_PORTFOLIO = {
+    'Sub-Zero Group Inc.': [
+      {workflow:'Technology Workflow', health:null,     bu:'ITSM',                   cacv:285,  nnacv:0},
+      {workflow:null,                  health:null,     bu:'ITOM',                   cacv:0,    nnacv:0},
+      {workflow:null,                  health:null,     bu:'Asset Management',        cacv:0,    nnacv:0},
+      {workflow:null,                  health:'orange', bu:'Security',               cacv:0,    nnacv:0},
+      {workflow:'Employee Workflow',   health:null,     bu:'HR Service Delivery',    cacv:0,    nnacv:180},
+      {workflow:'AI Platform',         health:null,     bu:'Now Assist for ITSM',    cacv:0,    nnacv:95},
+      {workflow:null,                  health:null,     bu:'Creator App Engine',      cacv:0,    nnacv:0},
+    ],
+    'Paylocity Corporation': [
+      {workflow:'Technology Workflow', health:'red',    bu:'ITSM',                   cacv:410,  nnacv:-50},
+      {workflow:null,                  health:null,     bu:'ITOM',                   cacv:120,  nnacv:0},
+      {workflow:null,                  health:null,     bu:'Asset Management',        cacv:0,    nnacv:0},
+      {workflow:'AI Platform',         health:null,     bu:'Now Assist for ITSM',    cacv:0,    nnacv:220},
+      {workflow:null,                  health:null,     bu:'AI Platform Foundations', cacv:0,    nnacv:0},
+    ],
+    'GATX Corporation': [
+      {workflow:'Technology Workflow', health:null,     bu:'ITSM',                   cacv:1240, nnacv:180},
+      {workflow:null,                  health:'orange', bu:'ITOM',                   cacv:380,  nnacv:350},
+      {workflow:null,                  health:null,     bu:'Asset Management',        cacv:210,  nnacv:0},
+      {workflow:null,                  health:null,     bu:'Security',               cacv:0,    nnacv:0},
+      {workflow:'AI Platform',         health:null,     bu:'Creator App Engine',      cacv:0,    nnacv:0},
+      {workflow:null,                  health:null,     bu:'AI Platform Foundations', cacv:0,    nnacv:0},
+    ],
+    'Crash Champions': [
+      {workflow:'Technology Workflow', health:'orange', bu:'ITSM',                   cacv:95,   nnacv:0},
+      {workflow:'Employee Workflow',   health:null,     bu:'HR Service Delivery',    cacv:0,    nnacv:140},
+      {workflow:'AI Platform',         health:null,     bu:'Now Assist for HR',       cacv:0,    nnacv:85},
+    ],
+    'Eversana': [
+      {workflow:'Technology Workflow', health:null,     bu:'ITSM',                   cacv:320,  nnacv:0},
+      {workflow:null,                  health:'orange', bu:'Security',               cacv:0,    nnacv:190},
+      {workflow:'AI Platform',         health:null,     bu:'Now Assist for ITSM',    cacv:0,    nnacv:0},
+    ],
+    'Kirkland & Ellis LLP': [
+      {workflow:'Technology Workflow', health:null,     bu:'ITSM',                   cacv:480,  nnacv:0},
+      {workflow:'Core Business',       health:null,     bu:'Legal and Contract Ops', cacv:0,    nnacv:210},
+      {workflow:'AI Platform',         health:null,     bu:'Now Assist for ITSM',    cacv:0,    nnacv:120},
+    ],
+  };
+  const portfolio = PRODUCT_PORTFOLIO[l.company] || [];
+  const prods = []; // kept for talking points compat
+
+  const timeline = getTimeline(l);
+  const research = researchBullets(l);
+
+  // Group timeline by date
+  const grouped = {};
+  timeline.forEach(t => {
+    const dk = formatDate(t.date);
+    if(!grouped[dk]) grouped[dk] = [];
+    grouped[dk].push(t);
+  });
+
+  // Status pill class
+  const statusCls = {critical:'sp-open',open:'sp-open',responded:'sp-working',booked:'sp-qualified',nurture:'sp-working',dead:'sp-dq'};
+  const statusLabel = {critical:'SLA Critical',open:'Open',responded:'Responded',booked:'Meeting Booked',nurture:'Nurture',dead:'Disqualified'};
+
+  // ── HEADER ──
+  document.getElementById('recHdr').innerHTML = `
+    <div class="rec-hdr-top">
+      <div class="breadcrumb">
+        <a href="leads.html">Leads</a>
+        <span class="sep">/</span>
+        <span style="color:var(--s600)">${l.name}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex:1;padding-left:8px">
+        <div class="rec-av">${initials}</div>
+        <div class="rec-id">
+          <div class="rec-name-row">
+            <span class="rec-name">${l.name}</span>
+            <span class="rec-badge">Lead</span>
+            <span class="rec-mono">${l.id}</span>
+          </div>
+          <div class="rec-meta">
+            <div class="rec-meta-item">🏢 <a href="#">${l.company}</a></div>
+            <div class="rec-meta-dot"></div>
+            <div class="rec-meta-item">💼 ${l.title}</div>
+            <div class="rec-meta-dot"></div>
+            <div class="rec-meta-item">📍 ${l.state}</div>
+            <div class="rec-meta-dot"></div>
+            <div class="rec-meta-item">✉️ ${l.email}</div>
+            <div class="rec-meta-dot"></div>
+            <div class="rec-meta-item">📞 ${l.phone}</div>
+          </div>
+        </div>
+      </div>
+      <div class="rec-acts">
+        <a href="mailto:${l.email}" class="btn btn-g btn-sm">📧 Email</a>
+        <a href="tel:${l.phone.replace(/\s/g,'')}" class="btn btn-g btn-sm">📞 Call</a>
+        <button class="btn btn-g btn-sm">💼 LinkedIn</button>
+        <button class="btn btn-g btn-sm">↗ Add to Sequence</button>
+        <button class="btn btn-w btn-sm">⬆ Import to Outreach</button>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <div class="status-pill ${statusCls[l.status]||'sp-open'}">
+        <div class="sp-dot" style="background:${l.status==='booked'?'var(--g500)':l.status==='responded'?'var(--a500)':'var(--b500)'}"></div>
+        ${statusLabel[l.status]||'Open'}
+      </div>
+      <div class="owner-chip">
+        <div class="owner-av" style="background:var(--ink)">JR</div>
+        Jacob Rubis
+      </div>
+      <div class="owner-chip">
+        <div class="owner-av" style="background:${ae.hex}">${l.ae.slice(0,2).toUpperCase()}</div>
+        AE: ${l.ae}
+      </div>
+      <div class="score-chip">⚡ Score: ${l.slaHours!==null&&l.slaHours<0?72+Math.abs(l.slaHours):Math.min(95,60+(l.slaHours||30))} <span style="opacity:.6;font-weight:400">/100</span></div>
+      <div style="font-size:11px;color:var(--s400)">Territory: <strong style="color:var(--s700)">${l.territory}</strong></div>
+      <div style="font-size:11px;color:var(--s400)">${l.leadRating}</div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:7px">
+        <button class="btn btn-g btn-sm">✓ Validate Lead</button>
+        <button class="btn btn-g btn-sm">🔄 ZoomInfo Enrich</button>
+        <button class="btn btn-p btn-sm">Convert to Contact →</button>
+      </div>
+    </div>
+
+    <div class="tab-nav">
+      <div class="tab-it research on">📌 Research</div>
+      <div class="tab-it">Summary</div>
+      <div class="tab-it">Account Details</div>
+      <div class="tab-it">Outreach Engagement <span class="tab-ct">18</span></div>
+      <div class="tab-it">Campaign History <span class="tab-ct">3</span></div>
+      <div class="tab-it">Activities <span class="tab-ct">${timeline.length}</span></div>
+      <div class="tab-it">Buying Groups</div>
+      <div class="tab-it">Opportunities</div>
+      <div class="tab-it">LinkedIn Profile</div>
+    </div>`;
+
+  // ── BODY ──
+  const nba = nbaItems(l);
+  const tags = aiTags(l);
+
+  document.getElementById('pageBody').innerHTML = `
+    <!-- LEFT -->
+    <div class="fade-in">
+      <!-- How They Became a Lead -->
+      <div class="panel">
+        <div class="panel-hd">
+          <span class="panel-title">How They Became a Lead</span>
+          <span style="font-size:11px;color:var(--s400)">${l.received}</span>
+        </div>
+        <div style="padding:13px 15px;display:flex;flex-direction:column;gap:0">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--s100)">
+            <div style="width:34px;height:34px;border-radius:8px;background:${srcBg};display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">${srcIcon}</div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--s900)">${l.source}</div>
+              <div style="font-size:11px;color:var(--s500);margin-top:1px">${l.memberStatus}</div>
+            </div>
+            <span style="margin-left:auto;font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;background:${srcBadgeBg};color:${srcBadgeColor}">${l.memberStatus}</span>
+          </div>
+          <div class="fr" style="padding-top:8px"><span class="fl">Campaign</span><span class="fv" style="font-size:10px;font-family:'DM Mono',monospace;color:var(--s600)">${l.campaign}</span></div>
+          <div class="fr"><span class="fl">Product Interest</span><span class="fv" style="font-weight:600;color:var(--s800)">${l.product}</span></div>
+          <div class="fr"><span class="fl">Most Recent BU</span><span class="fv"><span style="display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;background:${BU_BG[l.mostRecentBU]||'var(--s100)'};color:${BU_COLORS[l.mostRecentBU]||'var(--s600)'}">${l.mostRecentBU}</span></span></div>
+          <div class="fr"><span class="fl">Lead Rating</span><span class="fv"><span class="ftag ftag-ink">${l.leadRating}</span></span></div>
+          ${l.slaHours!==null ? `<div class="fr"><span class="fl">SLA</span><span class="fv" style="color:${slaInfo.col};font-weight:700;font-family:'DM Mono',monospace">${slaInfo.t}</span></div>` : ''}
+          ${l.meetingDate ? `<div class="fr"><span class="fl">Meeting</span><span class="fv" style="color:var(--g600);font-weight:600">${l.meetingDate}</span></div>` : ''}
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="panel">
+        <div class="panel-hd"><span class="panel-title">Contact Information</span><span class="panel-act">Edit</span></div>
+        <div class="fg">
+          <div class="fg-lbl">Identity</div>
+          <div class="fr"><span class="fl">Full Name</span><span class="fv" style="font-weight:700;color:var(--s900)">${l.name}</span></div>
+          <div class="fr"><span class="fl">Company</span><span class="fv link">${l.company}</span></div>
+          <div class="fr"><span class="fl">Job Title</span><span class="fv">${l.title}</span></div>
+          <div class="fr"><span class="fl">Parent Account</span><span class="fv link">${l.parentAccount}</span></div>
+        </div>
+        <div class="fg">
+          <div class="fg-lbl">Contact Details</div>
+          <div class="fr"><span class="fl">Email</span><span class="fv link" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0"><a href="mailto:${l.email}" title="${l.email}" style="color:var(--b600);font-size:11px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.email}</a></span></div>
+          <div class="fr"><span class="fl">Business Phone</span><span class="fv"><a href="tel:${l.phone.replace(/\s/g,'')}" style="color:var(--s700)">${l.phone}</a></span></div>
+          <div class="fr"><span class="fl">LinkedIn</span><span class="fv"><a href="${l.linkedin || 'https://linkedin.com/in/'}" target="_blank" style="color:var(--b600);display:inline-flex;align-items:center;gap:4px;font-weight:500">💼 View Profile ↗</a></span></div>
+          <div class="fr"><span class="fl">State</span><span class="fv">${l.state}</span></div>
+          <div class="fr"><span class="fl">Do Not Email</span><span class="fv"><span class="ftag ftag-green">Allowed</span></span></div>
+          <div class="fr"><span class="fl">Do Not Call</span><span class="fv"><span class="ftag ftag-green">Allowed</span></span></div>
+        </div>
+        <div class="fg">
+          <div class="fg-lbl">Lead Details</div>
+          <div class="fr"><span class="fl">Source</span><span class="fv">${l.source}</span></div>
+          <div class="fr"><span class="fl">Member Status</span><span class="fv">${l.memberStatus}</span></div>
+          <div class="fr"><span class="fl">Received</span><span class="fv">${l.received}</span></div>
+          ${l.slaHours!==null ? `<div class="fr"><span class="fl">SLA</span><span class="fv" style="color:${slaInfo.col};font-weight:700">${slaInfo.t}</span></div>` : ''}
+          ${l.meetingDate ? `<div class="fr"><span class="fl">Meeting</span><span class="fv" style="color:var(--g600);font-weight:600">${l.meetingDate}</span></div>` : ''}
+        </div>
+      </div>
+
+      <!-- Buying Groups -->
+      <div class="panel">
+        <div class="panel-hd"><span class="panel-title">Buying Groups</span><span class="panel-act">+ Add</span></div>
+        <div class="bu-strip">
+          <div class="bu-tag bu-active">🖥️ IT</div>
+          <div class="bu-tag bu-inactive">👥 HR</div>
+          <div class="bu-tag bu-inactive">💼 CRM</div>
+          <div class="bu-tag bu-inactive">🔒 Security</div>
+          <div class="bu-tag bu-inactive">💰 Finance</div>
+        </div>
+        <div class="fg" style="border:none">
+          <div class="fr"><span class="fl">Most Recent BU</span><span class="fv"><span style="display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;background:${BU_BG[l.mostRecentBU]||'var(--s100)'};color:${BU_COLORS[l.mostRecentBU]||'var(--s600)'}">${l.mostRecentBU}</span></span></div>
+          <div class="fr"><span class="fl">Product Interest</span><span class="fv" style="font-size:11px;color:var(--s500)">${l.product}</span></div>
+        </div>
+      </div>
+
+      <!-- Engagement -->
+      <div class="panel">
+        <div class="panel-hd"><span class="panel-title">Engagement Snapshot</span></div>
+        <div class="eng-grid">
+          <div class="eng-stat hl"><div class="eng-num">${timeline.length}</div><div class="eng-lbl">Total Touches</div></div>
+          <div class="eng-stat"><div class="eng-num">${timeline.filter(t=>t.type==='Email').length}</div><div class="eng-lbl">Emails Sent</div></div>
+          <div class="eng-stat"><div class="eng-num">${timeline.filter(t=>t.type==='Phone Call').length}</div><div class="eng-lbl">Calls Made</div></div>
+          <div class="eng-stat"><div class="eng-num">${timeline.filter(t=>t.type==='LinkedIn').length}</div><div class="eng-lbl">LI Touches</div></div>
+        </div>
+        <div style="padding:9px 15px;border-top:1px solid var(--s100)">
+          <div class="fr"><span class="fl" style="font-size:11px">Last Activity</span><span class="fv" style="font-size:11px">${formatDate(timeline[0].date)}</span></div>
+          <div class="fr"><span class="fl" style="font-size:11px">First Touch</span><span class="fv" style="font-size:11px">${formatDate(timeline[timeline.length-1].date)}</span></div>
+          <div class="fr"><span class="fl" style="font-size:11px">Campaign</span><span class="fv" style="font-size:10px;font-family:'DM Mono',monospace;color:var(--s500)">${l.campaign}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER -->
+    <div class="fade-in" style="animation-delay:.06s">
+      <!-- AI Card -->
+      <div class="ai-card">
+        <div class="ai-card-hd">
+          <div class="ai-lbl"><div class="ai-pulse"></div> AI Contact Summary</div>
+          <div class="ai-card-btns">
+            <button class="ai-btn ai-btn-out">↻ Refresh</button>
+            <button class="ai-btn ai-btn-out">📋 Copy</button>
+            <button class="ai-btn ai-btn-solid" onclick="openDraftEmail()">⚡ Draft Email</button>
+          </div>
+        </div>
+        <div class="ai-summary">${aiSummary(l)}</div>
+        <div class="ai-tags">${tags.map(t=>`<span class="ai-tag ${t.cls}">${t.t}</span>`).join('')}</div>
+      </div>
+
+      <!-- Pre-Call Talking Points -->
+      <div class="pct-card">
+        <div class="pct-hd" onclick="var b=this.nextElementSibling;b.style.display=b.style.display==='block'?'none':'block';this.querySelector('.pct-arrow').textContent=b.style.display==='block'?'▲':'▼'">
+          <div class="pct-title-row">
+            <span style="font-size:15px">📞</span>
+            <span class="pct-main-title">Pre-Call Talking Points</span>
+            <span class="pct-tag">${l.product.split('+')[0].trim()}</span>
+          </div>
+          <span class="pct-arrow">▼</span>
+        </div>
+        <div class="pct-body-inner" style="display:none">
+          ${[
+            {label:'📦 Products', icon:'bg:rgba(3,45,66,.06)', items: tp.products},
+            {label:'📡 Account Signals', icon:'bg:rgba(99,223,78,.06)', items: tp.signals},
+            {label:'🎯 Lead Source', icon:'bg:rgba(59,130,246,.06)', items: tp.source},
+            {label:'👤 Title & Level', icon:'bg:rgba(168,85,247,.06)', items: tp.title},
+          ].map(sec=>`<div style="border-bottom:1px solid var(--s100)">
+            <div style="padding:8px 15px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s500);background:var(--s50)">${sec.label}</div>
+            <div style="padding:6px 15px 10px">
+              ${sec.items.map(pt=>`<div class="pct-item">${pt}</div>`).join('')}
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="tl-panel">
+        <div class="tl-hd">
+          <div class="tl-title">Activity Timeline</div>
+          <div class="tl-filters">
+            <button class="tlfil on">All</button>
+            <button class="tlfil">📧 Email</button>
+            <button class="tlfil">📞 Calls</button>
+            <button class="tlfil">💼 LinkedIn</button>
+          </div>
+          <button class="btn btn-g btn-sm" style="margin-left:6px">+ Log Activity</button>
+        </div>
+        <div class="tl-compose">
+          <input class="compose-in" type="text" placeholder="Add a note about ${l.name.split(' ')[0]}…">
+          <button class="btn btn-p btn-sm">Post</button>
+        </div>
+        <div class="tl-items">
+          ${Object.entries(grouped).map(([date, items]) => `
+            <div>
+              <div class="tl-date-lbl">${date}</div>
+              ${items.map(t => `<div class="tl-item">
+                <div class="tl-ic ${t.icon}">${t.type==='Email'?'✉️':t.type==='Phone Call'?'📞':t.type==='LinkedIn'?'💼':t.type==='Field Event'||t.type==='Event'?'🎪':t.type==='Content'?'📄':'📝'}</div>
+                <div class="tl-body">
+                  <div class="tl-row">
+                    <span class="tl-type">${t.type}</span>
+                    <span class="tl-dir">${t.dir}</span>
+                    <span class="tl-st ${t.st==='closed'?'tl-st-closed':'tl-st-open'}">${t.st==='closed'?'Closed':'Open'}</span>
+                  </div>
+                  <div class="tl-preview">${t.preview}</div>
+                  <div class="tl-meta">
+                    <span class="tl-time">${t.date.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}</span>
+                    <span>·</span>
+                    <span class="tl-rep">${t.rep}</span>
+                    ${t.outcome ? `<span>·</span><span style="font-size:10px;color:${t.outcome.includes('Opened')||t.outcome.includes('Connected')||t.outcome.includes('Scanned')||t.outcome.includes('Attended')||t.outcome.includes('Downloaded')?'var(--g600)':'var(--a500)'}">${t.outcome}</span>` : ''}
+                  </div>
+                </div>
+              </div>`).join('')}
+            </div>`).join('')}
+          <div style="text-align:center;padding:12px 0 4px">
+            <button class="btn btn-g btn-sm">Load More Activities ↓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="fade-in" style="animation-delay:.12s">
+      <!-- Research -->
+      <div class="rp">
+        <div class="rp-hd">
+          <div class="rp-title">📌 Account Research</div>
+          <span class="rp-badge ${ageDays < 30 ? 'rp-fresh' : ageDays < 60 ? 'rp-stale' : 'rp-stale'}">${ageDays} of 90 days</span>
+        </div>
+        ${ageDays >= 60 ? `<div class="rp-warn">
+          <div style="font-size:13px;flex-shrink:0">⚠️</div>
+          <div>
+            <div class="rp-warn-title">Research getting stale — refresh recommended</div>
+            <div class="rp-warn-sub">Last updated Mar 27 — ${l.company} may have new initiatives this quarter</div>
+          </div>
+        </div>` : ''}
+        <div class="rp-body">
+          <div class="rp-date">📅 Last updated Mar 27, 2026 · ${l.company}</div>
+          <div class="rp-sec">
+            <div class="rp-sec-title">Company Overview</div>
+            <div class="rp-bullets">${research.overview.map(b=>`<div class="rp-bullet">${b}</div>`).join('')}</div>
+          </div>
+          <div class="rp-sec">
+            <div class="rp-sec-title">Active Signals</div>
+            <div class="rp-bullets">${research.signals.map(b=>`<div class="rp-bullet">${b}</div>`).join('')}</div>
+          </div>
+          <div class="rp-sec">
+            <div class="rp-sec-title">Pain Hypothesis</div>
+            <div class="rp-bullets">${research.pain.map(b=>`<div class="rp-bullet">${b}</div>`).join('')}</div>
+          </div>
+        </div>
+        <div class="rp-cta">
+          <div class="rp-cta-ic">🤖</div>
+          Refresh research → Account Research Project
+          <span style="margin-left:auto;font-size:10px;color:var(--s400)">↗</span>
+        </div>
+      </div>
+
+      <!-- Product Usage Sheet -->
+      <div class="panel" style="margin-bottom:12px;overflow:hidden">
+        <div class="panel-hd" style="background:var(--s50)">
+          <span class="panel-title">Product Usage</span>
+          <span class="panel-act">View Full Account</span>
+        </div>
+        ${portfolio.length === 0 ? `
+          <div style="padding:16px 15px;text-align:center">
+            <div style="font-size:22px;margin-bottom:6px">🆕</div>
+            <div style="font-size:12px;font-weight:600;color:var(--s700);margin-bottom:3px">No existing ServiceNow footprint</div>
+            <div style="font-size:11px;color:var(--s400)">New logo — all products available.</div>
+          </div>
+        ` : `
+          <div style="overflow-y:auto;max-height:340px">
+            <table style="width:100%;border-collapse:collapse;font-size:11px">
+              <thead style="position:sticky;top:0;z-index:1">
+                <tr style="background:var(--s50);border-bottom:1px solid var(--s200)">
+                  <th style="padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:left">BU / Product</th>
+                  <th style="padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:right;white-space:nowrap">CACV</th>
+                  <th style="padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:right;white-space:nowrap">NNACV (4RQ)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${portfolio.map(row=>`<tr style="border-bottom:1px solid var(--s100)">
+                  <td style="padding:8px 10px;font-size:12px;color:var(--s800);font-weight:500">${row.bu}</td>
+                  <td style="padding:8px 10px;font-size:12px;text-align:right;font-family:'DM Mono',monospace;font-weight:${row.cacv>0?'600':'400'};color:${row.cacv>0?'var(--s800)':'var(--s300)'}">${row.cacv>0?'$'+row.cacv+'K':'$0K'}</td>
+                  <td style="padding:8px 10px;font-size:12px;text-align:right;font-family:'DM Mono',monospace;font-weight:${row.nnacv!==0?'600':'400'};color:${row.nnacv>0?'var(--g600)':row.nnacv<0?'var(--r600)':'var(--s300)'}">${row.nnacv>0?'$'+row.nnacv+'K':row.nnacv<0?'-$'+Math.abs(row.nnacv)+'K':'$0K'}</td>
+                </tr>`).join('')}
+                ${(()=>{const totalCacv=portfolio.reduce((s,r)=>s+r.cacv,0);const totalNnacv=portfolio.reduce((s,r)=>s+r.nnacv,0);return `<tr style="background:var(--s50);border-top:2px solid var(--s200)">
+                  <td style="padding:8px 10px;font-size:11px;font-weight:700;color:var(--s600)">Total</td>
+                  <td style="padding:8px 10px;font-size:12px;font-weight:700;text-align:right;font-family:'DM Mono',monospace;color:var(--s800)">$${totalCacv}K</td>
+                  <td style="padding:8px 10px;font-size:12px;font-weight:700;text-align:right;font-family:'DM Mono',monospace;color:${totalNnacv>0?'var(--g600)':totalNnacv<0?'var(--r600)':'var(--s400)'}">$${totalNnacv}K</td>
+                </tr>`;})()} 
+              </tbody>
+            </table>
+          </div>
+        `}
+      </div>
+
+      <!-- Who Knows Whom -->
+      <div class="panel">
+        <div class="panel-hd"><span class="panel-title">Who Knows Whom</span></div>
+        <div style="padding:13px 15px;display:flex;flex-direction:column;gap:8px">
+          <div class="wkw-item">
+            <div style="width:28px;height:28px;background:${ae.hex};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--white);flex-shrink:0">${l.ae.slice(0,2).toUpperCase()}</div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--s700)">${l.ae} (AE)</div><div style="font-size:10px;color:var(--s400)">Account Executive · Account owner</div></div>
+            <div style="margin-left:auto"><span class="ftag ftag-green" style="font-size:10px">Primary</span></div>
+          </div>
+          <div class="wkw-item">
+            <div style="width:28px;height:28px;background:var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--wasabi);flex-shrink:0">JR</div>
+            <div><div style="font-size:12px;font-weight:600;color:var(--s700)">Jacob Rubis</div><div style="font-size:10px;color:var(--s400)">BDR · Lead owner</div></div>
+            <div style="margin-left:auto"><span class="ftag ftag-blue" style="font-size:10px">Active</span></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  // Timeline filter interaction
+  document.querySelectorAll('.tlfil').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tlfil').forEach(b => b.classList.remove('on'));
+      this.classList.add('on');
+    });
+  });
+
+  // Tab interaction
+  document.querySelectorAll('.tab-it').forEach(t => {
+    t.addEventListener('click', function() {
+      document.querySelectorAll('.tab-it').forEach(x => x.classList.remove('on'));
+      this.classList.add('on');
+    });
+  });
+}
+
+renderPage();
+
+function openDraftEmail() {
+  const l = window._currentLead;
+  if (!l) return;
+  const bodies = {
+    'Attended':      "Hi " + l.name.split(' ')[0] + ",\n\nReaching out as part of your ServiceNow account team, working alongside your account executive " + l.ae + ".\n\nSaw you attended our " + l.campaign + " — appreciate you making time for that. Most people who check out that session are thinking through how to consolidate IT and HR service delivery into one experience for employees, or dealing with a specific gap in how requests get routed and resolved today.\n\nDid anything from the session connect to something you are working on? Happy to answer questions or go deeper on a specific piece.\n\nBest,\nJacob Rubis\nBusiness Development Representative, ServiceNow",
+    'Visited Booth': "Hi " + l.name.split(' ')[0] + ",\n\nReaching out as part of your ServiceNow account team, working alongside your account executive " + l.ae + ".\n\nWe connected briefly at " + l.campaign + " — wanted to follow up while the conversation is still fresh. A lot of the folks I talked to were thinking through how to modernize their service operations without adding headcount.\n\nWould love to pick up where we left off. Is there a specific area that caught your attention, or a problem you are working through right now?\n\nBest,\nJacob Rubis\nBusiness Development Representative, ServiceNow",
+    'Downloaded':    "Hi " + l.name.split(' ')[0] + ",\n\nReaching out as part of your ServiceNow account team, working alongside your account executive " + l.ae + ".\n\nNoticed you pulled down our " + l.campaign + " content — usually that means someone is actively thinking through the problem, not just browsing.\n\nMost IT and business leaders explore this area because they are dealing with fragmented service delivery, employees going around the system, or an upcoming initiative that needs a platform behind it. Does any of that resonate with what is going on at " + l.company + "?\n\nBest,\nJacob Rubis\nBusiness Development Representative, ServiceNow",
+    'Contact Us':    "Hi " + l.name.split(' ')[0] + ",\n\nReaching out because you submitted a request through our website — wanted to make sure you connected with the right person quickly.\n\nI am on the account team for " + l.company + ", working alongside your account executive " + l.ae + ". Whatever brought you to the form, I can get you to the right answer or set up the right conversation.\n\nWhat prompted the outreach?\n\nBest,\nJacob Rubis\nBusiness Development Representative, ServiceNow",
+  };
+  const body = bodies[l.memberStatus] || bodies['Downloaded'];
+  const subjectMap = {'Attended':'Following up from ' + l.campaign, 'Visited Booth':'Great connecting at ' + l.campaign, 'Contact Us':'Re: Your ServiceNow inquiry', 'Downloaded':'Re: ' + l.campaign};
+  const subject = subjectMap[l.memberStatus] || ('Re: ' + l.campaign);
+
+  document.getElementById('email-modal-root').innerHTML =
+    '<div class="email-modal" onclick="if(event.target===this)closeEmailModal()">' +
+    '<div class="email-card">' +
+    '<div class="email-card-hd"><div class="email-card-title">✉ Draft Email — ' + l.name + '</div><button class="email-close" onclick="closeEmailModal()">×</button></div>' +
+    '<div class="email-to-bar"><span style="font-size:10px;font-weight:700;color:var(--s400);text-transform:uppercase;letter-spacing:.06em;width:40px;flex-shrink:0">To</span><span style="font-size:12px;font-weight:600;color:var(--s800)">' + l.name + '</span><span style="font-size:11px;color:var(--s400);margin-left:6px">&lt;' + l.email + '&gt;</span></div>' +
+    '<div class="email-to-bar" style="border-top:1px solid var(--s100)"><span style="font-size:10px;font-weight:700;color:var(--s400);text-transform:uppercase;letter-spacing:.06em;width:40px;flex-shrink:0">Subj</span><input id="email-subject" value="' + subject.replace(/"/g,"'") + '" style="flex:1;border:none;outline:none;font-family:inherit;font-size:12px;color:var(--s800);background:transparent"></div>' +
+    '<div class="email-body-wrap"><textarea class="email-body" id="email-body">' + body + '</textarea></div>' +
+    '<div class="email-actions">' +
+    '<button class="btn btn-p btn-sm" onclick="copyEmail()">📋 Copy</button>' +
+    '<button class="btn btn-p btn-sm" onclick="openInMail()">📨 Open in Mail</button>' +
+    '<button class="btn btn-g btn-sm" style="margin-left:auto" onclick="closeEmailModal()">Close</button>' +
+    '</div></div></div>';
+}
+
+function closeEmailModal() { document.getElementById('email-modal-root').innerHTML = ''; }
+
+function copyEmail() {
+  var subj = document.getElementById('email-subject').value;
+  var body = document.getElementById('email-body').value;
+  navigator.clipboard.writeText('Subject: ' + subj + '\n\n' + body).then(function() {
+    var btn = event.target; btn.textContent = '✓ Copied!';
+    setTimeout(function(){ btn.textContent = '📋 Copy'; }, 2000);
+  });
+}
+
+function openInMail() {
+  var l = window._currentLead;
+  var subj = encodeURIComponent(document.getElementById('email-subject').value);
+  var body = encodeURIComponent(document.getElementById('email-body').value);
+  window.open('mailto:' + (l ? l.email : '') + '?subject=' + subj + '&body=' + body);
+}
+
+</script>
+<div id="modal-root"></div>
+<div id="email-modal-root"></div>
+</body>
+</html>
