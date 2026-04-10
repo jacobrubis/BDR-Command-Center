@@ -43,22 +43,74 @@ button{font-family:inherit;}
 .gnav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
 .gnav-av{width:28px;height:28px;background:var(--wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ink);cursor:pointer;margin-left:4px;}
 
-/* SIDEBAR */
-.sbar{position:fixed;top:44px;left:0;bottom:0;width:180px;background:#0d1f2b;border-right:1px solid rgba(255,255,255,.05);z-index:200;display:flex;flex-direction:column;overflow-y:auto;}
+/* SIDEBAR — collapsed to icon rail, expands on hover */
+.sbar{
+  position:fixed;top:44px;left:0;bottom:0;
+  width:44px;           /* collapsed default */
+  background:#0d1f2b;
+  border-right:1px solid rgba(255,255,255,.05);
+  z-index:200;
+  display:flex;flex-direction:column;
+  overflow:hidden;       /* clips text during collapse */
+  transition:width .22s cubic-bezier(.4,0,.2,1);
+}
+.sbar:hover{
+  width:180px;
+  box-shadow:4px 0 20px rgba(0,0,0,.25);
+}
 .sbar::-webkit-scrollbar{width:0;}
 .sbar-sec{padding:10px 0 4px;}
-.sbar-lbl{font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;}
-.sbar-item{display:flex;align-items:center;gap:9px;padding:7px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:.12s;text-decoration:none;}
+/* Section labels fade in on expand */
+.sbar-lbl{
+  font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;
+  color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;
+  white-space:nowrap;opacity:0;transition:opacity .15s .05s;
+}
+.sbar:hover .sbar-lbl{opacity:1;}
+/* Nav items — icon centered in 44px, text hidden until expanded */
+.sbar-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 14px;
+  font-size:12px;color:rgba(255,255,255,.50);
+  border-left:2px solid transparent;
+  transition:background .12s,color .12s;
+  text-decoration:none;white-space:nowrap;
+}
 .sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
 .sbar-item.on{color:var(--wasabi);border-left-color:var(--wasabi);background:rgba(99,223,78,.06);font-weight:500;}
-.sbar-ic{width:16px;text-align:center;font-size:14px;flex-shrink:0;}
-.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);}
+.sbar-ic{
+  width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;
+}
+/* Badge — hidden when collapsed, fades in on expand */
+.sb{
+  margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);
+  opacity:0;transition:opacity .1s;flex-shrink:0;
+}
+.sbar:hover .sb{opacity:1;}
 .sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
+/* Active item indicator dot when collapsed */
+.sbar-item.on .sbar-ic::after{
+  content:'';display:block;width:4px;height:4px;border-radius:50%;
+  background:var(--wasabi);margin:1px auto 0;
+  /* only visible when collapsed */
+}
+.sbar:hover .sbar-item.on .sbar-ic::after{display:none;}
 .sdiv{height:1px;background:rgba(255,255,255,.06);margin:5px 10px;}
-.sbar-footer{padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);margin-top:auto;}
+.sbar-footer{
+  padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);
+  margin-top:auto;white-space:nowrap;opacity:0;transition:opacity .15s;
+}
+.sbar:hover .sbar-footer{opacity:1;}
 
-/* LAYOUT */
-.main{margin-top:44px;margin-left:180px;min-height:calc(100vh - 44px);display:flex;flex-direction:column;}
+/* LAYOUT — margin-left matches collapsed sidebar width */
+.main{
+  margin-top:44px;
+  margin-left:44px;          /* tracks collapsed sidebar */
+  max-width:1380px;           /* prevents over-stretch on wide monitors */
+  min-height:calc(100vh - 44px);
+  display:flex;flex-direction:column;
+}
 .page-hdr{background:var(--white);border-bottom:1px solid var(--s200);padding:18px 24px 0;position:sticky;top:44px;z-index:100;}
 .phdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
 .phdr-date{font-size:11px;color:var(--s400);margin-bottom:2px;}
@@ -280,24 +332,24 @@ button{font-family:inherit;}
 <aside class="sbar">
   <div class="sbar-sec">
     <span class="sbar-lbl">My Work</span>
-    <a href="index.html"           class="sbar-item on"><span class="sbar-ic">⌂</span>Command Center</a>
-    <a href="outreach-center.html" class="sbar-item"><span class="sbar-ic">📋</span>Workbench</a>
-    <a href="buying-groups.html"   class="sbar-item"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
-    <a href="leads.html"           class="sbar-item"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
-    <a href="#"                    class="sbar-item"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+    <a href="index.html"           class="sbar-item on"  title="Command Center"><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="outreach-center.html" class="sbar-item"     title="Workbench"><span class="sbar-ic">📋</span>Workbench</a>
+    <a href="buying-groups.html"   class="sbar-item"     title="Buying Groups (12)"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"           class="sbar-item"     title="Leads — 39 open SLA"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#"                    class="sbar-item"     title="Tasks — 17 due"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
   </div>
   <div class="sdiv"></div>
   <div class="sbar-sec">
     <span class="sbar-lbl">Customers</span>
-    <a href="#"                    class="sbar-item"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
-    <a href="#"                    class="sbar-item"><span class="sbar-ic">👥</span>Contacts</a>
-    <a href="opportunities.html"   class="sbar-item"><span class="sbar-ic">💼</span>Opportunities</a>
+    <a href="#"                    class="sbar-item"     title="Accounts (340)"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="#"                    class="sbar-item"     title="Contacts"><span class="sbar-ic">👥</span>Contacts</a>
+    <a href="opportunities.html"   class="sbar-item"     title="Opportunities"><span class="sbar-ic">💼</span>Opportunities</a>
   </div>
   <div class="sdiv"></div>
   <div class="sbar-sec">
     <span class="sbar-lbl">Marketing</span>
-    <a href="#"                    class="sbar-item"><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
-    <a href="#"                    class="sbar-item"><span class="sbar-ic">📊</span>Reports</a>
+    <a href="#"                    class="sbar-item"     title="Campaigns (5)"><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="#"                    class="sbar-item"     title="Reports"><span class="sbar-ic">📊</span>Reports</a>
   </div>
   <div class="sbar-footer">ServiceNow Confidential</div>
 </aside>
@@ -390,13 +442,16 @@ button{font-family:inherit;}
         </div>
         <div id="briefBody" class="ai-coll">
           <div class="ai-body">
-            <div class="ai-snap">Snapshot</div>
+            <div class="ai-snap">High Intent Signals Only — Updated 1m ago</div>
             <div class="ai-txt">
-              You have,<br>
-              <span class="ar">8 SLA Critical Leads</span> — Brandon Joyce (Sub-Zero, 6h) and Dylan Blumenberg (FTI, 9h) are highest priority.<br>
-              <span class="ar">3 BG had new activity overnight</span> — <strong>$120,000</strong> in new signals tracked.<br>
-              <strong>Crash Champion Opty 6994 moved Stage 2 → Stage 3</strong> by Brian Disher.<br>
-              <span class="ar">100 Tasks Due:</span> 30 calls for HR campaign Bluecross + FTI, 50 emails for IT push at Sub Zero.
+              <span class="ar" style="font-weight:700">2 SLA Critical Leads with qualifying actions:</span><br>
+              → Brandon Joyce (Sub-Zero Group) — <strong>HRSD Demo attended at K25</strong> · 5h SLA window closing<br>
+              → Dylan Blumenberg (FTI Consulting) — <strong>IT Webinar registered</strong> + 3 sequence email opens · 9h remaining<br>
+              <br>
+              <span style="color:var(--a600);font-weight:700">3 Buying Groups with new signal activity:</span><br>
+              → <strong>Echo Global IT BG</strong> — Sarah Chen (VP IT) attended ITOM AIOps Field Demo · Engagement +18<br>
+              → <strong>Bluecross Illinois HR BG</strong> — Mark Osei (Dir HR Ops) registered for HRSD Webinar · No outreach scheduled<br>
+              → <strong>Sub-Zero IT BG</strong> — 2 contacts confirmed K25 session attendance · Follow-up window open now
             </div>
           </div>
           <div class="ai-foot">
