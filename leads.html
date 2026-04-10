@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leads — BDR Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+:root{
+  --ink:#032D42;--ink-nav:#01161f;--ink-mid:#043d5a;
+  --wasabi:#63DF4E;--wdk:#4ab83a;
+  --white:#fff;--bg:#f1f5f9;
+  --s50:#f8fafc;--s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;
+  --s400:#94a3b8;--s500:#64748b;--s600:#475569;--s700:#334155;
+  --s800:#1e293b;--s900:#0f172a;
+  --b50:#eff6ff;--b100:#dbeafe;--b500:#3b82f6;--b600:#2563eb;
+  --g50:#f0fdf4;--g100:#dcfce7;--g500:#22c55e;--g600:#16a34a;
+  --a50:#fffbeb;--a100:#fef3c7;--a500:#f59e0b;--a600:#d97706;
+  --r50:#fff1f2;--r100:#ffe4e6;--r500:#ef4444;--r600:#dc2626;
+  --p50:#faf5ff;--p500:#a855f7;--p600:#9333ea;
+  --sh-xs:0 1px 2px rgba(0,0,0,.05);
+  --sh-sm:0 1px 3px rgba(0,0,0,.10),0 1px 2px rgba(0,0,0,.06);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--s800);font-size:13px;line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--s300);border-radius:2px;}
+
+/* NAV */
+.gnav{height:44px;background:var(--ink-nav);display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:300;border-bottom:1px solid rgba(255,255,255,.06);}
+.gnav-logo{display:flex;align-items:center;padding:0 14px;height:44px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.gnav-tabs{display:flex;align-items:center;}
+.gnav-tab{display:flex;align-items:center;height:44px;padding:0 13px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;text-decoration:none;}
+.gnav-tab:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);}
+.gnav-pill-wrap{flex:1;display:flex;justify-content:center;}
+.gnav-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);}
+.gnav-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--wasabi);}
+.gnav-r{display:flex;align-items:center;gap:2px;padding:0 10px;}
+.gnav-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:rgba(255,255,255,.45);font-size:13px;border:none;background:transparent;cursor:pointer;}
+.gnav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
+.gnav-av{width:28px;height:28px;background:var(--wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ink);cursor:pointer;margin-left:4px;}
+
+/* SIDEBAR */
+.sbar{position:fixed;top:44px;left:0;bottom:0;width:44px;background:#0d1f2b;border-right:1px solid rgba(255,255,255,.05);z-index:200;display:flex;flex-direction:column;overflow:hidden;transition:width .22s cubic-bezier(.4,0,.2,1);}
+.sbar:hover{width:180px;box-shadow:4px 0 20px rgba(0,0,0,.25);}
+.sbar::-webkit-scrollbar{width:0;}
+.sbar-sec{padding:10px 0 4px;}
+.sbar-lbl{font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;white-space:nowrap;opacity:0;transition:opacity .15s .05s;}
+.sbar:hover .sbar-lbl{opacity:1;}
+.sbar-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:background .12s,color .12s;text-decoration:none;white-space:nowrap;}
+.sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.sbar-item.on{color:var(--wasabi);border-left-color:var(--wasabi);background:rgba(99,223,78,.06);font-weight:500;}
+.sbar-ic{width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;}
+.sbar-item.on .sbar-ic::after{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--wasabi);margin:1px auto 0;}
+.sbar:hover .sbar-item.on .sbar-ic::after{display:none;}
+.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);opacity:0;transition:opacity .1s;flex-shrink:0;}
+.sbar:hover .sb{opacity:1;}
+.sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
+.sdiv{height:1px;background:rgba(255,255,255,.06);margin:5px 10px;}
+.sbar-footer{padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);margin-top:auto;white-space:nowrap;opacity:0;transition:opacity .15s;}
+.sbar:hover .sbar-footer{opacity:1;}
+
+/* LAYOUT */
+.main{margin-top:44px;margin-left:44px;min-height:calc(100vh - 44px);display:flex;flex-direction:column;}
+.page-hdr{background:var(--white);border-bottom:1px solid var(--s200);padding:18px 24px 0;position:sticky;top:44px;z-index:100;}
+.phdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.phdr-date{font-size:11px;color:var(--s400);margin-bottom:2px;}
+.phdr-name{font-size:22px;font-weight:700;color:var(--s900);letter-spacing:-.02em;}
+.phdr-sub{font-size:12px;color:var(--s500);}
+.phdr-acts{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.page-body{display:flex;flex:1;min-height:0;}
+.body-main{flex:1;padding:16px 22px 48px;display:flex;flex-direction:column;gap:14px;min-width:0;}
+.body-side{width:268px;flex-shrink:0;border-left:1px solid var(--s200);background:var(--white);padding:14px 15px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;position:sticky;top:calc(44px + 185px);max-height:calc(100vh - 44px - 185px);align-self:flex-start;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;transition:.12s;white-space:nowrap;text-decoration:none;}
+.btn-g{background:transparent;color:var(--s600);border-color:var(--s200);}
+.btn-g:hover{background:var(--s50);border-color:var(--s300);}
+.btn-p{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.btn-p:hover{background:var(--ink-mid);}
+.btn-r{background:var(--r600);color:var(--white);border-color:var(--r600);}
+.btn-sm{font-size:11px;padding:5px 11px;}
+.btn-xs{font-size:10px;padding:3px 8px;}
+
+/* STAT CARDS */
+.stat-row{display:flex;gap:8px;margin-bottom:4px;}
+.stat-card{flex:1;background:var(--white);border:1px solid var(--s200);border-radius:10px;padding:11px 13px;box-shadow:var(--sh-xs);}
+.stat-card.critical{border-color:rgba(220,38,38,.3);background:var(--r50);}
+.stat-lbl{font-size:11px;color:var(--s500);margin-bottom:2px;font-weight:500;}
+.stat-val{font-size:20px;font-weight:700;color:var(--s900);line-height:1;margin-bottom:2px;font-family:'DM Mono',monospace;}
+.stat-val.red{color:var(--r600);}
+.stat-val.amber{color:var(--a600);}
+.stat-val.green{color:var(--g600);}
+.stat-d{font-size:11px;color:var(--s400);}
+.du{color:var(--g600);font-weight:600;}
+.dw{color:var(--a600);font-weight:600;}
+.dr{color:var(--r600);font-weight:600;}
+
+/* STATUS TABS */
+.stage-tabs{display:flex;gap:0;border-bottom:2px solid var(--s200);margin-bottom:0;overflow-x:auto;}
+.stab{padding:9px 14px;font-size:12px;font-weight:500;color:var(--s500);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;display:flex;align-items:center;gap:6px;border-top:none;border-left:none;border-right:none;background:none;}
+.stab:hover{color:var(--s800);}
+.stab.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:600;}
+.stab .cnt{font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;background:var(--s100);color:var(--s500);}
+.stab.on .cnt{background:rgba(3,45,66,.1);color:var(--ink);}
+.stab.crit .cnt{background:rgba(220,38,38,.12);color:var(--r600);}
+.stab.crit.on{color:var(--r600);border-bottom-color:var(--r600);}
+.stab.crit.on .cnt{background:rgba(220,38,38,.15);color:var(--r600);}
+.stab.responded .cnt{background:rgba(59,130,246,.1);color:var(--b600);}
+.stab.responded.on{color:var(--b600);border-bottom-color:var(--b600);}
+.stab.booked .cnt{background:rgba(22,163,74,.12);color:var(--g600);}
+.stab.booked.on{color:var(--g600);border-bottom-color:var(--g600);}
+
+/* FILTER BAR */
+.filter-bar{display:flex;align-items:center;gap:8px;padding:10px 0 4px;flex-wrap:wrap;}
+.filter-search{position:relative;flex:1;min-width:180px;max-width:280px;}
+.filter-search input{width:100%;padding:7px 10px 7px 30px;border:1px solid var(--s200);border-radius:7px;font-size:12px;font-family:inherit;background:var(--white);color:var(--s800);}
+.filter-search input:focus{outline:none;border-color:var(--s400);}
+.filter-search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--s400);}
+.filter-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 11px;border-radius:20px;border:1px solid var(--s200);background:var(--white);cursor:pointer;color:var(--s600);}
+.filter-chip:hover{border-color:var(--s300);background:var(--s50);}
+.filter-chip.on{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.filter-total{margin-left:auto;font-size:12px;color:var(--s400);}
+
+/* TABLE */
+.leads-table-wrap{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);}
+.leads-table{width:100%;border-collapse:collapse;}
+.leads-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);padding:9px 12px;text-align:left;border-bottom:1px solid var(--s200);background:var(--s50);white-space:nowrap;}
+.leads-table td{padding:10px 12px;border-bottom:1px solid var(--s100);vertical-align:middle;font-size:12px;}
+.leads-table tr:last-child td{border-bottom:none;}
+.leads-table tr:hover td{background:var(--s50);}
+.leads-table tr.clickable{cursor:pointer;}
+.leads-table tr.critical-row td{background:rgba(255,241,242,.5);}
+.leads-table tr.critical-row:hover td{background:rgba(255,225,228,.5);}
+
+/* SLA TIMER */
+.sla-block{display:flex;flex-direction:column;gap:2px;}
+.sla-timer{font-size:12px;font-weight:700;font-family:'DM Mono',monospace;}
+.sla-timer.overdue{color:var(--r600);}
+.sla-timer.critical{color:var(--r500);}
+.sla-timer.warning{color:var(--a600);}
+.sla-timer.ok{color:var(--g600);}
+.sla-timer.met{color:var(--s400);font-weight:500;}
+.sla-label{font-size:10px;color:var(--s400);}
+.sla-bar{width:80px;height:4px;background:var(--s200);border-radius:2px;overflow:hidden;margin-top:2px;}
+.sla-fill{height:100%;border-radius:2px;transition:.3s;}
+
+/* LEAD NAME */
+.lead-name{font-weight:600;color:var(--s800);}
+.lead-company{font-size:11px;color:var(--s500);margin-top:1px;}
+.lead-title{font-size:10px;color:var(--s400);}
+
+/* SOURCE PILL */
+.src-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;white-space:nowrap;}
+.src-webinar{background:#eff6ff;color:#1d4ed8;}
+.src-demo{background:#f0fdf4;color:#15803d;}
+.src-event{background:#faf5ff;color:#7e22ce;}
+.src-content{background:#fffbeb;color:#854d0e;}
+.src-inbound{background:#f0fdfa;color:#0f766e;}
+.src-partner{background:#fdf4ff;color:#86198f;}
+.src-trigger{background:#f8fafc;color:#475569;border:1px solid var(--s200);}
+.src-contactus{background:#fff7ed;color:#c2410c;border:1px solid rgba(194,65,12,.15);}
+
+/* STATUS PILL */
+.status-pill{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.st-open{background:rgba(3,45,66,.08);color:var(--ink);}
+.st-critical{background:rgba(220,38,38,.1);color:var(--r600);border:1px solid rgba(220,38,38,.2);}
+.st-responded{background:rgba(59,130,246,.1);color:var(--b600);}
+.st-booked{background:rgba(22,163,74,.12);color:var(--g600);}
+.st-nurture{background:rgba(180,83,9,.1);color:var(--a600);}
+.st-dead{background:var(--s100);color:var(--s400);}
+
+/* AE BUBBLE */
+.ae-dot{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0;}
+
+/* RIGHT PANEL */
+.side-hd{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.side-link{font-size:11px;color:var(--b600);cursor:pointer;font-weight:400;text-transform:none;letter-spacing:0;}
+
+/* SLA SIDE CARD */
+.sla-side-card{padding:10px 11px;border-radius:8px;border:1px solid;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.12s;}
+.sla-side-card:hover{box-shadow:var(--sh-sm);}
+.sla-side-card.overdue{border-color:rgba(220,38,38,.25);background:var(--r50);}
+.sla-side-card.critical{border-color:rgba(220,38,38,.2);background:rgba(255,241,242,.5);}
+.sla-side-card.warning{border-color:rgba(245,158,11,.2);background:var(--a50);}
+.sla-side-card.ok{border-color:var(--s200);background:var(--s50);}
+.sla-side-name{font-size:12px;font-weight:600;color:var(--s800);}
+.sla-side-co{font-size:11px;color:var(--s500);}
+.sla-side-time{font-size:11px;font-weight:700;font-family:'DM Mono',monospace;flex-shrink:0;text-align:right;}
+
+/* ACTIVITY ITEM */
+.act-item{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--s100);}
+.act-item:last-child{border-bottom:none;}
+.act-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.act-text{font-size:11px;color:var(--s600);line-height:1.5;}
+.act-time{font-size:10px;color:var(--s400);}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(3px);}
+.modal{background:var(--white);border-radius:12px;width:min(680px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+.modal-hd{padding:16px 20px;border-bottom:1px solid var(--s200);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:2;}
+.modal-title{font-size:15px;font-weight:700;color:var(--s900);}
+.modal-close{width:28px;height:28px;border-radius:50%;background:var(--s100);border:none;color:var(--s500);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.modal-body{padding:20px;}
+.modal-section{margin-bottom:20px;}
+.modal-section-hd{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--s100);}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.field{padding:10px 12px;background:var(--s50);border:1px solid var(--s200);border-radius:8px;}
+.field-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);margin-bottom:3px;}
+.field-val{font-size:13px;font-weight:500;color:var(--s800);}
+
+/* EMPTY */
+.empty{text-align:center;padding:60px 20px;color:var(--s400);}
+.empty-icon{font-size:36px;margin-bottom:10px;}
+.empty-msg{font-size:14px;font-weight:500;color:var(--s500);}
+.empty-sub{font-size:12px;margin-top:4px;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn .16s ease;}
+</style>
+</head>
+<body>
+
+<!-- ── TOP NAV ── -->
+<nav class="gnav">
+  <div class="gnav-logo">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="5" fill="#63DF4E"/>
+      <rect x="7" y="7" width="18" height="18" rx="3" fill="#032D42"/>
+      <rect x="11" y="11" width="10" height="10" rx="1.5" fill="#63DF4E"/>
+    </svg>
+  </div>
+  <div class="gnav-tabs">
+    <span class="gnav-tab">Favorites</span>
+    <span class="gnav-tab">History</span>
+    <span class="gnav-tab">Workspaces</span>
+    <span class="gnav-tab" style="padding:0 10px">⋮</span>
+  </div>
+  <div class="gnav-pill-wrap">
+    <div class="gnav-pill">
+      <div class="gnav-pill-dot"></div>
+      <span>GBA Commercial Illinois &amp; Midwest · Q2 FY26</span>
+    </div>
+  </div>
+  <div class="gnav-r">
+    <button class="gnav-btn">🔍</button>
+    <button class="gnav-btn">🔔</button>
+    <button class="gnav-btn">⚙️</button>
+    <div class="gnav-av">JR</div>
+  </div>
+</nav>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sbar">
+  <div class="sbar-sec">
+    <span class="sbar-lbl">My Work</span>
+    <a href="index.html"           class="sbar-item"    title="Command Center"><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="outreach-center.html" class="sbar-item"    title="Outreach Center"><span class="sbar-ic">📋</span>Outreach Center</a>
+    <a href="buying-groups.html"   class="sbar-item"    title="Buying Groups"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"           class="sbar-item on" title="Leads"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#"                    class="sbar-item"    title="Tasks"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Customers</span>
+    <a href="#"                    class="sbar-item"    title="Accounts"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="#"                    class="sbar-item"    title="Contacts"><span class="sbar-ic">👥</span>Contacts</a>
+    <a href="opportunities.html"   class="sbar-item"    title="Opportunities"><span class="sbar-ic">💼</span>Opportunities</a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Marketing</span>
+    <a href="#"                    class="sbar-item"    title="Campaigns"><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="#"                    class="sbar-item"    title="Reports"><span class="sbar-ic">📊</span>Reports</a>
+  </div>
+  <div class="sbar-footer">ServiceNow Confidential</div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- PAGE HEADER -->
+  <div class="page-hdr">
+    <div class="phdr-top">
+      <div>
+        <div class="phdr-date">Friday, April 10, 2026</div>
+        <div class="phdr-name">Leads</div>
+        <div class="phdr-sub">SLA-tracked inbound &amp; outbound leads · GBA Commercial Illinois &amp; Midwest</div>
+      </div>
+      <div class="phdr-acts">
+        <button class="btn btn-g btn-sm">⬇ Export</button>
+        <button class="btn btn-g btn-sm">🔄 Sync CRM</button>
+        <button class="btn btn-p btn-sm">+ Add Lead</button>
+      </div>
+    </div>
+
+    <!-- KPI STRIP -->
+    <div class="stat-row">
+      <div class="stat-card critical">
+        <div class="stat-lbl">SLA Critical</div>
+        <div class="stat-val red">7</div>
+        <div class="stat-d dr">⚠ Action required now</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Open SLA Leads</div>
+        <div class="stat-val amber">39</div>
+        <div class="stat-d dw">Window closing today: 12</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Responded</div>
+        <div class="stat-val">8</div>
+        <div class="stat-d du">↑ 3 this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Meetings Booked</div>
+        <div class="stat-val green">5</div>
+        <div class="stat-d du">From leads this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">SLA Attainment (MTD)</div>
+        <div class="stat-val">83%</div>
+        <div class="stat-d" style="color:var(--s400)">Target: 90%</div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="stage-tabs">
+      <button class="stab crit on" data-tab="critical" onclick="switchTab('critical',this)">🔴 SLA Critical <span class="cnt">7</span></button>
+      <button class="stab"         data-tab="open"     onclick="switchTab('open',this)">All Open <span class="cnt">39</span></button>
+      <button class="stab responded" data-tab="responded" onclick="switchTab('responded',this)">Responded <span class="cnt">8</span></button>
+      <button class="stab booked"  data-tab="booked"   onclick="switchTab('booked',this)">Meeting Booked <span class="cnt">5</span></button>
+      <button class="stab"         data-tab="nurture"  onclick="switchTab('nurture',this)">Nurture <span class="cnt">11</span></button>
+      <button class="stab"         data-tab="dead"     onclick="switchTab('dead',this)">Dead / Unqualified <span class="cnt">9</span></button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <!-- MAIN -->
+    <div class="body-main">
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <div class="filter-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="searchInput" placeholder="Search name, company, product…" oninput="renderTable()">
+        </div>
+        <button class="filter-chip on" id="srcAll" onclick="setSrcFilter('all',this)">All Sources</button>
+        <button class="filter-chip" onclick="setSrcFilter('Webinar',this)">Webinar</button>
+        <button class="filter-chip" onclick="setSrcFilter('Demo',this)">Demo</button>
+        <button class="filter-chip" onclick="setSrcFilter('Field Event',this)">Field Event</button>
+        <button class="filter-chip" onclick="setSrcFilter('Content',this)">Content</button>
+        <button class="filter-chip" onclick="setSrcFilter('Contact Us',this)">Contact Us</button>
+        <span class="filter-total" id="filterTotal"></span>
+      </div>
+
+      <!-- TABLE -->
+      <div class="leads-table-wrap">
+        <table class="leads-table">
+          <thead>
+            <tr>
+              <th>Lead</th>
+              <th>Source / Campaign</th>
+              <th>Product Interest</th>
+              <th>SLA</th>
+              <th>AE</th>
+              <th>Status</th>
+              <th>Received</th>
+            </tr>
+          </thead>
+          <tbody id="leadsBody"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="body-side">
+
+      <!-- SLA COUNTDOWN -->
+      <div>
+        <div class="side-hd">
+          <span>SLA Due Today</span>
+          <span class="side-link" onclick="switchTab('critical',document.querySelector('.stab.crit'))">See all</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;" id="slaPanel"></div>
+      </div>
+
+      <!-- RECENT ACTIVITY -->
+      <div>
+        <div class="side-hd"><span>Recent Activity</span></div>
+        <div id="actPanel">
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--g500)"></div>
+            <div><div class="act-text"><strong>Brandon Joyce</strong> opened Email 2 from Veza campaign</div><div class="act-time">9 min ago</div></div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--b500)"></div>
+            <div><div class="act-text"><strong>Sarah Mitchell</strong> submitted Now Assist demo request form</div><div class="act-time">23 min ago</div></div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--a500)"></div>
+            <div><div class="act-text"><strong>Dylan Blumenberg</strong> registered for IT Webinar series</div><div class="act-time">1h ago</div></div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--p500)"></div>
+            <div><div class="act-text"><strong>Marcus Webb</strong> attended live ITOM AIOps demo</div><div class="act-time">2h ago</div></div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--g500)"></div>
+            <div><div class="act-text"><strong>Jennifer Torres</strong> replied to Email 1 — Platform sequence</div><div class="act-time">3h ago</div></div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--r500)"></div>
+            <div><div class="act-text"><strong>Robert Kim</strong> SLA window expired — follow-up overdue</div><div class="act-time">4h ago</div></div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--g500)"></div>
+            <div><div class="act-text"><strong>Lisa Park</strong> booked meeting — Crash Champions HR demo</div><div class="act-time">Yesterday</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOURCE BREAKDOWN -->
+      <div>
+        <div class="side-hd"><span>Leads by Source</span></div>
+        <div id="sourceBreakdown" style="display:flex;flex-direction:column;gap:5px;"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="modal-root"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const AE_STYLES = {
+  Tony:    {bg:'rgba(3,45,66,0.1)',   color:'#032D42'},
+  Jeff:    {bg:'rgba(4,67,85,0.1)',   color:'#044355'},
+  Riley:   {bg:'rgba(180,83,9,0.1)',  color:'#B45309'},
+  Katie:   {bg:'rgba(91,33,182,0.1)', color:'#5B21B6'},
+  Brian:   {bg:'rgba(217,48,37,0.1)', color:'#D93025'},
+  Seamus:  {bg:'rgba(26,122,0,0.1)',  color:'#1a7a00'},
+  Mikaela: {bg:'rgba(3,105,161,0.1)', color:'#0369A1'},
+};
+
+// slaHours: hours remaining (negative = overdue). null = SLA met/not applicable
+const LEADS = [
+  // ── SLA CRITICAL ──
+  {id:'LD-48291', name:'Brandon Joyce',     title:'VP of IT',            company:'Sub-Zero Group Inc.',       source:'Webinar',      campaign:'HRSD K25 Demo',       product:'HR Service Delivery',     slaHours:5,    score:88, ae:'Tony',    status:'critical', tab:'critical', received:'Apr 10',
+   email:'brandon.joyce@subzero.com', phone:'+1 608-271-2233', state:'WI - Wisconsin', territory:'COMMIDW-TER-1', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'Employee Workflows', parentAccount:'Sub-Zero Group',
+   notes:'Attended HRSD live demo at K25. 3 email opens on follow-up sequence. High engagement. Sub-Zero is a customer — expansion opportunity.'},
+  {id:'LD-48302', name:'Dylan Blumenberg',  title:'Director of IT Ops',  company:'FTI Consulting',            source:'Webinar',      campaign:'IT Leader Webinar',   product:'ITSM + Now Assist',       slaHours:9,    score:74, ae:'Jeff',    status:'critical', tab:'critical', received:'Apr 10',
+   email:'d.blumenberg@fticonsulting.com', phone:'+1 312-759-8100', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'ITSM', parentAccount:'FTI Consulting',
+   notes:'Registered and attended live IT webinar. Opened 3 follow-up emails. FTI is a new logo target. Jeff has existing CxO relationship.'},
+  {id:'LD-48315', name:'Sarah Mitchell',    title:'CIO',                 company:'Paylocity Corporation',     source:'Demo',  campaign:'Now Assist Demo',     product:'Now Assist for ITSM',     slaHours:2,    score:92, ae:'Riley',   status:'critical', tab:'critical', received:'Apr 10',
+   email:'sarah.mitchell@paylocity.com', phone:'+1 847-463-5000', state:'IL - Illinois', territory:'COMMIDW-TER-3', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'ITSM', parentAccount:'Paylocity Corporation',
+   notes:'Inbound demo request submitted via servicenow.com. CIO-level. Paylocity is an existing customer on ITSM Pro — expansion into Now Assist.'},
+  {id:'LD-48327', name:'Marcus Webb',       title:'VP of Technology',    company:'Ritchie Bros. Auctioneers', source:'Field Event',        campaign:'ChiTech Spring 2026', product:'ITOM AIOps',              slaHours:-3,   score:81, ae:'Jeff',    status:'critical', tab:'critical', received:'Apr 9',
+   email:'mwebb@rbauction.com', phone:'+1 312-900-5540', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Visited Booth', mostRecentBU:'ITOM', parentAccount:'Ritchie Bros. Auctioneers',
+   notes:'Met at ChiTech conference. Expressed interest in ITOM. SLA expired — needs immediate outreach. Jeff to lead.'},
+  {id:'LD-48338', name:'Kevin Ostrander',   title:'IT Director',         company:'Sargento Foods Inc.',       source:'Content',      campaign:'ITAM Whitepaper',     product:'ITAM + HAM',              slaHours:6,    score:68, ae:'Tony',    status:'critical', tab:'critical', received:'Apr 10',
+   email:'kostrander@sargento.com', phone:'+1 920-893-8484', state:'WI - Wisconsin', territory:'COMMIDW-TER-1', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'ITSM', parentAccount:'Sargento Foods',
+   notes:'Downloaded ITAM whitepaper + HAM ebook in same session. Sargento is existing customer. Expansion play.'},
+  {id:'LD-48341', name:'Priya Nair',        title:'CISO',                company:'Eversana',                  source:'Webinar',      campaign:'Veza Security Brief', product:'Veza Identity Governance', slaHours:7,   score:79, ae:'Seamus',  status:'critical', tab:'critical', received:'Apr 10',
+   email:'pnair@eversana.com', phone:'+1 262-373-9555', state:'WI - Wisconsin', territory:'COMMIDW-TER-6', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'Security Operations', parentAccount:'Eversana',
+   notes:'Attended Veza post-acquisition webinar. CISO role — security buying group. Eversana is a Seamus customer.'},
+  {id:'LD-48352', name:'Robert Kim',        title:'Head of IT Security', company:'DMI Inc.',                  source:'Contact Us',      campaign:'Organic Search',      product:'Security Operations',     slaHours:-6,   score:85, ae:'Seamus',  status:'critical', tab:'critical', received:'Apr 9',
+   email:'r.kim@dminc.com', phone:'+1 301-944-4600', state:'IL - Illinois', territory:'COMMIDW-TER-6', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'Security Operations', parentAccount:'DMI Inc.',
+   notes:'Inbound inquiry via web form. Already in a SecOps conversation with Seamus via the ITAM campaign. High intent signal.'},
+
+  // ── CONTACT US (new) ──
+  {id:'LD-48361', name:'Rogelio Garcia',    title:'ServiceDesk Technician', company:'Echo Global Logistics, Inc.', source:'Contact Us', campaign:'WS-DemoNow-PLAT-CloudPlatformAppDev', product:'Creator App Engine', slaHours:14, score:55, ae:'Tony', status:'open', tab:'open', received:'Apr 9',
+   email:'rogelio.garcia@echo.com', phone:'+1 312-999-2754', state:'IL - Illinois', territory:'COMMIDW-TER-1', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'Creator App Engine', parentAccount:'Echo Global Logistics',
+   notes:'Downloaded Platform App Dev demo. ServiceDesk Technician — influencer level. Echo Global is a Riley account but assigned to Tony territory. Needs economic buyer mapping.'},
+  {id:'LD-48374', name:'Ramprasad Kalan',   title:'Solutions Architect',  company:'BlueCross BlueShield Assoc.', source:'Contact Us', campaign:'WS-DemoNow-PLAT-AutomationEngine', product:'Workflow Data Fabric', slaHours:22, score:61, ae:'Brian', status:'open', tab:'open', received:'Apr 8',
+   email:'ramprasad.kalangan@bcbsa.com', phone:'+1 312-297-6265', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'Workflow Data Fabric', parentAccount:'BlueCross BlueShield',
+   notes:'Downloaded Automation Engine demo content. Solutions Architect at BCBSA — technical evaluator. Brian existing relationship with IT leadership. Map to budget holder.'},
+  {id:'LD-48387', name:'Ashley Tokarz',     title:'Director of Information Technology', company:'S&C Electric Co.', source:'Contact Us', campaign:'WBR-FY26-Q1-GPM-Google-PV', product:'All BUs', slaHours:31, score:72, ae:'Katie', status:'open', tab:'open', received:'Apr 7',
+   email:'ashley.tokarz@sandc.com', phone:'+1 773-338-1000', state:'IL - Illinois', territory:'COMMIDW-TER-5', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'ITSM', parentAccount:'S&C Electric Co.',
+   notes:'Attended Google Partner Value webinar. IT Director at S&C Electric — existing Katie customer. Interest spans multiple BUs. Strong candidate for account expansion conversation.'},
+  {id:'LD-48399', name:'Lorenzo De Luca',   title:'IoT Engineer',         company:'Culligan International',    source:'Contact Us', campaign:'TS-MA00003003-MWC-Barcelona-2026', product:'ITSM', slaHours:-1, score:58, ae:'Brian', status:'critical', tab:'critical', received:'Apr 7',
+   email:'lorenzo.deluca@culligan.com', phone:'+39 333-751-6379', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Visited Booth', mostRecentBU:'ITSM', parentAccount:'Culligan International',
+   notes:'Visited ServiceNow booth at MWC Barcelona. IoT Engineer — not budget holder but high engagement. Culligan is existing Brian customer. Route to IT Director relationship.'},
+
+  // ── ALL OPEN ──
+  {id:'LD-48201', name:'Amanda Foster',     title:'Dir. of HR Systems',  company:'Quinnox Inc.',              source:'Webinar',      campaign:'EW HR Webinar',       product:'Employee Workflows',      slaHours:18,   score:71, ae:'Jeff',    status:'open', tab:'open', received:'Apr 9',
+   email:'amanda.foster@quinnox.com', phone:'+1 630-572-8800', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'Employee Workflows', parentAccount:'Quinnox Inc.',
+   notes:'Attended EW webinar live. HR Systems director — key buying group member. Quinnox is Jeff big bet new logo.'},
+  {id:'LD-48213', name:'David Chen',        title:'VP Engineering',      company:'Chicago Mercantile Exchange',source:'Demo', campaign:'Platform Demo',       product:'Platform Licensing',      slaHours:24,   score:66, ae:'Jeff',    status:'open', tab:'open', received:'Apr 9',
+   email:'dchen@cmegroup.com', phone:'+1 312-930-1000', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'Creator App Engine', parentAccount:'Chicago Mercantile Exchange',
+   notes:'Demo request — CME is an existing customer. David is new to role (90 days). Potential expansion conversation.'},
+  {id:'LD-48224', name:'Lisa Rodriguez',    title:'IT Manager',          company:'Crash Champions',           source:'Content',      campaign:'ITSM Buyers Guide',   product:'ITSM Pro',                slaHours:36,   score:58, ae:'Brian',   status:'open', tab:'open', received:'Apr 8',
+   email:'l.rodriguez@crashchampions.com', phone:'+1 844-272-7480', state:'IL - Illinois', territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'ITSM', parentAccount:'Crash Champions',
+   notes:'Downloaded ITSM buyer guide. Crash Champions is existing customer on basic ITSM — upgrade motion.'},
+  {id:'LD-48235', name:'Thomas Nguyen',     title:'Director IT Ops',     company:'Holcim Building Envelope',  source:'Field Event',        campaign:'K26 Pre-event',       product:'ITSM + ITOM',             slaHours:42,   score:62, ae:'Jeff',    status:'open', tab:'open', received:'Apr 8',
+   email:'thomas.nguyen@holcim.com', phone:'+1 312-400-5500', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Visited Booth', mostRecentBU:'ITOM', parentAccount:'Holcim Building Envelope',
+   notes:'Registered for K26 session on ITSM + ITOM. New logo target. Jeff to reach out with K26 agenda preview.'},
+  {id:'LD-48247', name:'Grace Liu',         title:'CHRO',                company:'Hollister Incorporated',    source:'Partner',      campaign:'Deloitte Referral',   product:'Now Assist for HR',       slaHours:48,   score:77, ae:'Katie',   status:'open', tab:'open', received:'Apr 8',
+   email:'g.liu@hollister.com', phone:'+1 262-842-0200', state:'WI - Wisconsin', territory:'COMMIDW-TER-5', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'Employee Workflows', parentAccount:'Hollister Incorporated',
+   notes:'Partner referral from Deloitte. CHRO — C-suite engagement. Hollister is existing customer. Now Assist for HR expansion.'},
+  {id:'LD-48258', name:'James Park',        title:'Sr. IT Architect',    company:'CF Industries Enterprises', source:'Webinar',      campaign:'Platform Webinar',    product:'Creator Workflows',       slaHours:52,   score:55, ae:'Jeff',    status:'open', tab:'open', received:'Apr 7',
+   email:'james.park@cfindustries.com', phone:'+1 847-438-9500', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'Creator App Engine', parentAccount:'CF Industries',
+   notes:'Attended platform webinar. Architect role — technical evaluator not budget holder. Jeff to map to economic buyer.'},
+  {id:'LD-48269', name:'Natalie Brooks',    title:'VP Operations',       company:'Culligan International',    source:'Contact Us',      campaign:'Organic Search',      product:'Field Service Mgmt',      slaHours:60,   score:69, ae:'Brian',   status:'open', tab:'open', received:'Apr 7',
+   email:'n.brooks@culligan.com', phone:'+1 630-505-1200', state:'IL - Illinois', territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'Customer Service', parentAccount:'Culligan International',
+   notes:'Inbound via contact form. Asking about field service management. Culligan operates 800+ field technicians.'},
+  {id:'LD-48281', name:'Eric Sandoval',     title:'CTO',                 company:'West Monroe Partners',      source:'Content',      campaign:'AI Readiness Guide',  product:'Now Assist + AICT',       slaHours:72,   score:80, ae:'Brian',   status:'open', tab:'open', received:'Apr 7',
+   email:'esandoval@westmonroe.com', phone:'+1 312-282-7200', state:'IL - Illinois', territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'AI Platform Foundation', parentAccount:'West Monroe Partners',
+   notes:'Downloaded AI readiness guide and executive AI brief in same session. CTO at consulting firm — potential partner angle.'},
+
+  // ── RESPONDED ──
+  {id:'LD-48101', name:'Jennifer Torres',   title:'IT Director',         company:'Kirkland & Ellis LLP',      source:'Webinar',      campaign:'Legal IT Webinar',    product:'ITSM Pro',                slaHours:null, score:76, ae:'Riley',   status:'responded', tab:'responded', received:'Apr 5',
+   email:'jennifer.torres@kirkland.com', phone:'+1 312-862-2000', state:'IL - Illinois', territory:'COMMIDW-TER-3', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'ITSM', parentAccount:'Kirkland & Ellis',
+   notes:'Replied to Email 1 in Platform sequence. Expressed interest in ITSM Pro for legal workflow automation. Discovery call scheduled.', respondedMsg:'Interested in how you handle matter management integrations — can we set up 20 minutes?'},
+  {id:'LD-48112', name:'Michael Chang',     title:'VP of IT',            company:'GATX Corporation',          source:'Field Event',        campaign:'MidwestTech Summit',  product:'ITOM AIOps',              slaHours:null, score:83, ae:'Riley',   status:'responded', tab:'responded', received:'Apr 4',
+   email:'mchang@gatx.com', phone:'+1 312-621-6200', state:'IL - Illinois', territory:'COMMIDW-TER-3', leadRating:'MQL', memberStatus:'Visited Booth', mostRecentBU:'ITOM', parentAccount:'GATX Corporation',
+   notes:'Event follow-up response. GATX already on ITSM — Michael flagged they are struggling with alert fatigue in their rail ops environment.', respondedMsg:'We are dealing with 3,000 alerts a day across our operations centers. What does the AIOps ROI look like for a company our size?'},
+  {id:'LD-48123', name:'Sandra Kowalski',   title:'Dir. of HR Tech',     company:'Federal Home Loan Bank of Chicago', source:'Demo', campaign:'HRSD Demo', product:'HR Service Delivery', slaHours:null, score:71, ae:'Riley', status:'responded', tab:'responded', received:'Apr 3',
+   email:'dballesteros@fhlbc.com', phone:'+1 312-565-5700', state:'IL - Illinois', territory:'COMMIDW-TER-3', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'Employee Workflows', parentAccount:'Federal Home Loan Bank of Chicago',
+   notes:'Submitted demo request for HRSD. HR Director — has headcount to build a case internally. FHLBank is existing customer on ITSM.', respondedMsg:'We have been looking at HR case management options. Can you include the onboarding module in the demo?'},
+  {id:'LD-48134', name:'Carlos Reyes',      title:'IT Security Manager', company:'Sysmex America, Inc.',      source:'Content',      campaign:'SecOps Playbook',     product:'Security Operations',     slaHours:null, score:68, ae:'Katie',   status:'responded', tab:'responded', received:'Apr 3',
+   email:'carlos.reyes@sysmex.com', phone:'+1 847-996-4500', state:'IL - Illinois', territory:'COMMIDW-TER-5', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'Security Operations', parentAccount:'Sysmex America',
+   notes:'Downloaded SecOps playbook. Replied to follow-up email asking about SIR pricing. Katie to loop in SC.', respondedMsg:'What is the typical implementation timeline for Security Incident Response at a company our size (~1,200 employees)?'},
+  {id:'LD-48145', name:'Annie Hoffman',     title:'VP of Finance Systems',company:'S&C Electric Co.',          source:'Webinar',      campaign:'FSC Webinar',         product:'Finance & Supply Chain',  slaHours:null, score:59, ae:'Katie',   status:'responded', tab:'responded', received:'Apr 2',
+   email:'anthony.bezina@sandc.com', phone:'+1 773-338-1000', state:'IL - Illinois', territory:'COMMIDW-TER-5', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'ITSM', parentAccount:'S&C Electric Co.',
+   notes:'Attended FSC webinar. Finance Systems VP — key persona for F&SC buying group. S&C is existing customer.', respondedMsg:'Interesting to see the treasury management module. We are evaluating alternatives to our current SAP workflow.'},
+
+  // ── MEETING BOOKED ──
+  {id:'LD-47981', name:'Lisa Park',         title:'CHRO',                company:'Crash Champions',           source:'Demo',  campaign:'Now Assist HR',       product:'Now Assist for HR',       slaHours:null, score:91, ae:'Brian',   status:'booked', tab:'booked', received:'Mar 31',
+   email:'lisa.park@crashchampions.com', phone:'+1 844-272-7480', state:'IL - Illinois', territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'Employee Workflows', parentAccount:'Crash Champions',
+   meetingDate:'Apr 17, 2026 · 10am', notes:'Meeting booked for Now Assist HR demo. CHRO + VP IT confirmed for April 17. Crash Champions has 650 employees across 50 locations — strong onboarding use case.'},
+  {id:'LD-47992', name:'Wei Zhang',         title:'CIO',                 company:'Videojet Technologies Inc.', source:'Field Event',        campaign:'K25 Booth',          product:'ITSM + Now Assist',       slaHours:null, score:88, ae:'Jeff',    status:'booked', tab:'booked', received:'Mar 28',
+   email:'wzhang@videojet.com', phone:'+1 630-860-7300', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Visited Booth', mostRecentBU:'ITSM', parentAccount:'Videojet Technologies',
+   meetingDate:'Apr 14, 2026 · 2pm', notes:'K25 booth scan converted to meeting. CIO level. Videojet is existing customer — expansion play. Jeff confirmed 4 participants on customer side.'},
+  {id:'LD-48003', name:'Patricia Olson',    title:'VP of IT',            company:'Sidley Austin LLP',         source:'Contact Us',      campaign:'Organic Search',      product:'Legal Service Mgmt',      slaHours:null, score:85, ae:'Jeff',    status:'booked', tab:'booked', received:'Mar 26',
+   email:'polson@sidley.com', phone:'+1 312-853-7000', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'Customer Service', parentAccount:'Sidley Austin',
+   meetingDate:'Apr 16, 2026 · 11am', notes:'Inbound web inquiry converted to discovery call. Sidley is existing ITSM customer. VP of IT exploring legal matter management automation.'},
+  {id:'LD-48014', name:'Rachel Green',      title:'IT Director',         company:'Hollister Incorporated',    source:'Partner',      campaign:'Accenture Referral',  product:'ITAM Enterprise',         slaHours:null, score:78, ae:'Katie',   status:'booked', tab:'booked', received:'Mar 25',
+   email:'r.green@hollister.com', phone:'+1 262-842-0200', state:'WI - Wisconsin', territory:'COMMIDW-TER-5', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'ITSM', parentAccount:'Hollister Incorporated',
+   meetingDate:'Apr 22, 2026 · 9am', notes:'Accenture partner referral. IT Director focused on hardware asset tracking. Hollister is existing customer looking to expand.'},
+  {id:'LD-48025', name:'Tomas Rivera',      title:'Head of IT',          company:'Stepan Co.',                source:'Webinar',      campaign:'ITAM Webinar',        product:'ITAM + HAM',              slaHours:null, score:82, ae:'Seamus',  status:'booked', tab:'booked', received:'Mar 24',
+   email:'tomas.rivera@stepan.com', phone:'+1 847-446-7500', state:'IL - Illinois', territory:'COMMIDW-TER-6', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'ITSM', parentAccount:'Stepan Co.',
+   meetingDate:'Apr 21, 2026 · 1pm', notes:'Attended ITAM webinar. Head of IT at Stepan — existing customer site visit happening Apr 7. Tomas confirmed for group meeting.'},
+
+  // ── NURTURE ──
+  {id:'LD-47801', name:'Alan Fitch',        title:'IT Manager',          company:'Badger Meter, Inc.',        source:'Content',      campaign:'ITSM ROI Guide',      product:'ITSM Pro',                slaHours:null, score:44, ae:'Tony',    status:'nurture', tab:'nurture', received:'Mar 15',
+   email:'afitch@badgermeter.com', phone:'+1 414-355-0400', state:'WI - Wisconsin', territory:'COMMIDW-TER-1', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'ITSM', parentAccount:'Badger Meter',
+   notes:'Downloaded ROI guide. Low engagement since. IT Manager — not the budget holder. Nurturing with educational content.'},
+  {id:'LD-47812', name:'Diana Cruz',        title:'HR Business Partner', company:'Faith Technologies Inc.',   source:'Webinar',      campaign:'EW Webinar',          product:'Employee Workflows',      slaHours:null, score:48, ae:'Tony',    status:'nurture', tab:'nurture', received:'Mar 12',
+   email:'diana.cruz@faithtechnologies.com', phone:'+1 920-738-5500', state:'WI - Wisconsin', territory:'COMMIDW-TER-1', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'Employee Workflows', parentAccount:'Faith Technologies',
+   notes:'Attended webinar but low intent signals. HR Business Partner — influencer role. Enrolled in nurture track.'},
+  {id:'LD-47823', name:'Mark Osei',         title:'Dir. HR Operations',  company:'BlueCross BlueShield Assoc.',source:'Content',     campaign:'EW Buyers Guide',     product:'Employee Workflows',      slaHours:null, score:51, ae:'Brian',   status:'nurture', tab:'nurture', received:'Mar 10',
+   email:'mark.osei@bcbsa.com', phone:'+1 312-297-6000', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'Employee Workflows', parentAccount:'BlueCross BlueShield',
+   notes:'Downloaded EW buyers guide. HR Operations Director — budget conversations have not started. Long runway deal. Part of EW campaign.'},
+
+  // ── DEAD ──
+  {id:'LD-47601', name:'Paul Strickland',   title:'IT Analyst',          company:'Parts Town LLC',            source:'Webinar',      campaign:'ITSM Webinar',        product:'ITSM Pro',                slaHours:null, score:22, ae:'Riley',   status:'dead', tab:'dead', received:'Feb 20',
+   email:'p.strickland@partstown.com', phone:'+1 630-300-4000', state:'IL - Illinois', territory:'COMMIDW-TER-3', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'ITSM', parentAccount:'Parts Town',
+   deadReason:'Do Not Contact — account flagged'},
+  {id:'LD-47612', name:'Tom Bauer',         title:'IT Director',         company:'Addison Group',             source:'Field Event',        campaign:'MidwestTech',         product:'ITSM Pro',                slaHours:null, score:31, ae:'Brian',   status:'dead', tab:'dead', received:'Feb 15',
+   email:'tom.bauer@addisongroup.com', phone:'+1 312-469-1700', state:'IL - Illinois', territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Visited Booth', mostRecentBU:'ITSM', parentAccount:'Addison Group',
+   deadReason:'No CIO in org for 12 months — unqualified'},
+  {id:'LD-47623', name:'Chris Watts',       title:'VP IT',               company:'Breakthru Beverage Group',  source:'Contact Us',      campaign:'Organic Search',      product:'Employee Workflows',      slaHours:null, score:28, ae:'Brian',   status:'dead', tab:'dead', received:'Feb 10',
+   email:'chris.watts@breakthrubev.com', phone:'+1 630-300-8000', state:'IL - Illinois', territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'Employee Workflows', parentAccount:'Breakthru Beverage',
+   deadReason:'DNC — Stage 6 opportunity active, AE managing'},
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let activeTab = 'critical';
+let activeSrc = 'all';
+
+
+// ── HELPERS ───────────────────────────────────────────────────────────────
+function srcClass(src) {
+  const m = {'Webinar':'src-webinar','Demo':'src-demo','Field Event':'src-event','Content':'src-content','Contact Us':'src-contactus','Partner':'src-partner','Trigger':'src-trigger'};
+  return m[src] || 'src-trigger';
+}
+
+function statusPill(st) {
+  const m = {critical:'st-critical Critical',open:'st-open Open',responded:'st-responded Responded',booked:'st-booked Booked',nurture:'st-nurture Nurture',dead:'st-dead Dead'};
+  const [cls, lbl] = (m[st]||'st-open Open').split(' ');
+  return `<span class="status-pill ${cls}">${lbl}</span>`;
+}
+
+function slaDisplay(hours) {
+  if(hours === null) return '<span style="font-size:11px;color:var(--s400)">—</span>';
+  if(hours < 0) {
+    const h = Math.abs(hours);
+    return `<div class="sla-block"><div class="sla-timer overdue">OVERDUE ${h}h</div><div class="sla-label">SLA expired</div><div class="sla-bar"><div class="sla-fill" style="width:100%;background:var(--r500)"></div></div></div>`;
+  }
+  const cls = hours <= 4 ? 'critical' : hours <= 8 ? 'warning' : 'ok';
+  const maxH = 48; const pct = Math.max(0, Math.round((1 - hours/maxH)*100));
+  const col = hours <= 4 ? 'var(--r500)' : hours <= 8 ? 'var(--a500)' : 'var(--g500)';
+  const label = hours < 1 ? `${Math.round(hours*60)}m left` : `${hours}h left`;
+  return `<div class="sla-block"><div class="sla-timer ${cls}">${label}</div><div class="sla-label">SLA window</div><div class="sla-bar"><div class="sla-fill" style="width:${pct}%;background:${col}"></div></div></div>`;
+}
+
+
+
+function aeBubble(ae) {
+  const s = AE_STYLES[ae] || {bg:'rgba(100,116,139,.1)',color:'#475569'};
+  return `<div class="ae-dot" style="background:${s.bg};color:${s.color}" title="${ae}">${ae.slice(0,2).toUpperCase()}</div>`;
+}
+
+// ── RENDER TABLE ──────────────────────────────────────────────────────────
+function renderTable() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const rows = LEADS.filter(l => {
+    if(l.tab !== activeTab) return false;
+    if(activeSrc !== 'all' && !l.source.toLowerCase().includes(activeSrc.toLowerCase())) return false;
+    if(q && !l.name.toLowerCase().includes(q) && !l.company.toLowerCase().includes(q) && !l.product.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  const body = document.getElementById('leadsBody');
+  document.getElementById('filterTotal').textContent = rows.length + ' lead' + (rows.length===1?'':'s');
+
+  if(!rows.length) {
+    body.innerHTML = `<tr><td colspan="8"><div class="empty"><div class="empty-icon">👤</div><div class="empty-msg">No leads match this filter</div><div class="empty-sub">Try adjusting the source filter or search.</div></div></td></tr>`;
+    return;
+  }
+
+  body.innerHTML = rows.map(l => {
+    const isCrit = l.slaHours !== null && l.slaHours < 0;
+    return `<tr class="clickable fade-in${isCrit?' critical-row':''}" onclick="openLeadModal('${l.id}')">
+      <td>
+        <div class="lead-name">${l.name}</div>
+        <div class="lead-company">${l.company}</div>
+        <div class="lead-title">${l.title}</div>
+      </td>
+      <td>
+        <span class="src-pill ${srcClass(l.source)}">${l.source}</span>
+        <div style="font-size:10px;color:var(--s400);margin-top:4px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.campaign}</div>
+      </td>
+      <td>
+        <div style="font-size:12px;font-weight:500;color:var(--s800)">${l.product}</div>
+      </td>
+      <td>${slaDisplay(l.slaHours)}</td>
+      <td>${aeBubble(l.ae)}</td>
+      <td>${statusPill(l.status)}</td>
+      <td><span style="font-size:11px;color:var(--s500)">${l.received}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── RENDER SLA PANEL ──────────────────────────────────────────────────────
+function renderSLAPanel() {
+  const urgent = LEADS.filter(l => l.slaHours !== null && l.slaHours <= 10).sort((a,b) => a.slaHours - b.slaHours).slice(0,6);
+  document.getElementById('slaPanel').innerHTML = urgent.map(l => {
+    const isOv = l.slaHours < 0;
+    const isCrit = l.slaHours >= 0 && l.slaHours <= 4;
+    const isWarn = l.slaHours > 4 && l.slaHours <= 8;
+    const cls = isOv ? 'overdue' : isCrit ? 'critical' : isWarn ? 'warning' : 'ok';
+    const timeLabel = isOv ? `${Math.abs(l.slaHours)}h overdue` : `${l.slaHours}h left`;
+    const tcol = isOv ? 'var(--r600)' : isCrit ? 'var(--r500)' : isWarn ? 'var(--a600)' : 'var(--g600)';
+    return `<div class="sla-side-card ${cls}" onclick="openLeadModal('${l.id}')">
+      <div style="flex:1;min-width:0">
+        <div class="sla-side-name">${l.name}</div>
+        <div class="sla-side-co">${l.company.length > 22 ? l.company.slice(0,22)+'…' : l.company}</div>
+      </div>
+      <div class="sla-side-time" style="color:${tcol}">${timeLabel}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── RENDER SOURCE BREAKDOWN ────────────────────────────────────────────────
+function renderSourceBreakdown() {
+  const open = LEADS.filter(l => ['critical','open'].includes(l.tab));
+  const bySource = {};
+  open.forEach(l => { bySource[l.source] = (bySource[l.source]||0)+1; });
+  const sorted = Object.entries(bySource).sort((a,b) => b[1]-a[1]);
+  const max = sorted[0]?.[1] || 1;
+  const colors = {'Webinar':'#3b82f6','Demo Request':'#22c55e','Event':'#a855f7','Content':'#f59e0b','Inbound':'#14b8a6','Partner':'#ec4899','Trigger':'#94a3b8'};
+
+  document.getElementById('sourceBreakdown').innerHTML = sorted.map(([src, cnt]) => `
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="min-width:60px;font-size:11px;color:var(--s600)">${src}</div>
+      <div style="flex:1;height:4px;background:var(--s100);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${Math.round(cnt/max*100)}%;background:${colors[src]||'var(--s400)'};border-radius:2px"></div>
+      </div>
+      <div style="font-size:11px;font-weight:600;font-family:'DM Mono',monospace;color:var(--s700);min-width:16px;text-align:right">${cnt}</div>
+    </div>
+  `).join('');
+}
+
+// ── TAB SWITCH ────────────────────────────────────────────────────────────
+function switchTab(tab, btn) {
+  activeTab = tab;
+  document.querySelectorAll('.stab').forEach(b => b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  renderTable();
+}
+
+// ── SOURCE FILTER ─────────────────────────────────────────────────────────
+function setSrcFilter(src, btn) {
+  activeSrc = src;
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  else document.getElementById('srcAll').classList.remove('on');
+  renderTable();
+}
+
+// ── LEAD MODAL ────────────────────────────────────────────────────────────
+function openLeadModal(id) {
+  const l = LEADS.find(x => x.id === id);
+  if(!l) return;
+
+  const slaColor = l.slaHours === null ? 'var(--s400)' : l.slaHours < 0 ? 'var(--r600)' : l.slaHours <= 8 ? 'var(--a600)' : 'var(--g600)';
+  const slaBg    = l.slaHours === null ? 'var(--s50)'  : l.slaHours < 0 ? 'var(--r50)'  : l.slaHours <= 8 ? 'var(--a50)'  : 'var(--s50)';
+  const slaBdr   = l.slaHours === null ? 'var(--s200)' : l.slaHours < 0 ? 'rgba(220,38,38,.3)' : l.slaHours <= 8 ? 'rgba(245,158,11,.3)' : 'var(--s200)';
+  const slaVal   = l.slaHours === null ? '—' : l.slaHours < 0 ? `OVERDUE ${Math.abs(l.slaHours)}h` : `${l.slaHours}h remaining`;
+
+  const buColor  = {'ITSM':'#1d4ed8','ITOM':'#0e7490','Employee Workflows':'#7e22ce','Security Operations':'#dc2626','Creator App Engine':'#c2410c','Workflow Data Fabric':'#15803d','AI Platform Foundation':'#6d28d9','Customer Service':'#0369a1','All BUs':'#475569'};
+  const buBg     = {'ITSM':'#eff6ff','ITOM':'rgba(6,182,212,.1)','Employee Workflows':'#faf5ff','Security Operations':'#fff1f2','Creator App Engine':'#fff7ed','Workflow Data Fabric':'#f0fdf4','AI Platform Foundation':'#f5f3ff','Customer Service':'#eff6ff','All BUs':'#f8fafc'};
+
+  const memberStatusIcon = {'Attended':'✅','Downloaded':'⬇️','Visited Booth':'🏪','Breakout Session':'📋','Registered':'📝','Contact Us':'💬'}[l.memberStatus] || '📄';
+
+  document.getElementById('modal-root').innerHTML = `
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-hd">
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+              <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--b600)">${l.id}</span>
+              <span style="font-size:10px;color:var(--s400)">·</span>
+              <span style="font-size:10px;font-weight:600;color:var(--s400)">${l.territory||''}</span>
+              <span style="font-size:10px;color:var(--s400)">·</span>
+              <span style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;background:rgba(3,45,66,.07);color:var(--ink)">${l.leadRating||'MQL'}</span>
+            </div>
+            <div class="modal-title">${l.name}</div>
+            <div style="font-size:12px;color:var(--s500);margin-top:2px">${l.title} · ${l.company}</div>
+          </div>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+
+          <!-- STATUS ROW -->
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+            ${statusPill(l.status)}
+            <span class="src-pill ${srcClass(l.source)}">${memberStatusIcon} ${l.memberStatus||l.source}</span>
+            <span class="src-pill ${srcClass(l.source)}" style="opacity:.75">${l.source}</span>
+
+          </div>
+
+          <!-- CONTACT INFO -->
+          <div class="modal-section">
+            <div class="modal-section-hd">Contact Information</div>
+            <div class="field-grid">
+              <div class="field">
+                <div class="field-lbl">Email</div>
+                <div class="field-val" style="font-size:12px">
+                  <a href="mailto:${l.email||''}" style="color:var(--b600)">${l.email||'—'}</a>
+                </div>
+              </div>
+              <div class="field">
+                <div class="field-lbl">Business Phone</div>
+                <div class="field-val" style="font-size:12px">
+                  <a href="tel:${(l.phone||'').replace(/\s/g,'')}" style="color:var(--s800)">${l.phone||'—'}</a>
+                </div>
+              </div>
+              <div class="field">
+                <div class="field-lbl">State</div>
+                <div class="field-val">${l.state||'—'}</div>
+              </div>
+              <div class="field">
+                <div class="field-lbl">Parent Account</div>
+                <div class="field-val" style="font-size:12px">${l.parentAccount||l.company}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LEAD DETAILS -->
+          <div class="modal-section">
+            <div class="modal-section-hd">Lead Details</div>
+            <div class="field-grid">
+              <div class="field">
+                <div class="field-lbl">Product Interest</div>
+                <div class="field-val">${l.product}</div>
+              </div>
+              <div class="field">
+                <div class="field-lbl">Most Recent BU</div>
+                <div class="field-val">
+                  <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 8px;border-radius:8px;background:${buBg[l.mostRecentBU]||'var(--s100)'};color:${buColor[l.mostRecentBU]||'var(--s600)'}">${l.mostRecentBU||'—'}</span>
+                </div>
+              </div>
+              <div class="field">
+                <div class="field-lbl">Member Status</div>
+                <div class="field-val">${memberStatusIcon} ${l.memberStatus||'—'}</div>
+              </div>
+              <div class="field">
+                <div class="field-lbl">Territory</div>
+                <div class="field-val" style="font-family:'DM Mono',monospace;font-size:11px">${l.territory||'—'}</div>
+              </div>
+              <div class="field" style="border-color:${slaBdr};background:${slaBg}">
+                <div class="field-lbl">SLA</div>
+                <div class="field-val" style="color:${slaColor}">${slaVal}</div>
+              </div>
+              <div class="field">
+                <div class="field-lbl">Account Executive</div>
+                <div class="field-val" style="display:flex;align-items:center;gap:6px">${aeBubble(l.ae)}<span>${l.ae}</span></div>
+              </div>
+              <div class="field">
+                <div class="field-lbl">Lead Source</div>
+                <div class="field-val"><span class="src-pill ${srcClass(l.source)}">${l.source}</span></div>
+              </div>
+              <div class="field">
+                <div class="field-lbl">Received</div>
+                <div class="field-val">${l.received}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CAMPAIGN -->
+          <div class="modal-section">
+            <div class="modal-section-hd">Campaign</div>
+            <div style="padding:10px 13px;background:var(--s50);border:1px solid var(--s200);border-radius:8px;font-size:11px;font-family:'DM Mono',monospace;color:var(--s600);word-break:break-all">${l.campaign}</div>
+          </div>
+
+          ${l.respondedMsg ? `
+          <div class="modal-section">
+            <div class="modal-section-hd">Reply from Lead</div>
+            <div style="padding:12px 14px;background:var(--b50);border:1px solid rgba(59,130,246,.2);border-left:3px solid var(--b500);border-radius:0 8px 8px 0;font-size:12px;color:var(--s700);line-height:1.6;font-style:italic">"${l.respondedMsg}"</div>
+          </div>` : ''}
+
+          ${l.meetingDate ? `
+          <div class="modal-section">
+            <div class="modal-section-hd">Meeting Booked</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--g50);border:1px solid rgba(22,163,74,.2);border-radius:8px">
+              <span style="font-size:20px">📅</span>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--g600)">${l.meetingDate}</div>
+                <div style="font-size:11px;color:var(--s500);margin-top:2px">Discovery / demo call confirmed</div>
+              </div>
+            </div>
+          </div>` : ''}
+
+          ${l.deadReason ? `
+          <div class="modal-section">
+            <div class="modal-section-hd">Reason Closed</div>
+            <div style="padding:10px 13px;background:var(--s50);border:1px solid var(--s200);border-radius:8px;font-size:12px;color:var(--s600)">${l.deadReason}</div>
+          </div>` : ''}
+
+          <div class="modal-section">
+            <div class="modal-section-hd">Notes</div>
+            <div style="padding:13px 15px;background:var(--s50);border:1px solid var(--s200);border-left:3px solid var(--ink);border-radius:0 8px 8px 0;font-size:12px;color:var(--s700);line-height:1.65">${l.notes}</div>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            ${l.status === 'critical' || l.status === 'open' ? `
+              <a href="mailto:${l.email||''}" class="btn btn-g btn-sm">✉ Email</a>
+              <a href="tel:${(l.phone||'').replace(/\s/g,'')}" class="btn btn-g btn-sm">📞 Call</a>
+              <button class="btn btn-p btn-sm" onclick="closeModal()">📝 Log Outreach</button>
+            ` : ''}
+            ${l.status === 'responded' ? `<button class="btn btn-p btn-sm" onclick="closeModal()">📅 Book Meeting</button>` : ''}
+            <button class="btn btn-g btn-sm" onclick="closeModal()">✎ Edit</button>
+            <button class="btn btn-g btn-sm" onclick="closeModal()">→ Convert to Opty</button>
+            <button class="btn btn-g btn-sm" style="margin-left:auto;color:var(--s400)" onclick="closeModal()">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>`;
+}
+
+function closeModal() { document.getElementById('modal-root').innerHTML = ''; }
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+renderTable();
+renderSLAPanel();
+renderSourceBreakdown();
+</script>
+</body>
+</html>
