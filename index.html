@@ -3,14 +3,246 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Command Center — BDR Sales CRM</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<title>Command Center — ServiceNow BDR</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-</head>
-<body data-page="home">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+:root{
+  --ink:#032D42;--ink-nav:#01161f;--ink-mid:#043d5a;
+  --wasabi:#63DF4E;--wdk:#4ab83a;
+  --white:#fff;--bg:#f1f5f9;
+  --s50:#f8fafc;--s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;
+  --s400:#94a3b8;--s500:#64748b;--s600:#475569;--s700:#334155;
+  --s800:#1e293b;--s900:#0f172a;
+  --b50:#eff6ff;--b100:#dbeafe;--b500:#3b82f6;--b600:#2563eb;
+  --g50:#f0fdf4;--g100:#dcfce7;--g500:#22c55e;--g600:#16a34a;
+  --a50:#fffbeb;--a100:#fef3c7;--a500:#f59e0b;--a600:#d97706;
+  --r50:#fff1f2;--r100:#ffe4e6;--r500:#ef4444;--r600:#dc2626;
+  --p50:#faf5ff;--p500:#a855f7;--p600:#9333ea;
+  --sh-xs:0 1px 2px rgba(0,0,0,.05);
+  --sh-sm:0 1px 3px rgba(0,0,0,.10),0 1px 2px rgba(0,0,0,.06);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--s800);font-size:13px;line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--s300);border-radius:2px;}
 
-<!-- ════ TOP NAV ════ -->
+/* NAV */
+.gnav{height:44px;background:var(--ink-nav);display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:300;border-bottom:1px solid rgba(255,255,255,.06);}
+.gnav-logo{display:flex;align-items:center;padding:0 14px;height:44px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.gnav-tabs{display:flex;align-items:center;}
+.gnav-tab{display:flex;align-items:center;height:44px;padding:0 13px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.gnav-tab:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);}
+.gnav-pill-wrap{flex:1;display:flex;justify-content:center;}
+.gnav-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);cursor:pointer;}
+.gnav-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--wasabi);}
+.gnav-r{display:flex;align-items:center;gap:2px;padding:0 10px;}
+.gnav-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:rgba(255,255,255,.45);cursor:pointer;font-size:13px;border:none;background:transparent;}
+.gnav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
+.gnav-av{width:28px;height:28px;background:var(--wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ink);cursor:pointer;margin-left:4px;}
+
+/* SIDEBAR */
+.sbar{position:fixed;top:44px;left:0;bottom:0;width:180px;background:#0d1f2b;border-right:1px solid rgba(255,255,255,.05);z-index:200;display:flex;flex-direction:column;overflow-y:auto;}
+.sbar::-webkit-scrollbar{width:0;}
+.sbar-sec{padding:10px 0 4px;}
+.sbar-lbl{font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;}
+.sbar-item{display:flex;align-items:center;gap:9px;padding:7px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:.12s;text-decoration:none;}
+.sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.sbar-item.on{color:var(--wasabi);border-left-color:var(--wasabi);background:rgba(99,223,78,.06);font-weight:500;}
+.sbar-ic{width:16px;text-align:center;font-size:14px;flex-shrink:0;}
+.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);}
+.sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
+.sdiv{height:1px;background:rgba(255,255,255,.06);margin:5px 10px;}
+.sbar-footer{padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);margin-top:auto;}
+
+/* LAYOUT */
+.main{margin-top:44px;margin-left:180px;min-height:calc(100vh - 44px);display:flex;flex-direction:column;}
+.page-hdr{background:var(--white);border-bottom:1px solid var(--s200);padding:18px 24px 0;position:sticky;top:44px;z-index:100;}
+.phdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.phdr-date{font-size:11px;color:var(--s400);margin-bottom:2px;}
+.phdr-name{font-size:22px;font-weight:700;color:var(--s900);letter-spacing:-.02em;}
+.phdr-sub{font-size:12px;color:var(--s500);}
+.phdr-acts{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;transition:.12s;white-space:nowrap;text-decoration:none;}
+.btn-g{background:transparent;color:var(--s600);border-color:var(--s200);}
+.btn-g:hover{background:var(--s50);border-color:var(--s300);}
+.btn-p{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.btn-p:hover{background:var(--ink-mid);}
+.btn-w{background:var(--wasabi);color:var(--ink);border-color:var(--wasabi);font-weight:600;}
+.btn-w:hover{background:var(--wdk);}
+.btn-sm{font-size:11px;padding:5px 11px;}
+.btn-xs{font-size:10px;padding:3px 8px;}
+
+/* STAT CARDS */
+.stat-row{display:flex;gap:10px;margin-bottom:12px;}
+.stat-card{flex:1;background:var(--white);border:1px solid var(--s200);border-radius:10px;padding:12px 14px;cursor:pointer;transition:.12s;box-shadow:var(--sh-xs);text-decoration:none;display:block;color:inherit;}
+.stat-card:hover{box-shadow:var(--sh-sm);border-color:var(--s300);}
+.stat-lbl{font-size:11px;color:var(--s500);margin-bottom:3px;font-weight:500;}
+.stat-val{font-size:22px;font-weight:700;color:var(--s900);line-height:1;margin-bottom:3px;font-family:'DM Mono',monospace;}
+.stat-val.red{color:var(--r600);}
+.stat-d{font-size:11px;color:var(--s400);}
+.du{color:var(--g600);font-weight:600;}
+.dw{color:var(--a600);font-weight:600;font-size:10px;}
+
+/* SINCE STRIP */
+.since{background:var(--s50);border:1px solid var(--s200);border-radius:8px;padding:7px 14px;font-size:11px;color:var(--s500);margin-bottom:12px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.sr{color:var(--r600);font-weight:600;}
+.sa{color:var(--a600);font-weight:600;}
+.sg{color:var(--g600);font-weight:600;}
+.ss{color:var(--s300);}
+
+/* PAGE TABS */
+.ptabs{display:flex;align-items:center;border-top:1px solid var(--s200);margin:0 -24px;padding:0 24px;overflow-x:auto;}
+.ptabs::-webkit-scrollbar{height:0;}
+.ptab{display:flex;align-items:center;gap:5px;padding:10px 14px;font-size:13px;font-weight:500;color:var(--s500);border-bottom:2px solid transparent;white-space:nowrap;transition:.1s;text-decoration:none;cursor:pointer;}
+.ptab:hover{color:var(--s700);}
+.ptab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.ptab-ct{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
+.ptab.on .ptab-ct{background:var(--ink);color:var(--white);}
+
+/* BODY LAYOUT */
+.page-body{display:flex;flex:1;}
+.body-main{flex:1;padding:16px 20px 48px;display:flex;flex-direction:column;gap:14px;min-width:0;}
+.body-side{width:292px;flex-shrink:0;border-left:1px solid var(--s200);background:var(--white);padding:14px 15px;display:flex;flex-direction:column;gap:11px;overflow-y:auto;max-height:calc(100vh - 200px);position:sticky;top:200px;align-self:flex-start;}
+
+/* CARD */
+.card{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);}
+
+/* AI BRIEF */
+.ai-brief{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);}
+.ai-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--s100);cursor:pointer;user-select:none;transition:.1s;}
+.ai-hdr:hover{background:var(--s50);}
+.ai-lbl{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--s700);}
+.ai-meta{font-size:10px;color:var(--s400);font-weight:400;margin-left:2px;}
+.ai-pulse{width:7px;height:7px;background:var(--wasabi);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.8);}}
+.ai-coll{overflow:hidden;transition:max-height .3s ease;}
+.ai-body{padding:14px;}
+.ai-snap{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--s400);margin-bottom:7px;}
+.ai-txt{font-size:13px;color:var(--s700);line-height:1.7;}
+.ai-txt strong{color:var(--s900);}
+.ai-txt .ar{color:var(--r600);font-weight:600;}
+.ai-foot{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-top:1px solid var(--s100);background:var(--s50);}
+.ai-foot-m{font-size:10px;color:var(--s400);}
+
+/* TOP OF MIND */
+.tom{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);}
+.tom-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--s100);}
+.tom-toolbar{display:flex;align-items:center;gap:2px;padding:5px 10px;background:var(--s50);border-bottom:1px solid var(--s100);}
+.tom-sel{font-size:11px;padding:2px 5px;border:1px solid var(--s200);border-radius:3px;background:var(--white);color:var(--s600);font-family:inherit;cursor:pointer;}
+.tom-tb{width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:3px;border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:700;color:var(--s500);}
+.tom-tb:hover{background:var(--s200);}
+.tom-tdiv{width:1px;height:14px;background:var(--s200);margin:0 2px;}
+.tom-note{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--s50);transition:.1s;}
+.tom-note:hover{background:var(--s50);}
+.tom-note:last-child{border-bottom:none;}
+.tom-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--white);flex-shrink:0;margin-top:1px;}
+.tom-bd{flex:1;}
+.tom-name{font-size:12px;font-weight:600;color:var(--s800);margin-bottom:2px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.tom-tg{font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px;}
+.tg-r{background:var(--r50);color:var(--r600);}
+.tg-a{background:var(--a50);color:var(--a600);}
+.tg-g{background:var(--g50);color:var(--g600);}
+.tom-ts{font-size:10px;color:var(--s400);}
+.tom-txt{font-size:12px;color:var(--s600);line-height:1.55;}
+.tom-sub{font-size:10px;color:var(--s400);margin-top:3px;}
+.tom-x{font-size:13px;color:var(--s300);background:none;border:none;cursor:pointer;flex-shrink:0;transition:.1s;padding:0 2px;}
+.tom-x:hover{color:var(--s600);}
+
+/* REC ACTIONS */
+.rec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.rec-lbl{font-size:13px;font-weight:700;color:var(--s700);display:flex;align-items:center;gap:6px;}
+.rec-lbl-m{font-size:10px;color:var(--s400);font-weight:400;}
+.rec-filters{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+.fl{font-size:11px;color:var(--s500);}
+.fchip{display:inline-flex;align-items:center;gap:4px;font-family:inherit;font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;border:1px solid var(--s200);background:var(--white);color:var(--s600);cursor:pointer;}
+.fchip:hover{border-color:var(--s300);background:var(--s50);}
+.rec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.rec-card{background:var(--white);border:1px solid var(--s200);border-radius:10px;padding:13px;box-shadow:var(--sh-xs);cursor:pointer;transition:.12s;display:flex;flex-direction:column;gap:7px;}
+.rec-card:hover{box-shadow:var(--sh-sm);border-color:var(--s300);}
+.rc-title{font-size:12px;font-weight:600;color:var(--s800);line-height:1.3;}
+.rc-sub{font-size:11px;color:var(--s500);line-height:1.4;flex:1;}
+.rc-opty{font-size:11px;color:var(--b600);}
+.rc-dates{display:flex;gap:10px;}
+.rc-di{display:flex;flex-direction:column;gap:1px;}
+.rc-dl{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--s400);}
+.rc-dv{font-size:11px;font-weight:600;color:var(--r600);}
+.rc-cta{width:100%;font-family:inherit;font-size:11px;font-weight:600;padding:6px;border-radius:6px;border:1px solid var(--s200);background:var(--s50);color:var(--s700);cursor:pointer;transition:.1s;}
+.rc-cta:hover,.rc-cta.pri{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.rec-dots{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:4px;}
+.rdot{width:7px;height:7px;border-radius:50%;background:var(--s300);cursor:pointer;}
+.rdot.on{background:var(--ink);}
+
+/* GAUGES */
+.prog-section{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);}
+.prog-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--s100);}
+.prog-hl{display:flex;align-items:center;gap:8px;}
+.prog-lbl{font-size:12px;font-weight:700;color:var(--s700);}
+.prog-m{font-size:10px;color:var(--s400);}
+.prog-ctrls{display:flex;align-items:center;gap:6px;}
+.prog-sel{font-family:inherit;font-size:11px;padding:3px 8px;border:1px solid var(--s200);border-radius:4px;background:var(--white);color:var(--s600);cursor:pointer;}
+.prog-apply{font-family:inherit;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;border:none;background:var(--ink);color:var(--white);cursor:pointer;}
+.gauges-row{display:grid;grid-template-columns:repeat(4,1fr);}
+.gauge-item{padding:14px 10px;border-right:1px solid var(--s100);display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:.1s;}
+.gauge-item:hover{background:var(--s50);}
+.gauge-item:last-child{border-right:none;}
+.gauge-title{font-size:11px;font-weight:600;color:var(--s700);text-align:center;line-height:1.35;}
+.gauge-wrap{position:relative;width:100px;height:60px;}
+.gauge-svg{width:100px;height:60px;}
+.gauge-val{position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-size:18px;font-weight:700;font-family:'DM Mono',monospace;line-height:1;}
+.gauge-target{font-size:10px;color:var(--s400);}
+.gauge-cta{font-family:inherit;font-size:10px;font-weight:600;padding:4px 10px;border-radius:4px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:4px;transition:.1s;}
+.gauge-cta:hover{background:var(--ink);color:var(--white);}
+
+/* RIGHT SIDEBAR */
+.side-lbl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--s400);margin-bottom:6px;display:block;}
+.side-card{background:var(--s50);border:1px solid var(--s200);border-radius:8px;padding:10px 11px;}
+.sc-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.sc-title{font-size:11px;font-weight:600;color:var(--s700);}
+.sc-link{font-size:11px;color:var(--b600);cursor:pointer;text-decoration:none;}
+.sc-link:hover{text-decoration:underline;}
+.si{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid var(--s200);}
+.si:last-child{border-bottom:none;}
+.si-name{font-size:12px;color:var(--b600);font-weight:500;cursor:pointer;line-height:1.3;}
+.si-name:hover{text-decoration:underline;}
+.si-co{font-size:10px;color:var(--s500);}
+.si-r{font-size:10px;font-weight:700;color:var(--r600);white-space:nowrap;padding-top:2px;}
+.si-a{font-size:10px;font-weight:700;color:var(--a600);white-space:nowrap;padding-top:2px;}
+.si-g{font-size:10px;font-weight:700;color:var(--g600);white-space:nowrap;padding-top:2px;}
+.si-s{font-size:10px;font-weight:700;color:var(--s500);white-space:nowrap;padding-top:2px;}
+/* side tabs */
+.stabs{display:flex;border-bottom:1px solid var(--s200);margin-bottom:7px;}
+.stab{font-size:11px;font-weight:500;padding:4px 8px;color:var(--s400);cursor:pointer;border-bottom:2px solid transparent;transition:.1s;}
+.stab.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:600;}
+.sact{font-size:11px;color:var(--s600);padding:4px 0;border-bottom:1px solid var(--s100);line-height:1.45;}
+.sact:last-child{border-bottom:none;}
+.sact strong{color:var(--s800);}
+/* news */
+.nfeed{background:var(--white);border:1px solid var(--s200);border-radius:8px;overflow:hidden;}
+.ni{padding:9px 11px;border-bottom:1px solid var(--s100);cursor:pointer;transition:.1s;}
+.ni:hover{background:var(--s50);}
+.ni:last-child{border-bottom:none;}
+.ni-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.ntag{font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em;}
+.ntag.promo{background:rgba(99,223,78,.12);color:#2d7a1a;}
+.ntag.breach{background:var(--r50);color:var(--r600);}
+.nmeta{font-size:10px;color:var(--s400);}
+.ntitle{font-size:12px;font-weight:600;color:var(--s800);line-height:1.3;margin-bottom:3px;}
+.ndesc{font-size:11px;color:var(--s500);line-height:1.4;}
+.nai{font-family:inherit;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;border:1px solid var(--s200);background:var(--s50);color:var(--s600);cursor:pointer;margin-top:5px;display:inline-flex;align-items:center;gap:3px;}
+.nai:hover{background:var(--ink);color:var(--white);border-color:var(--ink);}
+
+/* FADE */
+.fu{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
 <nav class="gnav">
   <div class="gnav-logo">
     <svg xmlns="http://www.w3.org/2000/svg" width="108" height="17" viewBox="0 0 132 20">
@@ -31,48 +263,47 @@
     <span class="gnav-tab">Favorites</span>
     <span class="gnav-tab">History</span>
     <span class="gnav-tab">Workspaces</span>
-    <span class="gnav-tab" style="padding:0 10px;">⋮</span>
+    <span class="gnav-tab" style="padding:0 10px">⋮</span>
   </div>
   <div class="gnav-pill-wrap">
     <div class="gnav-pill"><div class="gnav-pill-dot"></div>Sales CRM BDR Landing Page ⌄</div>
   </div>
   <div class="gnav-r">
-    <button class="gnav-btn" title="Outreach Center" onclick="window.location='outreach-center.html'">🔗</button>
+    <button class="gnav-btn" onclick="window.location='outreach-center.html'" title="Outreach Center">🔗</button>
     <button class="gnav-btn">＋</button>
     <button class="gnav-btn">🔔</button>
     <div class="gnav-av">JR</div>
   </div>
 </nav>
 
-<!-- ════ SIDEBAR ════ -->
+<!-- SIDEBAR -->
 <aside class="sbar">
   <div class="sbar-sec">
-    <div class="sbar-lbl">My Work</div>
-    <a href="index.html"           class="sbar-item active"><span class="sbar-ic">⌂</span>Command Center</a>
+    <span class="sbar-lbl">My Work</span>
+    <a href="index.html"           class="sbar-item on"><span class="sbar-ic">⌂</span>Command Center</a>
     <a href="outreach-center.html" class="sbar-item"><span class="sbar-ic">📋</span>Workbench</a>
-    <a href="buying-groups.html"   class="sbar-item"><span class="sbar-ic">🎯</span>Buying Groups<span class="sbar-badge">12</span></a>
-    <a href="leads.html"           class="sbar-item"><span class="sbar-ic">👤</span>Leads<span class="sbar-badge red">39</span></a>
-    <a href="#"                    class="sbar-item"><span class="sbar-ic">📅</span>Tasks<span class="sbar-badge red">17</span></a>
+    <a href="buying-groups.html"   class="sbar-item"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"           class="sbar-item"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#"                    class="sbar-item"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
   </div>
-  <div class="sbar-div"></div>
+  <div class="sdiv"></div>
   <div class="sbar-sec">
-    <div class="sbar-lbl">Customers</div>
-    <a href="#"                    class="sbar-item"><span class="sbar-ic">🏢</span>Accounts<span class="sbar-badge">340</span></a>
+    <span class="sbar-lbl">Customers</span>
+    <a href="#"                    class="sbar-item"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
     <a href="#"                    class="sbar-item"><span class="sbar-ic">👥</span>Contacts</a>
     <a href="opportunities.html"   class="sbar-item"><span class="sbar-ic">💼</span>Opportunities</a>
   </div>
-  <div class="sbar-div"></div>
+  <div class="sdiv"></div>
   <div class="sbar-sec">
-    <div class="sbar-lbl">Marketing</div>
-    <a href="#"                    class="sbar-item"><span class="sbar-ic">📣</span>Campaigns<span class="sbar-badge">5</span></a>
+    <span class="sbar-lbl">Marketing</span>
+    <a href="#"                    class="sbar-item"><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
     <a href="#"                    class="sbar-item"><span class="sbar-ic">📊</span>Reports</a>
   </div>
   <div class="sbar-footer">ServiceNow Confidential</div>
 </aside>
 
+<!-- MAIN -->
 <div class="main">
-
-  <!-- ════ PAGE HEADER ════ -->
   <div class="page-hdr">
 
     <div class="phdr-top">
@@ -81,174 +312,153 @@
         <div class="phdr-name">Good morning, Jacob!</div>
         <div class="phdr-sub">Commercial Illinois &amp; Midwest · Global Business Acceleration</div>
       </div>
-      <div class="phdr-actions">
-        <a href="#" class="btn btn-ghost btn-sm">📊 Weekly Recap</a>
-        <a href="#" class="btn btn-primary btn-sm">🤖 AI Sales Coach ↗</a>
+      <div class="phdr-acts">
+        <a href="#" class="btn btn-g btn-sm">📊 Weekly Recap</a>
+        <a href="#" class="btn btn-p btn-sm">🤖 AI Sales Coach ↗</a>
       </div>
     </div>
 
-    <!-- Stat Cards -->
+    <!-- STAT CARDS -->
     <div class="stat-row">
       <div class="stat-card">
-        <div class="stat-label">Pipeline (QTD)</div>
+        <div class="stat-lbl">Pipeline (QTD)</div>
         <div class="stat-val">$2.4M</div>
-        <div class="stat-delta"><span class="delta-up">↑ $340K this week</span></div>
+        <div class="stat-d"><span class="du">↑ $340K this week</span></div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Meetings</div>
+        <div class="stat-lbl">Meetings</div>
         <div class="stat-val">16</div>
-        <div class="stat-delta"><span class="delta-up">↑ 2 this week</span></div>
+        <div class="stat-d"><span class="du">↑ 2 this week</span></div>
       </div>
-      <a href="leads.html" class="stat-card" style="text-decoration:none;color:inherit;">
-        <div class="stat-label">Open SLA Leads</div>
+      <a href="leads.html" class="stat-card">
+        <div class="stat-lbl">Open SLA Leads</div>
         <div class="stat-val red">39</div>
-        <div class="stat-delta"><span class="delta-warn">⚠ 7 SLA Critical</span></div>
+        <div class="stat-d"><span class="dw">⚠ 7 SLA Critical</span></div>
       </a>
-      <a href="buying-groups.html" class="stat-card" style="text-decoration:none;color:inherit;">
-        <div class="stat-label">Active Buying Groups</div>
+      <a href="buying-groups.html" class="stat-card">
+        <div class="stat-lbl">Active Buying Groups</div>
         <div class="stat-val">12</div>
-        <div class="stat-delta"><span class="delta-up">↑ 3 New signals</span></div>
+        <div class="stat-d"><span class="du">↑ 3 New signals</span></div>
       </a>
       <div class="stat-card">
-        <div class="stat-label">Tasks Due Today</div>
+        <div class="stat-lbl">Tasks Due Today</div>
         <div class="stat-val">100</div>
-        <div class="stat-delta" style="color:var(--s400);">✉ 30 · ☎ 50 · 20 Other</div>
+        <div class="stat-d" style="color:var(--s400)">✉ 30 · ☎ 50 · 20 Other</div>
       </div>
     </div>
 
-    <!-- Since Yesterday -->
-    <div class="since-strip">
-      <span style="color:var(--s400);">Since Yesterday ·</span>
-      <span class="since-r">⚠ 8 SLA Critical Leads</span>
-      <span class="since-sep">·</span>
-      <span class="since-a">3 BG Signals Overnight</span>
-      <span class="since-sep">·</span>
-      <span class="since-g">2 Opty Stage Movements</span>
-      <span class="since-sep">·</span>
+    <!-- SINCE YESTERDAY -->
+    <div class="since">
+      <span style="color:var(--s400)">Since Yesterday ·</span>
+      <span class="sr">⚠ 8 SLA Critical Leads</span>
+      <span class="ss">·</span>
+      <span class="sa">3 BG Signals Overnight</span>
+      <span class="ss">·</span>
+      <span class="sg">2 Opty Stage Movements</span>
+      <span class="ss">·</span>
       <span>100 Tasks Due Today</span>
     </div>
 
-    <!-- Page Tabs (other tabs = links to other pages) -->
-    <div class="page-tabs">
-      <span class="ptab active">Today</span>
-      <a href="opportunities.html" class="ptab">Opportunities <span class="ptab-ct">5</span></a>
-      <a href="buying-groups.html" class="ptab">Buying Groups <span class="ptab-ct">12</span></a>
-      <a href="ae-alignment.html"  class="ptab">AE Alignment</a>
+    <!-- PAGE TABS -->
+    <div class="ptabs">
+      <span class="ptab on">Today</span>
+      <a href="opportunities.html"    class="ptab">Opportunities <span class="ptab-ct">5</span></a>
+      <a href="buying-groups.html"    class="ptab">Buying Groups <span class="ptab-ct">12</span></a>
+      <a href="ae-alignment.html"     class="ptab">AE Alignment</a>
       <a href="book-of-business.html" class="ptab">Book of Business</a>
     </div>
 
-  </div><!-- end page-hdr -->
+  </div><!-- /page-hdr -->
 
-  <!-- ════ PAGE BODY ════ -->
   <div class="page-body">
 
-    <!-- ─── MAIN COLUMN ─── -->
+    <!-- MAIN COLUMN -->
     <div class="body-main">
 
       <!-- AI DAILY BRIEF -->
-      <div class="ai-brief fade-up">
-        <div class="ai-brief-hdr" onclick="toggleBrief()">
-          <div class="ai-brief-label">
+      <div class="ai-brief fu">
+        <div class="ai-hdr" onclick="toggleBrief()">
+          <div class="ai-lbl">
             <div class="ai-pulse"></div>
             ✦ AI Daily Brief
-            <span class="ai-brief-meta">Last refreshed 1m ago</span>
+            <span class="ai-meta">Last refreshed 1m ago</span>
           </div>
-          <div style="display:flex;align-items:center;gap:7px;">
-            <button onclick="event.stopPropagation()" class="btn btn-ghost btn-xs">↻ Refresh</button>
-            <span id="briefChev" style="font-size:13px;color:var(--s400);">▲</span>
+          <div style="display:flex;align-items:center;gap:7px">
+            <button onclick="event.stopPropagation()" class="btn btn-g btn-xs">↻ Refresh</button>
+            <span id="briefChev" style="font-size:13px;color:var(--s400)">▲</span>
           </div>
         </div>
-        <div id="briefBody" class="ai-brief-coll">
-          <div class="ai-brief-body">
+        <div id="briefBody" class="ai-coll">
+          <div class="ai-body">
             <div class="ai-snap">Snapshot</div>
-            <div class="ai-text">
+            <div class="ai-txt">
               You have,<br>
-              <span class="r">8 SLA Critical Leads</span> — Brandon Joyce (Sub-Zero, 6h) and Dylan Blumenberg (FTI, 9h) are highest priority.<br>
-              <span class="r">3 BG had new activity overnight</span> — <strong>$120,000</strong> in new signals tracked.<br>
+              <span class="ar">8 SLA Critical Leads</span> — Brandon Joyce (Sub-Zero, 6h) and Dylan Blumenberg (FTI, 9h) are highest priority.<br>
+              <span class="ar">3 BG had new activity overnight</span> — <strong>$120,000</strong> in new signals tracked.<br>
               <strong>Crash Champion Opty 6994 moved Stage 2 → Stage 3</strong> by Brian Disher.<br>
-              <span class="r">100 Tasks Due:</span> 30 calls for HR campaign Bluecross + FTI, 50 emails for IT push at Sub Zero.
+              <span class="ar">100 Tasks Due:</span> 30 calls for HR campaign Bluecross + FTI, 50 emails for IT push at Sub Zero.
             </div>
           </div>
-          <div class="ai-brief-foot">
-            <div class="ai-brief-foot-meta">Generated by Now Assist. Check for accuracy.</div>
-            <div style="display:flex;gap:6px;">
-              <button class="btn btn-ghost btn-xs">↻ Refresh</button>
-              <button class="btn btn-primary btn-xs">✓ Ask Now Assist ▼</button>
+          <div class="ai-foot">
+            <div class="ai-foot-m">Generated by Now Assist. Check for accuracy.</div>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-g btn-xs">↻ Refresh</button>
+              <button class="btn btn-p btn-xs">✓ Ask Now Assist ▼</button>
             </div>
           </div>
         </div>
       </div>
 
       <!-- TOP OF MIND -->
-      <div class="tom-card fade-up">
+      <div class="tom fu">
         <div class="tom-hdr">
-          <div style="display:flex;align-items:center;gap:7px;">
-            <span style="font-size:15px;">📌</span>
-            <span style="font-size:12px;font-weight:600;color:var(--s700);">Top of Mind</span>
-            <span style="font-size:11px;color:var(--s400);">Things to remember before you act</span>
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="font-size:15px">📌</span>
+            <span style="font-size:12px;font-weight:600;color:var(--s700)">Top of Mind</span>
+            <span style="font-size:11px;color:var(--s400)">Things to remember before you act</span>
           </div>
-          <button class="btn btn-wasabi btn-xs" onclick="addTOM()">+ Add Note</button>
+          <button class="btn btn-w btn-xs" onclick="addTOM()">+ Add Note</button>
         </div>
-
-        <!-- Rich text toolbar (decorative) -->
         <div class="tom-toolbar">
-          <select class="tom-tool-sel"><option>Verdana</option><option>DM Sans</option></select>
-          <select class="tom-tool-sel" style="width:46px;"><option>16pt</option><option>12pt</option><option>14pt</option></select>
-          <div class="tom-tool-div"></div>
-          <button class="tom-tool-btn" style="font-weight:700;">B</button>
-          <button class="tom-tool-btn" style="font-style:italic;">I</button>
-          <button class="tom-tool-btn" style="text-decoration:underline;">U</button>
-          <button class="tom-tool-btn" style="text-decoration:line-through;">S</button>
-          <div class="tom-tool-div"></div>
-          <button class="tom-tool-btn">≡</button>
-          <button class="tom-tool-btn">≣</button>
-          <button class="tom-tool-btn">☰</button>
-          <button class="tom-tool-btn">⊡</button>
-          <div class="tom-tool-div"></div>
-          <button class="tom-tool-btn">↩</button>
-          <button class="tom-tool-btn">↪</button>
-          <button class="tom-tool-btn">—</button>
+          <select class="tom-sel"><option>Verdana</option><option>DM Sans</option></select>
+          <select class="tom-sel" style="width:46px"><option>16pt</option><option>12pt</option><option>14pt</option></select>
+          <div class="tom-tdiv"></div>
+          <button class="tom-tb" style="font-weight:700">B</button>
+          <button class="tom-tb" style="font-style:italic">I</button>
+          <button class="tom-tb" style="text-decoration:underline">U</button>
+          <button class="tom-tb" style="text-decoration:line-through">S</button>
+          <div class="tom-tdiv"></div>
+          <button class="tom-tb">≡</button><button class="tom-tb">≣</button><button class="tom-tb">☰</button><button class="tom-tb">⊡</button>
+          <div class="tom-tdiv"></div>
+          <button class="tom-tb">↩</button><button class="tom-tb">↪</button><button class="tom-tb">—</button>
         </div>
-
         <div id="tomList">
 
           <div class="tom-note" id="tom-1">
-            <div class="tom-av" style="background:#7c3aed;">RS</div>
-            <div class="tom-body">
-              <div class="tom-name">
-                FHLBC — Do not prospect
-                <span class="tom-badge tom-badge-r">Do not contact</span>
-                <span class="tom-ts">Riley Scott · Today</span>
-              </div>
-              <div class="tom-text">"Lets take FHLBC off your prospecting list. The platform owner just pinged me about the K26 invite you sent and asked me to filter all outreach through her."</div>
+            <div class="tom-av" style="background:#7c3aed">RS</div>
+            <div class="tom-bd">
+              <div class="tom-name">FHLBC — Do not prospect <span class="tom-tg tg-r">Do not contact</span><span class="tom-ts">Riley Scott · Today</span></div>
+              <div class="tom-txt">"Lets take FHLBC off your prospecting list. The platform owner just pinged me about the K26 invite you sent and asked me to filter all outreach through her."</div>
               <div class="tom-sub">Federal Home Loan Bank of Chicago · All outreach routes through AE only</div>
             </div>
             <button class="tom-x" onclick="dismissTOM('tom-1')">✕</button>
           </div>
 
           <div class="tom-note" id="tom-2">
-            <div class="tom-av" style="background:var(--ink);">TR</div>
-            <div class="tom-body">
-              <div class="tom-name">
-                Echo Global — Hold BDR outreach
-                <span class="tom-badge tom-badge-a">Coordinate first</span>
-                <span class="tom-ts">Tony Riebel · Mar 4</span>
-              </div>
-              <div class="tom-text">Tony called after ITOM Discovery call — Sarah Chen is key champion and he wants to control the outreach cadence.</div>
+            <div class="tom-av" style="background:var(--ink)">TR</div>
+            <div class="tom-bd">
+              <div class="tom-name">Echo Global — Hold BDR outreach <span class="tom-tg tg-a">Coordinate first</span><span class="tom-ts">Tony Riebel · Mar 4</span></div>
+              <div class="tom-txt">Tony called after ITOM Discovery call — Sarah Chen is key champion and he wants to control the outreach cadence.</div>
               <div class="tom-sub">Echo Global Logistics · ITOM AIOps · OPTY 543211</div>
             </div>
             <button class="tom-x" onclick="dismissTOM('tom-2')">✕</button>
           </div>
 
           <div class="tom-note" id="tom-3">
-            <div class="tom-av" style="background:#059669;">BD</div>
-            <div class="tom-body">
-              <div class="tom-name">
-                AIT Worldwide
-                <span class="tom-badge tom-badge-g">Stage 5</span>
-                <span class="tom-ts">Brian Disher · Feb 20</span>
-              </div>
-              <div class="tom-text">Brian asked to pause all BDR activity. Contract negotiations in legal — any unsolicited outreach could disrupt the close.</div>
+            <div class="tom-av" style="background:#059669">BD</div>
+            <div class="tom-bd">
+              <div class="tom-name">AIT Worldwide <span class="tom-tg tg-g">Stage 5</span><span class="tom-ts">Brian Disher · Feb 20</span></div>
+              <div class="tom-txt">Brian asked to pause all BDR activity. Contract negotiations in legal — any unsolicited outreach could disrupt the close.</div>
               <div class="tom-sub">AIT Worldwide Logistics · AI Control Tower · OPTY 543211</div>
             </div>
             <button class="tom-x" onclick="dismissTOM('tom-3')">✕</button>
@@ -258,170 +468,133 @@
       </div>
 
       <!-- RECOMMENDED ACTIONS -->
-      <div class="fade-up">
+      <div class="fu">
         <div class="rec-hdr">
-          <div class="rec-label">
-            Recommended actions ✦
-            <span class="rec-label-meta">Last refreshed 1m ago</span>
-          </div>
-          <a href="#" class="card-action">View all →</a>
+          <div class="rec-lbl">Recommended actions ✦ <span class="rec-lbl-m">Last refreshed 1m ago</span></div>
+          <a href="#" style="font-size:12px;color:var(--b600);font-weight:500">View all →</a>
         </div>
-
         <div class="rec-filters">
-          <span class="filter-label">Filter by</span>
-          <button class="filter-chip">Category ▼</button>
-          <button class="filter-chip">Closing by month ▼</button>
-          <span class="filter-label">Sort by</span>
-          <button class="filter-chip">Recently Viewed ▼</button>
+          <span class="fl">Filter by</span>
+          <button class="fchip">Category ▼</button>
+          <button class="fchip">Closing by month ▼</button>
+          <span class="fl">Sort by</span>
+          <button class="fchip">Recently Viewed ▼</button>
         </div>
-
         <div class="rec-grid">
-          <!-- Card 1 -->
+
           <div class="rec-card">
-            <div class="rec-card-title">Follow-up with Leads</div>
-            <div class="rec-card-sub">SLA nearing expiry for 2 contact us form interactions. 6 hours remain to be compliant.</div>
-            <div class="rec-dates">
-              <div class="rec-date-item">
-                <div class="rec-date-lbl">Status</div>
-                <div class="rec-date-val">Due today</div>
-              </div>
-              <div class="rec-date-item">
-                <div class="rec-date-lbl">Due Date</div>
-                <div class="rec-date-val">2026-04-10</div>
-              </div>
+            <div class="rc-title">Follow-up with Leads</div>
+            <div class="rc-sub">SLA nearing expiry for 2 contact us form interactions. 6 hours remain to be compliant.</div>
+            <div class="rc-dates">
+              <div class="rc-di"><div class="rc-dl">Status</div><div class="rc-dv">Due today</div></div>
+              <div class="rc-di"><div class="rc-dl">Due Date</div><div class="rc-dv">2026-04-10</div></div>
             </div>
-            <div class="rec-card-opty">OPTY-0000456 · Alectri · Implementation Services</div>
-            <button class="rec-cta pri">🤖 Take action</button>
+            <div class="rc-opty">OPTY-0000456 · Alectri</div>
+            <button class="rc-cta pri">🤖 Take action</button>
           </div>
 
-          <!-- Card 2 -->
           <div class="rec-card">
-            <div class="rec-card-title">BDR Meeting for Intuit</div>
-            <div class="rec-card-sub">Your BDR meeting with Intuit's IT buying group is coming soon.</div>
-            <div class="rec-dates">
-              <div class="rec-date-item">
-                <div class="rec-date-lbl">Status</div>
-                <div class="rec-date-val">Due today</div>
-              </div>
-              <div class="rec-date-item">
-                <div class="rec-date-lbl">Due Date</div>
-                <div class="rec-date-val">2026-04-10</div>
-              </div>
+            <div class="rc-title">BDR Meeting for Intuit</div>
+            <div class="rc-sub">Your BDR meeting with Intuit's IT buying group is coming soon.</div>
+            <div class="rc-dates">
+              <div class="rc-di"><div class="rc-dl">Status</div><div class="rc-dv">Due today</div></div>
+              <div class="rc-di"><div class="rc-dl">Due Date</div><div class="rc-dv">2026-04-10</div></div>
             </div>
-            <div class="rec-card-opty">OPTY-0005521 · Intuit</div>
-            <button class="rec-cta pri">🤖 Take action</button>
+            <div class="rc-opty">OPTY-0005521 · Intuit</div>
+            <button class="rc-cta pri">🤖 Take action</button>
           </div>
 
-          <!-- Card 3 -->
           <div class="rec-card">
-            <div class="rec-card-title">10X Genomics — Engagement Surge</div>
-            <div class="rec-card-sub">Surge in digital signals and uptick of 10 points in Engagement Score.</div>
-            <div class="rec-dates">
-              <div class="rec-date-item">
-                <div class="rec-date-lbl">Status</div>
-                <div class="rec-date-val">Due today</div>
-              </div>
-              <div class="rec-date-item">
-                <div class="rec-date-lbl">Due Date</div>
-                <div class="rec-date-val">2026-04-10</div>
-              </div>
+            <div class="rc-title">10X Genomics — Engagement Surge</div>
+            <div class="rc-sub">Surge in digital signals and uptick of 10 points in Engagement Score.</div>
+            <div class="rc-dates">
+              <div class="rc-di"><div class="rc-dl">Status</div><div class="rc-dv">Due today</div></div>
+              <div class="rc-di"><div class="rc-dl">Due Date</div><div class="rc-dv">2026-04-10</div></div>
             </div>
-            <div class="rec-card-opty">OPTY-0005521 · Intuit</div>
-            <a href="buying-groups.html" class="rec-cta" style="text-align:center;display:block;border-color:var(--b100);color:var(--b600);">View Buying Group</a>
+            <div class="rc-opty">OPTY-0005521 · Intuit</div>
+            <button class="rc-cta" style="border-color:var(--b100);color:var(--b600)">View Buying Group</button>
           </div>
 
-          <!-- Card 4 -->
           <div class="rec-card">
-            <div class="rec-card-title">BDR Meeting Prep Required</div>
-            <div class="rec-card-sub">Your BDR meeting is coming soon and requires preparation.</div>
-            <div class="rec-dates">
-              <div class="rec-date-item">
-                <div class="rec-date-lbl">Status</div>
-                <div class="rec-date-val">Due today</div>
-              </div>
-              <div class="rec-date-item">
-                <div class="rec-date-lbl">Due Date</div>
-                <div class="rec-date-val">2026-04-10</div>
-              </div>
+            <div class="rc-title">BDR Meeting Prep Required</div>
+            <div class="rc-sub">Your BDR meeting is coming soon and requires preparation.</div>
+            <div class="rc-dates">
+              <div class="rc-di"><div class="rc-dl">Status</div><div class="rc-dv">Due today</div></div>
+              <div class="rc-di"><div class="rc-dl">Due Date</div><div class="rc-dv">2026-04-10</div></div>
             </div>
-            <div class="rec-card-opty">OPTY-0005521 · Intuit</div>
-            <button class="rec-cta pri">🤖 Take action</button>
+            <div class="rc-opty">OPTY-0005521 · Intuit</div>
+            <button class="rc-cta pri">🤖 Take action</button>
           </div>
+
         </div>
-
         <div class="rec-dots">
-          <div class="rec-dot on"></div>
-          <div class="rec-dot"></div>
-          <div class="rec-dot"></div>
+          <div class="rdot on"></div>
+          <div class="rdot"></div>
+          <div class="rdot"></div>
         </div>
       </div>
 
       <!-- MY PROGRESS -->
-      <div class="prog-section fade-up">
+      <div class="prog-section fu">
         <div class="prog-hdr">
-          <div class="prog-hdr-left">
-            <span class="prog-hdr-label">My Progress</span>
-            <span class="prog-hdr-meta">Last refreshed 1m ago</span>
+          <div class="prog-hl">
+            <span class="prog-lbl">My Progress</span>
+            <span class="prog-m">Last refreshed 1m ago</span>
           </div>
-          <div class="prog-controls">
+          <div class="prog-ctrls">
             <select class="prog-sel"><option>2026</option></select>
             <select class="prog-sel"><option>Q2</option><option>Q1</option><option>Q3</option><option>Q4</option></select>
-            <button style="font-family:inherit;font-size:11px;padding:3px 9px;border-radius:var(--r4);border:1px solid var(--s200);background:var(--white);color:var(--s500);cursor:pointer;">Cancel</button>
+            <button style="font-family:inherit;font-size:11px;padding:3px 9px;border-radius:4px;border:1px solid var(--s200);background:var(--white);color:var(--s500);cursor:pointer">Cancel</button>
             <button class="prog-apply">Apply</button>
           </div>
         </div>
-
         <div class="gauges-row">
 
-          <!-- BG Member Added -->
           <div class="gauge-item">
-            <div class="gauge-title">BG Member Added <span style="color:var(--s400);font-weight:400;cursor:help;" title="% of GBA prioritized buying groups with 1 net new buying group member role added">ⓘ</span></div>
+            <div class="gauge-title">BG Member Added <span style="color:var(--s400);cursor:help" title="% of GBA prioritized buying groups with 1 net new buying group member role added">ⓘ</span></div>
             <div class="gauge-wrap">
               <svg class="gauge-svg" viewBox="0 0 100 60" fill="none">
                 <path d="M10 55 A40 40 0 0 1 90 55" stroke="#e2e8f0" stroke-width="10" stroke-linecap="round" fill="none"/>
                 <path d="M10 55 A40 40 0 0 1 90 55" stroke="#dc2626" stroke-width="10" stroke-linecap="round" fill="none" stroke-dasharray="126" stroke-dashoffset="63"/>
               </svg>
-              <div class="gauge-val" style="color:var(--r600);">50%</div>
+              <div class="gauge-val" style="color:var(--r600)">50%</div>
             </div>
             <div class="gauge-target">Target 80%</div>
             <button class="gauge-cta">🤖 Take action</button>
           </div>
 
-          <!-- Qualified to Stage 2 -->
           <div class="gauge-item">
-            <div class="gauge-title">Qualified to Stage 2 Conv. <span style="color:var(--s400);font-weight:400;cursor:help;">ⓘ</span></div>
+            <div class="gauge-title">Qualified to Stage 2 Conv. <span style="color:var(--s400);cursor:help">ⓘ</span></div>
             <div class="gauge-wrap">
               <svg class="gauge-svg" viewBox="0 0 100 60" fill="none">
                 <path d="M10 55 A40 40 0 0 1 90 55" stroke="#e2e8f0" stroke-width="10" stroke-linecap="round" fill="none"/>
                 <path d="M10 55 A40 40 0 0 1 90 55" stroke="#16a34a" stroke-width="10" stroke-linecap="round" fill="none" stroke-dasharray="126" stroke-dashoffset="28"/>
               </svg>
-              <div class="gauge-val" style="color:var(--g600);">78%</div>
+              <div class="gauge-val" style="color:var(--g600)">78%</div>
             </div>
             <div class="gauge-target">Target 50%</div>
           </div>
 
-          <!-- Progressed to Mature -->
           <div class="gauge-item">
-            <div class="gauge-title">Progressed to Mature <span style="color:var(--s400);font-weight:400;cursor:help;">ⓘ</span></div>
+            <div class="gauge-title">Progressed to Mature <span style="color:var(--s400);cursor:help">ⓘ</span></div>
             <div class="gauge-wrap">
               <svg class="gauge-svg" viewBox="0 0 100 60" fill="none">
                 <path d="M10 55 A40 40 0 0 1 90 55" stroke="#e2e8f0" stroke-width="10" stroke-linecap="round" fill="none"/>
                 <path d="M10 55 A40 40 0 0 1 90 55" stroke="#16a34a" stroke-width="10" stroke-linecap="round" fill="none" stroke-dasharray="126" stroke-dashoffset="44"/>
               </svg>
-              <div class="gauge-val" style="color:var(--g600);">45%</div>
+              <div class="gauge-val" style="color:var(--g600)">45%</div>
             </div>
             <div class="gauge-target">Target 25%</div>
           </div>
 
-          <!-- SLA Attainment -->
           <div class="gauge-item">
-            <div class="gauge-title">Prioritized SLA Attainment <span style="color:var(--s400);font-weight:400;cursor:help;">ⓘ</span></div>
+            <div class="gauge-title">Prioritized SLA Attainment <span style="color:var(--s400);cursor:help">ⓘ</span></div>
             <div class="gauge-wrap">
               <svg class="gauge-svg" viewBox="0 0 100 60" fill="none">
                 <path d="M10 55 A40 40 0 0 1 90 55" stroke="#e2e8f0" stroke-width="10" stroke-linecap="round" fill="none"/>
                 <path d="M10 55 A40 40 0 0 1 90 55" stroke="#d97706" stroke-width="10" stroke-linecap="round" fill="none" stroke-dasharray="126" stroke-dashoffset="15"/>
               </svg>
-              <div class="gauge-val" style="color:var(--a600);">83%</div>
+              <div class="gauge-val" style="color:var(--a600)">83%</div>
             </div>
             <div class="gauge-target">Target 100%</div>
             <button class="gauge-cta">🤖 Take action</button>
@@ -430,214 +603,154 @@
         </div>
       </div>
 
-    </div><!-- end body-main -->
+    </div><!-- /body-main -->
 
-    <!-- ─── RIGHT PANEL ─── -->
+    <!-- RIGHT PANEL -->
     <div class="body-side">
 
-      <!-- SLA Due Today -->
-      <div class="side-lbl">SLA Due Today (6)</div>
+      <span class="side-lbl">SLA Due Today (6)</span>
       <div class="side-card">
-        <div class="side-card-hdr">
-          <span class="side-card-title">SLA Due Today</span>
-          <a href="leads.html" class="side-card-link">View All</a>
+        <div class="sc-hdr">
+          <span class="sc-title">SLA Due Today</span>
+          <a href="leads.html" class="sc-link">View All</a>
         </div>
-        <div class="side-item">
-          <div>
-            <div class="side-name"><a href="lead-detail.html">David Blasdell</a></div>
-            <div class="side-co">Sterling Manufacturing</div>
-          </div>
-          <div class="side-badge red">5h left</div>
+        <div class="si">
+          <div><div class="si-name">David Blasdell</div><div class="si-co">Sterling Manufacturing</div></div>
+          <span class="si-r">5h left</span>
         </div>
-        <div class="side-item">
-          <div>
-            <div class="side-name">Rashmi Jayarama</div>
-            <div class="side-co">NovaTech Systems</div>
-          </div>
-          <div class="side-badge red">6h left</div>
+        <div class="si">
+          <div><div class="si-name">Rashmi Jayarama</div><div class="si-co">NovaTech Systems</div></div>
+          <span class="si-r">6h left</span>
         </div>
-        <div class="side-item">
-          <div>
-            <div class="side-name">Paul Carter</div>
-            <div class="side-co">LumaCore Solutions</div>
-          </div>
-          <div class="side-badge" style="color:var(--a600);">7h left</div>
+        <div class="si">
+          <div><div class="si-name">Paul Carter</div><div class="si-co">LumaCore Solutions</div></div>
+          <span class="si-a">7h left</span>
         </div>
       </div>
 
-      <!-- Activities Due Today -->
       <div class="side-card">
-        <div class="side-card-hdr">
-          <span class="side-card-title">Activities Due Today</span>
-          <a href="#" class="side-card-link">View All</a>
+        <div class="sc-hdr">
+          <span class="sc-title">Activities Due Today</span>
+          <a href="#" class="sc-link">View All</a>
         </div>
-        <div class="side-tabs">
-          <div class="side-tab active">Email (3)</div>
-          <div class="side-tab">Phone Call (12)</div>
-          <div class="side-tab">Tasks (7)</div>
+        <div class="stabs" id="actTabs">
+          <div class="stab on" onclick="switchTab(this,'actTabs')">Email (3)</div>
+          <div class="stab" onclick="switchTab(this,'actTabs')">Phone Call (12)</div>
+          <div class="stab" onclick="switchTab(this,'actTabs')">Tasks (7)</div>
         </div>
-        <div style="display:flex;flex-direction:column;">
-          <div class="side-activity">
-            <strong>David Blasdell</strong><br>
-            Sterling Manufacturing<br>
-            <span style="color:var(--s400);">Opportunity Team Member</span>
-          </div>
-          <div class="side-activity" style="margin-top:6px;">
-            <strong>Rashmi Jayarama</strong><br>
-            NovaTech Systems<br>
-            <span style="color:var(--s400);">Opportunity Task OPTASK0</span>
-          </div>
-        </div>
+        <div class="sact"><strong>David Blasdell</strong><br>Sterling Manufacturing<br><span style="color:var(--s400)">Opportunity Team Member</span></div>
+        <div class="sact" style="margin-top:5px"><strong>Rashmi Jayarama</strong><br>NovaTech Systems<br><span style="color:var(--s400)">Opportunity Task OPTASK0</span></div>
       </div>
 
-      <!-- Meetings This Week -->
       <div class="side-card">
-        <div class="side-card-hdr">
-          <span class="side-card-title">Meetings This Week</span>
-          <a href="#" class="side-card-link">View All</a>
+        <div class="sc-hdr">
+          <span class="sc-title">Meetings This Week</span>
+          <a href="#" class="sc-link">View All</a>
         </div>
-        <div class="side-item">
-          <div>
-            <div class="side-name">David Blasdell</div>
-            <div class="side-co">Sterling Manufacturing</div>
-          </div>
-          <div class="side-badge green">Today 2pm</div>
+        <div class="si">
+          <div><div class="si-name">David Blasdell</div><div class="si-co">Sterling Manufacturing</div></div>
+          <span class="si-g">Today 2pm</span>
         </div>
-        <div class="side-item">
-          <div>
-            <div class="side-name">Rashmi Jayarama</div>
-            <div class="side-co">NovaTech Systems</div>
-          </div>
-          <div class="side-badge green">Today 3pm</div>
+        <div class="si">
+          <div><div class="si-name">Rashmi Jayarama</div><div class="si-co">NovaTech Systems</div></div>
+          <span class="si-g">Today 3pm</span>
         </div>
-        <div class="side-item">
-          <div>
-            <div class="side-name">Paul Carter</div>
-            <div class="side-co">LumaCore Solutions</div>
-          </div>
-          <div class="side-badge" style="color:var(--s500);">Tomorrow 10am</div>
+        <div class="si">
+          <div><div class="si-name">Paul Carter</div><div class="si-co">LumaCore Solutions</div></div>
+          <span class="si-s">Tomorrow 10am</span>
         </div>
       </div>
 
-      <!-- Latest Updates -->
-      <div class="side-lbl" style="margin-top:4px;">Latest Updates</div>
-      <div class="news-feed">
+      <span class="side-lbl" style="margin-top:4px">Latest Updates</span>
+      <div class="nfeed">
 
-        <div class="news-item">
-          <div class="news-tag-row">
-            <span class="news-tag promo">Promotion</span>
-            <span class="news-meta">4hrs ago</span>
-          </div>
-          <div class="news-title">John Smith → CTO at Alectri</div>
-          <div class="news-desc">New decision maker identified. Consider technical outreach.</div>
-          <button class="news-ai-btn">🤖 Ask AI</button>
+        <div class="ni">
+          <div class="ni-top"><span class="ntag promo">Promotion</span><span class="nmeta">4hrs ago</span></div>
+          <div class="ntitle">John Smith → CTO at Alectri</div>
+          <div class="ndesc">New decision maker identified. Consider technical outreach.</div>
+          <button class="nai">🤖 Ask AI</button>
         </div>
 
-        <div class="news-item">
-          <div class="news-tag-row">
-            <span class="news-tag promo">Promotion</span>
-            <span class="news-meta">4hrs ago</span>
-          </div>
-          <div class="news-title">Sarah Chen promoted at Echo Global</div>
-          <div class="news-desc">VP IT promotion. Key champion in ITOM buying group — re-engage.</div>
-          <button class="news-ai-btn">🤖 Ask AI</button>
+        <div class="ni">
+          <div class="ni-top"><span class="ntag promo">Promotion</span><span class="nmeta">4hrs ago</span></div>
+          <div class="ntitle">Sarah Chen promoted at Echo Global</div>
+          <div class="ndesc">VP IT promotion. Key ITOM champion — re-engage now.</div>
+          <button class="nai">🤖 Ask AI</button>
         </div>
 
-        <div class="news-item">
-          <div class="news-tag-row">
-            <span class="news-tag breach">Data Breach</span>
-            <span class="news-meta">2hrs ago</span>
-          </div>
-          <div class="news-title">Pitch Risk based on Data Breach news</div>
-          <div class="news-desc">Automated Threat Detection. Reduce response times with automated workflows for threat detection...</div>
-          <button class="news-ai-btn">🤖 Ask AI</button>
+        <div class="ni">
+          <div class="ni-top"><span class="ntag breach">Data Breach</span><span class="nmeta">2hrs ago</span></div>
+          <div class="ntitle">Pitch Risk based on Data Breach news</div>
+          <div class="ndesc">Automated Threat Detection. Reduce response times with automated workflows...</div>
+          <button class="nai">🤖 Ask AI</button>
         </div>
 
       </div>
 
-    </div><!-- end body-side -->
+    </div><!-- /body-side -->
 
-  </div><!-- end page-body -->
-
-</div><!-- end main -->
+  </div><!-- /page-body -->
+</div><!-- /main -->
 
 <script>
-// ── Inline utilities (no external dependency) ──────────────
-
-// Set today's date
-(function() {
-  const el = document.getElementById('todayDate');
-  if (!el) return;
-  const d = new Date();
-  const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  el.textContent = days[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+// Date
+(function(){
+  var d=new Date(),days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+  months=['January','February','March','April','May','June','July','August','September','October','November','December'],
+  el=document.getElementById('todayDate');
+  if(el)el.textContent=days[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
 })();
 
-// Fade-in all .fade-up elements
-(function() {
-  document.querySelectorAll('.fade-up').forEach(function(el, i) {
-    setTimeout(function() {
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    }, 40 + i * 55);
+// Fade in
+setTimeout(function(){
+  document.querySelectorAll('.fu').forEach(function(el,i){
+    setTimeout(function(){el.style.opacity='1';el.style.transform='translateY(0)';},i*80);
   });
-})();
+},60);
 
-// Side tabs
-document.querySelectorAll('.side-tab').forEach(function(tab) {
-  tab.addEventListener('click', function() {
-    var parent = this.closest('.side-card');
-    if (!parent) return;
-    parent.querySelectorAll('.side-tab').forEach(function(t) { t.classList.remove('active'); });
-    this.classList.add('active');
-  });
-});
-
-// Toggle AI brief
-function toggleBrief() {
-  var body = document.getElementById('briefBody');
-  var chev = document.getElementById('briefChev');
-  if (!body) return;
-  var open = body.style.maxHeight && body.style.maxHeight !== '0px';
-  body.style.maxHeight = open ? '0px' : '2000px';
-  if (chev) chev.textContent = open ? '▼' : '▲';
+// AI brief toggle
+function toggleBrief(){
+  var b=document.getElementById('briefBody'),c=document.getElementById('briefChev');
+  if(!b)return;
+  var open=b.style.maxHeight&&b.style.maxHeight!=='0px';
+  b.style.maxHeight=open?'0px':'2000px';
+  if(c)c.textContent=open?'▼':'▲';
 }
 
-// Dismiss Top of Mind note
-function dismissTOM(id) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  el.style.transition = 'opacity .25s, max-height .3s, padding .3s, margin .3s';
-  el.style.opacity = '0';
-  el.style.maxHeight = el.offsetHeight + 'px';
-  setTimeout(function() {
-    el.style.maxHeight = '0';
-    el.style.overflow = 'hidden';
-    el.style.padding = '0';
-    el.style.margin = '0';
-  }, 30);
-  setTimeout(function() { el.remove(); }, 380);
+// Dismiss TOM note
+function dismissTOM(id){
+  var el=document.getElementById(id);
+  if(!el)return;
+  el.style.transition='opacity .25s,max-height .3s,padding .3s';
+  el.style.opacity='0';
+  el.style.maxHeight=el.offsetHeight+'px';
+  setTimeout(function(){el.style.maxHeight='0';el.style.overflow='hidden';el.style.padding='0';},30);
+  setTimeout(function(){el.remove();},380);
 }
 
-// Add new Top of Mind note
-function addTOM() {
-  var note = prompt('Add a note (e.g. "Riley — FHLBC — do not prospect"):');
-  if (!note || !note.trim()) return;
-  var list = document.getElementById('tomList');
-  if (!list) return;
-  var id  = 'tom-' + Date.now();
-  var div = document.createElement('div');
-  div.className = 'tom-note';
-  div.id = id;
-  div.innerHTML =
-    '<div class="tom-av" style="background:var(--s500);">📌</div>' +
-    '<div class="tom-body">' +
-      '<div class="tom-name">New note <span class="tom-ts">Just now</span></div>' +
-      '<div class="tom-text">' + note.replace(/</g,'&lt;') + '</div>' +
-    '</div>' +
-    '<button class="tom-x" onclick="dismissTOM(\'' + id + '\')">✕</button>';
+// Add TOM note
+function addTOM(){
+  var note=prompt('Add a note (e.g. "Riley — FHLBC — do not prospect"):');
+  if(!note||!note.trim())return;
+  var list=document.getElementById('tomList');
+  if(!list)return;
+  var id='tom-'+Date.now(),div=document.createElement('div');
+  div.className='tom-note';div.id=id;
+  div.innerHTML='<div class="tom-av" style="background:var(--s500)">📌</div>'+
+    '<div class="tom-bd"><div class="tom-name">New note <span class="tom-ts">Just now</span></div>'+
+    '<div class="tom-txt">'+note.replace(/</g,'&lt;')+'</div></div>'+
+    '<button class="tom-x" onclick="dismissTOM(\''+id+'\')">✕</button>';
   list.appendChild(div);
+  div.style.opacity='0';
+  setTimeout(function(){div.style.transition='opacity .3s';div.style.opacity='1';},10);
+}
+
+// Side tab switching
+function switchTab(tab,containerId){
+  var c=document.getElementById(containerId);
+  if(!c)return;
+  c.querySelectorAll('.stab').forEach(function(t){t.classList.remove('on');});
+  tab.classList.add('on');
 }
 </script>
 </body>
