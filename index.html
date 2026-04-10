@@ -103,13 +103,14 @@ button{font-family:inherit;}
 }
 .sbar:hover .sbar-footer{opacity:1;}
 
-/* LAYOUT — margin-left matches collapsed sidebar width */
+/* LAYOUT — sidebar overlay model, fills viewport */
 .main{
   margin-top:44px;
-  margin-left:44px;          /* tracks collapsed sidebar */
-  max-width:1380px;           /* prevents over-stretch on wide monitors */
+  margin-left:44px;
   min-height:calc(100vh - 44px);
-  display:flex;flex-direction:column;
+  display:flex;
+  flex-direction:column;
+  /* No max-width here — content fills available viewport */
 }
 .page-hdr{background:var(--white);border-bottom:1px solid var(--s200);padding:18px 24px 0;position:sticky;top:44px;z-index:100;}
 .phdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
@@ -117,6 +118,28 @@ button{font-family:inherit;}
 .phdr-name{font-size:22px;font-weight:700;color:var(--s900);letter-spacing:-.02em;}
 .phdr-sub{font-size:12px;color:var(--s500);}
 .phdr-acts{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+
+/* BODY — flex row, right panel fixed, main column fills */
+.page-body{display:flex;flex:1;min-height:0;}
+.body-main{
+  flex:1;
+  padding:16px 22px 48px;
+  display:flex;flex-direction:column;gap:14px;
+  min-width:0;
+  max-width:1080px; /* content column cap — prevents over-stretch on wide monitors */
+}
+.body-side{
+  width:268px;flex-shrink:0;
+  border-left:1px solid var(--s200);
+  background:var(--white);
+  padding:14px 15px;
+  display:flex;flex-direction:column;gap:11px;
+  overflow-y:auto;
+  /* Sticky so panel scrolls independently */
+  position:sticky;top:calc(44px + 200px);
+  max-height:calc(100vh - 44px - 200px);
+  align-self:flex-start;
+}
 
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;transition:.12s;white-space:nowrap;text-decoration:none;}
@@ -130,11 +153,11 @@ button{font-family:inherit;}
 .btn-xs{font-size:10px;padding:3px 8px;}
 
 /* STAT CARDS */
-.stat-row{display:flex;gap:10px;margin-bottom:12px;}
-.stat-card{flex:1;background:var(--white);border:1px solid var(--s200);border-radius:10px;padding:12px 14px;cursor:pointer;transition:.12s;box-shadow:var(--sh-xs);text-decoration:none;display:block;color:inherit;}
+.stat-row{display:flex;gap:8px;margin-bottom:12px;}
+.stat-card{flex:1;background:var(--white);border:1px solid var(--s200);border-radius:10px;padding:11px 13px;cursor:pointer;transition:.12s;box-shadow:var(--sh-xs);text-decoration:none;display:block;color:inherit;}
 .stat-card:hover{box-shadow:var(--sh-sm);border-color:var(--s300);}
-.stat-lbl{font-size:11px;color:var(--s500);margin-bottom:3px;font-weight:500;}
-.stat-val{font-size:22px;font-weight:700;color:var(--s900);line-height:1;margin-bottom:3px;font-family:'DM Mono',monospace;}
+.stat-lbl{font-size:11px;color:var(--s500);margin-bottom:2px;font-weight:500;}
+.stat-val{font-size:20px;font-weight:700;color:var(--s900);line-height:1;margin-bottom:2px;font-family:'DM Mono',monospace;}
 .stat-val.red{color:var(--r600);}
 .stat-d{font-size:11px;color:var(--s400);}
 .du{color:var(--g600);font-weight:600;}
@@ -155,11 +178,6 @@ button{font-family:inherit;}
 .ptab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
 .ptab-ct{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
 .ptab.on .ptab-ct{background:var(--ink);color:var(--white);}
-
-/* BODY LAYOUT */
-.page-body{display:flex;flex:1;}
-.body-main{flex:1;padding:16px 20px 48px;display:flex;flex-direction:column;gap:14px;min-width:0;}
-.body-side{width:292px;flex-shrink:0;border-left:1px solid var(--s200);background:var(--white);padding:14px 15px;display:flex;flex-direction:column;gap:11px;overflow-y:auto;max-height:calc(100vh - 200px);position:sticky;top:200px;align-self:flex-start;}
 
 /* CARD */
 .card{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);}
@@ -366,6 +384,7 @@ button{font-family:inherit;}
       </div>
       <div class="phdr-acts">
         <a href="#" class="btn btn-g btn-sm">📊 Weekly Recap</a>
+        <a href="outreach-center.html" class="btn btn-g btn-sm" style="border-color:rgba(99,223,78,.35);color:var(--wdk);">📋 Outreach</a>
         <a href="#" class="btn btn-p btn-sm">🤖 AI Sales Coach ↗</a>
       </div>
     </div>
