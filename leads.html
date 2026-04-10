@@ -149,7 +149,10 @@ button{font-family:inherit;}
 .sla-fill{height:100%;border-radius:2px;transition:.3s;}
 
 /* LEAD NAME */
-.lead-name{font-weight:600;color:var(--s800);}
+.lead-name{font-weight:600;color:var(--b600);cursor:pointer;text-decoration:none;}
+.lead-name:hover{text-decoration:underline;}
+.qv-btn{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;background:rgba(3,45,66,.06);border:1px solid rgba(3,45,66,.14);color:var(--s600);cursor:pointer;margin-top:4px;opacity:0;transition:opacity .12s;}
+tr:hover .qv-btn{opacity:1;}
 .lead-company{font-size:11px;color:var(--s500);margin-top:1px;}
 .lead-title{font-size:10px;color:var(--s400);}
 
@@ -628,9 +631,10 @@ function renderTable() {
     const isCrit = l.slaHours !== null && l.slaHours < 0;
     return `<tr class="clickable fade-in${isCrit?' critical-row':''}" onclick="openLeadModal('${l.id}')">
       <td>
-        <div class="lead-name">${l.name}</div>
+        <a href="lead-detail.html?id=${l.id}" class="lead-name" onclick="event.stopPropagation()">${l.name}</a>
         <div class="lead-company">${l.company}</div>
         <div class="lead-title">${l.title}</div>
+        <button class="qv-btn" onclick="event.stopPropagation();openLeadModal('${l.id}')">👁 Quick View</button>
       </td>
       <td>
         <span class="src-pill ${srcClass(l.source)}">${l.source}</span>
@@ -732,9 +736,12 @@ function openLeadModal(id) {
               <span style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;background:rgba(3,45,66,.07);color:var(--ink)">${l.leadRating||'MQL'}</span>
             </div>
             <div class="modal-title">${l.name}</div>
-            <div style="font-size:12px;color:var(--s500);margin-top:2px">${l.title} · ${l.company}</div>
+            <div style="font-size:12px;color:var(--s500);margin-top:2px">${l.title} · ${l.company} <a href="lead-detail.html?id=${l.id}" onclick="closeModal()" style="font-size:11px;color:var(--b600);font-weight:600;text-decoration:none;margin-left:8px">View Full Record →</a></div>
           </div>
-          <button class="modal-close" onclick="closeModal()">×</button>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button onclick="closeModal()" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;background:var(--ink);color:#fff;border-color:var(--ink)">⬆ Import to Outreach</button>
+            <button class="modal-close" onclick="closeModal()">×</button>
+          </div>
         </div>
         <div class="modal-body">
 
