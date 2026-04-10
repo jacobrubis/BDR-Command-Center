@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book of Business — BDR Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+:root{
+  --ink:#032D42;--ink-nav:#01161f;--ink-mid:#043d5a;
+  --wasabi:#63DF4E;--wdk:#4ab83a;
+  --white:#fff;--bg:#f1f5f9;
+  --s50:#f8fafc;--s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;
+  --s400:#94a3b8;--s500:#64748b;--s600:#475569;--s700:#334155;
+  --s800:#1e293b;--s900:#0f172a;
+  --b50:#eff6ff;--b600:#2563eb;
+  --g50:#f0fdf4;--g500:#22c55e;--g600:#16a34a;
+  --a50:#fffbeb;--a500:#f59e0b;--a600:#d97706;
+  --r50:#fff1f2;--r500:#ef4444;--r600:#dc2626;
+  --p50:#faf5ff;--p500:#a855f7;
+  --sh-xs:0 1px 2px rgba(0,0,0,.05);
+  --sh-sm:0 1px 3px rgba(0,0,0,.10),0 1px 2px rgba(0,0,0,.06);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--s800);font-size:13px;line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--s300);border-radius:2px;}
+
+/* NAV */
+.gnav{height:44px;background:var(--ink-nav);display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:300;border-bottom:1px solid rgba(255,255,255,.06);}
+.gnav-logo{display:flex;align-items:center;padding:0 14px;height:44px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.gnav-tabs{display:flex;align-items:center;}
+.gnav-tab{display:flex;align-items:center;height:44px;padding:0 13px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.gnav-tab:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);}
+.gnav-pill-wrap{flex:1;display:flex;justify-content:center;}
+.gnav-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);}
+.gnav-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--wasabi);}
+.gnav-r{display:flex;align-items:center;gap:2px;padding:0 10px;}
+.gnav-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:rgba(255,255,255,.45);font-size:13px;border:none;background:transparent;cursor:pointer;}
+.gnav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
+.gnav-av{width:28px;height:28px;background:var(--wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ink);cursor:pointer;margin-left:4px;}
+
+/* SIDEBAR */
+.sbar{position:fixed;top:44px;left:0;bottom:0;width:44px;background:#0d1f2b;border-right:1px solid rgba(255,255,255,.05);z-index:200;display:flex;flex-direction:column;overflow:hidden;transition:width .22s cubic-bezier(.4,0,.2,1);}
+.sbar:hover{width:180px;box-shadow:4px 0 20px rgba(0,0,0,.25);}
+.sbar-sec{padding:10px 0 4px;}
+.sbar-lbl{font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;white-space:nowrap;opacity:0;transition:opacity .15s .05s;}
+.sbar:hover .sbar-lbl{opacity:1;}
+.sbar-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:background .12s,color .12s;text-decoration:none;white-space:nowrap;}
+.sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.sbar-item.on{color:var(--wasabi);border-left-color:var(--wasabi);background:rgba(99,223,78,.06);font-weight:500;}
+.sbar-ic{width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;}
+.sbar-item.on .sbar-ic::after{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--wasabi);margin:1px auto 0;}
+.sbar:hover .sbar-item.on .sbar-ic::after{display:none;}
+.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);opacity:0;transition:opacity .1s;flex-shrink:0;}
+.sbar:hover .sb{opacity:1;}
+.sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
+.sdiv{height:1px;background:rgba(255,255,255,.06);margin:5px 10px;}
+.sbar-footer{padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);margin-top:auto;white-space:nowrap;opacity:0;transition:opacity .15s;}
+.sbar:hover .sbar-footer{opacity:1;}
+
+/* LAYOUT */
+.main{margin-top:44px;margin-left:44px;min-height:calc(100vh - 44px);display:flex;flex-direction:column;}
+.page-hdr{background:var(--white);border-bottom:1px solid var(--s200);padding:18px 24px 0;position:sticky;top:44px;z-index:100;}
+.phdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.phdr-name{font-size:22px;font-weight:700;color:var(--s900);letter-spacing:-.02em;}
+.phdr-sub{font-size:12px;color:var(--s500);margin-top:2px;}
+.phdr-acts{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;transition:.12s;white-space:nowrap;text-decoration:none;}
+.btn-g{background:transparent;color:var(--s600);border-color:var(--s200);}
+.btn-g:hover{background:var(--s50);border-color:var(--s300);}
+.btn-p{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.btn-p:hover{background:var(--ink-mid);}
+.btn-sm{font-size:11px;padding:5px 11px;}
+
+/* KPI CARDS */
+.kpi-row{display:flex;gap:8px;margin-bottom:12px;}
+.kpi{flex:1;background:var(--white);border:1px solid var(--s200);border-radius:10px;padding:11px 13px;box-shadow:var(--sh-xs);}
+.kpi-lbl{font-size:11px;color:var(--s500);margin-bottom:2px;font-weight:500;}
+.kpi-val{font-size:20px;font-weight:700;color:var(--s900);line-height:1;margin-bottom:2px;font-family:monospace;}
+.kpi-d{font-size:11px;color:var(--s400);}
+.kpi-d.up{color:var(--g600);font-weight:600;}
+.kpi-d.warn{color:var(--a600);font-weight:600;}
+.kpi-d.danger{color:var(--r600);font-weight:600;}
+
+/* AE SCORECARDS */
+.ae-row{display:flex;gap:8px;margin-bottom:4px;overflow-x:auto;padding-bottom:4px;}
+.ae-row::-webkit-scrollbar{height:3px;}
+.ae-card{flex:0 0 140px;background:var(--white);border:1px solid var(--s200);border-radius:10px;padding:10px 12px;box-shadow:var(--sh-xs);cursor:pointer;transition:.12s;}
+.ae-card:hover{border-color:var(--s300);box-shadow:var(--sh-sm);}
+.ae-card.sel{border-color:var(--ink);background:rgba(3,45,66,.03);}
+.ae-card-top{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+.ae-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;}
+.ae-name{font-size:12px;font-weight:600;color:var(--s800);}
+.ae-accts{font-size:10px;color:var(--s400);}
+.ae-metrics{display:flex;flex-direction:column;gap:3px;}
+.ae-metric{display:flex;justify-content:space-between;align-items:center;}
+.ae-metric-lbl{font-size:10px;color:var(--s400);}
+.ae-metric-val{font-size:11px;font-weight:600;color:var(--s700);font-family:monospace;}
+.ae-bar{height:3px;background:var(--s100);border-radius:2px;overflow:hidden;margin-top:6px;}
+.ae-bar-fill{height:100%;border-radius:2px;}
+
+/* TABS */
+.page-tabs{display:flex;border-bottom:2px solid var(--s200);}
+.ptab{padding:8px 14px;font-size:12px;font-weight:500;color:var(--s500);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;display:flex;align-items:center;gap:6px;background:none;border-top:none;border-left:none;border-right:none;}
+.ptab:hover{color:var(--s800);}
+.ptab.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:600;}
+.ptab .ct{font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;background:var(--s100);color:var(--s500);}
+.ptab.on .ct{background:rgba(3,45,66,.1);color:var(--ink);}
+
+/* PAGE BODY */
+.page-body{display:flex;flex:1;min-height:0;}
+.body-main{flex:1;padding:14px 22px 48px;display:flex;flex-direction:column;gap:12px;min-width:0;overflow-x:hidden;}
+.body-side{width:260px;flex-shrink:0;border-left:1px solid var(--s200);background:var(--white);padding:14px 15px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;position:sticky;top:calc(44px + 280px);max-height:calc(100vh - 44px - 280px);align-self:flex-start;}
+
+/* FILTER BAR */
+.filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.filter-search{position:relative;flex:1;min-width:200px;max-width:300px;}
+.filter-search input{width:100%;padding:7px 10px 7px 30px;border:1px solid var(--s200);border-radius:7px;font-size:12px;font-family:inherit;background:var(--white);color:var(--s800);}
+.filter-search input:focus{outline:none;border-color:var(--s400);}
+.filter-search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--s400);}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:5px 11px;border-radius:20px;border:1px solid var(--s200);background:var(--white);cursor:pointer;color:var(--s600);transition:.1s;}
+.chip:hover{border-color:var(--s300);background:var(--s50);}
+.chip.on{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.chip .chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.filter-count{margin-left:auto;font-size:12px;color:var(--s400);}
+
+/* ACCOUNT TABLE */
+.acct-table-wrap{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);}
+.acct-table{width:100%;border-collapse:collapse;min-width:900px;}
+.acct-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);padding:9px 12px;text-align:left;border-bottom:1px solid var(--s200);background:var(--s50);white-space:nowrap;cursor:pointer;user-select:none;}
+.acct-table th:hover{color:var(--s600);}
+.acct-table td{padding:9px 12px;border-bottom:1px solid var(--s100);vertical-align:middle;font-size:12px;}
+.acct-table tr:last-child td{border-bottom:none;}
+.acct-table tr:hover td{background:var(--s50);}
+.acct-name{font-weight:600;color:var(--s900);}
+.acct-name:hover{color:var(--b600);cursor:pointer;}
+.acct-parent{font-size:10px;color:var(--s400);margin-top:1px;}
+
+/* PILLS */
+.type-pill{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;}
+.tp-customer{background:var(--g50);color:var(--g600);}
+.tp-prospect{background:var(--b50);color:var(--b600);}
+.tp-newlogo{background:var(--p50);color:var(--p500);}
+.tp-fmrcust{background:var(--a50);color:var(--a600);}
+
+.status-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;}
+.sp-active{background:rgba(22,163,74,.1);color:var(--g600);}
+.sp-covered{background:rgba(3,45,66,.07);color:var(--ink);}
+.sp-none{background:var(--s100);color:var(--s400);}
+.sp-pipeline{background:rgba(37,99,235,.1);color:var(--b600);}
+.status-dot{width:5px;height:5px;border-radius:50%;}
+
+/* PRODUCT CHIPS */
+.prod-chips{display:flex;flex-wrap:wrap;gap:3px;}
+.prod-chip{font-size:9px;font-weight:600;padding:1px 6px;border-radius:4px;background:rgba(3,45,66,.07);color:var(--ink);}
+.prod-chip.target{background:rgba(99,223,78,.12);color:#166534;border:1px dashed rgba(99,223,78,.3);}
+
+/* AE BUBBLE */
+.ae-dot{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0;}
+
+/* MINI COUNTS */
+.mini-ct{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;border-radius:10px;font-size:10px;font-weight:700;padding:0 5px;}
+.mc-lead{background:rgba(220,38,38,.1);color:var(--r600);}
+.mc-bg{background:rgba(3,45,66,.08);color:var(--ink);}
+.mc-zero{color:var(--s300);font-weight:400;}
+
+/* SIDE PANEL */
+.side-hd{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:8px;}
+.cov-gauge{width:100%;margin-bottom:4px;}
+.cov-track{height:8px;background:var(--s100);border-radius:4px;overflow:hidden;}
+.cov-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--g500),var(--wdk));}
+.cov-label{display:flex;justify-content:space-between;font-size:10px;color:var(--s500);margin-top:4px;}
+.side-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.side-bar-lbl{font-size:11px;color:var(--s600);min-width:60px;}
+.side-bar-track{flex:1;height:4px;background:var(--s100);border-radius:2px;overflow:hidden;}
+.side-bar-fill{height:100%;border-radius:2px;}
+.side-bar-val{font-size:10px;font-weight:600;color:var(--s700);min-width:28px;text-align:right;font-family:monospace;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn .14s ease;}
+
+/* CROSS-PAGE TABS */
+.ptabs{display:flex;align-items:center;border-bottom:1px solid var(--s200);margin:0;padding:0;overflow-x:auto;background:var(--white);}
+.ptabs::-webkit-scrollbar{height:0;}
+.ptab{display:inline-flex;align-items:center;gap:5px;padding:10px 14px;font-size:13px;font-weight:500;color:var(--s500);border-bottom:2px solid transparent;white-space:nowrap;transition:.1s;text-decoration:none;cursor:pointer;}
+.ptab:hover{color:var(--s700);}
+.ptab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.ptab-ct{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
+.ptab.on .ptab-ct{background:var(--ink);color:var(--white);}
+
+/* PERF CARDS */
+.perf-cards{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:14px 22px;}
+.pc{background:var(--white);border:1px solid var(--s200);border-radius:10px;padding:11px 13px;box-shadow:var(--sh-xs);}
+.pc-hi{border-color:rgba(22,163,74,.25);}
+.pc-lbl{font-size:11px;color:var(--s500);margin-bottom:2px;font-weight:500;}
+.pc-val{font-size:20px;font-weight:700;color:var(--s900);line-height:1;font-family:monospace;}
+.pc-sub{font-size:11px;color:var(--s400);margin-top:2px;}
+/* PANEL */
+.panel{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);}
+.panel-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--s100);background:var(--s50);}
+.panel-title{font-size:12px;font-weight:700;color:var(--s700);}
+/* OPTY TABLE */
+.opty-tbl{width:100%;border-collapse:collapse;min-width:860px;}
+.opty-tbl th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);padding:9px 12px;text-align:left;border-bottom:1px solid var(--s200);background:var(--s50);white-space:nowrap;}
+.opty-tbl td{padding:9px 12px;border-bottom:1px solid var(--s100);vertical-align:middle;font-size:12px;}
+.opty-tbl tr:last-child td{border-bottom:none;}
+.opty-tbl tr:hover td{background:var(--s50);}
+.stage-pill{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;white-space:nowrap;}
+.bu-chip{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px;background:var(--ink);color:var(--white);white-space:nowrap;}
+/* MEETING TABLE */
+.mt-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--s50);}
+.mt-row:last-child{border-bottom:none;}
+.mt-lbl{font-size:12px;color:var(--s600);}
+.mt-val{font-size:13px;font-weight:700;color:var(--s800);}
+/* CTRL */
+.ctrl-sel{font-family:inherit;font-size:11px;padding:5px 10px;border:1px solid var(--s200);border-radius:6px;background:var(--white);color:var(--s600);cursor:pointer;}
+/* PTABS */
+.ptabs{display:flex;align-items:center;border-bottom:1px solid var(--s200);padding:0 22px;background:var(--white);}
+.ptab{display:inline-flex;align-items:center;gap:5px;padding:10px 14px;font-size:13px;font-weight:500;color:var(--s500);border-bottom:2px solid transparent;white-space:nowrap;transition:.1s;text-decoration:none;}
+.ptab:hover{color:var(--s700);}
+.ptab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.ptab-ct{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
+.ptab.on .ptab-ct{background:var(--ink);color:var(--white);}
+.btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;transition:.12s;white-space:nowrap;}
+.btn-g{background:transparent;color:var(--s600);border-color:var(--s200);}
+.btn-g:hover{background:var(--s50);}
+.btn-sm{font-size:11px;padding:5px 11px;}
+</style>
+</head>
+<body>
+
+<nav class="gnav">
+  <div class="gnav-logo">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="5" fill="#63DF4E"/>
+      <rect x="7" y="7" width="18" height="18" rx="3" fill="#032D42"/>
+      <rect x="11" y="11" width="10" height="10" rx="1.5" fill="#63DF4E"/>
+    </svg>
+  </div>
+  <div class="gnav-tabs">
+    <span class="gnav-tab">Favorites</span>
+    <span class="gnav-tab">History</span>
+    <span class="gnav-tab">Workspaces</span>
+    <span class="gnav-tab" style="padding:0 10px">⋮</span>
+  </div>
+  <div class="gnav-pill-wrap">
+    <div class="gnav-pill"><div class="gnav-pill-dot"></div><span>GBA Commercial Illinois &amp; Midwest · Q2 FY26</span></div>
+  </div>
+  <div class="gnav-r">
+    <button class="gnav-btn">🔍</button><button class="gnav-btn">🔔</button><button class="gnav-btn">⚙️</button>
+    <div class="gnav-av">JR</div>
+  </div>
+</nav>
+
+<aside class="sbar">
+  <div class="sbar-sec">
+    <span class="sbar-lbl">My Work</span>
+    <a href="index.html"           class="sbar-item"><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="outreach-center.html" class="sbar-item"><span class="sbar-ic">📋</span>Outreach Center</a>
+    <a href="buying-groups.html"   class="sbar-item"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"           class="sbar-item"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#"                    class="sbar-item"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Customers</span>
+    <a href="#"                    class="sbar-item"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="#"                    class="sbar-item"><span class="sbar-ic">👥</span>Contacts</a>
+    <a href="opportunities.html"   class="sbar-item"><span class="sbar-ic">💼</span>Opportunities</a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Reports</span>
+    <a href="book-of-business.html" class="sbar-item on"><span class="sbar-ic">📖</span>Book of Business</a>
+    <a href="ae-alignment.html"     class="sbar-item"><span class="sbar-ic">🤝</span>AE Alignment</a>
+    <a href="#"                     class="sbar-item"><span class="sbar-ic">📊</span>Reports</a>
+  </div>
+  <div class="sbar-footer">ServiceNow Confidential</div>
+</aside>
+
+<div class="main">
+  <div class="page-hdr">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;padding:18px 24px 0">
+      <div>
+        <div style="font-size:11px;color:var(--s400);margin-bottom:2px">Friday, April 10, 2026</div>
+        <div style="font-size:22px;font-weight:700;color:var(--s900);letter-spacing:-.02em">Book of Business</div>
+        <div style="font-size:12px;color:var(--s500)">GBA Commercial Illinois &amp; Midwest · Q2 FY26 · Updated today</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;padding-top:18px">
+        <select class="ctrl-sel"><option>Q2 2026</option><option>Q1 2026</option></select>
+        <button class="btn btn-g btn-sm">⬇ Export</button>
+        <button class="btn btn-g btn-sm">Filter Rep ▼</button>
+        <button class="btn btn-g btn-sm">Filter Stage ▼</button>
+      </div>
+    </div>
+
+    <!-- PERF CARDS -->
+    <div class="perf-cards" style="grid-template-columns:repeat(6,1fr)">
+      <div class="pc"><div class="pc-lbl">Total Opps</div><div class="pc-val">23</div><div class="pc-sub">All open stages</div></div>
+      <div class="pc pc-hi"><div class="pc-lbl">Meetings Booked (QTD)</div><div class="pc-val" style="color:var(--g600)">16</div><div class="pc-sub"><span style="color:var(--g600);font-weight:600">↑ 2 this week</span></div></div>
+      <div class="pc"><div class="pc-lbl">Stage 1 Pipeline</div><div class="pc-val" style="color:var(--s500)">$73K</div><div class="pc-sub">1 opportunity</div></div>
+      <div class="pc"><div class="pc-lbl">Stage 2–3 Pipeline</div><div class="pc-val" style="color:var(--b600)">$1.71M</div><div class="pc-sub">Mid-funnel · 12 opps</div></div>
+      <div class="pc"><div class="pc-lbl">Stage 4+ Pipeline</div><div class="pc-val" style="color:var(--a600)">$3.0M</div><div class="pc-sub">Late-stage · 9 opps</div></div>
+      <div class="pc" style="border-color:rgba(3,45,66,.2)"><div class="pc-lbl">Total Pipeline (Stage 2+)</div><div class="pc-val" style="color:var(--ink)">$4.71M</div><div class="pc-sub">Stage 1 excluded</div></div>
+    </div>
+
+    <!-- ATTAINMENT BAR -->
+    <div style="padding:10px 22px 0">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+        <div style="font-size:11px;font-weight:700;color:var(--s600)">Pipeline Attainment vs. Q2 Goal</div>
+        <div style="display:flex;align-items:center;gap:14px;font-size:11px;color:var(--s500)">
+          <span>$4.71M / $5.5M · <strong style="color:var(--a600)">86%</strong></span>
+          <span style="color:var(--g600);font-weight:600">$1.4M in Stage 4+</span>
+        </div>
+      </div>
+      <div style="height:10px;background:var(--s200);border-radius:5px;overflow:hidden;margin-bottom:6px">
+        <div style="height:100%;width:86%;background:linear-gradient(90deg,var(--wasabi),var(--wdk));border-radius:5px"></div>
+      </div>
+      <div style="font-size:11px;color:var(--a600);font-weight:600">Stage 2+ → 4+ conversion: 38%</div>
+    </div>
+
+    <!-- TABS -->
+    <div class="ptabs" style="margin-top:10px">
+      <a href="index.html"            class="ptab">Today</a>
+      <a href="opportunities.html"    class="ptab">Opportunities <span class="ptab-ct">5</span></a>
+      <a href="buying-groups.html"    class="ptab">Buying Groups <span class="ptab-ct">12</span></a>
+      <a href="leads.html"            class="ptab">Leads <span class="ptab-ct">39</span></a>
+      <a href="accounts.html"         class="ptab">Accounts <span class="ptab-ct">340</span></a>
+      <a href="ae-alignment.html"     class="ptab">AE Alignment</a>
+      <a href="book-of-business.html" class="ptab on">Book of Business</a>
+    </div>
+  </div><!-- /page-hdr -->
+
+  <div class="page-body" style="padding:16px 22px 48px;display:grid;grid-template-columns:1fr 380px;gap:16px;align-items:start">
+
+    <!-- LEFT COLUMN -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+
+      <!-- PIPELINE BY REP -->
+      <div class="panel">
+        <div class="panel-hd">
+          <span class="panel-title">Pipeline by Rep</span>
+          <span style="font-size:11px;color:var(--s400)">All stages · Q2 2026</span>
+        </div>
+        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:10px" id="repBars"></div>
+        <div style="padding:6px 16px 10px;font-size:10px;color:var(--s400)">* Mikaela Consilio LLC FSM $2.5M is the largest single opty in the pod</div>
+      </div>
+
+      <!-- MEETINGS BY REP -->
+      <div class="panel">
+        <div class="panel-hd">
+          <span class="panel-title">Meetings Booked by Rep (QTD)</span>
+          <span style="font-size:11px;color:var(--s400)">Q2 2026 · Target: 20</span>
+        </div>
+        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:10px" id="meetingBars"></div>
+      </div>
+
+      <!-- ALL OPPORTUNITIES TABLE -->
+      <div class="panel" style="overflow:hidden">
+        <div class="panel-hd">
+          <span class="panel-title">Book of Business — All Opportunities</span>
+          <span style="font-size:11px;color:var(--s400)">23 opportunities</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="opty-tbl">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Rep</th>
+                <th>Date Scheduled</th>
+                <th>Stage</th>
+                <th>Business Unit</th>
+                <th style="text-align:right">Pipeline</th>
+                <th>OPTY #</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="optyBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /left -->
+
+    <!-- RIGHT COLUMN: PIPELINE BY STAGE -->
+    <div style="display:flex;flex-direction:column;gap:14px;position:sticky;top:calc(44px + 280px)">
+      <div class="panel">
+        <div class="panel-hd"><span class="panel-title">Pipeline by Stage</span></div>
+        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:10px" id="stageBars"></div>
+      </div>
+
+      <!-- MEETINGS BY STAGE BREAKDOWN -->
+      <div class="panel">
+        <div class="panel-hd"><span class="panel-title">Meeting Outcomes</span></div>
+        <div style="padding:10px 16px;display:flex;flex-direction:column;gap:7px">
+          <div class="mt-row"><span class="mt-lbl">Demo / Discovery</span><span class="mt-val">8</span></div>
+          <div class="mt-row"><span class="mt-lbl">Stage 2 Progressed</span><span class="mt-val" style="color:var(--g600)">5</span></div>
+          <div class="mt-row"><span class="mt-lbl">No Show / Cancelled</span><span class="mt-val" style="color:var(--r600)">2</span></div>
+          <div class="mt-row"><span class="mt-lbl">Pending Outcome</span><span class="mt-val" style="color:var(--a600)">1</span></div>
+          <div style="height:1px;background:var(--s200);margin:4px 0"></div>
+          <div class="mt-row"><span class="mt-lbl" style="font-weight:700;color:var(--s800)">Total Booked</span><span class="mt-val" style="font-weight:700;color:var(--s900)">16</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /main -->
+
+<script>
+const AE_STYLES = {
+  Tony:    {hex:'#032D42',bg:'rgba(3,45,66,.12)'},
+  Jeff:    {hex:'#044355',bg:'rgba(4,67,85,.12)'},
+  Riley:   {hex:'#B45309',bg:'rgba(180,83,9,.12)'},
+  Katie:   {hex:'#5B21B6',bg:'rgba(91,33,182,.12)'},
+  Brian:   {hex:'#D93025',bg:'rgba(217,48,37,.12)'},
+  Seamus:  {hex:'#1a7a00',bg:'rgba(26,122,0,.12)'},
+  Mikaela:{hex:'#0369A1',bg:'rgba(3,105,161,.12)'},
+};
+
+const REP_PIPELINE = [
+  {rep:'Brian',   pipe:1820000, goal:2000000},
+  {rep:'Riley',   pipe:1130000, goal:1500000},
+  {rep:'Mikaela', pipe:2500000, goal:1200000},
+  {rep:'Jeff',    pipe:430000,  goal:800000},
+  {rep:'Tony',    pipe:560000,  goal:700000},
+  {rep:'Seamus',  pipe:195000,  goal:600000},
+  {rep:'Katie',   pipe:280000,  goal:700000},
+];
+
+const REP_MEETINGS = [
+  {rep:'Riley',   meetings:4, target:3},
+  {rep:'Jeff',    meetings:4, target:3},
+  {rep:'Brian',   meetings:3, target:3},
+  {rep:'Tony',    meetings:3, target:3},
+  {rep:'Katie',   meetings:2, target:3},
+  {rep:'Seamus',  meetings:1, target:3},
+  {rep:'Mikaela', meetings:0, target:3},
+];
+
+const STAGE_DATA = [
+  {stage:'Stage 1 (pre-pipe)', color:'var(--s300)', pipe:73000},
+  {stage:'Stage 2', color:'var(--b600)', pipe:1320000},
+  {stage:'Stage 3', color:'var(--p500)', pipe:390000},
+  {stage:'Stage 4', color:'var(--a500)', pipe:3400000},
+  {stage:'Stage 5', color:'var(--g500)', pipe:58000},
+  {stage:'Closed Won', color:'var(--g600)', pipe:46000},
+  {stage:'Closed Lost', color:'var(--r400)', pipe:0},
+];
+
+const OPTIES = [
+  {company:'Crash Champions',          rep:'Brian',   date:'Jan 29, 2026', stage:'Stage 4', bu:'EAM',               pipe:130000,  opty:'OPTY-5313647', status:'Discovery Call'},
+  {company:'Blue Cross Blue Shield',   rep:'Brian',   date:'Feb 3, 2026',  stage:'Stage 4', bu:'MoveWorks',         pipe:134000,  opty:'OPTY-5314787', status:'Discovery Call'},
+  {company:'Parts Town LLC',           rep:'Riley',   date:'Feb 9, 2026',  stage:'Closed Lost',bu:'CSM Pro+',        pipe:0,       opty:'OPTY-5316357', status:'Closed Lost'},
+  {company:'Parts Town LLC',           rep:'Riley',   date:'Feb 9, 2026',  stage:'Stage 2', bu:'ITOM Pro+',         pipe:705000,  opty:'OPTY-5316360', status:'Discovery Call'},
+  {company:"Portillo's",               rep:'Jeff',    date:'Feb 11, 2026', stage:'Stage 2', bu:'CSM Pro+',          pipe:119000,  opty:'OPTY-5317345', status:'Discovery Call'},
+  {company:'AIT Worldwide Logistics',  rep:'Brian',   date:'Feb 20, 2026', stage:'Closed Won',bu:'CSM HRSD',        pipe:46000,   opty:'OPTY-5319616', status:'Closed Won'},
+  {company:'Afni Inc',                 rep:'Riley',   date:'Feb 20, 2026', stage:'Stage 2', bu:'ITOM',              pipe:97000,   opty:'OPTY-5319618', status:'Discovery Call'},
+  {company:'Consilio LLC',             rep:'Mikaela', date:'Feb 25, 2026', stage:'Stage 4', bu:'FSM',               pipe:2500000, opty:'OPTY-5320708', status:'Discovery Call'},
+  {company:'Echo Global Logistics',    rep:'Riley',   date:'Mar 4, 2026',  stage:'Stage 4', bu:'ITOM AIOps',        pipe:217000,  opty:'OPTY-5322544', status:'Discovery Call'},
+  {company:'Echo Global Logistics',    rep:'Riley',   date:'Mar 4, 2026',  stage:'Stage 4', bu:'EmployeeWorks',     pipe:242000,  opty:'OPTY-5322545', status:'Discovery Call'},
+  {company:'Blue Cross Blue Shield',   rep:'Brian',   date:'Mar 5, 2026',  stage:'Stage 2', bu:'VR-AI CT',          pipe:176000,  opty:'OPTY-5322739', status:'Discovery Call'},
+  {company:'Encore Event Technologies',rep:'Seamus',  date:'Mar 9, 2026',  stage:'Stage 2', bu:'CPQ',               pipe:80000,   opty:'OPTY-5333632', status:'Discovery Call'},
+  {company:'Culligan International',   rep:'Brian',   date:'Mar 13, 2026', stage:'Stage 1', bu:'ITSM',              pipe:73000,   opty:'OPTY-5334064', status:'Discovery Call'},
+  {company:'GATX Corporation',         rep:'Riley',   date:'Mar 18, 2026', stage:'Stage 4', bu:'ITOM AIOps',        pipe:350000,  opty:'OPTY-5336201', status:'Discovery Call'},
+  {company:'Paylocity Corporation',    rep:'Riley',   date:'Mar 20, 2026', stage:'Stage 3', bu:'Now Assist',        pipe:220000,  opty:'OPTY-5337445', status:'Discovery Call'},
+  {company:'Crash Champions',          rep:'Brian',   date:'Mar 22, 2026', stage:'Stage 3', bu:'Now Assist HR',     pipe:170000,  opty:'OPTY-5338712', status:'Discovery Call'},
+  {company:'DMI Inc',                  rep:'Seamus',  date:'Mar 25, 2026', stage:'Stage 2', bu:'SecOps',            pipe:115000,  opty:'OPTY-5339884', status:'Discovery Call'},
+  {company:'Eversana',                 rep:'Seamus',  date:'Mar 28, 2026', stage:'Stage 5', bu:'Veza IGA',          pipe:58000,   opty:'OPTY-5341230', status:'Discovery Call'},
+  {company:'Sub-Zero Group Inc',       rep:'Tony',    date:'Apr 1, 2026',  stage:'Stage 2', bu:'HRSD',              pipe:275000,  opty:'OPTY-5343615', status:'Discovery Call'},
+  {company:'Kirkland & Ellis LLP',     rep:'Riley',   date:'Apr 3, 2026',  stage:'Stage 3', bu:'Legal Service Mgmt',pipe:210000,  opty:'OPTY-5344892', status:'Discovery Call'},
+  {company:'Badger Meter, Inc.',       rep:'Tony',    date:'Apr 5, 2026',  stage:'Stage 4', bu:'ITSM Pro',          pipe:285000,  opty:'OPTY-5345331', status:'Discovery Call'},
+  {company:'AIT Worldwide Logistics',  rep:'Brian',   date:'Apr 7, 2026',  stage:'Stage 2', bu:'Employee Workflows',pipe:140000,  opty:'OPTY-5346820', status:'Closed Won'},
+  {company:'West Monroe Partners',     rep:'Brian',   date:'Apr 9, 2026',  stage:'Stage 2', bu:'Now Assist + AICT', pipe:90000,   opty:'OPTY-5348210', status:'Discovery Call'},
+];
+
+const STAGE_COLORS = {
+  'Stage 1':'#94a3b8','Stage 2':'#2563eb','Stage 3':'#a855f7','Stage 4':'#f59e0b',
+  'Stage 5':'#22c55e','Closed Won':'#16a34a','Closed Lost':'#ef4444'
+};
+
+function fmtPipe(v) {
+  if(!v) return '$0';
+  if(v>=1000000) return '$'+(v/1000000).toFixed(1)+'M';
+  return '$'+(v/1000).toFixed(0)+'K';
+}
+
+function aeBubble(rep) {
+  const s = AE_STYLES[rep] || {};
+  return '<div style="width:22px;height:22px;border-radius:50%;background:'+s.bg+';color:'+s.hex+';display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0">'+rep.slice(0,2).toUpperCase()+'</div>';
+}
+
+// Pipeline by rep bars
+const maxPipe = Math.max(...REP_PIPELINE.map(r=>r.pipe));
+document.getElementById('repBars').innerHTML = REP_PIPELINE.map(r => {
+  const s = AE_STYLES[r.rep];
+  const pct = Math.round(r.pipe / maxPipe * 100);
+  const goalPct = Math.min(100, Math.round(r.goal / maxPipe * 100));
+  return '<div style="display:flex;align-items:center;gap:10px">' +
+    aeBubble(r.rep) +
+    '<span style="font-size:12px;font-weight:600;width:58px;flex-shrink:0;color:'+s.hex+'">'+r.rep+'</span>' +
+    '<div style="flex:1;position:relative;height:10px;background:var(--s100);border-radius:5px;overflow:visible">' +
+      '<div style="height:100%;width:'+pct+'%;background:'+s.hex+';border-radius:5px"></div>' +
+      '<div style="position:absolute;top:-3px;left:'+goalPct+'%;width:2px;height:16px;background:var(--s400);border-radius:1px" title="Goal"></div>' +
+    '</div>' +
+    '<span style="font-size:12px;font-weight:600;color:var(--s800);min-width:48px;text-align:right;font-family:monospace">'+fmtPipe(r.pipe)+'</span>' +
+  '</div>';
+}).join('');
+
+// Meetings by rep bars
+const maxMeet = Math.max(...REP_MEETINGS.map(r=>r.meetings), 4);
+document.getElementById('meetingBars').innerHTML = REP_MEETINGS.map(r => {
+  const s = AE_STYLES[r.rep];
+  const pct = Math.round(r.meetings / maxMeet * 100);
+  const tgtPct = Math.round(r.target / maxMeet * 100);
+  const col = r.meetings >= r.target ? 'var(--g600)' : r.meetings > 0 ? s.hex : 'var(--s300)';
+  return '<div style="display:flex;align-items:center;gap:10px">' +
+    aeBubble(r.rep) +
+    '<span style="font-size:12px;font-weight:600;width:58px;flex-shrink:0;color:'+s.hex+'">'+r.rep+'</span>' +
+    '<div style="flex:1;position:relative;height:10px;background:var(--s100);border-radius:5px;overflow:visible">' +
+      '<div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:5px"></div>' +
+      '<div style="position:absolute;top:-3px;left:'+tgtPct+'%;width:2px;height:16px;background:var(--s400);border-radius:1px" title="Target"></div>' +
+    '</div>' +
+    '<span style="font-size:11px;font-weight:600;color:var(--s600);min-width:32px;text-align:right">'+r.meetings+'<span style="color:var(--s300)"> / '+r.target+'</span></span>' +
+  '</div>';
+}).join('');
+
+// Pipeline by stage bars
+const maxStagePipe = Math.max(...STAGE_DATA.map(s=>s.pipe), 1);
+document.getElementById('stageBars').innerHTML = STAGE_DATA.map(s => {
+  const pct = Math.round(s.pipe / maxStagePipe * 100);
+  return '<div style="display:flex;align-items:center;gap:10px">' +
+    '<span style="font-size:11px;font-weight:600;color:'+s.color+';min-width:72px;flex-shrink:0">'+s.stage+'</span>' +
+    '<div style="flex:1;height:8px;background:var(--s100);border-radius:4px;overflow:hidden">' +
+      (s.pipe>0?'<div style="height:100%;width:'+pct+'%;background:'+s.color+';border-radius:4px"></div>':'') +
+    '</div>' +
+    '<span style="font-size:11px;font-weight:600;color:var(--s700);min-width:44px;text-align:right;font-family:monospace">'+fmtPipe(s.pipe)+'</span>' +
+  '</div>';
+}).join('');
+
+// Opportunities table
+document.getElementById('optyBody').innerHTML = OPTIES.map(o => {
+  const stageCol = STAGE_COLORS[o.stage] || '#64748b';
+  const isClosed = o.stage.startsWith('Closed');
+  return '<tr>' +
+    '<td><span style="font-weight:600;color:var(--s900)">'+o.company+'</span></td>' +
+    '<td style="display:flex;align-items:center;gap:6px;padding:9px 12px">'+aeBubble(o.rep)+'<span style="font-size:12px;color:var(--s600)">'+o.rep+'</span></td>' +
+    '<td style="font-size:11px;color:var(--s500)">'+o.date+'</td>' +
+    '<td><span class="stage-pill" style="background:'+stageCol+'22;color:'+stageCol+';border:1px solid '+stageCol+'44">'+o.stage+'</span></td>' +
+    '<td><span class="bu-chip">'+o.bu+'</span></td>' +
+    '<td style="text-align:right;font-family:monospace;font-weight:600;color:'+(isClosed&&o.pipe===0?'var(--r500)':'var(--s800)')+'">'+fmtPipe(o.pipe)+'</td>' +
+    '<td style="font-size:10px;color:var(--s400);font-family:monospace">'+o.opty+'</td>' +
+    '<td><span style="font-size:11px;font-weight:600;color:'+(o.status==='Closed Won'?'var(--g600)':o.status==='Closed Lost'?'var(--r600)':'var(--b600)')+'">'+o.status+'</span></td>' +
+  '</tr>';
+}).join('');
+</script>
+</body>
+</html>
