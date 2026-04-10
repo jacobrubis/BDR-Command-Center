@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buying Groups — BDR Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+:root{
+  --ink:#032D42;--ink-nav:#01161f;--ink-mid:#043d5a;
+  --wasabi:#63DF4E;--wdk:#4ab83a;
+  --white:#fff;--bg:#f1f5f9;
+  --s50:#f8fafc;--s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;
+  --s400:#94a3b8;--s500:#64748b;--s600:#475569;--s700:#334155;
+  --s800:#1e293b;--s900:#0f172a;
+  --b50:#eff6ff;--b600:#2563eb;
+  --g50:#f0fdf4;--g100:#dcfce7;--g500:#22c55e;--g600:#16a34a;
+  --a50:#fffbeb;--a500:#f59e0b;--a600:#d97706;
+  --r50:#fff1f2;--r500:#ef4444;--r600:#dc2626;
+  --p50:#faf5ff;--p500:#a855f7;--p600:#9333ea;
+  --t50:#f0fdfa;--t600:#0d9488;
+  --sh-xs:0 1px 2px rgba(0,0,0,.05);
+  --sh-sm:0 1px 3px rgba(0,0,0,.10),0 1px 2px rgba(0,0,0,.06);
+  --sh-md:0 4px 12px rgba(0,0,0,.08);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--s800);font-size:13px;line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--s300);border-radius:2px;}
+
+/* NAV */
+.gnav{height:44px;background:var(--ink-nav);display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:300;border-bottom:1px solid rgba(255,255,255,.06);}
+.gnav-logo{display:flex;align-items:center;padding:0 14px;height:44px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.gnav-tabs{display:flex;align-items:center;}
+.gnav-tab{display:flex;align-items:center;height:44px;padding:0 13px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;text-decoration:none;}
+.gnav-tab:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);}
+.gnav-pill-wrap{flex:1;display:flex;justify-content:center;}
+.gnav-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);}
+.gnav-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--wasabi);}
+.gnav-r{display:flex;align-items:center;gap:2px;padding:0 10px;}
+.gnav-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:rgba(255,255,255,.45);font-size:13px;border:none;background:transparent;cursor:pointer;}
+.gnav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
+.gnav-av{width:28px;height:28px;background:var(--wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ink);cursor:pointer;margin-left:4px;}
+
+/* SIDEBAR */
+.sbar{position:fixed;top:44px;left:0;bottom:0;width:44px;background:#0d1f2b;border-right:1px solid rgba(255,255,255,.05);z-index:200;display:flex;flex-direction:column;overflow:hidden;transition:width .22s cubic-bezier(.4,0,.2,1);}
+.sbar:hover{width:180px;box-shadow:4px 0 20px rgba(0,0,0,.25);}
+.sbar::-webkit-scrollbar{width:0;}
+.sbar-sec{padding:10px 0 4px;}
+.sbar-lbl{font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;white-space:nowrap;opacity:0;transition:opacity .15s .05s;}
+.sbar:hover .sbar-lbl{opacity:1;}
+.sbar-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:background .12s,color .12s;text-decoration:none;white-space:nowrap;}
+.sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.sbar-item.on{color:var(--wasabi);border-left-color:var(--wasabi);background:rgba(99,223,78,.06);font-weight:500;}
+.sbar-ic{width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;}
+.sbar-item.on .sbar-ic::after{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--wasabi);margin:1px auto 0;}
+.sbar:hover .sbar-item.on .sbar-ic::after{display:none;}
+.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);opacity:0;transition:opacity .1s;flex-shrink:0;}
+.sbar:hover .sb{opacity:1;}
+.sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
+.sdiv{height:1px;background:rgba(255,255,255,.06);margin:5px 10px;}
+.sbar-footer{padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);margin-top:auto;white-space:nowrap;opacity:0;transition:opacity .15s;}
+.sbar:hover .sbar-footer{opacity:1;}
+
+/* LAYOUT */
+.main{margin-top:44px;margin-left:44px;min-height:calc(100vh - 44px);display:flex;flex-direction:column;}
+.page-hdr{background:var(--white);border-bottom:1px solid var(--s200);padding:18px 24px 0;position:sticky;top:44px;z-index:100;}
+.phdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.phdr-name{font-size:22px;font-weight:700;color:var(--s900);letter-spacing:-.02em;}
+.phdr-sub{font-size:12px;color:var(--s500);margin-top:2px;}
+.phdr-acts{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;transition:.12s;white-space:nowrap;text-decoration:none;}
+.btn-g{background:transparent;color:var(--s600);border-color:var(--s200);}
+.btn-g:hover{background:var(--s50);border-color:var(--s300);}
+.btn-p{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.btn-p:hover{background:var(--ink-mid);}
+.btn-w{background:var(--wasabi);color:var(--ink);border-color:var(--wasabi);font-weight:600;}
+.btn-gr{background:var(--g600);color:var(--white);border-color:var(--g600);}
+.btn-gr:hover{background:#15803d;}
+.btn-re{background:transparent;color:var(--r600);border-color:rgba(220,38,38,.3);}
+.btn-re:hover{background:var(--r50);}
+.btn-sm{font-size:11px;padding:5px 11px;}
+.btn-xs{font-size:10px;padding:3px 8px;}
+
+/* STAT CARDS */
+.stat-row{display:flex;gap:8px;margin-bottom:4px;}
+.stat-card{flex:1;background:var(--white);border:1px solid var(--s200);border-radius:10px;padding:11px 13px;box-shadow:var(--sh-xs);}
+.stat-lbl{font-size:11px;color:var(--s500);margin-bottom:2px;font-weight:500;}
+.stat-val{font-size:20px;font-weight:700;color:var(--s900);line-height:1;margin-bottom:2px;font-family:'DM Mono',monospace;}
+.stat-d{font-size:11px;color:var(--s400);}
+.du{color:var(--g600);font-weight:600;}
+.dw{color:var(--a600);font-weight:600;}
+.dr{color:var(--r600);font-weight:600;}
+
+/* STAGE TABS */
+.stage-tabs{display:flex;gap:0;border-bottom:2px solid var(--s200);overflow-x:auto;}
+.stab{padding:9px 14px;font-size:12px;font-weight:500;color:var(--s500);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;display:flex;align-items:center;gap:6px;border-top:none;border-left:none;border-right:none;background:none;}
+.stab:hover{color:var(--s800);}
+.stab.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:600;}
+.stab .cnt{font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;background:var(--s100);color:var(--s500);}
+.stab.on .cnt{background:rgba(3,45,66,.1);color:var(--ink);}
+
+/* AI SIGNAL PANEL */
+.ai-signal{display:flex;align-items:flex-start;gap:10px;padding:11px 15px;background:linear-gradient(135deg,rgba(3,45,66,.04),rgba(99,223,78,.06));border:1px solid rgba(99,223,78,.2);border-radius:10px;margin-bottom:14px;}
+.ai-signal-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.ai-signal-body{flex:1;min-width:0;}
+.ai-signal-hd{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--wasabi);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.ai-signal-hd .ts{font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--s400);}
+.ai-signal-items{display:flex;flex-direction:column;gap:4px;}
+.ai-sig-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--s700);}
+.ai-sig-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.ai-sig-strong{font-weight:600;color:var(--s900);}
+.ai-sig-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:8px;background:rgba(99,223,78,.15);color:#166534;flex-shrink:0;}
+
+/* TABLE */
+.bg-table-wrap{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);}
+.bg-table{width:100%;border-collapse:collapse;}
+.bg-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);padding:9px 12px;text-align:left;border-bottom:1px solid var(--s200);background:var(--s50);white-space:nowrap;}
+.bg-table td{padding:10px 12px;border-bottom:1px solid var(--s100);vertical-align:middle;font-size:12px;}
+.bg-table tr:last-child td{border-bottom:none;}
+.bg-table tr:hover td{background:var(--s50);cursor:pointer;}
+.bg-name{font-weight:600;color:var(--b600);}
+.bg-name:hover{text-decoration:underline;}
+.acct-type{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;}
+.at-customer{background:var(--g50);color:var(--g600);}
+.at-prospect{background:var(--b50);color:var(--b600);}
+.at-suspect{background:rgba(168,85,247,.08);color:var(--p600);}
+.at-fmrcust{background:var(--a50);color:var(--a600);}
+.stage-tag{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;white-space:nowrap;}
+.st-handraiser{background:rgba(22,163,74,.12);color:var(--g600);}
+.st-rfa{background:rgba(59,130,246,.1);color:var(--b600);}
+.st-npm{background:rgba(168,85,247,.1);color:var(--p600);}
+.st-nbgm{background:rgba(245,158,11,.1);color:var(--a600);}
+.st-inprogress{background:rgba(3,45,66,.08);color:var(--ink);}
+.st-targeted{background:rgba(13,148,136,.1);color:var(--t600);}
+.st-qualified{background:rgba(22,163,74,.15);color:var(--g600);border:1px solid rgba(22,163,74,.25);}
+.ae-dot{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;}
+.ask-ai-btn{width:26px;height:26px;border-radius:6px;background:rgba(99,223,78,.1);border:1px solid rgba(99,223,78,.25);color:var(--g600);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:.12s;}
+.ask-ai-btn:hover{background:rgba(99,223,78,.2);}
+.handraiser-yes{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--g600);font-weight:600;}
+.hr-contact-us{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;background:rgba(37,99,235,.1);color:#1d4ed8;border:1px solid rgba(37,99,235,.18);}
+.hr-get-pricing{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;background:rgba(22,163,74,.1);color:#15803d;border:1px solid rgba(22,163,74,.2);}
+.hr-banner{display:flex;flex-direction:column;gap:7px;padding:12px 14px;background:rgba(37,99,235,.04);border:1px solid rgba(37,99,235,.15);border-radius:9px;margin-bottom:10px;}
+.hr-row{display:flex;align-items:flex-start;gap:10px;}
+.hr-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
+
+/* BODY */
+.page-body{flex:1;padding:16px 22px 48px;display:flex;flex-direction:column;gap:14px;}
+
+/* ── DETAIL VIEW ────────────────────────────────────────────────── */
+.detail-back{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--s500);cursor:pointer;margin-bottom:14px;padding:8px 12px;border-radius:8px;width:fit-content;}
+.detail-back:hover{background:var(--s100);color:var(--s800);}
+.detail-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.detail-title{font-size:20px;font-weight:700;color:var(--s900);letter-spacing:-.02em;}
+.detail-sub{font-size:12px;color:var(--s500);margin-top:3px;}
+
+/* AI SIGNAL BANNER */
+.ai-banner{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:linear-gradient(135deg,rgba(3,45,66,.05),rgba(99,223,78,.08));border:1px solid rgba(99,223,78,.25);border-radius:10px;margin-bottom:16px;}
+.ai-banner-label{font-size:11px;font-weight:700;color:var(--wasabi);margin-right:6px;}
+.ai-banner-text{font-size:12px;color:var(--s700);line-height:1.6;}
+
+/* COVERAGE SECTION */
+.coverage-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.coverage-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);}
+.coverage-legend{display:flex;align-items:center;gap:12px;}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--s500);}
+.leg-dot{width:8px;height:8px;border-radius:50%;}
+.coverage-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px;}
+.role-card{border-radius:10px;padding:14px 13px;border:1px solid;position:relative;}
+.role-card.confirmed{border-color:rgba(22,163,74,.3);background:rgba(240,253,244,.7);}
+.role-card.new-signal{border-color:rgba(245,158,11,.4);background:rgba(255,251,235,.7);}
+.role-card.active{border-color:rgba(59,130,246,.25);background:rgba(239,246,255,.7);}
+.role-card.not-identified{border-color:rgba(239,68,68,.2);background:rgba(255,241,242,.5);}
+.role-card.open{border-color:var(--s200);background:var(--s50);border-style:dashed;}
+.role-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}
+.role-label.champion{color:var(--g600);}
+.role-label.buyer{color:var(--a600);}
+.role-label.influencer{color:var(--b600);}
+.role-label.ratifier{color:var(--r500);}
+.role-label.user{color:var(--r500);}
+.role-name{font-size:13px;font-weight:700;color:var(--s900);margin-bottom:2px;}
+.role-title{font-size:11px;color:var(--s500);margin-bottom:6px;}
+.role-status{font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;}
+.rs-confirmed{background:rgba(22,163,74,.1);color:var(--g600);}
+.rs-new-signal{background:rgba(245,158,11,.12);color:var(--a600);}
+.rs-active{background:rgba(59,130,246,.1);color:var(--b600);}
+.rs-not-id{background:rgba(239,68,68,.1);color:var(--r600);}
+.rs-open{background:var(--s100);color:var(--s400);}
+.role-ml{font-size:10px;color:var(--s400);margin-top:5px;}
+.role-seq{font-size:10px;color:var(--s500);margin-top:3px;font-style:italic;}
+
+/* ORG CHART */
+.orgchart-wrap{margin-bottom:20px;padding:20px;background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow-x:auto;}
+.orgchart{display:flex;flex-direction:column;align-items:center;gap:0;min-width:500px;}
+.oc-row{display:flex;justify-content:center;align-items:flex-start;gap:20px;position:relative;}
+.oc-node{display:flex;flex-direction:column;align-items:center;position:relative;}
+.oc-box{width:110px;padding:10px 8px;border-radius:8px;border:2px solid;text-align:center;position:relative;z-index:2;}
+.oc-box.confirmed{border-color:rgba(22,163,74,.4);background:rgba(240,253,244,.9);}
+.oc-box.new-signal{border-color:rgba(245,158,11,.5);background:rgba(255,251,235,.9);}
+.oc-box.active{border-color:rgba(59,130,246,.35);background:rgba(239,246,255,.9);}
+.oc-box.open{border-color:var(--s300);background:var(--s50);border-style:dashed;}
+.oc-role{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.oc-role.champion{color:var(--g600);}
+.oc-role.buyer{color:var(--a600);}
+.oc-role.influencer{color:var(--b600);}
+.oc-role.ratifier{color:var(--r500);}
+.oc-role.user{color:var(--r500);}
+.oc-av{width:32px;height:32px;border-radius:50%;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.oc-name{font-size:10px;font-weight:600;color:var(--s900);line-height:1.3;}
+.oc-sub{font-size:9px;color:var(--s500);margin-top:2px;}
+.oc-badge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:6px;margin-top:4px;display:inline-flex;}
+.oc-badge.confirmed{background:rgba(22,163,74,.1);color:var(--g600);}
+.oc-badge.new-signal{background:rgba(245,158,11,.12);color:var(--a600);}
+.oc-badge.active{background:rgba(59,130,246,.1);color:var(--b600);}
+.oc-badge.open{background:var(--s100);color:var(--s400);}
+/* Connector lines */
+.oc-line-v{width:2px;height:24px;background:var(--s300);margin:0 auto;}
+.oc-line-h-wrap{display:flex;align-items:flex-start;position:relative;padding-top:0;}
+.oc-connector{display:flex;flex-direction:column;align-items:center;}
+.oc-line-branch{display:flex;justify-content:center;align-items:flex-start;}
+
+/* MEMBERS TABLE */
+.members-section{margin-bottom:20px;}
+.members-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+.members-title{font-size:12px;font-weight:700;color:var(--s800);display:flex;align-items:center;gap:8px;}
+.members-title .chk{color:var(--g600);}
+.pending-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(245,158,11,.15);color:var(--a600);}
+.mtable{width:100%;border-collapse:collapse;font-size:11px;}
+.mtable th{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);padding:7px 10px;text-align:left;border-bottom:1px solid var(--s200);background:var(--s50);white-space:nowrap;}
+.mtable td{padding:8px 10px;border-bottom:1px solid var(--s100);vertical-align:middle;}
+.mtable tr:last-child td{border-bottom:none;}
+.mtable tr:hover td{background:var(--s50);}
+.role-pill{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;}
+.rp-champion{background:rgba(22,163,74,.1);color:var(--g600);}
+.rp-buyer{background:rgba(245,158,11,.1);color:var(--a600);}
+.rp-influencer{background:rgba(59,130,246,.1);color:var(--b600);}
+.rp-ratifier{background:rgba(239,68,68,.1);color:var(--r600);}
+.rp-user{background:rgba(168,85,247,.1);color:var(--p600);}
+.rp-pending{background:rgba(245,158,11,.1);color:var(--a600);border:1px dashed rgba(245,158,11,.4);}
+.eng-pill{font-size:10px;font-weight:600;padding:2px 7px;border-radius:8px;}
+.eng-high{background:rgba(22,163,74,.1);color:var(--g600);}
+.eng-med{background:rgba(245,158,11,.1);color:var(--a600);}
+.eng-low{background:var(--s100);color:var(--s500);}
+.status-pill{font-size:10px;font-weight:600;padding:2px 7px;border-radius:8px;}
+.sp-mql{background:var(--b50);color:var(--b600);}
+.sp-remarked{background:rgba(22,163,74,.1);color:var(--g600);}
+.sp-hold{background:var(--s100);color:var(--s500);}
+.sp-qualified{background:rgba(13,148,136,.1);color:var(--t600);}
+.sp-listimport{background:rgba(168,85,247,.08);color:var(--p600);}
+.sp-open{background:rgba(3,45,66,.07);color:var(--ink);}
+.sla-warn{color:var(--a600);font-weight:700;font-family:'DM Mono',monospace;}
+.view-lead-btn{font-size:10px;font-weight:600;padding:3px 9px;border-radius:6px;background:rgba(3,45,66,.06);border:1px solid rgba(3,45,66,.15);color:var(--ink);cursor:pointer;white-space:nowrap;}
+.view-lead-btn:hover{background:rgba(3,45,66,.12);}
+.ml-reasoning{font-size:11px;color:var(--s600);line-height:1.5;max-width:280px;}
+.ml-score{font-size:12px;font-weight:700;font-family:'DM Mono',monospace;color:var(--s800);}
+.accept-btn{font-size:10px;font-weight:700;padding:4px 11px;border-radius:6px;background:var(--g600);color:var(--white);border:none;cursor:pointer;}
+.accept-btn:hover{background:#15803d;}
+.deny-btn{font-size:10px;font-weight:700;padding:4px 11px;border-radius:6px;background:transparent;color:var(--r600);border:1px solid rgba(220,38,38,.3);cursor:pointer;}
+.deny-btn:hover{background:var(--r50);}
+.accepted-chip{font-size:10px;font-weight:600;padding:3px 9px;border-radius:6px;background:rgba(22,163,74,.12);color:var(--g600);border:1px solid rgba(22,163,74,.25);}
+.denied-chip{font-size:10px;font-weight:600;padding:3px 9px;border-radius:6px;background:var(--s100);color:var(--s400);border:1px solid var(--s200);}
+
+/* CAMPAIGN SECTION */
+.camp-section{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;}
+.camp-tabs{display:flex;border-bottom:1px solid var(--s200);}
+.ctab{padding:10px 16px;font-size:12px;font-weight:500;color:var(--s500);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none;}
+.ctab.on{color:var(--b600);border-bottom-color:var(--b600);font-weight:600;}
+.camp-table-wrap{padding:4px 0;}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(3px);}
+.modal{background:var(--white);border-radius:12px;width:min(500px,96vw);max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+.modal-hd{padding:16px 20px;border-bottom:1px solid var(--s200);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:2;}
+.modal-title{font-size:15px;font-weight:700;color:var(--s900);}
+.modal-close{width:28px;height:28px;border-radius:50%;background:var(--s100);border:none;color:var(--s500);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.modal-body{padding:20px;}
+.form-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:5px;display:block;}
+.form-input{width:100%;padding:8px 11px;border:1px solid var(--s200);border-radius:7px;font-size:13px;font-family:inherit;color:var(--s800);}
+.form-input:focus{outline:none;border-color:var(--s400);}
+.form-select{width:100%;padding:8px 11px;border:1px solid var(--s200);border-radius:7px;font-size:13px;font-family:inherit;color:var(--s800);}
+.form-row{margin-bottom:12px;}
+.form-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn .16s ease;}
+</style>
+</head>
+<body>
+
+<!-- ── TOP NAV ── -->
+<nav class="gnav">
+  <div class="gnav-logo">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="5" fill="#63DF4E"/>
+      <rect x="7" y="7" width="18" height="18" rx="3" fill="#032D42"/>
+      <rect x="11" y="11" width="10" height="10" rx="1.5" fill="#63DF4E"/>
+    </svg>
+  </div>
+  <div class="gnav-tabs">
+    <span class="gnav-tab">Favorites</span>
+    <span class="gnav-tab">History</span>
+    <span class="gnav-tab">Workspaces</span>
+    <span class="gnav-tab" style="padding:0 10px">⋮</span>
+  </div>
+  <div class="gnav-pill-wrap">
+    <div class="gnav-pill">
+      <div class="gnav-pill-dot"></div>
+      <span>GBA Commercial Illinois &amp; Midwest · Q2 FY26</span>
+    </div>
+  </div>
+  <div class="gnav-r">
+    <button class="gnav-btn">🔍</button>
+    <button class="gnav-btn">🔔</button>
+    <button class="gnav-btn">⚙️</button>
+    <div class="gnav-av">JR</div>
+  </div>
+</nav>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sbar">
+  <div class="sbar-sec">
+    <span class="sbar-lbl">My Work</span>
+    <a href="index.html"           class="sbar-item"    title="Command Center"><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="outreach-center.html" class="sbar-item"    title="Outreach Center"><span class="sbar-ic">📋</span>Outreach Center</a>
+    <a href="buying-groups.html"   class="sbar-item on" title="Buying Groups"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"           class="sbar-item"    title="Leads"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#"                    class="sbar-item"    title="Tasks"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Customers</span>
+    <a href="#"                    class="sbar-item"    title="Accounts"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="#"                    class="sbar-item"    title="Contacts"><span class="sbar-ic">👥</span>Contacts</a>
+    <a href="opportunities.html"   class="sbar-item"    title="Opportunities"><span class="sbar-ic">💼</span>Opportunities</a>
+  </div>
+  <div class="sdiv"></div>
+  <div class="sbar-sec">
+    <span class="sbar-lbl">Marketing</span>
+    <a href="#"                    class="sbar-item"    title="Campaigns"><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="#"                    class="sbar-item"    title="Reports"><span class="sbar-ic">📊</span>Reports</a>
+  </div>
+  <div class="sbar-footer">ServiceNow Confidential</div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+  <div class="page-hdr" id="pageHdr">
+    <div class="phdr-top">
+      <div>
+        <div style="font-size:11px;color:var(--s400);margin-bottom:2px">Friday, April 10, 2026</div>
+        <div class="phdr-name">Buying Groups</div>
+        <div class="phdr-sub">GBA Commercial Illinois &amp; Midwest · AI-mapped stakeholder coverage</div>
+      </div>
+      <div class="phdr-acts">
+        <button class="btn btn-g btn-sm">⬇ Export</button>
+        <button class="btn btn-g btn-sm" onclick="openAddBG()">+ New Buying Group</button>
+        <button class="btn btn-p btn-sm" onclick="openAddBG()">🤖 Ask AI to Map</button>
+      </div>
+    </div>
+
+    <!-- STAT STRIP -->
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-lbl">Total Buying Groups</div><div class="stat-val">12</div><div class="stat-d du">↑ 3 new signals today</div></div>
+      <div class="stat-card"><div class="stat-lbl">Handraisers</div><div class="stat-val" style="color:var(--g600)">3</div><div class="stat-d du">Action required</div></div>
+      <div class="stat-card"><div class="stat-lbl">Confirmed Members</div><div class="stat-val">28</div><div class="stat-d">Across all groups</div></div>
+      <div class="stat-card"><div class="stat-lbl">Pending Review</div><div class="stat-val" style="color:var(--a600)">14</div><div class="stat-d dw">Accept or deny</div></div>
+      <div class="stat-card"><div class="stat-lbl">Open Roles</div><div class="stat-val" style="color:var(--r600)">19</div><div class="stat-d dr">Not yet identified</div></div>
+    </div>
+
+    <!-- STAGE TABS -->
+    <div class="stage-tabs" id="stageTabs">
+      <button class="stab on"  data-tab="all"         onclick="switchTab('all',this)">All <span class="cnt">12</span></button>
+      <button class="stab"     data-tab="handraiser"  onclick="switchTab('handraiser',this)">Handraisers <span class="cnt">3</span></button>
+      <button class="stab"     data-tab="rfa"         onclick="switchTab('rfa',this)">Ready for Action <span class="cnt">2</span></button>
+      <button class="stab"     data-tab="npm"         onclick="switchTab('npm',this)">New Potential Member Interactions <span class="cnt">2</span></button>
+      <button class="stab"     data-tab="nbgm"        onclick="switchTab('nbgm',this)">New BG Member Interactions <span class="cnt">1</span></button>
+      <button class="stab"     data-tab="inprogress"  onclick="switchTab('inprogress',this)">In Progress <span class="cnt">2</span></button>
+      <button class="stab"     data-tab="targeted"    onclick="switchTab('targeted',this)">Targeted &amp; Engaged <span class="cnt">1</span></button>
+      <button class="stab"     data-tab="qualified"   onclick="switchTab('qualified',this)">Qualified <span class="cnt">1</span></button>
+    </div>
+  </div>
+
+  <div class="page-body" id="pageBody">
+    <!-- content rendered here -->
+  </div>
+</div>
+
+<div id="modal-root"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const AE_STYLES = {
+  Tony:    {bg:'rgba(3,45,66,0.1)',   color:'#032D42'},
+  Jeff:    {bg:'rgba(4,67,85,0.1)',   color:'#044355'},
+  Riley:   {bg:'rgba(180,83,9,0.1)',  color:'#B45309'},
+  Katie:   {bg:'rgba(91,33,182,0.1)', color:'#5B21B6'},
+  Brian:   {bg:'rgba(217,48,37,0.1)', color:'#D93025'},
+  Seamus:  {bg:'rgba(26,122,0,0.1)',  color:'#1a7a00'},
+  Mikaela: {bg:'rgba(3,105,161,0.1)', color:'#0369A1'},
+};
+
+const BG_LIST = [
+  {id:'bg-001', name:'Echo Global - IT',           account:'Echo Global Logistics, Inc.',     accountType:'customer', ae:'Riley',   stage:'Handraisers',  tab:'handraiser', members:3, handraiser:true,  lastSignal:'3h ago', signalType:'Webinar Attended',  handraisers:[{name:'Sarah Chen',title:'VP IT',type:'Contact Us',date:'Apr 8',detail:'Submitted contact form after HRSD demo — requested follow-up'},{name:'James Liu',title:'CIO',type:'Get Pricing',date:'Apr 10',detail:'Requested ITSM Enterprise pricing via servicenow.com'}]},
+  {id:'bg-002', name:'Sub-Zero Group - IT',         account:'Sub-Zero Group Inc.',             accountType:'customer', ae:'Tony',    stage:'Handraisers',  tab:'handraiser', members:2, handraiser:true,  lastSignal:'5h ago', signalType:'Demo Registered',   handraisers:[{name:'Brandon Joyce',title:'VP of IT',type:'Get Pricing',date:'Apr 10',detail:'Requested HRSD pricing — SLA window 5h remaining'},{name:'Carter Voss',title:'VP Information Technology',type:'Contact Us',date:'Apr 9',detail:'Submitted contact request via sub-zero.servicenow.com partner portal'}]},
+  {id:'bg-003', name:'Consilio - Security',         account:'Consilio LLC',                    accountType:'customer', ae:'Mikaela', stage:'Handraisers',  tab:'handraiser', members:2, handraiser:true,  lastSignal:'7h ago', signalType:'Veza Webinar',      handraisers:[{name:'Priya Nair',title:'CISO',type:'Contact Us',date:'Apr 10',detail:'Submitted Contact Us form after Veza acquisition announcement webinar'}]},
+  {id:'bg-004', name:'Hollister - IT',              account:'Hollister Incorporated',          accountType:'customer', ae:'Katie',   stage:'Ready for Action', tab:'rfa',   members:4, handraiser:false, lastSignal:'1d ago', signalType:'Sequence Active'},
+  {id:'bg-005', name:'Bluecross - HR',              account:'BlueCross BlueShield Assoc.',     accountType:'customer', ae:'Brian',   stage:'Ready for Action', tab:'rfa',   members:3, handraiser:false, lastSignal:'2d ago', signalType:'Content Download'},
+  {id:'bg-006', name:'AIT Worldwide - EW',          account:'AIT Worldwide Logistics',         accountType:'customer', ae:'Brian',   stage:'New Potential Member Interactions', tab:'npm', members:2, handraiser:false, lastSignal:'1d ago', signalType:'New Signal'},
+  {id:'bg-007', name:'Madison Air - HR',            account:'Madison Air',                     accountType:'prospect', ae:'Katie',   stage:'New Potential Member Interactions', tab:'npm', members:1, handraiser:false, lastSignal:'2d ago', signalType:'Webinar'},
+  {id:'bg-008', name:'Stepan Co - IRM',             account:'Stepan Co.',                      accountType:'customer', ae:'Seamus',  stage:'New BG Member Interactions', tab:'nbgm', members:3, handraiser:false, lastSignal:'6h ago', signalType:'Demo Attended'},
+  {id:'bg-009', name:'TTX Company - ITAM',          account:'TTX Company',                     accountType:'customer', ae:'Seamus',  stage:'In Progress',  tab:'inprogress', members:5, handraiser:false, lastSignal:'3d ago', signalType:'Opty Active'},
+  {id:'bg-010', name:'Quinnox - Now Assist',        account:'Quinnox Inc.',                    accountType:'prospect', ae:'Jeff',    stage:'In Progress',  tab:'inprogress', members:3, handraiser:false, lastSignal:'4d ago', signalType:'Sequence Active'},
+  {id:'bg-011', name:'Batteries Plus - IT',         account:'Batteries Plus LLC',              accountType:'prospect', ae:'Tony',    stage:'Targeted & Engaged', tab:'targeted', members:2, handraiser:false, lastSignal:'5d ago', signalType:'Email Opened'},
+  {id:'bg-012', name:'GATX Corporation - Platform', account:'GATX Corporation',                accountType:'customer', ae:'Riley',   stage:'Qualified',    tab:'qualified', members:6, handraiser:false, lastSignal:'1d ago', signalType:'Opty Stage 4'},
+];
+
+// ── DETAIL DATA ────────────────────────────────────────────────────────────
+const BG_DETAIL = {
+  'bg-001': {
+    aiSignal: 'Sarah Chen (Champion) opened Email 3 in the Knowledge \'25 sequence 3 hours ago — first engagement in 8 days. Economic Buyer role identified via ML: James Liu (CIO) attended AI Platform Foundation webinar today. Ratifier and User roles not yet identified.',
+    roles: {
+      champion:     {name:'Sarah Chen',     title:'VP IT',              status:'confirmed',     seq:'Knowledge \'25 FU'},
+      economicBuyer:{name:'James Liu',       title:'CIO',                status:'new-signal'},
+      influencer:   {name:'Nicholas Parker', title:'IT-Other Director',  status:'active',        seq:'WS-DemoNow-ITSM'},
+      ratifier:     {status:'not-identified', mlSuggests:2},
+      user:         {status:'open',           mlSuggests:2},
+    },
+    confirmedMembers:[
+      {name:'Sarah Chen',     title:'VP IT',           level:'VP',       role:'champion',   handraiser:true,  engagement:'High', status:'open', seq:'Knowledge \'25 FU',    sla:null,  lastSignal:'3h ago'},
+      {name:'Nicholas Parker',title:'IT-Other Director/Sr', level:'Director', role:'influencer', handraiser:false, engagement:'High', status:'open', seq:'WS-DemoNow-ITSM', sla:'48h', lastSignal:'3/10/2026'},
+    ],
+    mlMembers:[
+      {id:'ml-001', name:'James Liu',       title:'CIO',                          level:'C-Level', role:'pending', handraiser:true,  handraisersType:'Get Pricing', engagement:'Medium', status:'MQL', score:96, reasoning:'Attended AI Platform Foundation webinar today — first engagement in 45 days. C-Level IT title is a strong Economic Buyer signal for ITSM evaluation of this size. Also submitted a Get Pricing request.', state:'pending'},
+      {id:'ml-002', name:'Emma Mitchell',   title:'Architect, Architecture',      level:'Manager', role:'pending', handraiser:false, engagement:'High',   status:'Remarked',   score:82, reasoning:'High engagement score, attended SNSummit Charlotte. Architecture background aligns with Influencer or technical Champion profile for ITSM implementation decisions.', state:'pending'},
+      {id:'ml-003', name:'Daniel Kim',      title:'IT Service Management Director',level:'Director',role:'pending', handraiser:false, engagement:'High',   status:'Remarked',   score:79, reasoning:'IT Service Management Director title is a direct match for ITSM buying group. High engagement, in active nurture sequence. Strong Influencer or co-Champion candidate.', state:'pending'},
+      {id:'ml-004', name:'Mouli Venkatesan',title:'CTO',                          level:'C-Level', role:'pending', handraiser:false, engagement:'Low',    status:'Hold',       score:74, reasoning:'Second CTO contact at Echo Global. Could be Ratifier or backup Economic Buyer. Low engagement but senior title warrants inclusion as potential Ratifier.', state:'pending'},
+      {id:'ml-005', name:'Samuel Paschka',  title:'VP IT Operations Management', level:'VP',      role:'pending', handraiser:false, engagement:'Low',    status:'Qualified',  score:68, reasoning:'VP IT Operations — adjacent to Sarah Chen\'s role. Qualified status from past campaign. Potential User or Ratifier given seniority and IT Ops function.', state:'pending'},
+      {id:'ml-006', name:'Rafee Doodekula', title:'Architect, Architecture',      level:'Manager', role:'pending', handraiser:false, engagement:'Low',    status:'Hold',       score:61, reasoning:'Architecture background. Attended Gartner ITSM webinar Dec 2025. Lower engagement but technical profile fits Influencer or User role in an ITSM evaluation.', state:'pending'},
+      {id:'ml-007', name:'Mark Albright',   title:'GRC-Other Director/Sr',        level:'Director',role:'pending', handraiser:false, engagement:'Low',    status:'List Import', score:55, reasoning:'GRC function overlaps with ITSM governance use cases. List import — no direct engagement yet. Lower confidence but worth validating with AE before excluding.', state:'pending'},
+    ],
+    campaignActivity:[
+      {date:'Apr 10', type:'Email Opened', contact:'Sarah Chen', sequence:'Knowledge \'25 FU', detail:'Email 3 opened — 3h ago'},
+      {date:'Apr 10', type:'Webinar Attended', contact:'James Liu', sequence:'AI Platform Foundation Webinar', detail:'First engagement in 45 days'},
+      {date:'Apr 7',  type:'Email Sent',   contact:'Sarah Chen', sequence:'Knowledge \'25 FU', detail:'Email 3 delivered'},
+      {date:'Apr 3',  type:'Email Sent',   contact:'Nicholas Parker', sequence:'WS-DemoNow-ITSM', detail:'Email 1 delivered · SLA: 48h remaining'},
+      {date:'Mar 25', type:'Demo Attended', contact:'Nicholas Parker', sequence:'WS-DemoNow-ITSM', detail:'Attended ITSM live demo — Engagement +12'},
+    ],
+    linkedOpty: {id:'OPTY4812937', name:'ITOM AIOps', stage:'Stage 3', amount:'$195K'},
+  },
+  'bg-002': {
+    aiSignal: 'Brandon Joyce (VP of IT) submitted a Get Pricing request for HRSD — SLA window 5h remaining. Carter Voss (VP Information Technology) submitted a Contact Us form yesterday. Both are surfaced as high-intent contacts. Champion role identified. Economic Buyer, Influencer, and Ratifier roles open.',
+    roles: {
+      champion:     {name:'Carter Voss',   title:'VP Information Technology', status:'confirmed', seq:'HRSD Demo Sequence'},
+      economicBuyer:{name:'Brandon Joyce', title:'VP of IT',                  status:'new-signal'},
+      influencer:   {status:'not-identified', mlSuggests:2},
+      ratifier:     {status:'open'},
+      user:         {status:'open'},
+    },
+    confirmedMembers:[
+      {name:'Carter Voss', title:'VP Information Technology', level:'VP', role:'champion', handraiser:true, handraisersType:'Contact Us', engagement:'High', status:'open', seq:'HRSD Demo Sequence', sla:null, lastSignal:'Apr 9'},
+    ],
+    mlMembers:[
+      {id:'ml-b2-001', name:'Brandon Joyce', title:'VP of IT',                  level:'VP',       role:'pending', handraiser:true,  handraisersType:'Get Pricing', engagement:'High',   status:'MQL',  score:95, reasoning:'Submitted Get Pricing request for HRSD — SLA window 5h remaining. VP of IT is a strong Champion or Economic Buyer signal for HR buying group.', state:'pending'},
+      {id:'ml-b2-002', name:'Diane Tremblay',title:'CIO',                       level:'C-Level',  role:'pending', handraiser:false, engagement:'Low',    status:'Hold', score:62, reasoning:'CIO title match — no direct engagement yet. Potential Economic Buyer once champion relationship is established.', state:'pending'},
+      {id:'ml-b2-003', name:'Brad Lester',   title:'Dir. of IT Infrastructure', level:'Director', role:'pending', handraiser:false, engagement:'Medium', status:'MQL',  score:71, reasoning:'Attended K25 session March 15. IT Infrastructure Director — strong Influencer profile for ITSM and HRSD evaluation.', state:'pending'},
+    ],
+    campaignActivity:[
+      {date:'Apr 10', type:'Get Pricing Request', contact:'Brandon Joyce', sequence:'servicenow.com/pricing',  detail:'HRSD pricing request — 5h SLA window remaining'},
+      {date:'Apr 9',  type:'Contact Us Form',     contact:'Carter Voss',   sequence:'servicenow.com/contact', detail:'Submitted contact request after HRSD webinar'},
+      {date:'Mar 15', type:'Event Attended',       contact:'Brad Lester',   sequence:'K25 - Las Vegas',        detail:'Attended HRSD session at K25'},
+    ],
+    linkedOpty: null,
+  },
+  'bg-003': {
+    aiSignal: 'Priya Nair (CISO) attended the Veza acquisition webinar and submitted a Contact Us form 7 hours ago — first high-intent signal from this account in 60 days. Derek Okafor (VP Cybersecurity) is surfaced as a strong Economic Buyer. Champion role open — Priya Nair is the top recommendation. Influencer and Ratifier roles not yet identified.',
+    roles: {
+      champion:     {status:'not-identified', mlSuggests:1},
+      economicBuyer:{status:'not-identified', mlSuggests:1},
+      influencer:   {status:'open'},
+      ratifier:     {status:'open'},
+      user:         {status:'open'},
+    },
+    confirmedMembers:[],
+    mlMembers:[
+      {id:'ml-b3-001', name:'Priya Nair',      title:'CISO',                       level:'C-Level',  role:'pending', handraiser:true,  handraisersType:'Contact Us', engagement:'High',   status:'MQL',      score:89, reasoning:'Attended Veza acquisition webinar and submitted Contact Us form today — dual high-intent signal. CISO is a direct match for Champion in a Security buying group.', state:'pending'},
+      {id:'ml-b3-002', name:'Derek Okafor',    title:'VP of Cybersecurity',        level:'VP',       role:'pending', handraiser:false, engagement:'Medium', status:'MQL',      score:73, reasoning:'Opened Email 1 in Veza awareness sequence. VP Cybersecurity — strong Economic Buyer or co-Champion. Needs engagement nurturing before outreach.', state:'pending'},
+      {id:'ml-b3-003', name:'Laura Shin',      title:'Security Operations Manager',level:'Manager',  role:'pending', handraiser:false, engagement:'Medium', status:'Remarked', score:65, reasoning:'Downloaded SecOps playbook April 8. Security Operations profile is a direct Influencer fit for Security buying group evaluation.', state:'pending'},
+      {id:'ml-b3-004', name:'Wei Park',        title:'CTO',                        level:'C-Level',  role:'pending', handraiser:false, engagement:'Low',    status:'Hold',     score:41, reasoning:'No direct engagement. CTO title warrants inclusion as potential Ratifier. Low confidence — validate with AE before adding.', state:'pending'},
+    ],
+    campaignActivity:[
+      {date:'Apr 10', type:'Contact Us Form',  contact:'Priya Nair',   sequence:'servicenow.com/contact',   detail:'Submitted after Veza acquisition webinar — 7h ago'},
+      {date:'Apr 10', type:'Webinar Attended', contact:'Priya Nair',   sequence:'Veza Acquisition Webinar', detail:'First engagement in 60 days'},
+      {date:'Apr 8',  type:'Content Download', contact:'Laura Shin',   sequence:'SecOps Playbook',          detail:'Downloaded security operations playbook'},
+    ],
+    linkedOpty: null,
+  },
+};
+
+// Default detail for BGs without full data
+function getDefaultDetail(bg) {
+  return BG_DETAIL[bg.id] || {
+    aiSignal: `${bg.ae} (AE) has ${bg.members} confirmed member${bg.members!==1?'s':''} mapped in this buying group. Last signal: ${bg.lastSignal} — ${bg.signalType}. Review recommendations to complete role coverage.`,
+    roles: {
+      champion:     {status:'not-identified', mlSuggests:1},
+      economicBuyer:{status:'open'},
+      influencer:   {status:'open'},
+      ratifier:     {status:'open'},
+      user:         {status:'open'},
+    },
+    confirmedMembers:[],
+    mlMembers:[],
+    campaignActivity:[],
+    linkedOpty:null,
+  };
+}
+
+
+// ── BG CANDIDATES (account contacts filtered by BG type) ─────────────────
+const BG_CANDIDATES = {
+  'bg-001': [ // Echo Global - IT
+    {account:'Echo Global Logistics', name:'James Liu',        title:'CIO',                              role:'Economic Buyer', level:'C-Level', signal:'Attended AI Platform webinar today',      score:96},
+    {account:'Echo Global Logistics', name:'Mouli Venkatesan', title:'CTO',                              role:'Ratifier',       level:'C-Level', signal:'2nd CTO contact — low engagement',       score:74},
+    {account:'Echo Global Logistics', name:'Daniel Kim',       title:'IT Service Management Director',   role:'Champion',       level:'Director',signal:'High engagement, ITSM sequence active',   score:79},
+    {account:'Echo Global Logistics', name:'Emma Mitchell',    title:'Architect, Architecture',           role:'Influencer',     level:'Manager', signal:'Attended SNSummit Charlotte',             score:82},
+    {account:'Echo Global Logistics', name:'Samuel Paschka',   title:'VP IT Operations Management',      role:'Champion',       level:'VP',      signal:'Qualified from prior campaign',           score:68},
+    {account:'Echo Global Logistics', name:'Rafee Doodekula',  title:'Architect, Architecture',           role:'Influencer',     level:'Manager', signal:'Gartner ITSM webinar Dec 2025',           score:61},
+    {account:'Echo Global Logistics', name:'Mark Albright',    title:'GRC-Other Director/Sr',             role:'Ratifier',       level:'Director',signal:'GRC overlap — no direct engagement',      score:55},
+  ],
+  'bg-002': [ // Sub-Zero Group - IT
+    {account:'Sub-Zero Group Inc.',   name:'Carter Voss',      title:'VP of Information Technology',      role:'Champion',       level:'VP',      signal:'Registered for HRSD demo — 5h SLA',       score:88},
+    {account:'Sub-Zero Group Inc.',   name:'Diane Tremblay',   title:'CIO',                              role:'Economic Buyer', level:'C-Level', signal:'No engagement — title match only',        score:62},
+    {account:'Sub-Zero Group Inc.',   name:'Brad Lester',      title:'Director of IT Infrastructure',    role:'Influencer',     level:'Director',signal:'Attended K25 session — 3/15',             score:71},
+    {account:'Sub-Zero Group Inc.',   name:'Vanessa Kim',      title:'IT Manager',                       role:'User',           level:'Manager', signal:'Opened ITSM content 2x this quarter',     score:54},
+  ],
+  'bg-003': [ // Consilio - Security
+    {account:'Consilio LLC',          name:'Priya Nair',        title:'CISO',                            role:'Champion',       level:'C-Level', signal:'Attended Veza webinar today — 7h SLA',    score:79},
+    {account:'Consilio LLC',          name:'Derek Okafor',      title:'VP of Cybersecurity',             role:'Economic Buyer', level:'VP',      signal:'Email opened — Veza sequence step 1',     score:73},
+    {account:'Consilio LLC',          name:'Laura Shin',        title:'Security Operations Manager',     role:'Influencer',     level:'Manager', signal:'Downloaded SecOps playbook — 4/8',        score:65},
+    {account:'Consilio LLC',          name:'Tom Breckenridge',  title:'IT Architect (Security Focus)',    role:'Influencer',     level:'Manager', signal:'No engagement — LinkedIn profile match',   score:48},
+    {account:'Consilio LLC',          name:'Wei Park',          title:'CTO',                             role:'Ratifier',       level:'C-Level', signal:'No engagement — title match only',        score:41},
+  ],
+  'bg-004': [ // Hollister - IT
+    {account:'Hollister Incorporated',name:'Rachel Green',      title:'IT Director',                     role:'Champion',       level:'Director',signal:'Accenture referral — meeting booked 4/22', score:78},
+    {account:'Hollister Incorporated',name:'Patrick Sullivan',  title:'VP of Technology',                role:'Economic Buyer', level:'VP',      signal:'Attended K25 — brief engagement',          score:69},
+    {account:'Hollister Incorporated',name:'Amy Chen',          title:'IT Systems Analyst',              role:'User',           level:'IC',      signal:'Downloaded ITAM whitepaper — 4/7',         score:55},
+    {account:'Hollister Incorporated',name:'James Ford',        title:'Infrastructure Manager',          role:'Influencer',     level:'Manager', signal:'No engagement — org chart match',          score:46},
+  ],
+  'bg-005': [ // Bluecross - HR
+    {account:'BlueCross BlueShield',  name:'Mark Osei',         title:'Dir. HR Operations',              role:'Champion',       level:'Director',signal:'Downloaded EW buyers guide — 3/10',        score:51},
+    {account:'BlueCross BlueShield',  name:'Emma Mitchell',     title:'Solutions Architect',             role:'Influencer',     level:'Manager', signal:'Attended BC webinar — Solutions Arch.',    score:61},
+    {account:'BlueCross BlueShield',  name:'Sandra Lewis',      title:'VP of Human Resources',          role:'Economic Buyer', level:'VP',      signal:'No engagement — title/level match',        score:67},
+    {account:'BlueCross BlueShield',  name:'Ramprasad Kalan',   title:'Solutions Architect',             role:'Influencer',     level:'Manager', signal:'Downloaded Automation Engine demo',        score:61},
+    {account:'BlueCross BlueShield',  name:'Tina Walsh',        title:'HR Technology Manager',           role:'Influencer',     level:'Manager', signal:'No engagement — function match only',      score:44},
+  ],
+  'bg-006': [ // AIT Worldwide - EW
+    {account:'AIT Worldwide Logistics',name:'Lisa Park',        title:'CHRO',                            role:'Economic Buyer', level:'C-Level', signal:'HR demo request — meeting 4/17',           score:91},
+    {account:'AIT Worldwide Logistics',name:'Marcus Tran',      title:'VP of Human Resources',           role:'Champion',       level:'VP',      signal:'Attended EW webinar — high engagement',    score:77},
+    {account:'AIT Worldwide Logistics',name:'Carolyn Hughes',   title:'HR Systems Director',             role:'Influencer',     level:'Director',signal:'Email reply received — evaluating',         score:69},
+    {account:'AIT Worldwide Logistics',name:'Jim Cienkus',      title:'VP IT Infrastructure',            role:'Ratifier',       level:'VP',      signal:'Downloaded ITOM content — IT persona',     score:58},
+  ],
+  'bg-007': [ // Madison Air - HR
+    {account:'Madison Air',           name:'Grace Turner',      title:'VP of People Operations',         role:'Champion',       level:'VP',      signal:'Attended HR webinar — 2d ago',             score:72},
+    {account:'Madison Air',           name:'Ryan Cassidy',      title:'Chief People Officer',            role:'Economic Buyer', level:'C-Level', signal:'No engagement — CPO title match',          score:63},
+    {account:'Madison Air',           name:'Leah Brennan',      title:'HR Technology Manager',           role:'Influencer',     level:'Manager', signal:'Downloaded EW buyers guide',               score:55},
+  ],
+  'bg-008': [ // Stepan Co - IRM
+    {account:'Stepan Co.',            name:'Tomas Rivera',      title:'Head of IT',                      role:'Champion',       level:'VP',      signal:'Attended ITAM webinar — meeting 4/21',     score:82},
+    {account:'Stepan Co.',            name:'Angela Ferris',     title:'CIO',                             role:'Economic Buyer', level:'C-Level', signal:'No engagement — CIO title match only',     score:65},
+    {account:'Stepan Co.',            name:'Darin Wolf',        title:'Risk & Compliance Director',      role:'Influencer',     level:'Director',signal:'Attended IRM webinar Dec 2025',            score:71},
+    {account:'Stepan Co.',            name:'Brian Holcomb',     title:'GRC Manager',                     role:'Influencer',     level:'Manager', signal:'No engagement — IRM function match',       score:49},
+  ],
+  'bg-009': [ // TTX Company - ITAM
+    {account:'TTX Company',           name:'David Blasdell',    title:'VP of IT',                        role:'Champion',       level:'VP',      signal:'Stage 5 opty — contract under review',     score:90},
+    {account:'TTX Company',           name:'Patricia Emmons',   title:'CIO',                             role:'Economic Buyer', level:'C-Level', signal:'Verbal commitment confirmed — 4/9',        score:85},
+    {account:'TTX Company',           name:'Scott Flanagan',    title:'IT Asset Manager',                role:'Influencer',     level:'Manager', signal:'Engaged on ITAM content multiple times',   score:74},
+    {account:'TTX Company',           name:'Kim Nakamura',      title:'Procurement Director',            role:'Ratifier',       level:'Director',signal:'Procurement engaged — reviewing MSA',       score:68},
+    {account:'TTX Company',           name:'Terry Vance',       title:'IT Operations Manager',           role:'User',           level:'Manager', signal:'Low engagement — operational fit',          score:52},
+  ],
+  'bg-010': [ // Quinnox - Now Assist
+    {account:'Quinnox Inc.',          name:'Amanda Foster',     title:'Dir. of HR Systems',              role:'Influencer',     level:'Director',signal:'Attended EW webinar — high engagement',    score:71},
+    {account:'Quinnox Inc.',          name:'Vijay Reddy',       title:'VP of Information Technology',    role:'Champion',       level:'VP',      signal:'Email opened — Now Assist sequence',       score:78},
+    {account:'Quinnox Inc.',          name:'Suresh Patel',      title:'CTO',                             role:'Economic Buyer', level:'C-Level', signal:'No engagement — CTO title match',          score:64},
+    {account:'Quinnox Inc.',          name:'Anita Nair',        title:'IT Service Delivery Director',    role:'Influencer',     level:'Director',signal:'No engagement — function match only',      score:53},
+  ],
+  'bg-011': [ // Batteries Plus - IT
+    {account:'Batteries Plus LLC',   name:'Kyle Ramos',        title:'IT Director',                      role:'Champion',       level:'Director',signal:'Email opened — platform sequence step 2',  score:66},
+    {account:'Batteries Plus LLC',   name:'Sandra Coates',     title:'CIO',                             role:'Economic Buyer', level:'C-Level', signal:'No engagement — CIO title match',          score:58},
+    {account:'Batteries Plus LLC',   name:'Drew Holland',      title:'Network & Infrastructure Manager', role:'Influencer',     level:'Manager', signal:'No engagement — IT function match',        score:44},
+  ],
+  'bg-012': [ // GATX Corporation - Platform
+    {account:'GATX Corporation',     name:'Michael Chang',     title:'VP of IT',                         role:'Champion',       level:'VP',      signal:'Stage 4 opty — platform expansion',        score:88},
+    {account:'GATX Corporation',     name:'Claire Desjardins', title:'CIO',                             role:'Economic Buyer', level:'C-Level', signal:'C-suite aligned — June deadline confirmed', score:82},
+    {account:'GATX Corporation',     name:'Alex Morris',       title:'IT Architect, Platform',          role:'Influencer',     level:'Manager', signal:'Attended platform webinar — technical eval', score:74},
+    {account:'GATX Corporation',     name:'Ron Yuen',          title:'VP of Finance',                   role:'Ratifier',       level:'VP',      signal:'Finance approval needed for contract',     score:61},
+    {account:'GATX Corporation',     name:'Dianne Park',       title:'Director of Operations',          role:'Ratifier',       level:'Director',signal:'Ops Director — platform adoption owner',   score:57},
+    {account:'GATX Corporation',     name:'Sam Keating',       title:'Software Engineer, Platform',     role:'User',           level:'IC',      signal:'Developer profile — creator workflows fit', score:49},
+  ],
+};
+
+function getBGCandidates(bgId) {
+  return BG_CANDIDATES[bgId] || [];
+}
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let activeTab = 'all';
+let currentView = 'list'; // 'list' | 'detail'
+let selectedBG = null;
+let mlStates = {}; // {mlId: 'pending'|'accepted'|'denied'}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────
+function aeBubble(ae) {
+  const s = AE_STYLES[ae] || {bg:'rgba(100,116,139,.1)',color:'#475569'};
+  return `<div class="ae-dot" style="background:${s.bg};color:${s.color}" title="${ae}">${ae.slice(0,2).toUpperCase()}</div>`;
+}
+
+function acctTypePill(t) {
+  const m = {customer:'at-customer Customer',prospect:'at-prospect Prospect',suspect:'at-suspect Suspect','former cust':'at-fmrcust Former Cust'};
+  const [cls,lbl] = (m[t.toLowerCase()]||'at-prospect Prospect').split(' ');
+  return `<span class="acct-type ${cls}">${lbl}</span>`;
+}
+
+function stagePill(stage) {
+  const m = {
+    'Handraisers':'st-handraiser', 'Ready for Action':'st-rfa',
+    'New Potential Member Interactions':'st-npm', 'New BG Member Interactions':'st-nbgm',
+    'In Progress':'st-inprogress', 'Targeted & Engaged':'st-targeted', 'Qualified':'st-qualified'
+  };
+  return `<span class="stage-tag ${m[stage]||'st-inprogress'}">${stage}</span>`;
+}
+
+function rolePill(role) {
+  const m = {champion:'rp-champion Champion', economicBuyer:'rp-buyer Economic Buyer',
+    influencer:'rp-influencer Influencer', ratifier:'rp-ratifier Ratifier', user:'rp-user User', pending:'rp-pending Pending'};
+  const [cls,lbl] = (m[role]||'rp-pending Pending').split(' ');
+  return `<span class="role-pill ${cls}">${lbl}</span>`;
+}
+
+function engPill(e) {
+  const m = {High:'eng-high',Medium:'eng-med',Low:'eng-low'};
+  return `<span class="eng-pill ${m[e]||'eng-low'}">${e}</span>`;
+}
+
+function statusPillM(s) {
+  const m = {MQL:'sp-mql',Remarked:'sp-remarked',Hold:'sp-hold',Qualified:'sp-qualified','List Import':'sp-listimport',Open:'sp-open'};
+  return `<span class="status-pill ${m[s]||'sp-hold'}">${s}</span>`;
+}
+
+function roleCardClass(status) {
+  return {confirmed:'confirmed','new-signal':'new-signal',active:'active','not-identified':'not-identified',open:'open'}[status] || 'open';
+}
+
+function roleStatusLabel(status) {
+  const m = {confirmed:'✓ Confirmed','new-signal':'⚡ New signal',active:'● Active','not-identified':'Not identified',open:'Open role'};
+  const cls = {confirmed:'rs-confirmed','new-signal':'rs-new-signal',active:'rs-active','not-identified':'rs-not-id',open:'rs-open'};
+  return `<span class="role-status ${cls[status]||'rs-open'}">${m[status]||status}</span>`;
+}
+
+// ── LIST VIEW ──────────────────────────────────────────────────────────────
+function renderListView() {
+  const rows = BG_LIST.filter(bg => activeTab === 'all' || bg.tab === activeTab);
+
+  const aiSignals = [
+    {bg:'Sub-Zero Group - IT',   text:'Brandon Joyce (VP IT) requested HRSD pricing via Get Pricing form — SLA window 5h remaining', tag:'Get Pricing', color:'var(--a600)'},
+    {bg:'Echo Global - IT',       text:'James Liu (CIO) attended AI Platform Foundation webinar — first engagement in 45 days',         tag:'Webinar Attended', color:'var(--b600)'},
+    {bg:'Consilio - Security',    text:'Priya Nair (CISO) attended Veza acquisition webinar and submitted Contact Us form — 7h ago',    tag:'Contact Us', color:'var(--g600)'},
+    {bg:'Stepan Co - IRM',        text:'Tomas Rivera (Head of IT) attended live ITAM demo — new member signal surfaced',                tag:'Demo Attended', color:'var(--p600)'},
+  ];
+
+  let html = `
+    <!-- AI SIGNAL PANEL -->
+    ${activeTab === 'all' ? `<div class="ai-signal fade-in">
+      <div class="ai-signal-icon">✦</div>
+      <div class="ai-signal-body">
+        <div class="ai-signal-hd">AI Buying Group Signals <span class="ts">Updated 3 minutes ago</span></div>
+        <div class="ai-signal-items">
+          ${aiSignals.map(s => `
+            <div class="ai-sig-item">
+              <div class="ai-sig-dot" style="background:${s.color}"></div>
+              <div><span class="ai-sig-strong">${s.bg}</span> — ${s.text} <span class="ai-sig-badge">${s.tag}</span></div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>` : ''}
+
+    <!-- TABLE -->
+    <div class="bg-table-wrap fade-in">
+      <table class="bg-table">
+        <thead>
+          <tr>
+            <th style="width:36px"></th>
+            <th>Buying Group</th>
+            <th>Account</th>
+            <th>Account Type</th>
+            <th>Sales Rep</th>
+            <th>Stage</th>
+            <th>Total Members</th>
+            <th>Handraiser</th>
+            ${activeTab === 'handraiser' ? '<th>Who Raised Their Hand</th>' : '<th>Last Signal</th>'}
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(bg => `
+            <tr onclick="openDetail('${bg.id}')">
+              <td><button class="ask-ai-btn" onclick="event.stopPropagation();askAI('${bg.id}')" title="Ask AI about this buying group">✦</button></td>
+              <td><span class="bg-name">${bg.name}</span></td>
+              <td style="color:var(--s600)">${bg.account}</td>
+              <td>${acctTypePill(bg.accountType)}</td>
+              <td>${aeBubble(bg.ae)}</td>
+              <td>${stagePill(bg.stage)}</td>
+              <td><span style="font-size:12px;font-weight:600;color:var(--s800)">${bg.members}</span></td>
+              <td>${bg.handraiser ? '<div class="handraiser-yes">⊙ True</div>' : '<span style="font-size:12px;color:var(--s400)">—</span>'}</td>
+              ${activeTab === 'handraiser' && bg.handraisers
+                ? `<td style="padding:8px 12px">
+                    ${bg.handraisers.map(h => `
+                      <div style="display:flex;align-items:flex-start;gap:8px;padding:4px 0;border-bottom:1px solid var(--s100);">
+                        <span class="${h.type === 'Contact Us' ? 'hr-contact-us' : 'hr-get-pricing'}">${h.type === 'Contact Us' ? '✉' : '💲'} ${h.type}</span>
+                        <div>
+                          <div style="font-size:12px;font-weight:600;color:var(--s800)">${h.name}</div>
+                          <div style="font-size:10px;color:var(--s500)">${h.title} · ${h.date}</div>
+                        </div>
+                      </div>`).join('')}
+                  </td>`
+                : `<td>
+                    <div style="font-size:11px;color:var(--s600)">${bg.lastSignal}</div>
+                    <div style="font-size:10px;color:var(--s400)">${bg.signalType}</div>
+                  </td>`}
+            </tr>`).join('')}
+        </tbody>
+      </table>
+      <div style="padding:10px 16px;border-top:1px solid var(--s100);font-size:11px;color:var(--s400)">
+        Showing ${rows.length} of ${BG_LIST.length} buying groups
+      </div>
+    </div>`;
+
+  document.getElementById('pageBody').innerHTML = html;
+}
+
+// ── DETAIL VIEW ────────────────────────────────────────────────────────────
+function openDetail(bgId) {
+  const bg = BG_LIST.find(x => x.id === bgId);
+  if(!bg) return;
+  selectedBG = bg;
+  currentView = 'detail';
+  renderDetailView();
+}
+
+function renderDetailView() {
+  const bg = selectedBG;
+  const detail = getDefaultDetail(bg);
+  const roles = detail.roles;
+
+  // Role card builder
+  function roleCard(key, labelCls, labelText) {
+    const r = roles[key] || {status:'open'};
+    const cardCls = roleCardClass(r.status);
+    return `<div class="role-card ${cardCls}">
+      <div class="role-label ${labelCls}">${labelText}</div>
+      ${r.name ? `<div class="role-name">${r.name}</div><div class="role-title">${r.title}</div>` : `<div class="role-name" style="color:var(--s400)">—</div><div class="role-title" style="color:var(--s300)">Open role</div>`}
+      ${roleStatusLabel(r.status)}
+      ${r.seq ? `<div class="role-seq">${r.seq}</div>` : ''}
+      ${r.mlSuggests ? `<div class="role-ml">AI suggests ${r.mlSuggests}</div>` : ''}
+    </div>`;
+  }
+
+  // Org chart node
+  function ocNode(key, roleCls, labelText, color, bg2) {
+    const r = roles[key] || {status:'open'};
+    const initials = r.name ? r.name.split(' ').map(w=>w[0]).join('').slice(0,2) : '—';
+    return `<div class="oc-node">
+      <div class="oc-box ${roleCardClass(r.status)}">
+        <div class="oc-role ${roleCls}">${labelText}</div>
+        <div class="oc-av" style="background:${color+'20'};color:${color}">${initials}</div>
+        <div class="oc-name">${r.name || 'Open Role'}</div>
+        ${r.name ? `<div class="oc-sub">${r.title.split(',')[0]}</div>` : ''}
+        <span class="oc-badge ${roleCardClass(r.status)}">${r.status==='new-signal'?'⚡ New':r.status==='confirmed'?'✓ Confirmed':r.status==='active'?'● Active':'Open'}</span>
+      </div>
+    </div>`;
+  }
+
+  // ML members rows
+  function mlRow(m) {
+    const state = mlStates[m.id] || m.state || 'pending';
+    const actionCell = state === 'accepted'
+      ? `<span class="accepted-chip">✓ Accepted</span>`
+      : state === 'denied'
+      ? `<span class="denied-chip">✗ Denied</span>`
+      : `<button class="accept-btn" onclick="mlAction('${m.id}','accepted')">✓ Accept</button>
+         <button class="deny-btn" style="margin-left:5px" onclick="mlAction('${m.id}','denied')">✗ Deny</button>`;
+    return `<tr class="${state==='denied'?'':''}">
+      <td>
+        <div style="font-size:12px;font-weight:600;color:${state==='denied'?'var(--s400)':'var(--b600)'}">${m.name}</div>
+        ${m.handraisersType ? `<span class="${m.handraisersType==='Contact Us'?'hr-contact-us':'hr-get-pricing'}" style="margin-top:4px;display:inline-flex">${m.handraisersType==='Contact Us'?'✉':'💲'} ${m.handraisersType}</span>` : ''}
+        <div style="font-size:10px;color:var(--s400);margin-top:2px">Last signal: ${m.lastSignal||'—'}</div>
+      </td>
+      <td style="color:var(--s600)">${m.title}</td>
+      <td><span style="font-size:11px;font-weight:600;color:var(--s700)">${m.level}</span></td>
+      <td><span class="role-pill rp-pending" style="${state==='denied'?'opacity:.4':''}">${m.role==='pending'?'⏳ Pending':m.role}</span></td>
+      <td><span style="font-size:11px;color:var(--s500)">${m.handraiser?'✓ Yes':'No'}</span></td>
+      <td>${engPill(m.engagement)}</td>
+      <td>${statusPillM(m.status)}</td>
+      <td><div class="ml-reasoning" style="${state==='denied'?'opacity:.5':''}">${m.reasoning}</div></td>
+      <td><span class="ml-score" style="${state==='denied'?'color:var(--s400)':''}">${m.score}</span></td>
+      <td>${actionCell}</td>
+    </tr>`;
+  }
+
+  const pendingCount = (detail.mlMembers||[]).filter(m => (mlStates[m.id]||m.state||'pending')==='pending').length;
+
+  let html = `
+    <!-- BACK BUTTON -->
+    <div class="detail-back fade-in" onclick="backToList()">← Back to Buying Groups</div>
+
+    <!-- DETAIL HEADER -->
+    <div class="detail-hd fade-in">
+      <div>
+        <div class="detail-title">${bg.name}</div>
+        <div class="detail-sub">${bg.account} · ${bg.accountType.charAt(0).toUpperCase()+bg.accountType.slice(1)} · AE: ${bg.ae} · Last signal: ${bg.lastSignal}</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-g btn-sm" onclick="openAddMember()">+ Add Manually</button>
+        <button class="btn btn-p btn-sm">⬆ Import to Outreach</button>
+        <button class="btn btn-p btn-sm" style="background:rgba(99,223,78,.15);border-color:rgba(99,223,78,.3);color:#166534">✦ Ask AI</button>
+      </div>
+    </div>
+
+    <!-- AI SIGNAL BANNER -->
+    <div class="ai-banner fade-in">
+      <span style="font-size:16px;flex-shrink:0">✦</span>
+      <div><span class="ai-banner-label">AI Signal</span><span class="ai-banner-text">${detail.aiSignal}</span></div>
+    </div>
+
+    <!-- HANDRAISER BANNER (if BG has handraisers) -->
+    ${bg.handraisers && bg.handraisers.length ? `
+    <div class="hr-banner fade-in">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#1d4ed8;margin-bottom:6px">🙋 Handraisers — ${bg.handraisers.length} inbound signal${bg.handraisers.length!==1?'s':''}</div>
+      ${bg.handraisers.map(h => `<div class="hr-row">
+        <span class="${h.type === 'Contact Us' ? 'hr-contact-us' : 'hr-get-pricing'}">${h.type === 'Contact Us' ? '✉' : '💲'} ${h.type}</span>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--s800)">${h.name} <span style="font-size:11px;font-weight:400;color:var(--s500)">· ${h.title}</span></div>
+          <div style="font-size:11px;color:var(--s600);margin-top:2px">${h.detail}</div>
+          <div style="font-size:10px;color:var(--s400);margin-top:2px">${h.date}</div>
+        </div>
+      </div>`).join('')}
+    </div>` : ''}
+
+    <!-- COVERAGE -->
+    <div class="fade-in">
+      <div class="coverage-hd">
+        <div class="coverage-title">Buying Group Coverage — 5 Roles</div>
+        <div class="coverage-legend">
+          <div class="leg-item"><div class="leg-dot" style="background:var(--g500)"></div>Confirmed</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--a500)"></div>AI Suggested</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--s200);border:1px dashed var(--s300)"></div>Open Role</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--a500)"></div>New signal</div>
+        </div>
+      </div>
+      <div class="coverage-grid">
+        ${roleCard('champion',     'champion',   'Champion')}
+        ${roleCard('economicBuyer','buyer',       'Economic Buyer')}
+        ${roleCard('influencer',   'influencer',  'Influencer')}
+        ${roleCard('ratifier',     'ratifier',    'Ratifier')}
+        ${roleCard('user',         'user',        'User')}
+      </div>
+    </div>
+
+    <!-- ORG CHART -->
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:8px">Buying Group Org Chart</div>
+    <div class="orgchart-wrap fade-in">
+      <div class="orgchart">
+        <!-- Economic Buyer -->
+        <div class="oc-row" style="margin-bottom:0">
+          ${ocNode('economicBuyer','buyer','ECONOMIC BUYER','#d97706','#a')}
+        </div>
+        <div style="width:2px;height:24px;background:var(--s300);margin:0 auto"></div>
+        <!-- Champion -->
+        <div class="oc-row" style="margin-bottom:0">
+          ${ocNode('champion','champion','CHAMPION','#16a34a','#g')}
+        </div>
+        <div style="width:2px;height:24px;background:var(--s300);margin:0 auto"></div>
+        <!-- Bottom row connector -->
+        <div style="display:flex;justify-content:center;width:100%;margin-bottom:0">
+          <div style="position:relative;display:flex;align-items:flex-start;justify-content:center;gap:24px">
+            <div style="position:absolute;top:0;left:50px;right:50px;height:2px;background:var(--s300);transform:translateY(0)"></div>
+            ${ocNode('influencer','influencer','INFLUENCER','#2563eb','#b')}
+            ${ocNode('ratifier','ratifier','RATIFIER','#ef4444','#r')}
+            ${ocNode('user','user','USER','#ef4444','#u')}
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;padding-top:10px;border-top:1px solid var(--s100)">
+        <div class="leg-item"><div class="leg-dot" style="background:var(--g500)"></div><span style="font-size:11px;color:var(--s500)">Confirmed</span></div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--a500)"></div><span style="font-size:11px;color:var(--s500)">AI Suggested</span></div>
+        <div class="leg-item"><div class="leg-dot" style="background:transparent;border:1.5px dashed var(--s300);width:9px;height:9px;border-radius:50%"></div><span style="font-size:11px;color:var(--s500)">Open Role</span></div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--a500)"></div><span style="font-size:11px;color:var(--s500)">New signal</span></div>
+        <span style="font-size:10px;color:var(--s400);margin-left:auto">Accepts updates from CRM in real time</span>
+      </div>
+    </div>
+
+    <!-- CONFIRMED MEMBERS -->
+    ${detail.confirmedMembers && detail.confirmedMembers.length ? `
+    <div class="members-section fade-in">
+      <div class="members-hd">
+        <div class="members-title"><span class="chk">✓</span> Confirmed Members <span style="font-size:12px;font-weight:400;color:var(--s500)">${detail.confirmedMembers.length}</span></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-g btn-sm" onclick="openAddMember()">+ Add Manually</button>
+          <button class="btn btn-p btn-sm">⬆ Import to Outreach</button>
+        </div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden">
+        <table class="mtable">
+          <thead><tr>
+            <th>Name</th><th>Title</th><th>Level</th><th>Role</th><th>Handraiser</th>
+            <th>Engagement</th><th>Lead Status</th><th>Sequence</th><th>SLA</th><th>Last Signal</th><th></th>
+          </tr></thead>
+          <tbody>
+            ${detail.confirmedMembers.map(m => `<tr>
+              <td><span style="font-size:12px;font-weight:600;color:var(--b600);cursor:pointer">${m.name}</span></td>
+              <td style="color:var(--s600)">${m.title}</td>
+              <td><span style="font-size:11px;font-weight:600;color:var(--s700)">${m.level}</span></td>
+              <td>${rolePill(m.role)}</td>
+              <td>${m.handraiser ? `<div><span style='color:var(--g600);font-weight:600;font-size:11px'>✓ Yes</span>${m.handraisersType ? `<br><span class='${m.handraisersType==="Contact Us"?"hr-contact-us":"hr-get-pricing"}' style='margin-top:4px;display:inline-flex'>${m.handraisersType==="Contact Us"?'✉':'💲'} ${m.handraisersType}</span>` : ''}</div>` : '<span style="color:var(--s400);font-size:11px">No</span>'}</td>
+              <td>${engPill(m.engagement)}</td>
+              <td>${statusPillM(m.status)}</td>
+              <td><span style="font-size:11px;color:var(--s600)">${m.seq}</span></td>
+              <td>${m.sla?`<span class="sla-warn">${m.sla}</span>`:'<span style="color:var(--s400);font-size:11px">—</span>'}</td>
+              <td><span style="font-size:11px;color:var(--s500)">${m.lastSignal}</span></td>
+              <td><button class="view-lead-btn">View Lead</button></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>` : ''}
+
+    <!-- RECOMMENDED -->
+    <div class="members-section fade-in">
+      <div class="members-hd">
+        <div class="members-title">🔍 Recommended Potential Members <span class="pending-badge">${pendingCount} pending</span></div>
+        <div style="font-size:11px;color:var(--s400)">Review signals · assign a role · add to buying group</div>
+      </div>
+      ${detail.mlMembers && detail.mlMembers.length ? `
+      <div style="background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;overflow-x:auto">
+        <table class="mtable">
+          <thead><tr>
+            <th>Name</th><th>Title</th><th>Level</th><th>Role</th><th>Handraiser</th>
+            <th>Engagement</th><th>Status</th><th>Reasoning</th><th>Score</th><th>Action</th>
+          </tr></thead>
+          <tbody id="mlTableBody">
+            ${detail.mlMembers.map(m => mlRow(m)).join('')}
+          </tbody>
+        </table>
+      </div>` : `<div style="padding:30px;text-align:center;color:var(--s400);font-size:12px;background:var(--white);border:1px solid var(--s200);border-radius:10px">No recommendations yet. The system will surface potential members as signals come in.</div>`}
+    </div>
+
+    <!-- CAMPAIGN ACTIVITY -->
+    <div class="members-section fade-in">
+      <div class="members-hd">
+        <div class="members-title">Campaign Activity &amp; Interactions</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-g btn-sm" style="color:var(--b600)">All activity →</button>
+          ${detail.linkedOpty ? `<button class="btn btn-g btn-sm" style="color:var(--g600)">Linked Opportunity: ${detail.linkedOpty.name} (${detail.linkedOpty.stage})</button>` : ''}
+        </div>
+      </div>
+      ${detail.campaignActivity && detail.campaignActivity.length ? `
+      <div style="background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden">
+        <table class="mtable">
+          <thead><tr><th>Date</th><th>Activity</th><th>Contact</th><th>Sequence / Campaign</th><th>Detail</th></tr></thead>
+          <tbody>
+            ${detail.campaignActivity.map(a => `<tr>
+              <td style="color:var(--s500)">${a.date}</td>
+              <td><span style="font-size:11px;font-weight:600;color:var(--s700)">${a.type}</span></td>
+              <td style="font-weight:500;color:var(--b600)">${a.contact}</td>
+              <td style="font-size:11px;color:var(--s500);font-family:'DM Mono',monospace">${a.sequence}</td>
+              <td style="font-size:11px;color:var(--s500)">${a.detail}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>` : `<div style="padding:20px;text-align:center;color:var(--s400);font-size:12px;background:var(--white);border:1px solid var(--s200);border-radius:10px">No campaign activity recorded yet.</div>`}
+    </div>`;
+
+  document.getElementById('pageBody').innerHTML = html;
+}
+
+// ── ML ACCEPT / DENY ───────────────────────────────────────────────────────
+function mlAction(mlId, action) {
+  mlStates[mlId] = action;
+  // Re-render just the ML table body
+  const bg = selectedBG;
+  const detail = getDefaultDetail(bg);
+  const tbody = document.getElementById('mlTableBody');
+  if(tbody && detail.mlMembers) {
+    tbody.innerHTML = detail.mlMembers.map(m => {
+      const state = mlStates[m.id] || m.state || 'pending';
+      const actionCell = state === 'accepted'
+        ? `<span class="accepted-chip">✓ Accepted</span>`
+        : state === 'denied'
+        ? `<span class="denied-chip">✗ Denied</span>`
+        : `<button class="accept-btn" onclick="mlAction('${m.id}','accepted')">✓ Accept</button>
+           <button class="deny-btn" style="margin-left:5px" onclick="mlAction('${m.id}','denied')">✗ Deny</button>`;
+      return `<tr>
+        <td>
+          <div style="font-size:12px;font-weight:600;color:${state==='denied'?'var(--s400)':'var(--b600)'}">${m.name}</div>
+          ${m.handraisersType ? `<span class="${m.handraisersType==='Contact Us'?'hr-contact-us':'hr-get-pricing'}" style="margin-top:4px;display:inline-flex">${m.handraisersType==='Contact Us'?'✉':'💲'} ${m.handraisersType}</span>` : ''}
+          <div style="font-size:10px;color:var(--s400);margin-top:2px">Last signal: ${m.lastSignal||'—'}</div>
+        </td>
+        <td style="color:var(--s600)">${m.title}</td>
+        <td><span style="font-size:11px;font-weight:600;color:var(--s700)">${m.level}</span></td>
+        <td><span class="role-pill rp-pending" style="${state==='denied'?'opacity:.4':''}">⏳ Pending</span></td>
+        <td><span style="font-size:11px;color:var(--s500)">No</span></td>
+        <td>${engPill(m.engagement)}</td>
+        <td>${statusPillM(m.status)}</td>
+        <td><div class="ml-reasoning" style="${state==='denied'?'opacity:.5':''}">${m.reasoning}</div></td>
+        <td><span class="ml-score" style="${state==='denied'?'color:var(--s400)':''}">${m.score}</span></td>
+        <td>${actionCell}</td>
+      </tr>`;
+    }).join('');
+  }
+  const pending = detail.mlMembers.filter(m => (mlStates[m.id]||m.state||'pending')==='pending').length;
+  const badge = document.querySelector('.pending-badge');
+  if(badge) badge.textContent = `${pending} pending`;
+  toast(action === 'accepted' ? 'Member accepted — adding to buying group' : 'Member denied');
+}
+
+// ── BACK TO LIST ───────────────────────────────────────────────────────────
+function backToList() {
+  currentView = 'list';
+  selectedBG = null;
+  renderListView();
+}
+
+// ── TAB SWITCH ─────────────────────────────────────────────────────────────
+function switchTab(tab, btn) {
+  activeTab = tab;
+  document.querySelectorAll('.stab').forEach(b => b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  if(currentView === 'list') renderListView();
+}
+
+// ── ASK AI ─────────────────────────────────────────────────────────────────
+function askAI(bgId) {
+  const bg = BG_LIST.find(x => x.id === bgId);
+  if(!bg) return;
+  const detail = getDefaultDetail(bg);
+  document.getElementById('modal-root').innerHTML = `
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-hd">
+          <div>
+            <div style="font-size:10px;color:var(--wasabi);font-weight:700;margin-bottom:3px">✦ AI SIGNAL</div>
+            <div class="modal-title">${bg.name}</div>
+          </div>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div style="padding:14px 15px;background:linear-gradient(135deg,rgba(3,45,66,.04),rgba(99,223,78,.08));border:1px solid rgba(99,223,78,.2);border-radius:10px;font-size:13px;color:var(--s700);line-height:1.7;margin-bottom:16px">
+            ${detail.aiSignal}
+          </div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:8px">Coverage Status</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+            ${['Champion','Economic Buyer','Influencer','Ratifier','User'].map((r,i) => {
+              const keys = ['champion','economicBuyer','influencer','ratifier','user'];
+              const role = detail.roles[keys[i]] || {status:'open'};
+              const statusColors = {confirmed:'var(--g600)','new-signal':'var(--a600)',active:'var(--b600)','not-identified':'var(--r600)',open:'var(--s400)'};
+              return `<div style="padding:8px 11px;background:var(--s50);border:1px solid var(--s200);border-radius:7px;display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:11px;font-weight:600;color:var(--s700)">${r}</span>
+                <span style="font-size:10px;color:${statusColors[role.status]||'var(--s400)'};font-weight:600">${role.name||role.status}</span>
+              </div>`;
+            }).join('')}
+          </div>
+          <button class="btn btn-p" style="width:100%" onclick="closeModal();openDetail('${bgId}')">View Full Buying Group →</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── ADD MEMBER MODAL (candidate list with role confirmation) ─────────────
+let addedMembers = new Set();
+let pendingConfirm = {}; // idx -> selectedRole
+
+function openAddMember() {
+  const bg = selectedBG;
+  const candidates = getBGCandidates(bg ? bg.id : '');
+  pendingConfirm = {};
+
+  const ROLES = ['Champion','Economic Buyer','Influencer','Ratifier','User'];
+  const roleColors = {'Economic Buyer':'#d97706','Champion':'#16a34a','Influencer':'#2563eb','Ratifier':'#dc2626','User':'#9333ea'};
+  const roleBgs   = {'Economic Buyer':'rgba(217,119,6,.1)','Champion':'rgba(22,163,74,.1)','Influencer':'rgba(37,99,235,.1)','Ratifier':'rgba(220,38,38,.08)','User':'rgba(147,51,234,.08)'};
+
+  function renderRows(q) {
+    // Use full candidates list, filter by search
+    const list = q
+      ? candidates.map((c,i) => ({c,i})).filter(({c}) => c.name.toLowerCase().includes(q) || c.title.toLowerCase().includes(q) || c.role.toLowerCase().includes(q))
+      : candidates.map((c,i) => ({c,i}));
+
+    if(!list.length) return '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--s400);font-size:12px">No matching contacts found.</td></tr>';
+
+    return list.map(({c, i}) => {
+      const isAdded   = addedMembers.has(i);
+      const isPending = pendingConfirm[i] !== undefined;
+      const signalColor = c.score >= 75 ? 'var(--g600)' : c.score >= 55 ? 'var(--a600)' : 'var(--s400)';
+
+      let actionCell;
+      if(isAdded) {
+        actionCell = `<span style="font-size:10px;font-weight:600;padding:4px 10px;border-radius:6px;background:rgba(22,163,74,.1);color:var(--g600);border:1px solid rgba(22,163,74,.2)">✓ Added</span>`;
+      } else if(isPending) {
+        const opts = ROLES.map(r => `<option value="${r}"${r===pendingConfirm[i]?' selected':''}>${r}</option>`).join('');
+        actionCell = `<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;min-width:160px">
+          <div style="font-size:10px;font-weight:600;color:var(--s600);margin-bottom:1px">Confirm role:</div>
+          <select id="role-sel-${i}" onchange="pendingConfirm[${i}]=this.value" style="font-size:11px;padding:5px 8px;border:1px solid var(--s300);border-radius:6px;font-family:inherit;width:100%;color:var(--s800)">${opts}</select>
+          <div style="display:flex;gap:5px">
+            <button onclick="confirmCandAdd(${i})" style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;background:var(--g600);color:#fff;border:none;cursor:pointer">✓ Confirm</button>
+            <button onclick="cancelCandAdd(${i})" style="font-size:10px;font-weight:600;padding:5px 10px;border-radius:6px;background:transparent;color:var(--s500);border:1px solid var(--s200);cursor:pointer">Cancel</button>
+          </div>
+        </div>`;
+      } else {
+        actionCell = `<button onclick="startCandAdd(${i},'${c.role}')" style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;background:var(--ink);color:#fff;border:none;cursor:pointer">+ Add</button>`;
+      }
+
+      const rowBg = isPending ? 'background:rgba(3,45,66,.03);' : '';
+      return `<tr style="border-bottom:1px solid var(--s100);${rowBg}">
+        <td style="padding:10px 12px;font-size:12px;color:var(--s500)">${c.account}</td>
+        <td style="padding:10px 12px">
+          <div style="font-size:12px;font-weight:600;color:var(--s800)">${c.name}</div>
+          <div style="font-size:10px;color:var(--s400);margin-top:1px">${c.level}</div>
+        </td>
+        <td style="padding:10px 12px;font-size:12px;color:var(--s600)">${c.title}</td>
+        <td style="padding:10px 12px">
+          <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;background:${roleBgs[c.role]||'var(--s100)'};color:${roleColors[c.role]||'var(--s600)'}">${c.role}</span>
+          <div style="font-size:10px;color:${signalColor};margin-top:3px;max-width:180px">${c.signal}</div>
+        </td>
+        <td style="padding:10px 12px;text-align:right;vertical-align:${isPending?'top':'middle'}">${actionCell}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  document.getElementById('modal-root').innerHTML = `
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="width:min(760px,96vw)">
+        <div class="modal-hd">
+          <div>
+            <div class="modal-title">Add Member to Buying Group</div>
+            <div style="font-size:11px;color:var(--s500);margin-top:2px">${bg ? bg.name + ' · ' + bg.account : ''} — showing contacts that fit this buying group</div>
+          </div>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" style="padding:0">
+          <div style="padding:12px 16px;border-bottom:1px solid var(--s200);background:var(--white);">
+            <div style="position:relative">
+              <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--s400)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input id="cand-search" type="text" placeholder="Search by name, title, or recommended role…"
+                oninput="document.getElementById('cand-tbody').innerHTML=window._renderCandRows(this.value.trim().toLowerCase())"
+                style="width:100%;padding:8px 10px 8px 30px;border:1px solid var(--s200);border-radius:7px;font-size:12px;font-family:inherit;color:var(--s800)">
+            </div>
+            <div style="font-size:11px;color:var(--s400);margin-top:8px">
+              ${candidates.length} contacts identified as matching the <strong>${bg ? bg.name.split(' - ')[1] || 'IT' : 'IT'}</strong> buying group roles
+            </div>
+          </div>
+          <div style="overflow-y:auto;max-height:calc(88vh - 200px)">
+            <table style="width:100%;border-collapse:collapse">
+              <thead><tr style="background:var(--s50);border-bottom:1px solid var(--s200)">
+                <th style="padding:8px 12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);text-align:left">Account</th>
+                <th style="padding:8px 12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);text-align:left">Name</th>
+                <th style="padding:8px 12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);text-align:left">Job Title</th>
+                <th style="padding:8px 12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);text-align:left">Recommended Role</th>
+                <th style="padding:8px 12px"></th>
+              </tr></thead>
+              <tbody id="cand-tbody">${renderRows('')}</tbody>
+            </table>
+          </div>
+          <div style="padding:12px 16px;border-top:1px solid var(--s200);display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:11px;color:var(--s400)">Click <strong>+ Add</strong> on any row to confirm their role before adding.</span>
+            <button class="btn btn-g btn-sm" onclick="closeModal()">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  window._renderCandRows = renderRows;
+}
+
+function startCandAdd(idx, defaultRole) {
+  pendingConfirm[idx] = defaultRole;
+  _refreshCandTbody();
+}
+function cancelCandAdd(idx) {
+  delete pendingConfirm[idx];
+  _refreshCandTbody();
+}
+function confirmCandAdd(idx) {
+  const role = document.getElementById('role-sel-'+idx)?.value || pendingConfirm[idx];
+  const bg = selectedBG;
+  const candidates = getBGCandidates(bg ? bg.id : '');
+  const c = candidates[idx];
+  addedMembers.add(idx);
+  delete pendingConfirm[idx];
+  _refreshCandTbody();
+  toast(`${c ? c.name : 'Member'} added as ${role}`, 'ok');
+}
+function _refreshCandTbody() {
+  const q = document.getElementById('cand-search')?.value?.trim().toLowerCase() || '';
+  const tbody = document.getElementById('cand-tbody');
+  if(tbody && window._renderCandRows) tbody.innerHTML = window._renderCandRows(q);
+}
+
+// ── ADD BG MODAL ─────────────────────────────────────────────────────────
+function openAddBG() {
+  document.getElementById('modal-root').innerHTML = `
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-hd">
+          <div class="modal-title">New Buying Group</div>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row"><label class="form-label">Buying Group Name *</label><input class="form-input" placeholder="Acme Corp - IT"></div>
+          <div class="form-2">
+            <div class="form-row"><label class="form-label">Account</label><input class="form-input" placeholder="Search accounts…"></div>
+            <div class="form-row"><label class="form-label">Account Type</label><select class="form-select"><option>Customer</option><option>Prospect</option><option>Suspect</option><option>Former Cust</option></select></div>
+          </div>
+          <div class="form-2">
+            <div class="form-row"><label class="form-label">Sales Rep</label><select class="form-select"><option>Tony Riebel</option><option>Jeff Wuestenfeld</option><option>Riley Scott</option><option>Katie Schneider</option><option>Brian Disher</option><option>Seamus Donovan</option><option>Mikaela Youpa</option></select></div>
+            <div class="form-row"><label class="form-label">Buying Group Stage</label><select class="form-select"><option>Targeted & Engaged</option><option>In Progress</option><option>Ready for Action</option><option>Qualified</option></select></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <button class="btn btn-p" onclick="closeModal();toast('Buying group created','ok')">Create Buying Group</button>
+            <button class="btn btn-g" onclick="closeModal()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── UTILS ──────────────────────────────────────────────────────────────────
+function closeModal() { document.getElementById('modal-root').innerHTML = ''; }
+
+let _tt;
+function toast(msg, type) {
+  let el = document.getElementById('toast-el');
+  if(!el) {
+    el = document.createElement('div');
+    el.id = 'toast-el';
+    el.style.cssText = 'position:fixed;bottom:20px;right:20px;padding:9px 15px;border-radius:8px;font-size:12px;font-weight:600;z-index:9999;transform:translateY(50px);opacity:0;transition:all .22s;pointer-events:none;font-family:inherit;box-shadow:0 4px 16px rgba(0,0,0,.15)';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.background = type === 'ok' ? '#16a34a' : '#032D42';
+  el.style.color = '#fff';
+  setTimeout(() => { el.style.transform='translateY(0)'; el.style.opacity='1'; }, 10);
+  clearTimeout(_tt);
+  _tt = setTimeout(() => { el.style.transform='translateY(50px)'; el.style.opacity='0'; }, 2500);
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+renderListView();
+</script>
+</body>
+</html>
