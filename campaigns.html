@@ -891,6 +891,7 @@ let selectedAEsForCamp = new Set();
 let selectedContactIds = new Set();
 let addedTocamp = new Set();
 let allGenerated = {};
+let uploadedResearchText = '';
 
 function togglePersona(el) {
   const p = el.dataset.persona;
@@ -922,34 +923,38 @@ function selectCampType(el) {
 
 function goToPhase(n) {
   currentPhase = n;
-  [1,2,3,4,5].forEach(i => {
+  [1,2,3,4,5,6].forEach(i => {
     const el = document.getElementById('camp-phase-'+i);
     if(el) el.style.display = i===n ? 'flex' : 'none';
   });
   // Update step dots
-  const labels = ['Type','Configure','Accounts','Contacts','Generate'];
-  [1,2,3,4,5].forEach(i => {
+  const labels = ['Type','Configure','Accounts','Research','Contacts','Generate'];
+  [1,2,3,4,5,6].forEach(i => {
     const dot = document.getElementById('s'+i+'dot');
     if(!dot) return;
     dot.className = 'step-dot ' + (i<n?'done':i===n?'active':'pending');
     dot.textContent = i<n?'✓':i;
+    dot.title = labels[i-1]||(i===4?'Research (Optional)':'');
   });
   updateModalFooter();
   if(n===3) renderModalAccounts();
-  if(n===4) renderModalContacts();
+  if(n===5) renderModalContacts();
 }
 
 function updateModalFooter() {
   const back = document.getElementById('campBackBtn');
   const next = document.getElementById('campNextBtn');
+  const skip = document.getElementById('campSkipBtn');
   if(!back || !next) return;
   back.style.display = currentPhase > 1 ? 'inline-flex' : 'none';
   next.style.display = 'inline-flex';
+  if(skip) skip.style.display = currentPhase === 4 ? 'inline-flex' : 'none';
   if(currentPhase === 1) { next.textContent = 'Next: Configure →'; next.onclick = () => goToPhase(2); }
   else if(currentPhase === 2) { next.textContent = 'Next: Select Accounts →'; next.onclick = () => goToPhase(3); }
-  else if(currentPhase === 3) { next.textContent = 'Next: Select Contacts →'; next.onclick = () => goToPhase(4); }
-  else if(currentPhase === 4) { next.textContent = 'Generate Campaign ✦'; next.onclick = startGenerate; }
-  else if(currentPhase === 5) { next.textContent = 'Done'; next.onclick = closeNewCampaign; }
+  else if(currentPhase === 3) { next.textContent = 'Next: Account Research →'; next.onclick = () => goToPhase(4); }
+  else if(currentPhase === 4) { next.textContent = 'Next: Select Contacts →'; next.onclick = () => goToPhase(5); }
+  else if(currentPhase === 5) { next.textContent = 'Generate Campaign ✦'; next.onclick = startGenerate; }
+  else if(currentPhase === 6) { next.textContent = 'Done'; next.onclick = closeNewCampaign; }
 }
 
 // ── PHASE 2: ACCOUNTS ────────────────────────────────────────────────────
@@ -1160,8 +1165,9 @@ async function startGenerate() {
   const motion = document.getElementById('nc-motion')?.value || 'new logo';
   const hasCalls = document.getElementById('nc-calls')?.checked;
 
-  goToPhase(5);
+  goToPhase(6);
   document.getElementById('campNextBtn').style.display = 'none';
+  const skipBtn=document.getElementById('campSkipBtn'); if(skipBtn) skipBtn.style.display='none';
   document.getElementById('campBackBtn').style.display = 'none';
 
   const levels = [
@@ -1190,7 +1196,7 @@ async function startGenerate() {
     if(stepEl) stepEl.textContent = 'Generating ' + lvl.label + ' sequence (' + (i+1) + ' of 3)...';
     const isCustomerOutbound = selectedCampType === 'Cold Outbound — Customer';
   const campTypeContext = isCustomerOutbound ? 'IMPORTANT: This is a cold outbound campaign to existing ServiceNow customers. Every email MUST open with a variation of: \'I\'m reaching out as part of the account team supporting the relationship between ServiceNow and [Company]\'. This establishes credibility and context before anything else. The rest of the email still follows problem-first framing.' : 'Campaign type: ' + selectedCampType + '.';
-  const prompt = 'You are a ServiceNow BDR named Jacob Rubis. Write a ' + emailCount + '-email cold outbound sequence.\n\nProduct: ' + product + '\nPersona: ' + personas + '\nJob Level: ' + lvl.label + ' — ' + levelPrompts[lvl.label] + '\nMotion: ' + motion + '\nCampaign type context: ' + campTypeContext + '\nCampaign: ' + name + '\nContext: ' + (notes||'none') + '\n\nRules:\n- Problem-first framing, no product pitch in email 1\n- Fifth-grade reading level, short paragraphs\n- No em dashes, no semicolons, no hyphens in prose\n- Curiosity-led CTAs, do not ask for a meeting in emails 1-2\n- Each email is a different angle on the same problem\n- Final email: honest last note, easy out\n\nReturn ONLY a JSON array, no markdown:\n[{"emailNum":1,"subject":"...","body":"..."}]';
+  const prompt = 'You are a ServiceNow BDR named Jacob Rubis. Write a ' + emailCount + '-email cold outbound sequence.\n\nProduct: ' + product + '\nPersona: ' + personas + '\nJob Level: ' + lvl.label + ' — ' + levelPrompts[lvl.label] + '\nMotion: ' + motion + '\nCampaign type context: ' + campTypeContext + '\nCampaign: ' + name + '\nContext: ' + (notes||'none') + '\nAccount Research: ' + (uploadedResearchText || document.getElementById('nc-research-notes')?.value.trim() || 'none provided') + '\n\nRules:\n- Problem-first framing, no product pitch in email 1\n- Fifth-grade reading level, short paragraphs\n- No em dashes, no semicolons, no hyphens in prose\n- Curiosity-led CTAs, do not ask for a meeting in emails 1-2\n- Each email is a different angle on the same problem\n- Final email: honest last note, easy out\n\nReturn ONLY a JSON array, no markdown:\n[{"emailNum":1,"subject":"...","body":"..."}]';
 
     try {
       const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1382,6 +1388,32 @@ function closeNewCampaign() {
 function selectAllAEs(){document.querySelectorAll('[name="nc-ae"]').forEach(cb=>cb.checked=true);}
 function toggleAcct(id,aeId,e){if(e&&e.target.tagName==='INPUT'){}if(selectedAcctIds.has(id)){selectedAcctIds.delete(id);}else{selectedAcctIds.add(id);const aeCb=document.querySelector('[name="nc-ae"][value="'+aeId+'"]');if(aeCb)aeCb.checked=true;}renderAcctList();}
 
+function handleResearchUpload(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    uploadedResearchText = e.target.result.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').substring(0, 2000);
+    const badge = document.getElementById('research-file-badge');
+    const nameEl = document.getElementById('research-file-name');
+    const area = document.getElementById('research-upload-area');
+    if(badge) badge.style.display='flex';
+    if(nameEl) nameEl.textContent = file.name;
+    if(area) area.style.opacity='0.4';
+  };
+  reader.readAsText(file);
+}
+
+function clearResearch() {
+  uploadedResearchText = '';
+  const badge = document.getElementById('research-file-badge');
+  const area = document.getElementById('research-upload-area');
+  const input = document.getElementById('research-file-input');
+  if(badge) badge.style.display='none';
+  if(area) area.style.opacity='1';
+  if(input) input.value='';
+}
+
 // Init
 renderList();
 renderDetail();
@@ -1395,16 +1427,18 @@ renderDetail();
         <div style="font-size:11px;color:var(--s400);margin-top:2px" id="campPhaseLabel">Step 1 of 4 — Configure</div>
       </div>
       <div style="display:flex;align-items:center;gap:12px">
-        <div class="step-indicator" style="margin:0;gap:4px">
+        <div class="step-indicator" style="margin:0;gap:3px">
           <div class="step-dot active" id="s1dot">1</div><span class="step-lbl active" style="font-size:10px">Type</span>
-          <div class="step-line" style="width:28px;margin:0 3px"></div>
+          <div class="step-line" style="width:20px;margin:0 2px"></div>
           <div class="step-dot pending" id="s2dot">2</div><span class="step-lbl pending" style="font-size:10px">Configure</span>
-          <div class="step-line" style="width:28px;margin:0 3px"></div>
+          <div class="step-line" style="width:20px;margin:0 2px"></div>
           <div class="step-dot pending" id="s3dot">3</div><span class="step-lbl pending" style="font-size:10px">Accounts</span>
-          <div class="step-line" style="width:28px;margin:0 3px"></div>
-          <div class="step-dot pending" id="s4dot">4</div><span class="step-lbl pending" style="font-size:10px">Contacts</span>
-          <div class="step-line" style="width:28px;margin:0 3px"></div>
-          <div class="step-dot pending" id="s5dot">5</div><span class="step-lbl pending" style="font-size:10px">Generate</span>
+          <div class="step-line" style="width:20px;margin:0 2px"></div>
+          <div class="step-dot pending" id="s4dot" style="position:relative">4<span style="position:absolute;top:-7px;right:-14px;font-size:7px;font-weight:700;color:var(--g600);white-space:nowrap">OPT</span></div><span class="step-lbl pending" style="font-size:10px">Research</span>
+          <div class="step-line" style="width:20px;margin:0 2px"></div>
+          <div class="step-dot pending" id="s5dot">5</div><span class="step-lbl pending" style="font-size:10px">Contacts</span>
+          <div class="step-line" style="width:20px;margin:0 2px"></div>
+          <div class="step-dot pending" id="s6dot">6</div><span class="step-lbl pending" style="font-size:10px">Generate</span>
         </div>
         <button class="modal-close" onclick="closeNewCampaign()">×</button>
       </div>
@@ -1542,8 +1576,43 @@ renderDetail();
       </div>
     </div>
 
+
+    <!-- PHASE 4: ACCOUNT RESEARCH (OPTIONAL) -->
+    <div id="camp-phase-4" class="modal-body" style="display:none;flex-direction:column;gap:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:var(--s800)">Upload Account Research</div>
+        <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(22,163,74,.1);color:var(--g600)">Optional</span>
+      </div>
+      <div style="font-size:12px;color:var(--s500);margin-top:-8px;line-height:1.6">
+        Account research lets Claude tailor each email sequence with specific company context — recent initiatives, known pain points, leadership priorities, and tech stack signals. The more specific the research, the more relevant the outreach.
+      </div>
+
+      <!-- UPLOAD AREA -->
+      <div id="research-upload-area" onclick="document.getElementById('research-file-input').click()" style="border:2px dashed var(--s300);border-radius:10px;padding:28px 20px;text-align:center;cursor:pointer;transition:.12s;background:var(--s50)">
+        <div style="font-size:28px;margin-bottom:8px">📄</div>
+        <div style="font-size:13px;font-weight:600;color:var(--s700);margin-bottom:4px">Drop account research here or click to upload</div>
+        <div style="font-size:11px;color:var(--s400)">Supports HTML or PDF account research files — or paste key insights below</div>
+        <input type="file" id="research-file-input" accept=".html,.pdf,.txt" style="display:none" onchange="handleResearchUpload(this)">
+      </div>
+      <div id="research-file-badge" style="display:none;padding:10px 14px;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.25);border-radius:8px;display:none;align-items:center;gap:10px">
+        <span style="font-size:18px">✅</span>
+        <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--g600)" id="research-file-name">File uploaded</div><div style="font-size:11px;color:var(--s500)">Research will be used to personalize all 3 sequences</div></div>
+        <button onclick="clearResearch()" style="font-size:11px;color:var(--r600);background:none;border:none;cursor:pointer">✕ Remove</button>
+      </div>
+
+      <!-- OR PASTE -->
+      <div>
+        <label class="form-label">Or paste key insights manually</label>
+        <textarea id="nc-research-notes" class="form-input" style="height:110px;resize:none" placeholder="e.g. Company recently moved to cloud-first infrastructure, CIO stated in Q1 earnings they're consolidating vendors, known pain: 3 separate ITSM tools across business units, evaluating consolidation in H2..."></textarea>
+      </div>
+
+      <div style="font-size:11px;color:var(--s400);padding:8px 12px;background:var(--s50);border-radius:6px">
+        💡 Tip: Use the <strong>Account Research</strong> skill to generate a full 19-section company brief, then paste the key signals here before generating your sequence.
+      </div>
+    </div>
+
     <!-- PHASE 3: SELECT CONTACTS -->
-    <div id="camp-phase-4" class="modal-body" style="display:none;flex-direction:column;gap:10px">
+    <div id="camp-phase-5" class="modal-body" style="display:none;flex-direction:column;gap:10px">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
           <div style="font-size:13px;font-weight:600;color:var(--s800)">Contacts from selected accounts</div>
@@ -1565,7 +1634,7 @@ renderDetail();
     </div>
 
     <!-- PHASE 4: GENERATE & REVIEW -->
-    <div id="camp-phase-5" class="modal-body" style="display:none;flex-direction:column;gap:12px;padding-bottom:8px">
+    <div id="camp-phase-6" class="modal-body" style="display:none;flex-direction:column;gap:12px;padding-bottom:8px">
       <div id="gen-loading-area" style="display:flex;flex-direction:column;align-items:center;padding:32px;text-align:center">
         <div style="font-size:28px;margin-bottom:12px">✦</div>
         <div style="font-size:15px;font-weight:700;color:var(--s900);margin-bottom:6px">Generating 3 persona-level sequences...</div>
