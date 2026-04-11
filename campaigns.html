@@ -147,7 +147,7 @@ button{font-family:inherit;}
 
 /* NEW CAMPAIGN MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(3px);}
-.modal-box{background:var(--white);border-radius:14px;width:min(540px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.25);display:flex;flex-direction:column;}
+.modal-box{background:var(--white);border-radius:14px;width:min(900px,96vw);max-height:94vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.25);display:flex;flex-direction:column;}
 .modal-hd{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--s200);position:sticky;top:0;background:var(--white);z-index:1;}
 .modal-title{font-size:17px;font-weight:700;color:var(--s900);}
 .modal-close{width:28px;height:28px;border-radius:50%;background:var(--s100);border:none;cursor:pointer;font-size:16px;color:var(--s500);display:flex;align-items:center;justify-content:center;}
@@ -188,6 +188,48 @@ button{font-family:inherit;}
 .ae-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .ae-check-item{display:flex;align-items:center;gap:7px;padding:6px 0;font-size:12px;color:var(--s700);cursor:pointer;}
 .ae-check-item input{cursor:pointer;accent-color:var(--ink);}
+
+/* EXPANDED CAMPAIGN MODAL */
+.camp-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.camp-modal-full{grid-column:1/-1;}
+.step-indicator{display:flex;align-items:center;gap:0;margin-bottom:20px;}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.step-dot.done{background:var(--g600);color:#fff;}
+.step-dot.active{background:var(--ink);color:#fff;}
+.step-dot.pending{background:var(--s200);color:var(--s500);}
+.step-line{flex:1;height:2px;background:var(--s200);}
+.step-line.done{background:var(--g500);}
+.step-lbl{font-size:10px;font-weight:600;color:var(--s500);white-space:nowrap;}
+.step-lbl.active{color:var(--ink);}
+.step-lbl.done{color:var(--g600);}
+.persona-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+.persona-chip{padding:8px 6px;border:2px solid var(--s200);border-radius:8px;text-align:center;cursor:pointer;transition:.12s;}
+.persona-chip:hover{border-color:var(--s300);background:var(--s50);}
+.persona-chip.on{border-color:var(--ink);background:rgba(3,45,66,.05);}
+.persona-chip .picon{font-size:18px;margin-bottom:4px;}
+.persona-chip .plbl{font-size:10px;font-weight:600;color:var(--s700);}
+.level-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.level-chip{padding:7px 8px;border:2px solid var(--s200);border-radius:8px;text-align:center;cursor:pointer;transition:.12s;}
+.level-chip:hover{border-color:var(--s300);}
+.level-chip.on{border-color:var(--ink);background:rgba(3,45,66,.05);}
+.level-chip .llbl{font-size:11px;font-weight:600;color:var(--s700);}
+.level-chip .lsub{font-size:9px;color:var(--s400);margin-top:2px;}
+/* GEN OUTPUT */
+.gen-email-card{background:var(--s50);border:1px solid var(--s200);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.gen-email-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;background:var(--white);border-bottom:1px solid var(--s100);}
+.gen-email-num{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(3,45,66,.08);color:var(--ink);font-family:monospace;}
+.gen-email-subj{font-size:12px;font-weight:600;color:var(--s800);flex:1;margin:0 10px;}
+.gen-email-body{padding:12px 14px;font-size:12px;color:var(--s700);line-height:1.65;white-space:pre-wrap;}
+.gen-spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.gen-loading-bar{height:4px;background:var(--s200);border-radius:2px;overflow:hidden;margin:12px 0;}
+.gen-loading-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--wasabi),var(--wdk));border-radius:2px;transition:width .4s ease;}
+
+.camp-ae-btn.on{border-color:var(--ink);background:rgba(3,45,66,.06);font-weight:600;}
+.camp-ae-btn:hover{background:var(--s50);}
+
+.contact-level-tab.on{color:var(--ink)!important;border-bottom-color:var(--ink)!important;font-weight:600!important;}
+.contact-level-tab.on .clt-ct{background:rgba(3,45,66,.1)!important;color:var(--ink)!important;}
 </style>
 </head>
 <body>
@@ -537,7 +579,7 @@ function renderDetail() {
     const isSent = !!step.sent;
     const isNext = !isSent && (i===0 || c.steps[i-1].sent);
     const numCls = isSent ? 'sn-sent' : isNext ? 'sn-next' : 'sn-pending';
-    const typeLabel = step.type === 'email' ? '📧 Email '+step.emailNum : '📞 Call';
+    const typeLabel = step.type === 'email' ? '📧 Email '+step.emailNum : step.type === 'linkedin' ? '🔗 LinkedIn' : '📞 Call';
     const email = step.type === 'email' ? c.emails[step.emailNum] : null;
     const hasBody = email && email.body && email.body.trim().length > 0;
 
@@ -574,8 +616,9 @@ function renderDetail() {
         '<span class="step-hd-title">🏢 Targeted Accounts ('+c.acctIds.length+')</span>'+
       '</div>'+
       c.acctIds.map(id => {
-        const name = ACCOUNT_NAMES[id] || id;
-        return '<div class="acct-row"><span style="font-weight:500">'+name+'</span><span style="font-size:10px;font-family:monospace;color:var(--s400)">'+id+'</span></div>';
+        const acct = MODAL_ACCOUNTS.find(a => a.id === id);
+        const name = acct ? acct.name : (ACCOUNT_NAMES[id] || id);
+        return '<div class="acct-row"><span style="font-weight:500">'+name+'</span></div>';
       }).join('')+
     '</div>';
   } else {
@@ -630,6 +673,14 @@ let selectedAcctIds = new Set();
 
 function openNewCampaign() {
   selectedAcctIds = new Set();
+  selectedPersonas = new Set();
+  selectedLevels = new Set();
+  generatedEmails = [];
+  currentPhase = 1;
+  document.querySelectorAll('.persona-chip,.level-chip').forEach(el => el.classList.remove('on'));
+  goToPhase(1);
+  document.getElementById('mainCTA').textContent = 'Generate Campaign ✦';
+  document.getElementById('mainCTA').style.display = 'inline-flex';
   document.getElementById('nc-name').value = '';
   document.getElementById('nc-product').value = '';
   document.getElementById('nc-url').value = '';
@@ -769,97 +820,709 @@ function saveCampaign() {
   document.querySelector('.gnav-pill span').textContent = 'GBA Commercial Illinois & Midwest · Q2 FY26';
 }
 
+
+
+const CRM_CONTACTS = [
+  {id:'c001', name:'Brandon Joyce',     title:'VP of IT',                company:'Sub-Zero Group Inc',       aeId:'tony',    source:'HRSD Demo',          status:'SLA Critical'},
+  {id:'c002', name:'Kevin Ostrander',   title:'IT Director',             company:'Sargento Foods Inc',       aeId:'tony',    source:'ITAM Whitepaper',    status:'SLA Critical'},
+  {id:'c003', name:'Alan Fitch',        title:'IT Manager',              company:'Badger Meter, Inc.',       aeId:'tony',    source:'ITSM ROI Guide',     status:'Re-engage'},
+  {id:'c004', name:'Diana Cruz',        title:'HR Business Partner',     company:'Faith Technologies Inc',   aeId:'tony',    source:'EW Webinar',         status:'Re-engage'},
+  {id:'c005', name:'Dylan Blumenberg',  title:'Director of IT Ops',      company:'FTI Consulting',           aeId:'jeff',    source:'IT Leader Webinar',  status:'SLA Critical'},
+  {id:'c006', name:'Amanda Foster',     title:'Dir. of HR Systems',      company:'Quinnox Inc.',             aeId:'jeff',    source:'EW HR Webinar',      status:'Open'},
+  {id:'c007', name:'David Chen',        title:'VP Engineering',          company:'Chicago Mercantile Exchange',aeId:'jeff',  source:'Platform Demo',      status:'Open'},
+  {id:'c008', name:'Thomas Nguyen',     title:'Director IT Ops',         company:'Holcim Building Envelope', aeId:'jeff',    source:'K26 Pre-event',      status:'Open'},
+  {id:'c009', name:'Wei Zhang',         title:'CIO',                     company:'Videojet Technologies Inc',aeId:'jeff',    source:'K25 Booth',          status:'Booked'},
+  {id:'c010', name:'Sarah Mitchell',    title:'CIO',                     company:'Paylocity Corporation',    aeId:'riley',   source:'Now Assist Demo',    status:'SLA Critical'},
+  {id:'c011', name:'Jennifer Torres',   title:'IT Director',             company:'Kirkland & Ellis LLP',     aeId:'riley',   source:'Legal IT Webinar',   status:'Responded'},
+  {id:'c012', name:'Michael Chang',     title:'VP of IT',                company:'GATX Corporation',         aeId:'riley',   source:'MidwestTech Summit', status:'Responded'},
+  {id:'c013', name:'Sandra Kowalski',   title:'Dir. of HR Tech',         company:'Federal Home Loan Bank',   aeId:'riley',   source:'HRSD Demo',          status:'Responded'},
+  {id:'c014', name:'Grace Liu',         title:'CHRO',                    company:'Hollister Incorporated',   aeId:'katie',   source:'Deloitte Referral',  status:'Open'},
+  {id:'c015', name:'Ashley Tokarz',     title:'Director of IT',          company:'S&C Electric Co.',         aeId:'katie',   source:'Google Partner',     status:'Open'},
+  {id:'c016', name:'Annie Hoffman',     title:'VP of Finance Systems',   company:'S&C Electric Co.',         aeId:'katie',   source:'FSC Webinar',        status:'Responded'},
+  {id:'c017', name:'Carlos Reyes',      title:'IT Security Manager',     company:'Sysmex America, Inc.',     aeId:'katie',   source:'SecOps Playbook',    status:'Responded'},
+  {id:'c018', name:'Lisa Park',         title:'CHRO',                    company:'Crash Champions',          aeId:'brian',   source:'Now Assist HR',      status:'Booked'},
+  {id:'c019', name:'Mark Osei',         title:'Dir. HR Operations',      company:'BlueCross BlueShield',     aeId:'brian',   source:'EW Buyers Guide',    status:'Re-engage'},
+  {id:'c020', name:'Lisa Rodriguez',    title:'IT Manager',              company:'Crash Champions',          aeId:'brian',   source:'ITSM Buyers Guide',  status:'Open'},
+  {id:'c021', name:'Eric Sandoval',     title:'CTO',                     company:'West Monroe Partners',     aeId:'brian',   source:'AI Readiness Guide', status:'Open'},
+  {id:'c022', name:'Ramprasad Kalan',   title:'Solutions Architect',     company:'BlueCross BlueShield',     aeId:'brian',   source:'Automation Engine',  status:'Open'},
+  {id:'c023', name:'Lorenzo De Luca',   title:'IoT Engineer',            company:'Culligan International',   aeId:'brian',   source:'MWC Barcelona',      status:'SLA Critical'},
+  {id:'c024', name:'Priya Nair',        title:'CISO',                    company:'Eversana',                 aeId:'seamus',  source:'Veza Security Brief',status:'SLA Critical'},
+  {id:'c025', name:'Robert Kim',        title:'Head of IT Security',     company:'DMI Inc.',                 aeId:'seamus',  source:'Contact Us',         status:'SLA Critical'},
+  {id:'c026', name:'Tomas Rivera',      title:'Head of IT',              company:'Stepan Co.',               aeId:'seamus',  source:'ITAM Webinar',       status:'Booked'},
+  {id:'c027', name:'Mark Petersen',     title:'VP of IT',                company:'Stepan Co.',               aeId:'seamus',  source:'ITAM Webinar',       status:'Re-engage'},
+  {id:'c028', name:'Natalie Brooks',    title:'VP Operations',           company:'Culligan International',   aeId:'brian',   source:'Organic Search',     status:'Open'},
+
+  // ── Tony's 5 ITSM Target Accounts ──────────────────────────────────────
+  // Charter Manufacturing
+  {id:'ct001', name:'Greg Halverson',   title:'CIO',                       level:'C-Suite',   company:'Charter Manufacturing Co Inc', aeId:'tony', source:'K26 Pre-event',       status:'SLA Critical'},
+  {id:'ct002', name:'Diane Muller',     title:'VP of IT',                  level:'VP',        company:'Charter Manufacturing Co Inc', aeId:'tony', source:'ITSM ROI Guide',      status:'Open'},
+  {id:'ct003', name:'James Kowalski',   title:'Director of IT Operations', level:'Director',  company:'Charter Manufacturing Co Inc', aeId:'tony', source:'MidwestTech Summit',  status:'Open'},
+  {id:'ct004', name:'Rachel Simmons',   title:'Director of IT Ops',        level:'Director',  company:'Charter Manufacturing Co Inc', aeId:'tony', source:'ITSM Buyers Guide',   status:'Open'},
+  // Cielo Talent
+  {id:'ct005', name:'Mark Herdegen',    title:'CTO',                       level:'C-Suite',   company:'Cielo Talent',                 aeId:'tony', source:'ITSM Webinar',        status:'SLA Critical'},
+  {id:'ct006', name:'Karen Vitale',     title:'VP of Technology',          level:'VP',        company:'Cielo Talent',                 aeId:'tony', source:'IT Leader Webinar',   status:'Responded'},
+  {id:'ct007', name:'Brett Schoewe',    title:'Dir. of IT Infrastructure', level:'Director',  company:'Cielo Talent',                 aeId:'tony', source:'Platform Demo',       status:'Open'},
+  {id:'ct008', name:'Amy Dietrich',     title:'IT Director',               level:'Director',  company:'Cielo Talent',                 aeId:'tony', source:'ITSM Playbook',       status:'Open'},
+  // Badger Meter
+  {id:'ct009', name:'Robert Mack',      title:'CIO',                       level:'C-Suite',   company:'Badger Meter, Inc.',           aeId:'tony', source:'Forrester Report',    status:'SLA Critical'},
+  {id:'ct010', name:'Susan Fleischer',  title:'VP of IT',                  level:'VP',        company:'Badger Meter, Inc.',           aeId:'tony', source:'ITSM ROI Calculator', status:'Responded'},
+  {id:'ct011', name:'Phil Novak',       title:'Dir. of IT Service Mgmt',  level:'Director',  company:'Badger Meter, Inc.',           aeId:'tony', source:'K26 Pre-event',       status:'Open'},
+  {id:'ct012', name:'Laura Jensen',     title:'IT Operations Director',    level:'Director',  company:'Badger Meter, Inc.',           aeId:'tony', source:'ITSM Buyers Guide',   status:'Open'},
+  // The Boldt Group
+  {id:'ct013', name:'Tim Ohlrogge',     title:'CIO',                       level:'C-Suite',   company:'The Boldt Group Inc',          aeId:'tony', source:'Biz Journal Article', status:'SLA Critical'},
+  {id:'ct014', name:'Shannon Murphy',   title:'VP of IT',                  level:'VP',        company:'The Boldt Group Inc',          aeId:'tony', source:'ITSM Webinar',        status:'Open'},
+  {id:'ct015', name:'Derek Lange',      title:'Director of Technology',    level:'Director',  company:'The Boldt Group Inc',          aeId:'tony', source:'MidwestTech Summit',  status:'Open'},
+  {id:'ct016', name:'Lisa Becker',      title:'IT Director',               level:'Director',  company:'The Boldt Group Inc',          aeId:'tony', source:'Platform Demo',       status:'Open'},
+  // Batteries Plus
+  {id:'ct017', name:'Chris Felton',     title:'CIO',                       level:'C-Suite',   company:'Batteries Plus LLC',           aeId:'tony', source:'IT Executive Summit', status:'SLA Critical'},
+  {id:'ct018', name:'Ryan Haugen',      title:'VP of IT',                  level:'VP',        company:'Batteries Plus LLC',           aeId:'tony', source:'ITSM ROI Guide',      status:'Responded'},
+  {id:'ct019', name:'Megan Strauss',    title:'Director of IT',            level:'Director',  company:'Batteries Plus LLC',           aeId:'tony', source:'K26 Pre-event',       status:'Open'},
+  {id:'ct020', name:'Tom Keyes',        title:'Dir. of IT Operations',     level:'Director',  company:'Batteries Plus LLC',           aeId:'tony', source:'ITSM Buyers Guide',   status:'Open'},
+];
+
+// ── ENHANCED CAMPAIGN MODAL ────────────────────────────────────────────────
+let selectedPersonas = new Set();
+let selectedLevels = new Set();
+let generatedEmails = [];
+let currentPhase = 1;
+let selectedAEsForCamp = new Set();
+let selectedContactIds = new Set();
+let addedTocamp = new Set();
+let allGenerated = {};
+
+function togglePersona(el) {
+  const p = el.dataset.persona;
+  if(selectedPersonas.has(p)) { selectedPersonas.delete(p); el.classList.remove('on'); }
+  else { selectedPersonas.add(p); el.classList.add('on'); }
+}
+
+function toggleLevel(el) {
+  const l = el.dataset.level;
+  if(selectedLevels.has(l)) { selectedLevels.delete(l); el.classList.remove('on'); }
+  else { selectedLevels.add(l); el.classList.add('on'); }
+}
+
+function goToPhase(n) {
+  currentPhase = n;
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById('camp-phase-'+i);
+    if(el) el.style.display = i===n ? 'flex' : 'none';
+  });
+  updateModalFooter();
+  if(n===2) renderModalAccounts();
+  if(n===3) renderModalContacts();
+}
+
+function updateModalFooter() {
+  const back = document.getElementById('campBackBtn');
+  const next = document.getElementById('campNextBtn');
+  if(!back || !next) return;
+  back.style.display = currentPhase > 1 ? 'inline-flex' : 'none';
+  if(currentPhase === 1) { next.textContent = 'Next: Select Accounts →'; next.onclick = () => goToPhase(2); }
+  else if(currentPhase === 2) { next.textContent = 'Next: Select Contacts →'; next.onclick = () => goToPhase(3); }
+  else if(currentPhase === 3) { next.textContent = 'Generate Campaign ✦'; next.onclick = startGenerate; }
+  else if(currentPhase === 4) { next.textContent = 'Done'; next.style.display='inline-flex'; next.onclick = closeNewCampaign; }
+}
+
+// ── PHASE 2: ACCOUNTS ────────────────────────────────────────────────────
+function toggleCampAE(ae, btn) {
+  if(selectedAEsForCamp.has(ae)) { selectedAEsForCamp.delete(ae); btn.classList.remove('on'); }
+  else { selectedAEsForCamp.add(ae); btn.classList.add('on'); }
+  // Also sync nc-ae checkboxes
+  const cb = document.querySelector('[name="nc-ae"][value="'+ae+'"]');
+  if(cb) cb.checked = selectedAEsForCamp.has(ae);
+  renderModalAccounts();
+}
+
+function renderModalAccounts() {
+  const q = (document.getElementById('ma-search')?.value||'').toLowerCase();
+  const typeFilter = document.querySelector('.ma-type.on')?.dataset.type || 'all';
+
+  // If no AEs selected, show all; otherwise filter to selected AEs
+  const aeFilter = selectedAEsForCamp.size > 0 ? selectedAEsForCamp : null;
+
+  const AE_NAMES = {tony:'Tony Riebel',jeff:'Jeff Wuestenfeld',riley:'Riley Scott',katie:'Katie Schneider',brian:'Brian Disher',seamus:'Seamus Donovan',mikaela:'Mikaela Youpa'};
+  const AE_ORDER = ['tony','jeff','riley','katie','brian','seamus','mikaela'];
+
+  let accounts = MODAL_ACCOUNTS.filter(a => {
+    if(aeFilter && !aeFilter.has(a.aeId)) return false;
+    if(typeFilter === 'newlogo' && a.type !== 'newlogo') return false;
+    if(typeFilter === 'customer' && a.type !== 'customer') return false;
+    if(typeFilter === 'bigbet' && !a.bigBet) return false;
+    if(q && !a.name.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  const grouped = {};
+  accounts.forEach(a => { if(!grouped[a.aeId]) grouped[a.aeId] = []; grouped[a.aeId].push(a); });
+
+  let html = '';
+  AE_ORDER.forEach(ae => {
+    if(!grouped[ae]?.length) return;
+    html += '<div class="acct-group-lbl">'+AE_NAMES[ae].toUpperCase()+' ('+grouped[ae].length+')</div>';
+    html += grouped[ae].map(a => {
+      const checked = selectedAcctIds.has(a.id) ? 'checked' : '';
+      const tag = a.type === 'customer' ? '<span class="acct-tag tag-cust">Customer</span>' : '<span class="acct-tag tag-nl">New Logo</span>';
+      const bb = a.bigBet ? ' ⭐' : '';
+      return '<label class="acct-check-item">' +
+        '<input type="checkbox" '+checked+' onchange="toggleAcctCheck(this,\''+a.id+'\',\''+a.aeId+'\')">'+
+        '<span style="font-size:12px;flex:1">'+a.name+bb+'</span>'+tag+
+      '</label>';
+    }).join('');
+  });
+
+  if(!html) html = '<div style="padding:20px;text-align:center;font-size:12px;color:var(--s400)">No accounts match. '+(aeFilter?'Try selecting more AEs or adjusting filters.':'Try adjusting filters.')+'</div>';
+  const el = document.getElementById('ma-acct-list');
+  if(el) el.innerHTML = html;
+  const ct = document.getElementById('ma-selected-ct');
+  if(ct) ct.textContent = selectedAcctIds.size + ' selected';
+}
+
+function toggleAcctCheck(cb, id, aeId) {
+  if(cb.checked) {
+    selectedAcctIds.add(id);
+    selectedAEsForCamp.add(aeId);
+    // Auto-check AE button
+    const btn = document.querySelector('.camp-ae-btn[data-ae="'+aeId+'"]');
+    if(btn) btn.classList.add('on');
+  } else {
+    selectedAcctIds.delete(id);
+  }
+  const ct = document.getElementById('ma-selected-ct');
+  if(ct) ct.textContent = selectedAcctIds.size + ' selected';
+}
+
+function setMaTypeFilter(type, btn) {
+  document.querySelectorAll('.ma-type').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderModalAccounts();
+}
+
+// ── PHASE 3: CONTACTS ────────────────────────────────────────────────────
+function renderModalContacts(levelFilter) {
+  if(levelFilter === undefined) levelFilter = 'all';
+  // Store last filter
+  window._contactLevelFilter = levelFilter;
+
+  // Update tab states
+  document.querySelectorAll('.contact-level-tab').forEach(t => {
+    t.classList.toggle('on', t.dataset.level === levelFilter);
+  });
+
+  // Build set of account names from selected account IDs
+  const selectedAcctNames = [];
+  selectedAcctIds.forEach(id => {
+    const a = MODAL_ACCOUNTS.find(x => x.id === id);
+    if(a) selectedAcctNames.push(a.name.toLowerCase().trim());
+  });
+
+  // Match contacts — direct company name match (first word) OR full inclusion
+  let contacts = CRM_CONTACTS.filter(c => {
+    // AE filter
+    if(selectedAEsForCamp.size > 0 && !selectedAEsForCamp.has(c.aeId)) return false;
+    // Level filter
+    if(levelFilter !== 'all' && c.level !== levelFilter) return false;
+    // Account filter — if accounts selected, match by company name
+    if(selectedAcctNames.length > 0) {
+      const cl = c.company.toLowerCase().trim();
+      return selectedAcctNames.some(n => {
+        const nWords = n.split(' ');
+        const cWords = cl.split(' ');
+        // Match if first word of either name appears in the other
+        return cl.includes(nWords[0]) || n.includes(cWords[0]);
+      });
+    }
+    return true;
+  });
+
+  // Count by level for tab badges
+  const allForAccts = CRM_CONTACTS.filter(c => {
+    if(selectedAEsForCamp.size > 0 && !selectedAEsForCamp.has(c.aeId)) return false;
+    if(selectedAcctNames.length > 0) {
+      const cl = c.company.toLowerCase().trim();
+      return selectedAcctNames.some(n => cl.includes(n.split(' ')[0]) || n.includes(cl.split(' ')[0]));
+    }
+    return true;
+  });
+  const counts = {all: allForAccts.length, 'C-Suite': 0, VP: 0, Director: 0};
+  allForAccts.forEach(c => { if(counts[c.level] !== undefined) counts[c.level]++; });
+  document.querySelectorAll('.contact-level-tab').forEach(t => {
+    const ct = t.querySelector('.clt-ct');
+    if(ct) ct.textContent = counts[t.dataset.level] || 0;
+  });
+
+  const grouped = {};
+  contacts.forEach(c => { if(!grouped[c.company]) grouped[c.company] = []; grouped[c.company].push(c); });
+
+  const statusColors = {'SLA Critical':'var(--r600)','Open':'var(--b600)','Responded':'var(--g600)','Booked':'var(--g600)','Re-engage':'var(--p500)'};
+
+  let html = '';
+  if(!contacts.length) {
+    html = '<div style="padding:30px;text-align:center;color:var(--s400);font-size:12px">No contacts found for this filter and the selected accounts.</div>';
+  } else {
+    Object.entries(grouped).forEach(([company, cs]) => {
+      html += '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--s400);background:var(--s50);padding:6px 12px;border-bottom:1px solid var(--s100);position:sticky;top:0">'+company+'</div>';
+      html += cs.map(c => {
+        const checked = selectedContactIds.has(c.id) ? 'checked' : '';
+        const col = statusColors[c.status] || 'var(--s500)';
+        const levelBg = c.level==='C-Suite'?'rgba(220,38,38,.08)':c.level==='VP'?'rgba(37,99,235,.08)':'rgba(100,116,139,.1)';
+        const levelCol = c.level==='C-Suite'?'var(--r600)':c.level==='VP'?'var(--b600)':'var(--s600)';
+        return '<label class="acct-check-item" style="align-items:center;padding:9px 12px;cursor:pointer">' +
+          '<input type="checkbox" '+checked+' onchange="toggleContact(this,\'' +c.id+ '\')">' +
+          '<div style="flex:1;min-width:0;margin-left:4px">' +
+            '<div style="font-size:12px;font-weight:600;color:var(--s800)">'+c.name+'</div>' +
+            '<div style="font-size:10px;color:var(--s500)">'+c.title+'</div>' +
+          '</div>' +
+          '<span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:6px;background:'+levelBg+';color:'+levelCol+';margin-right:10px">'+c.level+'</span>' +
+          '<div style="text-align:right;flex-shrink:0">' +
+            '<div style="font-size:10px;color:var(--s400)">'+c.source+'</div>' +
+            '<div style="font-size:10px;font-weight:600;color:'+col+'">'+c.status+'</div>' +
+          '</div>' +
+        '</label>';
+      }).join('');
+    });
+  }
+
+  const el = document.getElementById('mc-contact-list');
+  if(el) el.innerHTML = html;
+  const ct = document.getElementById('mc-selected-ct');
+  if(ct) ct.textContent = selectedContactIds.size + ' selected';
+}
+
+function toggleContact(cb, id) {
+  if(cb.checked) selectedContactIds.add(id);
+  else selectedContactIds.delete(id);
+  const ct = document.getElementById('mc-selected-ct');
+  if(ct) ct.textContent = selectedContactIds.size + ' selected';
+}
+
+function selectAllContacts() {
+  const levelFilter = window._contactLevelFilter || 'all';
+  const selectedAcctNames = [];
+  selectedAcctIds.forEach(id => {
+    const a = MODAL_ACCOUNTS.find(x => x.id === id);
+    if(a) selectedAcctNames.push(a.name.toLowerCase().trim());
+  });
+
+  CRM_CONTACTS.forEach(c => {
+    if(selectedAEsForCamp.size > 0 && !selectedAEsForCamp.has(c.aeId)) return;
+    if(levelFilter !== 'all' && c.level !== levelFilter) return;
+    if(selectedAcctNames.length > 0) {
+      const cl = c.company.toLowerCase().trim();
+      const match = selectedAcctNames.some(n => cl.includes(n.split(' ')[0]) || n.includes(cl.split(' ')[0]));
+      if(!match) return;
+    }
+    selectedContactIds.add(c.id);
+  });
+
+  // Check all visible checkboxes
+  document.querySelectorAll('#mc-contact-list input[type=checkbox]').forEach(cb => cb.checked = true);
+
+  const ct = document.getElementById('mc-selected-ct');
+  if(ct) ct.textContent = selectedContactIds.size + ' selected';
+}
+
+// ── PHASE 4: GENERATE ────────────────────────────────────────────────────
+async function startGenerate() {
+  const name = document.getElementById('nc-name')?.value.trim() || 'New Campaign';
+  const product = document.getElementById('nc-product')?.value.trim() || 'ServiceNow Platform';
+  const emailCount = parseInt(document.querySelector('[name="nc-emails"]:checked')?.value || 3);
+  const personas = [...selectedPersonas].join(', ') || 'IT Workflows';
+  const notes = document.getElementById('nc-notes')?.value.trim() || '';
+  const motion = document.getElementById('nc-motion')?.value || 'new logo';
+  const hasCalls = document.getElementById('nc-calls')?.checked;
+
+  goToPhase(4);
+  document.getElementById('campNextBtn').style.display = 'none';
+  document.getElementById('campBackBtn').style.display = 'none';
+
+  const levels = [
+    {key:'csuite',  label:'C-Suite',  desc:'CIO / CTO / CHRO',  color:'var(--r600)',  bg:'rgba(220,38,38,.07)'},
+    {key:'vp',      label:'VP',       desc:'VP of IT / VP of HR', color:'var(--b600)',  bg:'rgba(37,99,235,.07)'},
+    {key:'director',label:'Director', desc:'IT Director / Dir. of IT Ops', color:'var(--s600)', bg:'rgba(100,116,139,.1)'},
+  ];
+
+  let pct = 0;
+  const bar = document.getElementById('genBar');
+  const stepEl = document.getElementById('genStep');
+  const ticker = setInterval(() => {
+    pct = Math.min(pct + (90 - pct) * 0.06, 86);
+    if(bar) bar.style.width = pct + '%';
+  }, 300);
+
+  const levelPrompts = {
+    'C-Suite': 'CIO, CTO, or CHRO level. Frame everything around business outcomes, risk, and competitive positioning. Strategic tone. No tactical details. Open with a board-level tension.',
+    'VP': 'VP of IT or VP of Engineering. Frame around team performance, operational efficiency, and their ability to deliver on leadership expectations. Bridge between strategy and execution.',
+    'Director': 'IT Director or Director of IT Operations. Frame around day-to-day pain — ticket queues, tool sprawl, manual work, team bandwidth. Tactical and specific. Ask about their current state.'
+  };
+
+  allGenerated = {};
+  let i = 0;
+  for(const lvl of levels) {
+    if(stepEl) stepEl.textContent = 'Generating ' + lvl.label + ' sequence (' + (i+1) + ' of 3)...';
+    const prompt = 'You are a ServiceNow BDR named Jacob Rubis. Write a ' + emailCount + '-email cold outbound sequence.\n\nProduct: ' + product + '\nPersona: ' + personas + '\nJob Level: ' + lvl.label + ' — ' + levelPrompts[lvl.label] + '\nMotion: ' + motion + '\nCampaign: ' + name + '\nContext: ' + (notes||'none') + '\n\nRules:\n- Problem-first framing, no product pitch in email 1\n- Fifth-grade reading level, short paragraphs\n- No em dashes, no semicolons, no hyphens in prose\n- Curiosity-led CTAs, do not ask for a meeting in emails 1-2\n- Each email is a different angle on the same problem\n- Final email: honest last note, easy out\n\nReturn ONLY a JSON array, no markdown:\n[{"emailNum":1,"subject":"...","body":"..."}]';
+
+    try {
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+      });
+      const data = await resp.json();
+      const raw = data.content?.[0]?.text || '[]';
+      allGenerated[lvl.key] = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    } catch(e) {
+      allGenerated[lvl.key] = Array.from({length:emailCount},(_,j)=>({emailNum:j+1,subject:'Email '+(j+1)+' — '+lvl.label+' · '+product,body:'Draft for '+lvl.label+' email '+(j+1)+'. Edit before importing.'}));
+    }
+    i++;
+  }
+
+  clearInterval(ticker);
+  if(bar) { bar.style.width='100%'; bar.style.background='var(--wasabi)'; }
+  await new Promise(r=>setTimeout(r,400));
+
+  // Render 3 level panels
+  const panelsEl = document.getElementById('gen-level-panels');
+  if(panelsEl) {
+    panelsEl.innerHTML = levels.map(lvl => {
+      const emails = allGenerated[lvl.key] || [];
+            const emailsHtml = emails.map(function(e,ei) {
+        const bodyHtml = (e.body||'').replace(/\n/g,'<br>');
+        const gid = lvl.key+'-'+ei;
+        return '<div class="gen-email-card">' +
+          '<div class="gen-email-hd" onclick="toggleGenEmail(\''+gid+'\');" style="gap:8px">' +
+            '<span class="gen-email-num">Email '+e.emailNum+'</span>' +
+            '<span class="gen-email-subj" style="flex:1">'+e.subject+'</span>' +
+            '<span style="font-size:10px;color:var(--s400);cursor:pointer">Edit ↓</span>' +
+          '</div>' +
+          '<div class="gen-email-body" id="gbody-'+gid+'" contenteditable="true" style="display:none">'+bodyHtml+'</div>' +
+        '</div>';
+      }).join('');
+
+      return '<div id="lvl-panel-'+lvl.key+'" style="border:1px solid var(--s200);border-radius:10px;overflow:hidden;margin-bottom:10px;transition:opacity .3s,max-height .4s">' +
+        '<div style="padding:12px 16px;background:'+lvl.bg+';display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--s200)">' +
+          '<div>' +
+            '<div style="font-size:13px;font-weight:700;color:'+lvl.color+'">' + lvl.label + '</div>' +
+            '<div style="font-size:11px;color:var(--s500);margin-top:1px">' + lvl.desc + ' · ' + emails.length + ' emails · '+name+'</div>' +
+          '</div>' +
+          '<div style="display:flex;gap:7px;align-items:center">' +
+            '<button id="added-badge-'+lvl.key+'" style="display:none;font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;background:rgba(22,163,74,.12);color:var(--g600);border:1px solid rgba(22,163,74,.3)">✓ Added to Campaigns</button>' +
+            '<button class="btn btn-p btn-sm" id="add-lvl-btn-'+lvl.key+'" onclick="addLevelToCampaign(this,\''+lvl.key+'\');">+ Add to Campaigns</button>' +
+            '<button class="btn btn-sm" style="background:var(--ink);color:#fff;border-color:var(--ink)" onclick="importLevelToOutreach(\''+lvl.key+'\');">⬆ Import to Outreach</button>' +
+          '</div>' +
+        '</div>' +
+        '<div style="padding:10px 12px;display:flex;flex-direction:column;gap:6px">' + emailsHtml + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  const loadArea = document.getElementById('gen-loading-area');
+  const revArea = document.getElementById('gen-review-area');
+  if(loadArea) loadArea.style.display = 'none';
+  if(revArea) { revArea.style.display = 'flex'; revArea.style.flexDirection = 'column'; }
+
+  document.getElementById('campBackBtn').style.display = 'none';
+  const nextBtn = document.getElementById('campNextBtn');
+  if(nextBtn) {
+    nextBtn.style.display = 'inline-flex';
+    nextBtn.textContent = 'Done';
+    nextBtn.onclick = closeNewCampaign;
+  }
+}
+
+function toggleGenEmail(id) {
+  const body = document.getElementById('gbody-'+id);
+  if(body) body.style.display = body.style.display==='none'?'block':'none';
+}
+
+function addLevelToCampaign(btnEl, levelKey) {
+  const baseName = document.getElementById('nc-name')?.value.trim() || 'New Campaign';
+  const product  = document.getElementById('nc-product')?.value.trim() || 'Platform';
+  const levelLabel = levelKey==='csuite' ? 'C-Suite' : levelKey==='vp' ? 'VP' : 'Director';
+  const emails = allGenerated[levelKey] || [];
+  const hasCalls = document.getElementById('nc-calls')?.checked;
+  const motion = document.getElementById('nc-motion')?.value || 'new logo';
+
+  // Use selectedAEsForCamp (set from Step 2 AE selection)
+  const aes = selectedAEsForCamp.size > 0
+    ? [...selectedAEsForCamp]
+    : [...document.querySelectorAll('[name="nc-ae"]:checked')].map(c => c.value);
+
+  const hasLinkedIn = document.getElementById('nc-linkedin')?.checked;
+
+  // Build steps from generated emails, interleaving calls and LinkedIn touches
+  const steps = [];
+  const emailsMap = {};
+  emails.forEach((e, i) => {
+    steps.push({type:'email', emailNum:e.emailNum, sendDate:'TBD', sent:null});
+    const bodyEl = document.getElementById('gbody-'+levelKey+'-'+i);
+    emailsMap[e.emailNum] = {subject: e.subject, body: bodyEl ? bodyEl.innerText : (e.body||'')};
+    // Add call after each email except the last
+    if(hasCalls && i < emails.length - 1) {
+      steps.push({type:'call', notes:'Follow up on Email '+(e.emailNum)+' — probe on current state', sendDate:'TBD', sent:null});
+    }
+    // Add LinkedIn touch after email 1 only
+    if(hasLinkedIn && i === 0) {
+      steps.push({type:'linkedin', notes:'Send connection request referencing email — keep note relevant, no pitch', sendDate:'TBD', sent:null});
+    }
+  });
+
+  // Resolve account IDs to names
+  const acctIds = [...selectedAcctIds];
+
+  const newCamp = {
+    id: 'nc-'+levelKey+'-'+Date.now(),
+    name: baseName + ' — ' + levelLabel,
+    product, status:'Active', motion,
+    aes: aes.length > 0 ? aes : ['tony'],
+    acctIds,
+    contactCount: selectedContactIds.size || acctIds.length * 3 || 0,
+    createdAt: '2026-04-10',
+    sourceSheetUrl: '',
+    steps,
+    emails: emailsMap,
+  };
+
+  CAMPAIGNS.unshift(newCamp);
+
+  const btn = btnEl || document.getElementById('add-lvl-btn-'+levelKey);
+  const badge = document.getElementById('added-badge-'+levelKey);
+  if(btn) { btn.innerHTML='✓ Added'; btn.disabled=true; btn.style.background='var(--g600)'; btn.style.color='#fff'; btn.style.borderColor='var(--g600)'; }
+  if(badge) badge.style.display='inline-flex';
+
+  renderList();
+}
+
+function importLevelToOutreach(levelKey) {
+  const baseName = document.getElementById('nc-name')?.value.trim()||'New Campaign';
+  const levelLabel = levelKey==='csuite'?'C-Suite':levelKey==='vp'?'VP':'Director';
+  const contacts = selectedContactIds.size;
+  // Collapse the panel
+  const panel = document.getElementById('lvl-panel-'+levelKey);
+  if(panel) {
+    panel.style.transition = 'opacity .3s, max-height .4s';
+    panel.style.opacity = '0';
+    panel.style.maxHeight = '0';
+    panel.style.overflow = 'hidden';
+    panel.style.marginBottom = '0';
+    setTimeout(() => { if(panel) panel.style.display='none'; }, 420);
+  }
+  // Show a toast-style confirmation
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:80px;right:24px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:12px;font-weight:500;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3)';
+  toast.innerHTML = '⬆ <strong>' + baseName + ' — ' + levelLabel + '</strong> imported to Outreach · ' + contacts + ' contacts';
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+
+
+function toggleGenEmail(i) {
+  const body = document.getElementById('gbody-'+i);
+  if(body) body.style.display = body.style.display==='none'?'block':'none';
+}
+
+
+
+function openNewCampaign() {
+  selectedAcctIds = new Set();
+  selectedPersonas = new Set();
+  selectedLevels = new Set();
+  selectedAEsForCamp = new Set();
+  selectedContactIds = new Set();
+  generatedEmails = [];
+  addedTocamp = new Set();
+  currentPhase = 1;
+  document.querySelectorAll('.persona-chip,.level-chip').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.camp-ae-btn').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('[name="nc-ae"]').forEach(cb=>cb.checked=false);
+  document.querySelectorAll('[name="nc-emails"]').forEach(r=>r.checked=r.value==='3');
+  if(document.getElementById('nc-name')) document.getElementById('nc-name').value='';
+  if(document.getElementById('nc-product')) document.getElementById('nc-product').value='';
+  if(document.getElementById('nc-notes')) document.getElementById('nc-notes').value='';
+  if(document.getElementById('nc-url')) document.getElementById('nc-url').value='';
+  goToPhase(1);
+  document.getElementById('newCampModal').style.display='flex';
+}
+
+function closeNewCampaign() {
+  document.getElementById('newCampModal').style.display='none';
+}
+function selectAllAEs(){document.querySelectorAll('[name="nc-ae"]').forEach(cb=>cb.checked=true);}
+function toggleAcct(id,aeId,e){if(e&&e.target.tagName==='INPUT'){}if(selectedAcctIds.has(id)){selectedAcctIds.delete(id);}else{selectedAcctIds.add(id);const aeCb=document.querySelector('[name="nc-ae"][value="'+aeId+'"]');if(aeCb)aeCb.checked=true;}renderAcctList();}
+
 // Init
 renderList();
 renderDetail();
 </script>
 
 <div id="newCampModal" style="display:none" class="modal-overlay" onclick="if(event.target===this)closeNewCampaign()">
-  <div class="modal-box">
-    <div class="modal-hd">
-      <div class="modal-title">New Campaign</div>
-      <button class="modal-close" onclick="closeNewCampaign()">×</button>
+  <div class="modal-box" style="width:min(920px,96vw);max-height:94vh">
+    <div class="modal-hd" style="padding:16px 20px">
+      <div>
+        <div class="modal-title">New Campaign</div>
+        <div style="font-size:11px;color:var(--s400);margin-top:2px" id="campPhaseLabel">Step 1 of 4 — Configure</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="step-indicator" style="margin:0;gap:6px">
+          <div class="step-dot active" id="s1dot">1</div><span class="step-lbl active" style="font-size:10px">Configure</span>
+          <div class="step-line" style="width:40px;margin:0 4px"></div>
+          <div class="step-dot pending" id="s2dot">2</div><span class="step-lbl pending" style="font-size:10px">Accounts</span>
+          <div class="step-line" style="width:40px;margin:0 4px"></div>
+          <div class="step-dot pending" id="s3dot">3</div><span class="step-lbl pending" style="font-size:10px">Contacts</span>
+          <div class="step-line" style="width:40px;margin:0 4px"></div>
+          <div class="step-dot pending" id="s4dot">4</div><span class="step-lbl pending" style="font-size:10px">Generate</span>
+        </div>
+        <button class="modal-close" onclick="closeNewCampaign()">×</button>
+      </div>
     </div>
-    <div class="modal-body">
 
-      <div>
-        <label class="form-label">Campaign Name *</label>
-        <input type="text" class="form-input" id="nc-name" placeholder="Veza Awareness Q2">
+    <!-- PHASE 1: CONFIGURE -->
+    <div id="camp-phase-1" class="modal-body" style="display:flex;flex-direction:column;gap:14px">
+      <div class="camp-modal-grid">
+        <div>
+          <label class="form-label">Campaign Name *</label>
+          <input type="text" class="form-input" id="nc-name" placeholder="Veza Awareness — Mikaela Installs Q2">
+        </div>
+        <div>
+          <label class="form-label">Product / Focus</label>
+          <input type="text" class="form-input" id="nc-product" placeholder="Veza, ITAM, Now Assist...">
+        </div>
       </div>
-
       <div>
-        <label class="form-label">Product / Focus</label>
-        <input type="text" class="form-input" id="nc-product" placeholder="Veza, ITAM, Now Assist...">
+        <label class="form-label">Buying Group / Persona</label>
+        <div class="persona-grid">
+          <div class="persona-chip" data-persona="IT Workflows" onclick="togglePersona(this)"><div class="picon">💻</div><div class="plbl">IT Workflows</div></div>
+          <div class="persona-chip" data-persona="Employee Workflows" onclick="togglePersona(this)"><div class="picon">👥</div><div class="plbl">Employee Workflows</div></div>
+          <div class="persona-chip" data-persona="Security & Risk" onclick="togglePersona(this)"><div class="picon">🔐</div><div class="plbl">Security & Risk</div></div>
+          <div class="persona-chip" data-persona="Customer Workflows" onclick="togglePersona(this)"><div class="picon">🤝</div><div class="plbl">Customer Workflows</div></div>
+          <div class="persona-chip" data-persona="Finance & Supply Chain" onclick="togglePersona(this)"><div class="picon">📊</div><div class="plbl">Finance & Supply Chain</div></div>
+        </div>
       </div>
-
       <div>
-        <label class="form-label">Sequence Steps</label>
-        <div class="seq-grid">
-          <div class="seq-box">
-            <div class="seq-box-title">📧 How many emails?</div>
-            <div class="radio-row">
-              <label class="radio-item"><input type="radio" name="nc-emails" value="1"><span class="radio-lbl">1</span></label>
-              <label class="radio-item"><input type="radio" name="nc-emails" value="2"><span class="radio-lbl">2</span></label>
-              <label class="radio-item"><input type="radio" name="nc-emails" value="3" checked><span class="radio-lbl">3</span></label>
-              <label class="radio-item"><input type="radio" name="nc-emails" value="4"><span class="radio-lbl">4</span></label>
-              <label class="radio-item"><input type="radio" name="nc-emails" value="5"><span class="radio-lbl">5</span></label>
+        <label class="form-label">Target Job Levels</label>
+        <div class="level-grid">
+          <div class="level-chip" data-level="C-Suite" onclick="toggleLevel(this)"><div class="llbl">C-Suite</div><div class="lsub">CIO, CTO, CISO, CHRO</div></div>
+          <div class="level-chip" data-level="VP" onclick="toggleLevel(this)"><div class="llbl">VP</div><div class="lsub">VP of IT, VP of HR</div></div>
+          <div class="level-chip" data-level="Director" onclick="toggleLevel(this)"><div class="llbl">Director</div><div class="lsub">Dir. of IT Ops, etc.</div></div>
+          <div class="level-chip" data-level="Manager" onclick="toggleLevel(this)"><div class="llbl">Manager & Below</div><div class="lsub">IT Manager, Analyst</div></div>
+        </div>
+      </div>
+      <div class="camp-modal-grid">
+        <div>
+          <label class="form-label">Sequence Steps</label>
+          <div class="seq-grid">
+            <div class="seq-box">
+              <div class="seq-box-title">📧 Emails</div>
+              <div class="radio-row">
+                <label class="radio-item"><input type="radio" name="nc-emails" value="1"><span class="radio-lbl">1</span></label>
+                <label class="radio-item"><input type="radio" name="nc-emails" value="2"><span class="radio-lbl">2</span></label>
+                <label class="radio-item"><input type="radio" name="nc-emails" value="3" checked><span class="radio-lbl">3</span></label>
+                <label class="radio-item"><input type="radio" name="nc-emails" value="4"><span class="radio-lbl">4</span></label>
+                <label class="radio-item"><input type="radio" name="nc-emails" value="5"><span class="radio-lbl">5</span></label>
+              </div>
+            </div>
+            <div class="seq-box">
+              <div class="seq-box-title">📞 Other</div>
+              <label class="check-item"><input type="checkbox" id="nc-calls"> Calls</label>
+              <label class="check-item"><input type="checkbox" id="nc-linkedin"> LinkedIn</label>
             </div>
           </div>
-          <div class="seq-box">
-            <div class="seq-box-title">📞 Other Touches</div>
-            <label class="check-item"><input type="checkbox" id="nc-calls"> Calls</label>
-            <label class="check-item"><input type="checkbox" id="nc-linkedin"> LinkedIn</label>
-            <div class="check-hint">Added between emails automatically.</div>
-          </div>
+        </div>
+        <div>
+          <label class="form-label">Motion</label>
+          <select class="form-input" id="nc-motion" style="padding:8px 11px;margin-bottom:8px">
+            <option value="new logo">New Logo</option>
+            <option value="customer">Customer / Install Base</option>
+            <option value="both">Both</option>
+          </select>
+          <label class="form-label">Source Sheet URL</label>
+          <input type="text" class="form-input" id="nc-url" placeholder="https://">
         </div>
       </div>
-
       <div>
-        <label class="form-label">Source Sheet URL</label>
-        <input type="text" class="form-input" id="nc-url" placeholder="https://...">
+        <label class="form-label">ICP & Messaging Context</label>
+        <textarea class="form-input" id="nc-notes" style="height:60px;resize:none" placeholder="Key pain points, competitive context, why now..."></textarea>
       </div>
-
-      <div>
-        <label class="form-label">Target Accounts</label>
-        <div class="acct-filter-row">
-          <button class="af-chip on" id="af-all" onclick="setAcctFilter('all',this)">All</button>
-          <button class="af-chip" onclick="setAcctFilter('newlogo',this)">New Logo</button>
-          <button class="af-chip" onclick="setAcctFilter('customer',this)">Customer</button>
-          <button class="af-chip" onclick="setAcctFilter('bigbet',this)">⭐ Big Bet</button>
-          <input type="text" class="af-search" id="af-search" placeholder="🔍 Search accounts..." oninput="renderAcctList()">
-        </div>
-        <div class="acct-list" id="nc-acct-list"></div>
-        <div style="font-size:10px;color:var(--s400);margin-top:5px">Selecting an account will auto-assign the AE below.</div>
-      </div>
-
-      <div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <label class="form-label" style="margin:0">Assign to AEs</label>
-          <button class="af-chip" onclick="selectAllAEs()" style="font-size:10px;padding:3px 8px">Select All</button>
-        </div>
-        <div class="ae-check-grid">
-          <label class="ae-check-item"><input type="checkbox" name="nc-ae" value="tony"> Tony Riebel</label>
-          <label class="ae-check-item"><input type="checkbox" name="nc-ae" value="jeff"> Jeff Wuestenfeld</label>
-          <label class="ae-check-item"><input type="checkbox" name="nc-ae" value="riley"> Riley Scott</label>
-          <label class="ae-check-item"><input type="checkbox" name="nc-ae" value="katie"> Katie Schneider</label>
-          <label class="ae-check-item"><input type="checkbox" name="nc-ae" value="brian"> Brian Disher</label>
-          <label class="ae-check-item"><input type="checkbox" name="nc-ae" value="seamus"> Seamus Donovan</label>
-          <label class="ae-check-item"><input type="checkbox" name="nc-ae" value="mikaela"> Mikaela Youpa</label>
-        </div>
-      </div>
-
-      <div>
-        <label class="form-label">Notes</label>
-        <textarea class="form-input" id="nc-notes" style="height:70px;resize:none" placeholder="ICP, messaging angle, strategy..."></textarea>
-      </div>
-
     </div>
-    <div class="modal-footer">
+
+    <!-- PHASE 2: SELECT ACCOUNTS -->
+    <div id="camp-phase-2" class="modal-body" style="display:none;flex-direction:column;gap:12px">
+      <div style="display:grid;grid-template-columns:200px 1fr;gap:14px;min-height:400px">
+        <!-- LEFT: AE SELECTOR -->
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:8px">Select AEs</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button class="camp-ae-btn" data-ae="tony" onclick="toggleCampAE('tony',this)" style="display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--s200);border-radius:7px;background:var(--white);cursor:pointer;font-size:12px;text-align:left;transition:.1s"><span style="width:18px;height:18px;border-radius:50%;background:rgba(3,45,66,.12);color:#032D42;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">TO</span>Tony Riebel</button>
+            <button class="camp-ae-btn" data-ae="jeff" onclick="toggleCampAE('jeff',this)" style="display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--s200);border-radius:7px;background:var(--white);cursor:pointer;font-size:12px;text-align:left;transition:.1s"><span style="width:18px;height:18px;border-radius:50%;background:rgba(4,67,85,.12);color:#044355;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">JE</span>Jeff Wuestenfeld</button>
+            <button class="camp-ae-btn" data-ae="riley" onclick="toggleCampAE('riley',this)" style="display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--s200);border-radius:7px;background:var(--white);cursor:pointer;font-size:12px;text-align:left;transition:.1s"><span style="width:18px;height:18px;border-radius:50%;background:rgba(180,83,9,.12);color:#B45309;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">RI</span>Riley Scott</button>
+            <button class="camp-ae-btn" data-ae="katie" onclick="toggleCampAE('katie',this)" style="display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--s200);border-radius:7px;background:var(--white);cursor:pointer;font-size:12px;text-align:left;transition:.1s"><span style="width:18px;height:18px;border-radius:50%;background:rgba(91,33,182,.12);color:#5B21B6;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">KA</span>Katie Schneider</button>
+            <button class="camp-ae-btn" data-ae="brian" onclick="toggleCampAE('brian',this)" style="display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--s200);border-radius:7px;background:var(--white);cursor:pointer;font-size:12px;text-align:left;transition:.1s"><span style="width:18px;height:18px;border-radius:50%;background:rgba(217,48,37,.12);color:#D93025;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">BD</span>Brian Disher</button>
+            <button class="camp-ae-btn" data-ae="seamus" onclick="toggleCampAE('seamus',this)" style="display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--s200);border-radius:7px;background:var(--white);cursor:pointer;font-size:12px;text-align:left;transition:.1s"><span style="width:18px;height:18px;border-radius:50%;background:rgba(26,122,0,.12);color:#1a7a00;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">SD</span>Seamus Donovan</button>
+            <button class="camp-ae-btn" data-ae="mikaela" onclick="toggleCampAE('mikaela',this)" style="display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--s200);border-radius:7px;background:var(--white);cursor:pointer;font-size:12px;text-align:left;transition:.1s"><span style="width:18px;height:18px;border-radius:50%;background:rgba(3,105,161,.12);color:#0369A1;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">MY</span>Mikaela Youpa</button>
+          </div>
+          <div style="font-size:10px;color:var(--s400);margin-top:8px">Select AEs to filter their accounts →</div>
+        </div>
+        <!-- RIGHT: ACCOUNTS -->
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <button class="ma-type af-chip on" data-type="all" onclick="setMaTypeFilter('all',this)">All</button>
+            <button class="ma-type af-chip" data-type="newlogo" onclick="setMaTypeFilter('newlogo',this)">New Logo</button>
+            <button class="ma-type af-chip" data-type="customer" onclick="setMaTypeFilter('customer',this)">Customer</button>
+            <button class="ma-type af-chip" data-type="bigbet" onclick="setMaTypeFilter('bigbet',this)">⭐ Big Bet</button>
+            <input type="text" class="af-search" id="ma-search" placeholder="🔍 Search..." oninput="renderModalAccounts()" style="flex:1">
+            <span style="font-size:11px;color:var(--b600);font-weight:600" id="ma-selected-ct">0 selected</span>
+          </div>
+          <div class="acct-list" id="ma-acct-list" style="max-height:360px;flex:1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3: SELECT CONTACTS -->
+    <div id="camp-phase-3" class="modal-body" style="display:none;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--s800)">Contacts from selected accounts</div>
+          <div style="font-size:11px;color:var(--s500);margin-top:1px">CRM leads and contacts matching your account selection</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:11px;color:var(--b600);font-weight:600" id="mc-selected-ct">0 selected</span>
+          <button class="af-chip" onclick="selectAllContacts()" style="font-size:10px;padding:4px 10px">Select All</button>
+        </div>
+      </div>
+      <!-- LEVEL TABS -->
+      <div style="display:flex;gap:0;border-bottom:2px solid var(--s200)">
+        <button class="contact-level-tab" data-level="all" onclick="renderModalContacts('all')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">All <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
+        <button class="contact-level-tab" data-level="C-Suite" onclick="renderModalContacts('C-Suite')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">C-Suite <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
+        <button class="contact-level-tab" data-level="VP" onclick="renderModalContacts('VP')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">VP <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
+        <button class="contact-level-tab" data-level="Director" onclick="renderModalContacts('Director')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">Director <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
+      </div>
+      <div class="acct-list" id="mc-contact-list" style="max-height:380px;overflow-y:auto"></div>
+    </div>
+
+    <!-- PHASE 4: GENERATE & REVIEW -->
+    <div id="camp-phase-4" class="modal-body" style="display:none;flex-direction:column;gap:12px;padding-bottom:8px">
+      <div id="gen-loading-area" style="display:flex;flex-direction:column;align-items:center;padding:32px;text-align:center">
+        <div style="font-size:28px;margin-bottom:12px">✦</div>
+        <div style="font-size:15px;font-weight:700;color:var(--s900);margin-bottom:6px">Generating 3 persona-level sequences...</div>
+        <div style="font-size:12px;color:var(--s500);margin-bottom:20px" id="genStatus">Building C-Suite, VP, and Director sequences</div>
+        <div class="gen-loading-bar" style="width:100%;max-width:380px"><div class="gen-loading-fill" id="genBar"></div></div>
+        <div style="font-size:11px;color:var(--s400);margin-top:8px" id="genStep">Analyzing product and persona fit...</div>
+      </div>
+      <div id="gen-review-area" style="display:none;flex-direction:column;gap:10px">
+        <div style="background:rgba(99,223,78,.08);border:1px solid rgba(99,223,78,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--s700)">
+          ✦ Claude generated 3 persona-level sequences. Add each to your campaign list and import to Outreach separately.
+        </div>
+        <div id="gen-level-panels"></div>
+      </div>
+    </div>
+
+    <div class="modal-footer" id="modalFooter">
       <button class="btn btn-g" onclick="closeNewCampaign()">Cancel</button>
-      <button class="btn btn-p" onclick="saveCampaign()">Save</button>
+      <button class="btn btn-g" id="campBackBtn" style="display:none" onclick="goToPhase(currentPhase-1)">← Back</button>
+      <button class="btn btn-p" id="campNextBtn" onclick="goToPhase(2)">Next: Select Accounts →</button>
     </div>
   </div>
 </div>
-
 </body>
 </html>
