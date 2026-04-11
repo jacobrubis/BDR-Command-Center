@@ -94,10 +94,10 @@ button{font-family:inherit;}
 .pod-pipe{font-size:11px;font-weight:700;font-family:'DM Mono',monospace;}
 
 /* INNER TABS */
-.inner-tabs{display:flex;gap:2px;padding:12px 24px 0;background:var(--s50);border-bottom:1px solid var(--s200);}
-.itab{font-size:12px;font-weight:500;padding:7px 14px;border-radius:6px 6px 0 0;color:var(--s500);cursor:pointer;border:1px solid transparent;background:transparent;transition:.1s;}
+.inner-tabs{display:flex;gap:2px;padding:0;background:var(--white);border-bottom:2px solid var(--s200);}
+.itab{font-size:12px;font-weight:500;padding:10px 16px;border-radius:0;color:var(--s500);cursor:pointer;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;background:transparent;transition:.1s;}
 .itab:hover{color:var(--s700);background:var(--s100);}
-.itab.on{color:var(--s900);background:var(--white);border-color:var(--s200);border-bottom-color:var(--white);font-weight:600;margin-bottom:-1px;}
+.itab.on{color:var(--s900);background:transparent;border-bottom:2px solid var(--ink);font-weight:600;}
 
 /* PAGE BODY */
 .page-body{display:grid;grid-template-columns:1fr 320px;gap:0;min-height:calc(100vh - 44px - 280px);}
@@ -221,26 +221,15 @@ button{font-family:inherit;}
 
 <aside class="sbar">
   <div class="sbar-sec">
-    <span class="sbar-lbl">My Work</span>
-    <a href="index.html"           class="sbar-item"><span class="sbar-ic">⌂</span>Command Center</a>
-    <a href="outreach-center.html" class="sbar-item"><span class="sbar-ic">📋</span>Outreach Center</a>
-    <a href="buying-groups.html"   class="sbar-item"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
-    <a href="leads.html"           class="sbar-item"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
-    <a href="#"                    class="sbar-item"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
-  </div>
-  <div class="sdiv"></div>
-  <div class="sbar-sec">
-    <span class="sbar-lbl">Customers</span>
-    <a href="accounts.html"        class="sbar-item"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
-    <a href="#"                    class="sbar-item"><span class="sbar-ic">👥</span>Contacts</a>
-    <a href="opportunities.html"   class="sbar-item"><span class="sbar-ic">💼</span>Opportunities</a>
-  </div>
-  <div class="sdiv"></div>
-  <div class="sbar-sec">
-    <span class="sbar-lbl">Reports</span>
-    <a href="book-of-business.html" class="sbar-item"><span class="sbar-ic">📖</span>Book of Business</a>
-    <a href="ae-alignment.html"     class="sbar-item on"><span class="sbar-ic">🤝</span>AE Alignment</a>
-    <a href="#"                     class="sbar-item"><span class="sbar-ic">📊</span>Reports</a>
+    <a href="index.html"            class="sbar-item "     ><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="campaigns.html"        class="sbar-item "   ><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="buying-groups.html"    class="sbar-item "     ><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"            class="sbar-item "  ><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="territory-leads.html"    class="sbar-item"    ><span class="sbar-ic">🗺</span>Territory Leads<span class="sb">100</span></a>
+    <a href="accounts.html"         class="sbar-item "  ><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="opportunities.html"    class="sbar-item "   ><span class="sbar-ic">💼</span>Opportunities</a>
+    <a href="book-of-business.html" class="sbar-item "    ><span class="sbar-ic">📖</span>Book of Business</a>
+    <a href="ae-alignment.html"     class="sbar-item on"     ><span class="sbar-ic">🤝</span>AE Alignment</a>
   </div>
   <div class="sbar-footer">ServiceNow Confidential</div>
 </aside>
@@ -263,24 +252,26 @@ button{font-family:inherit;}
     <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--s400);padding:0 0 8px">Your Pod — Commercial Illinois &amp; Midwest</div>
     <div class="pod-row" id="podRow"></div>
 
-    <!-- INNER TABS -->
-    <div class="inner-tabs">
-      <button class="itab on" id="tab-prep" onclick="showView('prep')">🤝 1:1 Prep</button>
-      <button class="itab" id="tab-leads" onclick="showView('leads')">👤 Inbound Leads</button>
-      <button class="itab" id="tab-recap" onclick="showView('recap')">📝 Generate Recap</button>
-    </div>
-
     <!-- CROSS-PAGE TABS -->
-    <div class="ptabs" style="border-bottom:none;border-top:1px solid var(--s200);margin-top:0">
-      <a href="index.html"            class="ptab">Today</a>
-      <a href="opportunities.html"    class="ptab">Opportunities <span class="ptab-ct">5</span></a>
-      <a href="buying-groups.html"    class="ptab">Buying Groups <span class="ptab-ct">12</span></a>
-      <a href="leads.html"            class="ptab">Leads <span class="ptab-ct">39</span></a>
-      <a href="accounts.html"         class="ptab">Accounts <span class="ptab-ct">340</span></a>
-      <a href="ae-alignment.html"     class="ptab on">AE Alignment</a>
+    <div class="ptabs">
+      <a href="index.html" class="ptab">Today</a>
+      <a href="campaigns.html" class="ptab">Campaigns <span class="ptab-ct">5</span></a>
+      <a href="buying-groups.html" class="ptab">Buying Groups <span class="ptab-ct">12</span></a>
+      <a href="leads.html" class="ptab">Leads <span class="ptab-ct">39</span></a>
+      <a href="territory-leads.html"  class="ptab">Territory Leads <span class="ptab-ct">200</span></a>
+      <a href="accounts.html" class="ptab">Accounts <span class="ptab-ct">340</span></a>
+      <a href="opportunities.html" class="ptab">Opportunities <span class="ptab-ct">5</span></a>
       <a href="book-of-business.html" class="ptab">Book of Business</a>
+      <a href="ae-alignment.html" class="ptab on">AE Alignment</a>
     </div>
   </div><!-- /page-hdr -->
+
+  <!-- INNER TABS -->
+  <div class="inner-tabs" style="background:var(--white);border-bottom:2px solid var(--s200);padding:0 24px">
+    <button class="itab on" id="tab-prep" onclick="showView('prep')">🤝 1:1 Prep</button>
+    <button class="itab" id="tab-leads" onclick="showView('leads')">👤 Inbound Leads</button>
+    <button class="itab" id="tab-recap" onclick="showView('recap')">📝 Generate Recap</button>
+  </div>
 
   <!-- VIEW: 1:1 PREP -->
   <div id="view-prep" class="page-body">
