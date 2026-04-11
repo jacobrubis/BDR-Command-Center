@@ -225,13 +225,15 @@ button{font-family:inherit;}
 .gen-loading-bar{height:4px;background:var(--s200);border-radius:2px;overflow:hidden;margin:12px 0;}
 .gen-loading-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--wasabi),var(--wdk));border-radius:2px;transition:width .4s ease;}
 
-.camp-ae-btn.on{border-color:var(--ink);background:rgba(3,45,66,.06);font-weight:600;}
+.camp-ae-btn.on{border-color:var(--g600);background:rgba(22,163,74,.12);font-weight:600;color:var(--g600);}
 .camp-ae-btn:hover{background:var(--s50);}
 
 .contact-level-tab.on{color:var(--ink)!important;border-bottom-color:var(--ink)!important;font-weight:600!important;}
 .contact-level-tab.on .clt-ct{background:rgba(3,45,66,.1)!important;color:var(--ink)!important;}
 
 .camp-type-card:hover{border-color:var(--s300)!important;background:var(--s50)!important;}
+
+.contact-mode-btn-active{background:var(--ink)!important;color:#fff!important;}
 </style>
 </head>
 <body>
@@ -343,12 +345,11 @@ const CAMPAIGNS = [
     name:'Mikaela - Veza News - Installs',
     product:'Veza',
     status:'Active',
-    motion:'customer',
     aes:['mikaela'],
     acctIds:['2nxw6tzx','5x5bnced','cd0955ng','fgcg5hg2','eja0v7os'],
     contactCount:30,
     createdAt:'2026-04-06',
-    sourceSheetUrl:'https://servicenow-my.sharepoint.com/:x:/r/personal/jacob_rubis_servicenow_com/Documents/Mikaela%20-%20Veza%20News%20-%20Intsalls.xlsx',
+    campaignTag:'Veza · Customer · Mikaela',
     steps:[
       {type:'email', emailNum:1, sendDate:'2026-03-31', sent:'2026-04-06'},
       {type:'call',  notes:'Follow up on email 1 — reference identity security angle', sendDate:'2026-04-07', sent:null},
@@ -367,12 +368,11 @@ const CAMPAIGNS = [
     name:'Seamus - ITAM - Installs',
     product:'ITAM',
     status:'Active',
-    motion:'customer',
     aes:['seamus'],
     acctIds:['6bfny2y1','wnxsv4in','9d7qbdvr'],
     contactCount:81,
     createdAt:'2026-04-06',
-    sourceSheetUrl:'MS Loop',
+    campaignTag:'ITAM · Customer · Seamus',
     steps:[
       {type:'email', emailNum:1, sendDate:'2026-03-25', sent:'2026-04-06'},
       {type:'email', emailNum:2, sendDate:'2026-03-31', sent:'2026-04-06'},
@@ -391,12 +391,10 @@ const CAMPAIGNS = [
     name:'Platform Sequence - NNL',
     product:'Platform',
     status:'Active',
-    motion:'new logo',
     aes:['tony','jeff','riley','katie','brian','seamus','mikaela'],
     acctIds:[],
     contactCount:369,
     createdAt:'2026-04-06',
-    sourceSheetUrl:'Microsoft Loop',
     steps:[
       {type:'email', emailNum:1, sendDate:'2026-03-27', sent:'2026-04-06'},
       {type:'email', emailNum:2, sendDate:'2026-03-31', sent:'2026-04-06'},
@@ -417,12 +415,10 @@ const CAMPAIGNS = [
     name:'AICT / EW / AW',
     product:'AI Control Tower · EmployeeWorks · Autonomous Workforce',
     status:'Active',
-    motion:'both',
     aes:['tony','jeff','riley','katie','brian','seamus','mikaela'],
     acctIds:[],
     contactCount:182,
     createdAt:'2026-04-06',
-    sourceSheetUrl:'Microsoft Loop',
     steps:[
       {type:'email', emailNum:1, sendDate:'2026-03-25', sent:'2026-04-06'},
       {type:'email', emailNum:2, sendDate:'2026-03-30', sent:'2026-04-06'},
@@ -443,12 +439,10 @@ const CAMPAIGNS = [
     name:'OT — Operational Technology',
     product:'Operational Technology Management',
     status:'Active',
-    motion:'both',
     aes:['jeff','riley','brian','seamus'],
     acctIds:['j8apzfsc'],
     contactCount:18,
     createdAt:'2026-04-06',
-    sourceSheetUrl:'https://servicenow-my.sharepoint.com/:x:/r/personal/jacob_rubis_servicenow_com/Documents/OT.xlsx',
     steps:[
       {type:'email', emailNum:1, sendDate:'2026-04-08', sent:null},
       {type:'email', emailNum:2, sendDate:'2026-04-13', sent:null},
@@ -504,6 +498,7 @@ function renderList() {
         '<span class="ci-status cs-active">'+c.status+'</span>'+
       '</div>'+
       '<div class="ci-product">'+c.product+'</div>'+
+      (c.campaignTag ? '<div style="margin-bottom:5px"><span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(3,45,66,.07);color:var(--ink);font-family:monospace">🏷 '+c.campaignTag+'</span></div>' : '')+
       '<div class="ci-meta">'+
         '<span class="ci-chip">👥 '+c.contactCount+' contacts</span>'+
         '<span class="ci-chip">'+c.steps.length+' steps</span>'+
@@ -550,7 +545,7 @@ function renderDetail() {
     '<span style="font-size:11px;color:var(--s500);margin-left:4px">'+c.aes.map(ae=>(AE_STYLES[ae]||{}).label).join(', ')+'</span>'+
     '</div>'+
     '<div class="cd-stats">'+
-      '<div class="cd-stat"><div class="cd-stat-lbl">Contacts</div><div class="cd-stat-val">'+c.contactCount+'</div><div class="cd-stat-sub">'+c.motion+' motion</div></div>'+
+      '<div class="cd-stat"><div class="cd-stat-lbl">Contacts</div><div class="cd-stat-val">'+c.contactCount+'</div><div class="cd-stat-sub">'+selectedCampType+'</div><div class="cd-stat-sub"></div></div>'+
       '<div class="cd-stat"><div class="cd-stat-lbl">Steps Sent</div><div class="cd-stat-val">'+sentCount(c)+' / '+c.steps.length+'</div><div class="cd-stat-sub">'+pct+'% complete</div></div>'+
       '<div class="cd-stat"><div class="cd-stat-lbl">Next Step</div><div class="cd-stat-val" style="font-size:14px">'+(ns ? fmtDate(ns.sendDate) : 'Done')+'</div><div class="cd-stat-sub">'+(ns ? (ns.type==='email'?'Email '+ns.emailNum:'Call') : 'All steps sent')+'</div></div>'+
       '<div class="cd-stat"><div class="cd-stat-lbl">Created</div><div class="cd-stat-val" style="font-size:14px">'+fmtDate(c.createdAt)+'</div><div class="cd-stat-sub">Q2 FY26</div></div>'+
@@ -685,8 +680,6 @@ function openNewCampaign() {
   document.getElementById('mainCTA').style.display = 'inline-flex';
   document.getElementById('nc-name').value = '';
   document.getElementById('nc-product').value = '';
-  document.getElementById('nc-url').value = '';
-  document.getElementById('nc-notes').value = '';
   document.getElementById('nc-calls').checked = false;
   document.getElementById('nc-linkedin').checked = false;
   document.querySelectorAll('[name="nc-ae"]').forEach(cb => cb.checked = false);
@@ -780,8 +773,7 @@ function saveCampaign() {
   const hasCalls = document.getElementById('nc-calls').checked;
   const hasLinkedIn = document.getElementById('nc-linkedin').checked;
   const selectedAEs = [...document.querySelectorAll('[name="nc-ae"]:checked')].map(c => c.value);
-  const notes = document.getElementById('nc-notes').value.trim();
-  const url = document.getElementById('nc-url').value.trim();
+
 
   // Build steps
   const steps = [];
@@ -801,12 +793,12 @@ function saveCampaign() {
     name,
     product,
     status:'Active',
-    motion: selectedAcctIds.size > 0 ? 'targeted' : 'full territory',
+
     aes: selectedAEs.length > 0 ? selectedAEs : ['tony','jeff','riley','katie','brian','seamus','mikaela'],
     acctIds: [...selectedAcctIds],
     contactCount: selectedAcctIds.size > 0 ? selectedAcctIds.size * 3 : 50,
     createdAt: '2026-04-10',
-    sourceSheetUrl: url || '',
+
     steps,
     emails,
     notes,
@@ -823,6 +815,89 @@ function saveCampaign() {
 }
 
 
+
+
+// ── CAMPAIGN TAGS (created from Territory Leads tagging workflow) ────────
+const CAMPAIGN_TAGS = [
+  {
+    id: 'tag-001',
+    type: 'Cold Outbound — New Logo',
+    name: 'ITSM · New Logo · Tony',
+    product: 'ITSM Pro',
+    aes: ['Tony'],
+    locked: false,
+    lockedBy: null,
+    allowEvent: false,
+    leadCount: 10,
+    contactIds: ['ct001','ct002','ct003','ct004','ct005','ct006','ct009','ct010','ct013','ct014'],
+    note: 'Charter, Cielo, Badger, Boldt — mixed levels from K26 pre-event and webinar touches'
+  },
+  {
+    id: 'tag-002',
+    type: 'Cold Outbound — Customer',
+    name: 'Veza · Customer · Mikaela',
+    product: 'Veza Identity Governance',
+    aes: ['Mikaela'],
+    locked: true,
+    lockedBy: 'Mikaela - Veza News - Installs',
+    allowEvent: false,
+    leadCount: 5,
+    contactIds: ['c024','c025','ct005','ct006','ct007'],
+    note: 'Security and risk contacts at Mikaela installs — currently in active Veza sequence'
+  },
+  {
+    id: 'tag-003',
+    type: 'Cold Outbound — Customer',
+    name: 'ITAM · Customer · Seamus',
+    product: 'ITAM',
+    aes: ['Seamus'],
+    locked: true,
+    lockedBy: 'Seamus - ITAM - Installs',
+    allowEvent: false,
+    leadCount: 6,
+    contactIds: ['c025','c026','c027'],
+    note: 'IT leaders and asset managers at Seamus customer accounts — in active ITAM sequence'
+  },
+  {
+    id: 'tag-004',
+    type: 'Cold Outbound — New Logo',
+    name: 'EW · New Logo · Brian, Katie',
+    product: 'Employee Workflows',
+    aes: ['Brian', 'Katie'],
+    locked: false,
+    lockedBy: null,
+    allowEvent: false,
+    leadCount: 12,
+    contactIds: ['c018','c019','c014','c015','c016','c020','c021','c022'],
+    note: 'HR and IT buyer personas at Brian and Katie new logo accounts — high intent signals from EW webinar'
+  },
+  {
+    id: 'tag-005',
+    type: 'Cross-sell — New BU',
+    name: 'ITSM · New Logo · Tony, Riley',
+    product: 'ITSM Pro',
+    aes: ['Tony', 'Riley'],
+    locked: false,
+    lockedBy: null,
+    allowEvent: false,
+    leadCount: 8,
+    contactIds: ['ct009','ct010','ct011','ct012','c010','c011','c012'],
+    note: 'IT Directors and VPs at Tony and Riley new logos — sourced from MidwestTech Summit and K26 pre-event'
+  },
+  {
+    id: 'tag-006',
+    type: 'Event / Webinar — New Logo',
+    name: 'K26 Event · All AEs',
+    product: 'Knowledge 2026',
+    aes: ['Tony','Jeff','Riley','Katie','Brian','Seamus','Mikaela'],
+    locked: false,
+    lockedBy: null,
+    allowEvent: true,
+    leadCount: 45,
+    contactIds: ['ct001','ct002','ct005','ct009','ct013','ct017','c001','c002','c005','c010','c018','c024'],
+    note: 'All leads registered or engaged with K26 pre-event content — event push, bypasses active campaign lock'
+  },
+];
 
 const CRM_CONTACTS = [
   {id:'c001', name:'Brandon Joyce',     title:'VP of IT',                company:'Sub-Zero Group Inc',       aeId:'tony',    source:'HRSD Demo',          status:'SLA Critical'},
@@ -892,6 +967,7 @@ let selectedContactIds = new Set();
 let addedTocamp = new Set();
 let allGenerated = {};
 let uploadedResearchText = '';
+let selectedEventFormat = '';
 
 function togglePersona(el) {
   const p = el.dataset.persona;
@@ -912,13 +988,24 @@ function selectCampType(el) {
   });
   el.style.borderColor='var(--ink)'; el.style.background='rgba(3,45,66,.04)';
   selectedCampType = el.dataset.type;
-  // Auto-set motion based on type
-  const motionEl = document.getElementById('nc-motion');
-  if(motionEl) {
-    if(selectedCampType === 'Cold Outbound — New Logo' || selectedCampType.includes('New Logo')) motionEl.value='new logo';
-    else if(selectedCampType === 'Cold Outbound — Customer') motionEl.value='customer';
-    else if(selectedCampType.includes('Customer') || selectedCampType.includes('Upsell') || selectedCampType.includes('Cross')) motionEl.value='customer';
-  }
+  const isEvent = selectedCampType.includes('Event') || selectedCampType.includes('Webinar');
+  // Cap email count at 3 for events
+  document.querySelectorAll('[name="nc-emails"]').forEach(r => {
+    const val = parseInt(r.value);
+    r.disabled = isEvent && val > 3;
+    r.parentElement.style.opacity = (isEvent && val > 3) ? '0.35' : '1';
+    if(isEvent && val > 3 && r.checked) {
+      const threeRadio = document.querySelector('[name="nc-emails"][value="3"]');
+      if(threeRadio) threeRadio.checked = true;
+    }
+  });
+  // Show/hide persona and level selectors
+  const personaSection = document.getElementById('persona-section');
+  const levelSection = document.getElementById('level-section');
+  if(personaSection) personaSection.style.display = isEvent ? 'none' : 'block';
+  if(levelSection) levelSection.style.display = isEvent ? 'none' : 'block';
+  // Auto-set motion
+
 }
 
 function goToPhase(n) {
@@ -938,6 +1025,7 @@ function goToPhase(n) {
   });
   updateModalFooter();
   if(n===3) renderModalAccounts();
+  if(n===4) switchPhase4Mode();
   if(n===5) renderModalContacts();
 }
 
@@ -952,7 +1040,7 @@ function updateModalFooter() {
   if(currentPhase === 1) { next.textContent = 'Next: Configure →'; next.onclick = () => goToPhase(2); }
   else if(currentPhase === 2) { next.textContent = 'Next: Select Accounts →'; next.onclick = () => goToPhase(3); }
   else if(currentPhase === 3) { next.textContent = 'Next: Account Research →'; next.onclick = () => goToPhase(4); }
-  else if(currentPhase === 4) { next.textContent = 'Next: Select Contacts →'; next.onclick = () => goToPhase(5); }
+  else if(currentPhase === 4) { next.textContent = 'Next: Select Contacts →'; next.onclick = () => { const isEv = selectedCampType.includes('Event')||selectedCampType.includes('Webinar'); if(isEv && !validateEventInfo()) return; goToPhase(5); }; }
   else if(currentPhase === 5) { next.textContent = 'Generate Campaign ✦'; next.onclick = startGenerate; }
   else if(currentPhase === 6) { next.textContent = 'Done'; next.onclick = closeNewCampaign; }
 }
@@ -1161,20 +1249,27 @@ async function startGenerate() {
   const product = document.getElementById('nc-product')?.value.trim() || 'ServiceNow Platform';
   const emailCount = parseInt(document.querySelector('[name="nc-emails"]:checked')?.value || 3);
   const personas = [...selectedPersonas].join(', ') || 'IT Workflows';
-  const notes = document.getElementById('nc-notes')?.value.trim() || '';
-  const motion = document.getElementById('nc-motion')?.value || 'new logo';
+
+
   const hasCalls = document.getElementById('nc-calls')?.checked;
 
   goToPhase(6);
   document.getElementById('campNextBtn').style.display = 'none';
+  const genTitle = document.getElementById('gen-title');
+  if(genTitle) genTitle.textContent = isEventCamp ? 'Generating event sequence...' : 'Generating 3 persona-level sequences...';
+  const genStatusEl = document.getElementById('genStatus');
+  if(genStatusEl) genStatusEl.textContent = isEventCamp ? 'Building one sequence for event awareness' : 'Building C-Suite, VP, and Director sequences';
   const skipBtn=document.getElementById('campSkipBtn'); if(skipBtn) skipBtn.style.display='none';
   document.getElementById('campBackBtn').style.display = 'none';
 
-  const levels = [
-    {key:'csuite',  label:'C-Suite',  desc:'CIO / CTO / CHRO',  color:'var(--r600)',  bg:'rgba(220,38,38,.07)'},
-    {key:'vp',      label:'VP',       desc:'VP of IT / VP of HR', color:'var(--b600)',  bg:'rgba(37,99,235,.07)'},
-    {key:'director',label:'Director', desc:'IT Director / Dir. of IT Ops', color:'var(--s600)', bg:'rgba(100,116,139,.1)'},
-  ];
+  const isEventCamp = selectedCampType.includes('Event') || selectedCampType.includes('Webinar');
+  const levels = isEventCamp
+    ? [{key:'event', label:'All Attendees', desc:'Single sequence — driving awareness and attendance', color:'var(--b600)', bg:'rgba(37,99,235,.07)'}]
+    : [
+        {key:'csuite',  label:'C-Suite',  desc:'CIO / CTO / CHRO',  color:'var(--r600)',  bg:'rgba(220,38,38,.07)'},
+        {key:'vp',      label:'VP',       desc:'VP of IT / VP of HR', color:'var(--b600)',  bg:'rgba(37,99,235,.07)'},
+        {key:'director',label:'Director', desc:'IT Director / Dir. of IT Ops', color:'var(--s600)', bg:'rgba(100,116,139,.1)'},
+      ];
 
   let pct = 0;
   const bar = document.getElementById('genBar');
@@ -1187,7 +1282,8 @@ async function startGenerate() {
   const levelPrompts = {
     'C-Suite': 'CIO, CTO, or CHRO level. Frame everything around business outcomes, risk, and competitive positioning. Strategic tone. No tactical details. Open with a board-level tension.',
     'VP': 'VP of IT or VP of Engineering. Frame around team performance, operational efficiency, and their ability to deliver on leadership expectations. Bridge between strategy and execution.',
-    'Director': 'IT Director or Director of IT Operations. Frame around day-to-day pain — ticket queues, tool sprawl, manual work, team bandwidth. Tactical and specific. Ask about their current state.'
+    'Director': 'IT Director or Director of IT Operations. Frame around day-to-day pain — ticket queues, tool sprawl, manual work, team bandwidth. Tactical and specific. Ask about their current state.',
+    'All Attendees': 'This is an event invitation / awareness sequence — NOT a product pitch. The goal is to drive attendance to an upcoming event or webinar. Write emails that create urgency around the event, highlight what they will learn or who they will meet, and make registration easy. Keep it short — 2-3 sentences per email max. Problem-first framing is NOT needed here. Focus on the value of the event itself and why this specific person should attend.'
   };
 
   allGenerated = {};
@@ -1195,8 +1291,9 @@ async function startGenerate() {
   for(const lvl of levels) {
     if(stepEl) stepEl.textContent = 'Generating ' + lvl.label + ' sequence (' + (i+1) + ' of 3)...';
     const isCustomerOutbound = selectedCampType === 'Cold Outbound — Customer';
-  const campTypeContext = isCustomerOutbound ? 'IMPORTANT: This is a cold outbound campaign to existing ServiceNow customers. Every email MUST open with a variation of: \'I\'m reaching out as part of the account team supporting the relationship between ServiceNow and [Company]\'. This establishes credibility and context before anything else. The rest of the email still follows problem-first framing.' : 'Campaign type: ' + selectedCampType + '.';
-  const prompt = 'You are a ServiceNow BDR named Jacob Rubis. Write a ' + emailCount + '-email cold outbound sequence.\n\nProduct: ' + product + '\nPersona: ' + personas + '\nJob Level: ' + lvl.label + ' — ' + levelPrompts[lvl.label] + '\nMotion: ' + motion + '\nCampaign type context: ' + campTypeContext + '\nCampaign: ' + name + '\nContext: ' + (notes||'none') + '\nAccount Research: ' + (uploadedResearchText || document.getElementById('nc-research-notes')?.value.trim() || 'none provided') + '\n\nRules:\n- Problem-first framing, no product pitch in email 1\n- Fifth-grade reading level, short paragraphs\n- No em dashes, no semicolons, no hyphens in prose\n- Curiosity-led CTAs, do not ask for a meeting in emails 1-2\n- Each email is a different angle on the same problem\n- Final email: honest last note, easy out\n\nReturn ONLY a JSON array, no markdown:\n[{"emailNum":1,"subject":"...","body":"..."}]';
+    const eventCtx = isEventCamp ? getEventContext() : null;
+  const campTypeContext = isEventCamp ? 'EVENT INVITATION SEQUENCE. Do NOT use problem-first framing. This is purely to drive attendance to an upcoming event. ' + eventCtx : isCustomerOutbound ? 'IMPORTANT: This is a cold outbound campaign to existing ServiceNow customers. Every email MUST open with a variation of: \'I\'m reaching out as part of the account team supporting the relationship between ServiceNow and [Company]\'. This establishes credibility and context before anything else.' : 'Campaign type: ' + selectedCampType + '.';
+  const prompt = 'You are a ServiceNow BDR named Jacob Rubis. Write a ' + emailCount + '-email cold outbound sequence.\n\nProduct: ' + product + '\nPersona: ' + personas + '\nJob Level: ' + lvl.label + ' — ' + levelPrompts[lvl.label] + '\nCampaign type context: ' + campTypeContext + '\nCampaign: ' + name + '\nAccount Research: ' + (uploadedResearchText || document.getElementById('nc-research-notes')?.value.trim() || 'none provided') + '\n\nRules:\n- Problem-first framing, no product pitch in email 1\n- Fifth-grade reading level, short paragraphs\n- No em dashes, no semicolons, no hyphens in prose\n- Curiosity-led CTAs, do not ask for a meeting in emails 1-2\n- Each email is a different angle on the same problem\n- Final email: honest last note, easy out\n\nReturn ONLY a JSON array, no markdown:\n[{"emailNum":1,"subject":"...","body":"..."}]';
 
     try {
       const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1277,7 +1374,7 @@ function addLevelToCampaign(btnEl, levelKey) {
   const levelLabel = levelKey==='csuite' ? 'C-Suite' : levelKey==='vp' ? 'VP' : 'Director';
   const emails = allGenerated[levelKey] || [];
   const hasCalls = document.getElementById('nc-calls')?.checked;
-  const motion = document.getElementById('nc-motion')?.value || 'new logo';
+
 
   // Use selectedAEsForCamp (set from Step 2 AE selection)
   const aes = selectedAEsForCamp.size > 0
@@ -1309,12 +1406,13 @@ function addLevelToCampaign(btnEl, levelKey) {
   const newCamp = {
     id: 'nc-'+levelKey+'-'+Date.now(),
     name: baseName + ' — ' + levelLabel,
-    product, status:'Active', motion,
+    product, status:'Active',
     aes: aes.length > 0 ? aes : ['tony'],
     acctIds,
     contactCount: selectedContactIds.size || acctIds.length * 3 || 0,
     createdAt: '2026-04-10',
-    sourceSheetUrl: '',
+
+    campaignTag: selectedTagId ? (CAMPAIGN_TAGS.find(t=>t.id===selectedTagId)||{}).name || '' : (baseName + ' · ' + (aes.length===1?aes[0].charAt(0).toUpperCase()+aes[0].slice(1):aes.map(a=>a.charAt(0).toUpperCase()+a.slice(1)).join(', '))),
     steps,
     emails: emailsMap,
   };
@@ -1371,13 +1469,16 @@ function openNewCampaign() {
   currentPhase = 1;
   document.querySelectorAll('.persona-chip,.level-chip,.camp-type-card').forEach(el=>{el.classList.remove('on');el.style.borderColor='var(--s200)';el.style.background='';});
   selectedCampType = '';
+  contactMode = 'ai';
+  selectedTagId = null;
+  uploadedResearchText = '';
+  selectedEventFormat = '';
   document.querySelectorAll('.camp-ae-btn').forEach(el=>el.classList.remove('on'));
   document.querySelectorAll('[name="nc-ae"]').forEach(cb=>cb.checked=false);
   document.querySelectorAll('[name="nc-emails"]').forEach(r=>r.checked=r.value==='3');
   if(document.getElementById('nc-name')) document.getElementById('nc-name').value='';
   if(document.getElementById('nc-product')) document.getElementById('nc-product').value='';
-  if(document.getElementById('nc-notes')) document.getElementById('nc-notes').value='';
-  if(document.getElementById('nc-url')) document.getElementById('nc-url').value='';
+
   goToPhase(1);
   document.getElementById('newCampModal').style.display='flex';
 }
@@ -1412,6 +1513,199 @@ function clearResearch() {
   if(badge) badge.style.display='none';
   if(area) area.style.opacity='1';
   if(input) input.value='';
+}
+
+
+let contactMode = 'ai';
+let selectedTagId = null;
+
+function setContactMode(mode) {
+  contactMode = mode;
+  const aiDiv = document.getElementById('contact-mode-ai');
+  const listDiv = document.getElementById('contact-mode-list');
+  const aiBtn = document.getElementById('mode-ai-btn');
+  const listBtn = document.getElementById('mode-list-btn');
+  if(mode === 'ai') {
+    if(aiDiv) aiDiv.style.display = 'flex';
+    if(listDiv) listDiv.style.display = 'none';
+    if(aiBtn) { aiBtn.style.background='var(--ink)'; aiBtn.style.color='#fff'; }
+    if(listBtn) { listBtn.style.background='transparent'; listBtn.style.color='var(--s500)'; }
+    // Clear any tag selection
+    selectedTagId = null;
+    selectedContactIds = new Set();
+    const ct = document.getElementById('mc-selected-ct');
+    if(ct) ct.textContent = '0 selected';
+  } else {
+    if(aiDiv) aiDiv.style.display = 'none';
+    if(listDiv) { listDiv.style.display = 'flex'; listDiv.style.flexDirection = 'column'; }
+    if(aiBtn) { aiBtn.style.background='transparent'; aiBtn.style.color='var(--s500)'; }
+    if(listBtn) { listBtn.style.background='var(--ink)'; listBtn.style.color='#fff'; }
+    selectedContactIds = new Set();
+    renderTagList();
+  }
+}
+
+function renderTagList() {
+  const q = (document.getElementById('tag-search-input')?.value||'').toLowerCase();
+  const isEvent = selectedCampType.includes('Event') || selectedCampType.includes('Webinar');
+  const container = document.getElementById('tag-list-container');
+  if(!container) return;
+
+  const filtered = CAMPAIGN_TAGS.filter(t => {
+    if(!isEvent && t.locked) return false;
+    if(q && !t.name.toLowerCase().includes(q) && !t.product.toLowerCase().includes(q) && !t.aes.join(' ').toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  const descEl = document.getElementById('tag-mode-desc');
+  if(descEl) descEl.textContent = isEvent
+    ? 'Event / Webinar campaign — all tags are available including ones locked to active campaigns.'
+    : 'Tags carry the campaign type they were built for. Locked tags can only be reached via Event / Webinar campaigns.';
+
+  if(!filtered.length) {
+    container.innerHTML = isEvent
+      ? '<div style="padding:24px;text-align:center;font-size:12px;color:var(--s400)">No tags match.</div>'
+      : '<div style="padding:24px;text-align:center;font-size:12px;color:var(--s500)">No available unlocked tags. Locked tags can only be used in Event / Webinar campaigns.</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(t => {
+    const isLocked = t.locked && !isEvent;
+    const isSelected = selectedTagId === t.id;
+    const borderCol = isSelected ? 'var(--ink)' : isLocked ? 'rgba(239,68,68,.25)' : 'var(--s200)';
+    const bgCol = isSelected ? 'rgba(3,45,66,.04)' : isLocked ? 'rgba(255,241,242,.5)' : 'var(--white)';
+    const aeBadges = t.aes.map(ae => {
+      const styles = {Tony:'#032D42',Jeff:'#044355',Riley:'#B45309',Katie:'#5B21B6',Brian:'#D93025',Seamus:'#1a7a00',Mikaela:'#0369A1'};
+      const col = styles[ae] || '#64748b';
+      return '<span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:'+col+'20;color:'+col+'">'+ae+'</span>';
+    }).join('');
+
+    return '<div onclick="'+(isLocked ? '' : "selectTag('"+t.id+"')")+'" style="border:2px solid '+borderCol+';border-radius:10px;padding:14px 16px;cursor:'+(isLocked?'not-allowed':'pointer')+';background:'+bgCol+';transition:.12s;'+(isLocked?'opacity:.65':'')+'">' +
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">' +
+        '<div>' +
+          '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">' +
+        '<div style="font-size:12px;font-weight:700;color:var(--s800);font-family:monospace">🏷 '+t.name+'</div>' +
+        (t.type ? '<span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(3,45,66,.07);color:var(--ink)">'+t.type+'</span>' : '') +
+      '</div>' +
+          '<div style="font-size:11px;color:var(--s500)">'+t.note+'</div>' +
+        '</div>' +
+        (isLocked
+          ? '<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px;background:rgba(239,68,68,.1);color:var(--r600);border:1px solid rgba(239,68,68,.2);white-space:nowrap;flex-shrink:0;margin-left:12px">🔒 In: '+t.lockedBy+'</span>'
+          : (isSelected ? '<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px;background:rgba(22,163,74,.1);color:var(--g600);border:1px solid rgba(22,163,74,.2)">✓ Selected</span>' : '')
+        ) +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
+        '<span style="font-size:10px;color:var(--s500)"><strong>'+t.leadCount+'</strong> leads</span>' +
+        '<span style="color:var(--s300)">·</span>' +
+        '<span style="font-size:10px;color:var(--s500)">'+t.motion+'</span>' +
+        '<span style="color:var(--s300)">·</span>' +
+        aeBadges +
+        (t.allowEvent ? '<span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;background:rgba(99,223,78,.12);color:#166534">Event bypass</span>' : '') +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function selectTag(tagId) {
+  selectedTagId = tagId;
+  const tag = CAMPAIGN_TAGS.find(t => t.id === tagId);
+  if(!tag) return;
+  // Load contacts from tag
+  selectedContactIds = new Set(tag.contactIds);
+  // Derive AEs from tag
+  selectedAEsForCamp = new Set(tag.aes.map(a => a.toLowerCase()));
+  // Update counter (shared element)
+  const ct = document.getElementById('mc-selected-ct');
+  if(ct) ct.textContent = tag.leadCount + ' selected';
+  // Re-render to show selection state
+  renderTagList();
+}
+
+function selectEventFormat(fmt) {
+  selectedEventFormat = fmt;
+  const ip = document.getElementById('fmt-inperson');
+  const vr = document.getElementById('fmt-virtual');
+  if(fmt === 'In Person') {
+    if(ip) { ip.style.borderColor='var(--ink)'; ip.style.background='rgba(3,45,66,.04)'; }
+    if(vr) { vr.style.borderColor='var(--s200)'; vr.style.background=''; }
+  } else {
+    if(vr) { vr.style.borderColor='var(--ink)'; vr.style.background='rgba(3,45,66,.04)'; }
+    if(ip) { ip.style.borderColor='var(--s200)'; ip.style.background=''; }
+  }
+}
+
+function switchPhase4Mode() {
+  const isEvent = selectedCampType.includes('Event') || selectedCampType.includes('Webinar');
+  const researchDiv = document.getElementById('phase4-research');
+  const eventDiv = document.getElementById('phase4-event');
+  if(researchDiv) researchDiv.style.display = isEvent ? 'none' : 'block';
+  if(eventDiv) eventDiv.style.display = isEvent ? 'flex' : 'none';
+  // Update step label
+  const s4dot = document.getElementById('s4dot');
+  const s4lbl = s4dot ? s4dot.nextElementSibling : null;
+  if(s4lbl) s4lbl.textContent = isEvent ? 'Gather Info' : 'Research';
+  // Update skip button label
+  const skip = document.getElementById('campSkipBtn');
+  if(skip) skip.style.display = isEvent ? 'none' : 'inline-flex';
+}
+
+function validateEventInfo() {
+  const fmt = selectedEventFormat;
+  const date = document.getElementById('nc-event-date')?.value;
+  const ctx = document.getElementById('nc-event-context')?.value.trim();
+  const banner = document.getElementById('event-validation-banner');
+  if(!fmt || !date || !ctx) {
+    if(banner) banner.style.display = 'block';
+    return false;
+  }
+  if(banner) banner.style.display = 'none';
+  return true;
+}
+
+function getEventContext() {
+  const fmt = selectedEventFormat || 'Virtual';
+  const date = document.getElementById('nc-event-date')?.value || '';
+  const url = document.getElementById('nc-event-url')?.value.trim() || 'no URL provided';
+  const ctx = document.getElementById('nc-event-context')?.value.trim() || '';
+  const fmtDate = date ? new Date(date+'T12:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : 'date TBD';
+  return 'Format: '+fmt+' | Date: '+fmtDate+' | URL: '+url+' | Details: '+ctx;
+}
+
+function selectAllCampAEs() {
+  const aeIds = ['tony','jeff','riley','katie','brian','seamus','mikaela'];
+  aeIds.forEach(ae => {
+    selectedAEsForCamp.add(ae);
+    const btn = document.querySelector('.camp-ae-btn[data-ae="'+ae+'"]');
+    if(btn) btn.classList.add('on');
+  });
+  renderModalAccounts();
+}
+
+function selectAllVisibleAccounts() {
+  const q = (document.getElementById('ma-search')?.value||'').toLowerCase();
+  const typeFilter = document.querySelector('.ma-type.on')?.dataset.type || 'all';
+  const aeFilter = selectedAEsForCamp.size > 0 ? selectedAEsForCamp : null;
+
+  MODAL_ACCOUNTS.forEach(a => {
+    if(aeFilter && !aeFilter.has(a.aeId)) return;
+    if(typeFilter === 'newlogo' && a.type !== 'newlogo') return;
+    if(typeFilter === 'customer' && a.type !== 'customer') return;
+    if(typeFilter === 'bigbet' && !a.bigBet) return;
+    if(q && !a.name.toLowerCase().includes(q)) return;
+    selectedAcctIds.add(a.id);
+    selectedAEsForCamp.add(a.aeId);
+    const btn = document.querySelector('.camp-ae-btn[data-ae="'+a.aeId+'"]');
+    if(btn) btn.classList.add('on');
+  });
+
+  renderModalAccounts();
+}
+
+function clearAllAccounts() {
+  selectedAcctIds = new Set();
+  const ct = document.getElementById('ma-selected-ct');
+  if(ct) ct.textContent = '0 selected';
+  renderModalAccounts();
 }
 
 // Init
@@ -1487,8 +1781,8 @@ renderDetail();
           <input type="text" class="form-input" id="nc-product" placeholder="Veza, ITAM, Now Assist...">
         </div>
       </div>
-      <div>
-        <label class="form-label">Buying Group / Persona</label>
+      <div id="persona-section">
+        <label class="form-label">Buying Group — used to match AI contact suggestions</label>
         <div class="persona-grid">
           <div class="persona-chip" data-persona="IT Workflows" onclick="togglePersona(this)"><div class="picon">💻</div><div class="plbl">IT Workflows</div></div>
           <div class="persona-chip" data-persona="Employee Workflows" onclick="togglePersona(this)"><div class="picon">👥</div><div class="plbl">Employee Workflows</div></div>
@@ -1497,7 +1791,7 @@ renderDetail();
           <div class="persona-chip" data-persona="Finance & Supply Chain" onclick="togglePersona(this)"><div class="picon">📊</div><div class="plbl">Finance & Supply Chain</div></div>
         </div>
       </div>
-      <div>
+      <div id="level-section">
         <label class="form-label">Target Job Levels</label>
         <div class="level-grid">
           <div class="level-chip" data-level="C-Suite" onclick="toggleLevel(this)"><div class="llbl">C-Suite</div><div class="lsub">CIO, CTO, CISO, CHRO</div></div>
@@ -1527,21 +1821,9 @@ renderDetail();
             </div>
           </div>
         </div>
-        <div>
-          <label class="form-label">Motion</label>
-          <select class="form-input" id="nc-motion" style="padding:8px 11px;margin-bottom:8px">
-            <option value="new logo">New Logo</option>
-            <option value="customer">Customer / Install Base</option>
-            <option value="both">Both</option>
-          </select>
-          <label class="form-label">Source Sheet URL</label>
-          <input type="text" class="form-input" id="nc-url" placeholder="https://">
-        </div>
+
       </div>
-      <div>
-        <label class="form-label">ICP & Messaging Context</label>
-        <textarea class="form-input" id="nc-notes" style="height:60px;resize:none" placeholder="Key pain points, competitive context, why now..."></textarea>
-      </div>
+
     </div>
 
     <!-- PHASE 2: SELECT ACCOUNTS -->
@@ -1549,7 +1831,7 @@ renderDetail();
       <div style="display:grid;grid-template-columns:200px 1fr;gap:14px;min-height:400px">
         <!-- LEFT: AE SELECTOR -->
         <div>
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:8px">Select AEs</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400)">Select AEs</span><button onclick="selectAllCampAEs()" style="font-size:10px;font-weight:600;color:var(--b600);background:none;border:none;cursor:pointer;padding:0">Select All</button></div>
           <div style="display:flex;flex-direction:column;gap:6px">
             <button class="camp-ae-btn" data-ae="tony" onclick="toggleCampAE('tony',this)" style="display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--s200);border-radius:7px;background:var(--white);cursor:pointer;font-size:12px;text-align:left;transition:.1s"><span style="width:18px;height:18px;border-radius:50%;background:rgba(3,45,66,.12);color:#032D42;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">TO</span>Tony Riebel</button>
             <button class="camp-ae-btn" data-ae="jeff" onclick="toggleCampAE('jeff',this)" style="display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--s200);border-radius:7px;background:var(--white);cursor:pointer;font-size:12px;text-align:left;transition:.1s"><span style="width:18px;height:18px;border-radius:50%;background:rgba(4,67,85,.12);color:#044355;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">JE</span>Jeff Wuestenfeld</button>
@@ -1569,6 +1851,8 @@ renderDetail();
             <button class="ma-type af-chip" data-type="customer" onclick="setMaTypeFilter('customer',this)">Customer</button>
             <button class="ma-type af-chip" data-type="bigbet" onclick="setMaTypeFilter('bigbet',this)">⭐ Big Bet</button>
             <input type="text" class="af-search" id="ma-search" placeholder="🔍 Search..." oninput="renderModalAccounts()" style="flex:1">
+            <button onclick="selectAllVisibleAccounts()" style="font-size:10px;font-weight:600;color:var(--b600);background:none;border:none;cursor:pointer;white-space:nowrap">Select All</button>
+            <button onclick="clearAllAccounts()" style="font-size:10px;font-weight:600;color:var(--r600);background:none;border:none;cursor:pointer">Clear</button>
             <span style="font-size:11px;color:var(--b600);font-weight:600" id="ma-selected-ct">0 selected</span>
           </div>
           <div class="acct-list" id="ma-acct-list" style="max-height:360px;flex:1"></div>
@@ -1577,68 +1861,138 @@ renderDetail();
     </div>
 
 
-    <!-- PHASE 4: ACCOUNT RESEARCH (OPTIONAL) -->
+    <!-- PHASE 4: RESEARCH or GATHER INFO (depends on campaign type) -->
     <div id="camp-phase-4" class="modal-body" style="display:none;flex-direction:column;gap:16px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-        <div style="font-size:13px;font-weight:600;color:var(--s800)">Upload Account Research</div>
-        <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(22,163,74,.1);color:var(--g600)">Optional</span>
-      </div>
-      <div style="font-size:12px;color:var(--s500);margin-top:-8px;line-height:1.6">
-        Account research lets Claude tailor each email sequence with specific company context — recent initiatives, known pain points, leadership priorities, and tech stack signals. The more specific the research, the more relevant the outreach.
+
+      <!-- ACCOUNT RESEARCH MODE (non-event) -->
+      <div id="phase4-research">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:600;color:var(--s800)">Upload Account Research</div>
+          <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(22,163,74,.1);color:var(--g600)">Optional</span>
+        </div>
+        <div style="font-size:12px;color:var(--s500);margin-bottom:16px;line-height:1.6">
+          Account research lets Claude tailor each email sequence with specific company context — recent initiatives, known pain points, leadership priorities, and tech stack signals.
+        </div>
+        <div id="research-upload-area" onclick="document.getElementById('research-file-input').click()" style="border:2px dashed var(--s300);border-radius:10px;padding:24px 20px;text-align:center;cursor:pointer;transition:.12s;background:var(--s50);margin-bottom:12px">
+          <div style="font-size:24px;margin-bottom:8px">📄</div>
+          <div style="font-size:13px;font-weight:600;color:var(--s700);margin-bottom:4px">Drop account research here or click to upload</div>
+          <div style="font-size:11px;color:var(--s400)">HTML, PDF, or TXT — or paste key insights below</div>
+          <input type="file" id="research-file-input" accept=".html,.pdf,.txt" style="display:none" onchange="handleResearchUpload(this)">
+        </div>
+        <div id="research-file-badge" style="display:none;padding:10px 14px;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.25);border-radius:8px;align-items:center;gap:10px;margin-bottom:12px">
+          <span style="font-size:18px">✅</span>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--g600)" id="research-file-name">File uploaded</div><div style="font-size:11px;color:var(--s500)">Research will personalize all 3 sequences</div></div>
+          <button onclick="clearResearch()" style="font-size:11px;color:var(--r600);background:none;border:none;cursor:pointer">✕ Remove</button>
+        </div>
+        <div>
+          <label class="form-label">Or paste key insights manually</label>
+          <textarea id="nc-research-notes" class="form-input" style="height:100px;resize:none" placeholder="e.g. CIO stated in Q1 earnings they're consolidating vendors. Known pain: 3 separate ITSM tools. Evaluating consolidation in H2..."></textarea>
+        </div>
+        <div style="font-size:11px;color:var(--s400);padding:8px 12px;background:var(--s50);border-radius:6px;margin-top:12px">
+          💡 Use the <strong>Account Research</strong> skill to generate a full company brief, then paste key signals here.
+        </div>
       </div>
 
-      <!-- UPLOAD AREA -->
-      <div id="research-upload-area" onclick="document.getElementById('research-file-input').click()" style="border:2px dashed var(--s300);border-radius:10px;padding:28px 20px;text-align:center;cursor:pointer;transition:.12s;background:var(--s50)">
-        <div style="font-size:28px;margin-bottom:8px">📄</div>
-        <div style="font-size:13px;font-weight:600;color:var(--s700);margin-bottom:4px">Drop account research here or click to upload</div>
-        <div style="font-size:11px;color:var(--s400)">Supports HTML or PDF account research files — or paste key insights below</div>
-        <input type="file" id="research-file-input" accept=".html,.pdf,.txt" style="display:none" onchange="handleResearchUpload(this)">
-      </div>
-      <div id="research-file-badge" style="display:none;padding:10px 14px;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.25);border-radius:8px;display:none;align-items:center;gap:10px">
-        <span style="font-size:18px">✅</span>
-        <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--g600)" id="research-file-name">File uploaded</div><div style="font-size:11px;color:var(--s500)">Research will be used to personalize all 3 sequences</div></div>
-        <button onclick="clearResearch()" style="font-size:11px;color:var(--r600);background:none;border:none;cursor:pointer">✕ Remove</button>
-      </div>
+      <!-- GATHER INFO MODE (event/webinar) -->
+      <div id="phase4-event" style="display:none;flex-direction:column;gap:14px">
+        <div style="padding:12px 14px;background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.15);border-radius:8px;font-size:12px;color:var(--s600)">
+          📅 Claude will use these details to write your event invitation sequence — including the event name, format, date, and registration link in each email.
+        </div>
 
-      <!-- OR PASTE -->
-      <div>
-        <label class="form-label">Or paste key insights manually</label>
-        <textarea id="nc-research-notes" class="form-input" style="height:110px;resize:none" placeholder="e.g. Company recently moved to cloud-first infrastructure, CIO stated in Q1 earnings they're consolidating vendors, known pain: 3 separate ITSM tools across business units, evaluating consolidation in H2..."></textarea>
-      </div>
+        <!-- IN PERSON / VIRTUAL -->
+        <div>
+          <label class="form-label">Event Format <span style="color:var(--r500)">*</span></label>
+          <div style="display:flex;gap:10px">
+            <div id="fmt-inperson" onclick="selectEventFormat('In Person')" style="flex:1;border:2px solid var(--s200);border-radius:10px;padding:14px 16px;cursor:pointer;transition:.12s;text-align:center">
+              <div style="font-size:20px;margin-bottom:5px">🏛️</div>
+              <div style="font-size:13px;font-weight:700;color:var(--s800)">In Person</div>
+              <div style="font-size:11px;color:var(--s500);margin-top:2px">Conference, summit, or live event</div>
+            </div>
+            <div id="fmt-virtual" onclick="selectEventFormat('Virtual')" style="flex:1;border:2px solid var(--s200);border-radius:10px;padding:14px 16px;cursor:pointer;transition:.12s;text-align:center">
+              <div style="font-size:20px;margin-bottom:5px">💻</div>
+              <div style="font-size:13px;font-weight:700;color:var(--s800)">Virtual</div>
+              <div style="font-size:11px;color:var(--s500);margin-top:2px">Webinar, online session, or virtual event</div>
+            </div>
+          </div>
+        </div>
 
-      <div style="font-size:11px;color:var(--s400);padding:8px 12px;background:var(--s50);border-radius:6px">
-        💡 Tip: Use the <strong>Account Research</strong> skill to generate a full 19-section company brief, then paste the key signals here before generating your sequence.
+        <!-- EVENT NAME & DATE -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div>
+            <label class="form-label">Event Date <span style="color:var(--r500)">*</span></label>
+            <input type="date" id="nc-event-date" class="form-input" style="padding:8px 11px">
+          </div>
+          <div>
+            <label class="form-label">Registration / Event URL <span style="color:var(--s400);font-weight:400;text-transform:none;letter-spacing:0">(Recommended)</span></label>
+            <input type="text" id="nc-event-url" class="form-input" placeholder="https://servicenow.com/events/...">
+          </div>
+        </div>
+
+        <!-- CONTEXT -->
+        <div>
+          <label class="form-label">Event Context <span style="color:var(--r500)">*</span></label>
+          <textarea id="nc-event-context" class="form-input" style="height:100px;resize:none" placeholder="What is this event about? Who should attend and why? What will they learn or experience? What makes this worth their time?&#10;&#10;Example: K26 is ServiceNow's annual Knowledge conference. This year's theme is AI in Action — attendees will see live demos of Now Assist, hear from Fortune 500 IT leaders, and join hands-on labs."></textarea>
+          <div style="font-size:10px;color:var(--s400);margin-top:5px">Claude uses this to write compelling invite copy. More context = better emails.</div>
+        </div>
+
+        <!-- VALIDATION BANNER -->
+        <div id="event-validation-banner" style="display:none;padding:10px 14px;background:var(--r50);border:1px solid rgba(220,38,38,.2);border-radius:8px;font-size:12px;color:var(--r600)">
+          ⚠ Please fill in the required fields above before generating.
+        </div>
       </div>
     </div>
 
-    <!-- PHASE 3: SELECT CONTACTS -->
-    <div id="camp-phase-5" class="modal-body" style="display:none;flex-direction:column;gap:10px">
-      <div style="display:flex;align-items:center;justify-content:space-between">
+    <!-- PHASE 5: SELECT CONTACTS -->
+    <div id="camp-phase-5" class="modal-body" style="display:none;flex-direction:column;gap:12px">
+      <!-- MODE TOGGLE -->
+      <div style="display:flex;gap:0;background:var(--s100);border-radius:8px;padding:3px;width:fit-content">
+        <button id="mode-ai-btn" onclick="setContactMode('ai')" style="font-size:12px;font-weight:600;padding:7px 18px;border-radius:6px;border:none;cursor:pointer;background:var(--ink);color:#fff;transition:.12s">✦ AI Suggestions</button>
+        <button id="mode-list-btn" onclick="setContactMode('list')" style="font-size:12px;font-weight:600;padding:7px 18px;border-radius:6px;border:none;cursor:pointer;background:transparent;color:var(--s500);transition:.12s">🏷 I Have a List</button>
+      </div>
+
+      <!-- AI MODE -->
+      <div id="contact-mode-ai" style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--s800)">Contacts from selected accounts</div>
+            <div style="font-size:11px;color:var(--s500);margin-top:1px">CRM leads and contacts matching your account and AE selection</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:11px;color:var(--b600);font-weight:600" id="mc-selected-ct">0 selected</span>
+            <button class="af-chip" onclick="selectAllContacts()" style="font-size:10px;padding:4px 10px">Select All</button>
+          </div>
+        </div>
+        <!-- LEVEL TABS -->
+        <div style="display:flex;gap:0;border-bottom:2px solid var(--s200)">
+          <button class="contact-level-tab" data-level="all" onclick="renderModalContacts('all')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">All <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
+          <button class="contact-level-tab" data-level="C-Suite" onclick="renderModalContacts('C-Suite')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">C-Suite <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
+          <button class="contact-level-tab" data-level="VP" onclick="renderModalContacts('VP')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">VP <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
+          <button class="contact-level-tab" data-level="Director" onclick="renderModalContacts('Director')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">Director <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
+        </div>
+        <div class="acct-list" id="mc-contact-list" style="max-height:340px;overflow-y:auto"></div>
+      </div>
+
+      <!-- LIST / TAG MODE -->
+      <div id="contact-mode-list" style="display:none;flex-direction:column;gap:10px">
         <div>
-          <div style="font-size:13px;font-weight:600;color:var(--s800)">Contacts from selected accounts</div>
-          <div style="font-size:11px;color:var(--s500);margin-top:1px">CRM leads and contacts matching your account selection</div>
+          <div style="font-size:13px;font-weight:600;color:var(--s800);margin-bottom:2px">Select a Campaign Tag</div>
+          <div style="font-size:11px;color:var(--s500)" id="tag-mode-desc">Tags are created in Territory Leads and carry the campaign type they were built for. Locked tags can only be used in Event / Webinar campaigns.</div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:11px;color:var(--b600);font-weight:600" id="mc-selected-ct">0 selected</span>
-          <button class="af-chip" onclick="selectAllContacts()" style="font-size:10px;padding:4px 10px">Select All</button>
+        <!-- TAG SEARCH -->
+        <div style="position:relative">
+          <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--s400)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input id="tag-search-input" type="text" placeholder="Search tags by product, AE name, or type..." oninput="renderTagList()" style="width:100%;padding:8px 10px 8px 30px;border:1px solid var(--s200);border-radius:7px;font-size:12px;font-family:inherit;color:var(--s800)">
         </div>
+        <div id="tag-list-container" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto"></div>
       </div>
-      <!-- LEVEL TABS -->
-      <div style="display:flex;gap:0;border-bottom:2px solid var(--s200)">
-        <button class="contact-level-tab" data-level="all" onclick="renderModalContacts('all')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">All <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
-        <button class="contact-level-tab" data-level="C-Suite" onclick="renderModalContacts('C-Suite')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">C-Suite <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
-        <button class="contact-level-tab" data-level="VP" onclick="renderModalContacts('VP')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">VP <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
-        <button class="contact-level-tab" data-level="Director" onclick="renderModalContacts('Director')" style="padding:7px 14px;font-size:12px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;display:flex;align-items:center;gap:5px">Director <span class="clt-ct" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s100);color:var(--s500)">0</span></button>
-      </div>
-      <div class="acct-list" id="mc-contact-list" style="max-height:380px;overflow-y:auto"></div>
     </div>
 
     <!-- PHASE 4: GENERATE & REVIEW -->
     <div id="camp-phase-6" class="modal-body" style="display:none;flex-direction:column;gap:12px;padding-bottom:8px">
       <div id="gen-loading-area" style="display:flex;flex-direction:column;align-items:center;padding:32px;text-align:center">
         <div style="font-size:28px;margin-bottom:12px">✦</div>
-        <div style="font-size:15px;font-weight:700;color:var(--s900);margin-bottom:6px">Generating 3 persona-level sequences...</div>
-        <div style="font-size:12px;color:var(--s500);margin-bottom:20px" id="genStatus">Building C-Suite, VP, and Director sequences</div>
+        <div style="font-size:15px;font-weight:700;color:var(--s900);margin-bottom:6px" id="gen-title">Generating persona-level sequences...</div>
+        <div style="font-size:12px;color:var(--s500);margin-bottom:20px" id="genStatus">Building sequences...</div>
         <div class="gen-loading-bar" style="width:100%;max-width:380px"><div class="gen-loading-fill" id="genBar"></div></div>
         <div style="font-size:11px;color:var(--s400);margin-top:8px" id="genStep">Analyzing product and persona fit...</div>
       </div>
