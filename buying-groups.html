@@ -299,6 +299,8 @@ button{font-family:inherit;}
 .ptab.on .ptab-ct{background:var(--ink);color:var(--white);}
 
 .filter-bar-wrap{background:var(--white);border-bottom:1px solid var(--s200);padding:0 22px;position:sticky;top:calc(44px + 280px);z-index:90;}
+
+.role-radio-card:hover{border-color:var(--s300)!important;background:var(--s50)!important;}
 </style>
 </head>
 <body>
@@ -1014,7 +1016,7 @@ function mlAction(mlId, action) {
         ? `<span class="accepted-chip">✓ Accepted</span>`
         : state === 'denied'
         ? `<span class="denied-chip">✗ Denied</span>`
-        : `<button class="accept-btn" onclick="mlAction('${m.id}','accepted')">✓ Accept</button>
+        : `<button class="accept-btn" onclick="openRoleModal('${m.id}')">✓ Accept</button>
            <button class="deny-btn" style="margin-left:5px" onclick="mlAction('${m.id}','denied')">✗ Deny</button>`;
       return `<tr>
         <td>
@@ -1247,6 +1249,129 @@ function openAddBG() {
         </div>
       </div>
     </div>`;
+}
+
+
+// ── ROLE ASSIGNMENT MODAL ─────────────────────────────────────────────────
+function openRoleModal(mlId) {
+  const bg = selectedBG;
+  const detail = getDefaultDetail(bg);
+  const member = detail.mlMembers.find(m => m.id === mlId);
+  if(!member) return;
+
+  // Get current role holders from confirmed members + existing roles
+  const roles = detail.roles;
+  const roleHolders = {
+    champion:      roles.champion?.name || null,
+    economicBuyer: roles.economicBuyer?.name || null,
+    influencer:    roles.influencer?.name || null,
+    ratifier:      roles.ratifier?.name || null,
+    user:          roles.user?.name || null,
+  };
+
+  const ROLES = [
+    {key:'champion',      label:'Champion',       desc:'Internal advocate driving the purchase decision'},
+    {key:'economicBuyer', label:'Economic Buyer',  desc:'Final budget authority and commercial sign-off'},
+    {key:'influencer',    label:'Influencer',      desc:'Shapes requirements and influences evaluation criteria'},
+    {key:'ratifier',      label:'Ratifier',        desc:'Reviews and approves the decision (Legal, Procurement, Exec)'},
+    {key:'user',          label:'User',            desc:'Day-to-day platform user whose buy-in matters'},
+  ];
+
+  document.getElementById('modal-root').innerHTML = `
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="width:min(560px,96vw)">
+        <div style="background:var(--ink);padding:20px 24px 18px;border-radius:12px 12px 0 0">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.5);margin-bottom:6px">ASSIGN BUYING GROUP ROLE</div>
+          <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:3px">${member.name}</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.6)">${member.title} · ML Score: ${member.score}</div>
+          <button onclick="closeModal()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.12);border:none;color:rgba(255,255,255,.7);width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>
+        </div>
+        <div class="modal-body" style="padding:20px 24px">
+          <div style="padding:12px 14px;background:var(--s50);border:1px solid var(--s200);border-radius:8px;font-size:12px;color:var(--s700);line-height:1.6;margin-bottom:18px">
+            ${member.handraisersType ? '<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(37,99,235,.1);color:#1d4ed8;margin-right:8px">' + (member.handraisersType === 'Contact Us' ? '✉ Contact Us' : '💲 Get Pricing') + '</span>' : ''}
+            ${member.reasoning}
+          </div>
+          <div style="font-size:12px;font-weight:600;color:var(--s800);margin-bottom:10px">Select a role for this contact:</div>
+          <div style="display:flex;flex-direction:column;gap:8px" id="role-radio-list">
+            ${ROLES.map(r => {
+              const holder = roleHolders[r.key];
+              return '<label style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border:2px solid var(--s200);border-radius:10px;cursor:pointer;transition:.1s" class="role-radio-card" onclick="selectRoleCard(this)">' +
+                '<input type="radio" name="bg-role" value="' + r.key + '" style="margin-top:3px;accent-color:var(--ink);flex-shrink:0">' +
+                '<div style="flex:1">' +
+                  '<div style="font-size:13px;font-weight:600;color:var(--s900);margin-bottom:1px">' + r.label + (holder ? ' <span style="font-size:11px;font-weight:400;color:var(--s400)">(currently: ' + holder + ')</span>' : '') + '</div>' +
+                  '<div style="font-size:12px;color:var(--s500)">' + r.desc + '</div>' +
+                '</div>' +
+              '</label>';
+            }).join('')}
+          </div>
+        </div>
+        <div style="padding:14px 24px;border-top:1px solid var(--s200);display:flex;justify-content:space-between;align-items:center">
+          <button class="btn btn-g" onclick="closeModal()">Cancel</button>
+          <button id="confirm-role-btn" class="btn" onclick="confirmRoleAssignment('${mlId}')" style="background:var(--s200);color:var(--s400);border-color:var(--s200);cursor:not-allowed" disabled>Add to Buying Group</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function selectRoleCard(label) {
+  document.querySelectorAll('.role-radio-card').forEach(c => {
+    c.style.borderColor = 'var(--s200)';
+    c.style.background = '';
+  });
+  label.style.borderColor = 'var(--ink)';
+  label.style.background = 'rgba(3,45,66,.04)';
+  const input = label.querySelector('input[type=radio]');
+  if(input) input.checked = true;
+  // Enable confirm button
+  const btn = document.getElementById('confirm-role-btn');
+  if(btn) {
+    btn.disabled = false;
+    btn.style.background = 'var(--ink)';
+    btn.style.color = '#fff';
+    btn.style.borderColor = 'var(--ink)';
+    btn.style.cursor = 'pointer';
+  }
+}
+
+function confirmRoleAssignment(mlId) {
+  const selected = document.querySelector('input[name="bg-role"]:checked');
+  if(!selected) return;
+  const roleKey = selected.value;
+  const roleLabels = {champion:'Champion',economicBuyer:'Economic Buyer',influencer:'Influencer',ratifier:'Ratifier',user:'User'};
+  mlStates[mlId] = 'accepted';
+  closeModal();
+  // Re-render the ML table
+  const bg = selectedBG;
+  const detail = getDefaultDetail(bg);
+  const tbody = document.getElementById('mlTableBody');
+  if(tbody && detail.mlMembers) {
+    tbody.innerHTML = detail.mlMembers.map(m => {
+      const state = mlStates[m.id] || m.state || 'pending';
+      const actionCell = state === 'accepted'
+        ? '<span class="accepted-chip">✓ Accepted</span>'
+        : state === 'denied'
+        ? '<span class="denied-chip">✗ Denied</span>'
+        : '<button class="accept-btn" onclick="openRoleModal(\'' + m.id + '\')">✓ Accept</button>' +
+          '<button class="deny-btn" style="margin-left:5px" onclick="mlAction(\'' + m.id + '\',\'denied\')">✗ Deny</button>';
+      return '<tr><td><div style="font-size:12px;font-weight:600;color:' + (state==='denied'?'var(--s400)':'var(--b600)') + '">' + m.name + '</div>' +
+        (m.handraisersType ? '<span class="' + (m.handraisersType==='Contact Us'?'hr-contact-us':'hr-get-pricing') + '" style="margin-top:4px;display:inline-flex">' + (m.handraisersType==='Contact Us'?'✉':'💲') + ' ' + m.handraisersType + '</span>' : '') +
+        '<div style="font-size:10px;color:var(--s400);margin-top:2px">Last signal: ' + (m.lastSignal||'—') + '</div></td>' +
+        '<td style="color:var(--s600)">' + m.title + '</td>' +
+        '<td><span style="font-size:11px;font-weight:600;color:var(--s700)">' + m.level + '</span></td>' +
+        '<td><span class="role-pill rp-pending" style="' + (state==='denied'?'opacity:.4':'') + '">⏳ Pending</span></td>' +
+        '<td><span style="font-size:11px;color:var(--s500)">No</span></td>' +
+        '<td>' + engPill(m.engagement) + '</td>' +
+        '<td>' + statusPillM(m.status) + '</td>' +
+        '<td><div class="ml-reasoning" style="' + (state==='denied'?'opacity:.5':'') + '">' + m.reasoning + '</div></td>' +
+        '<td><span class="ml-score" style="' + (state==='denied'?'color:var(--s400)':'') + '">' + m.score + '</span></td>' +
+        '<td>' + actionCell + '</td></tr>';
+    }).join('');
+  }
+  const member = detail.mlMembers.find(m => m.id === mlId);
+  toast((member ? member.name : 'Member') + ' added as ' + (roleLabels[roleKey]||roleKey), 'ok');
+  const pending = detail.mlMembers.filter(m => (mlStates[m.id]||m.state||'pending')==='pending').length;
+  const badge = document.querySelector('.pending-badge');
+  if(badge) badge.textContent = pending + ' pending';
 }
 
 // ── UTILS ──────────────────────────────────────────────────────────────────
