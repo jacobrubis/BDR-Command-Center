@@ -288,6 +288,17 @@ button{font-family:inherit;}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 .fade-in{animation:fadeIn .16s ease;}
+
+/* CROSS-PAGE TABS */
+.ptabs{display:flex;align-items:center;border-bottom:1px solid var(--s200);margin:0;padding:0;overflow-x:auto;background:var(--white);}
+.ptabs::-webkit-scrollbar{height:0;}
+.ptab{display:inline-flex;align-items:center;gap:5px;padding:10px 14px;font-size:13px;font-weight:500;color:var(--s500);border-bottom:2px solid transparent;white-space:nowrap;transition:.1s;text-decoration:none;cursor:pointer;}
+.ptab:hover{color:var(--s700);}
+.ptab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.ptab-ct{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
+.ptab.on .ptab-ct{background:var(--ink);color:var(--white);}
+
+.filter-bar-wrap{background:var(--white);border-bottom:1px solid var(--s200);padding:0 22px;position:sticky;top:calc(44px + 280px);z-index:90;}
 </style>
 </head>
 <body>
@@ -324,25 +335,15 @@ button{font-family:inherit;}
 <!-- ── SIDEBAR ── -->
 <aside class="sbar">
   <div class="sbar-sec">
-    <span class="sbar-lbl">My Work</span>
-    <a href="index.html"           class="sbar-item"    title="Command Center"><span class="sbar-ic">⌂</span>Command Center</a>
-    <a href="outreach-center.html" class="sbar-item"    title="Outreach Center"><span class="sbar-ic">📋</span>Outreach Center</a>
-    <a href="buying-groups.html"   class="sbar-item on" title="Buying Groups"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
-    <a href="leads.html"           class="sbar-item"    title="Leads"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
-    <a href="#"                    class="sbar-item"    title="Tasks"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
-  </div>
-  <div class="sdiv"></div>
-  <div class="sbar-sec">
-    <span class="sbar-lbl">Customers</span>
-    <a href="#"                    class="sbar-item"    title="Accounts"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
-    <a href="#"                    class="sbar-item"    title="Contacts"><span class="sbar-ic">👥</span>Contacts</a>
-    <a href="opportunities.html"   class="sbar-item"    title="Opportunities"><span class="sbar-ic">💼</span>Opportunities</a>
-  </div>
-  <div class="sdiv"></div>
-  <div class="sbar-sec">
-    <span class="sbar-lbl">Marketing</span>
-    <a href="#"                    class="sbar-item"    title="Campaigns"><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
-    <a href="#"                    class="sbar-item"    title="Reports"><span class="sbar-ic">📊</span>Reports</a>
+    <a href="index.html"            class="sbar-item"    ><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="campaigns.html"        class="sbar-item"    ><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="buying-groups.html"    class="sbar-item on" ><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"            class="sbar-item"    ><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#"                     class="sbar-item"    ><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+    <a href="accounts.html"         class="sbar-item"    ><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="opportunities.html"    class="sbar-item"    ><span class="sbar-ic">💼</span>Opportunities</a>
+    <a href="book-of-business.html" class="sbar-item"    ><span class="sbar-ic">📖</span>Book of Business</a>
+    <a href="ae-alignment.html"     class="sbar-item"    ><span class="sbar-ic">🤝</span>AE Alignment</a>
   </div>
   <div class="sbar-footer">ServiceNow Confidential</div>
 </aside>
@@ -372,7 +373,22 @@ button{font-family:inherit;}
       <div class="stat-card"><div class="stat-lbl">Open Roles</div><div class="stat-val" style="color:var(--r600)">19</div><div class="stat-d dr">Not yet identified</div></div>
     </div>
 
-    <!-- STAGE TABS -->
+    <div class="ptabs" style="border-top:1px solid var(--s200);margin:4px -24px 0;padding:0 24px;">
+      <a href="index.html"            class="ptab">Today</a>
+      <a href="campaigns.html"        class="ptab">Campaigns <span class="ptab-ct">5</span></a>
+      <a href="buying-groups.html"    class="ptab on">Buying Groups <span class="ptab-ct">12</span></a>
+      <a href="leads.html"            class="ptab">Leads <span class="ptab-ct">39</span></a>
+      <a href="accounts.html"         class="ptab">Accounts <span class="ptab-ct">340</span></a>
+      <a href="opportunities.html"    class="ptab">Opportunities <span class="ptab-ct">5</span></a>
+      <a href="book-of-business.html" class="ptab">Book of Business</a>
+      <a href="ae-alignment.html"     class="ptab">AE Alignment</a>
+    </div>
+
+  
+
+  </div>
+  
+  <div style="background:var(--white);border-bottom:1px solid var(--s200);padding:0 22px;overflow-x:auto;">
     <div class="stage-tabs" id="stageTabs">
       <button class="stab on"  data-tab="all"         onclick="switchTab('all',this)">All <span class="cnt">12</span></button>
       <button class="stab"     data-tab="handraiser"  onclick="switchTab('handraiser',this)">Handraisers <span class="cnt">3</span></button>
@@ -384,7 +400,6 @@ button{font-family:inherit;}
       <button class="stab"     data-tab="qualified"   onclick="switchTab('qualified',this)">Qualified <span class="cnt">1</span></button>
     </div>
   </div>
-
   <div class="page-body" id="pageBody">
     <!-- content rendered here -->
   </div>
