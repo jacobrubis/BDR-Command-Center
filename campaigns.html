@@ -230,6 +230,8 @@ button{font-family:inherit;}
 
 .contact-level-tab.on{color:var(--ink)!important;border-bottom-color:var(--ink)!important;font-weight:600!important;}
 .contact-level-tab.on .clt-ct{background:rgba(3,45,66,.1)!important;color:var(--ink)!important;}
+
+.camp-type-card:hover{border-color:var(--s300)!important;background:var(--s50)!important;}
 </style>
 </head>
 <body>
@@ -902,15 +904,39 @@ function toggleLevel(el) {
   else { selectedLevels.add(l); el.classList.add('on'); }
 }
 
+let selectedCampType = '';
+function selectCampType(el) {
+  document.querySelectorAll('.camp-type-card').forEach(c => {
+    c.style.borderColor='var(--s200)'; c.style.background='';
+  });
+  el.style.borderColor='var(--ink)'; el.style.background='rgba(3,45,66,.04)';
+  selectedCampType = el.dataset.type;
+  // Auto-set motion based on type
+  const motionEl = document.getElementById('nc-motion');
+  if(motionEl) {
+    if(selectedCampType === 'Cold Outbound — New Logo' || selectedCampType.includes('New Logo')) motionEl.value='new logo';
+    else if(selectedCampType === 'Cold Outbound — Customer') motionEl.value='customer';
+    else if(selectedCampType.includes('Customer') || selectedCampType.includes('Upsell') || selectedCampType.includes('Cross')) motionEl.value='customer';
+  }
+}
+
 function goToPhase(n) {
   currentPhase = n;
-  [1,2,3,4].forEach(i => {
+  [1,2,3,4,5].forEach(i => {
     const el = document.getElementById('camp-phase-'+i);
     if(el) el.style.display = i===n ? 'flex' : 'none';
   });
+  // Update step dots
+  const labels = ['Type','Configure','Accounts','Contacts','Generate'];
+  [1,2,3,4,5].forEach(i => {
+    const dot = document.getElementById('s'+i+'dot');
+    if(!dot) return;
+    dot.className = 'step-dot ' + (i<n?'done':i===n?'active':'pending');
+    dot.textContent = i<n?'✓':i;
+  });
   updateModalFooter();
-  if(n===2) renderModalAccounts();
-  if(n===3) renderModalContacts();
+  if(n===3) renderModalAccounts();
+  if(n===4) renderModalContacts();
 }
 
 function updateModalFooter() {
@@ -918,10 +944,12 @@ function updateModalFooter() {
   const next = document.getElementById('campNextBtn');
   if(!back || !next) return;
   back.style.display = currentPhase > 1 ? 'inline-flex' : 'none';
-  if(currentPhase === 1) { next.textContent = 'Next: Select Accounts →'; next.onclick = () => goToPhase(2); }
-  else if(currentPhase === 2) { next.textContent = 'Next: Select Contacts →'; next.onclick = () => goToPhase(3); }
-  else if(currentPhase === 3) { next.textContent = 'Generate Campaign ✦'; next.onclick = startGenerate; }
-  else if(currentPhase === 4) { next.textContent = 'Done'; next.style.display='inline-flex'; next.onclick = closeNewCampaign; }
+  next.style.display = 'inline-flex';
+  if(currentPhase === 1) { next.textContent = 'Next: Configure →'; next.onclick = () => goToPhase(2); }
+  else if(currentPhase === 2) { next.textContent = 'Next: Select Accounts →'; next.onclick = () => goToPhase(3); }
+  else if(currentPhase === 3) { next.textContent = 'Next: Select Contacts →'; next.onclick = () => goToPhase(4); }
+  else if(currentPhase === 4) { next.textContent = 'Generate Campaign ✦'; next.onclick = startGenerate; }
+  else if(currentPhase === 5) { next.textContent = 'Done'; next.onclick = closeNewCampaign; }
 }
 
 // ── PHASE 2: ACCOUNTS ────────────────────────────────────────────────────
@@ -1132,7 +1160,7 @@ async function startGenerate() {
   const motion = document.getElementById('nc-motion')?.value || 'new logo';
   const hasCalls = document.getElementById('nc-calls')?.checked;
 
-  goToPhase(4);
+  goToPhase(5);
   document.getElementById('campNextBtn').style.display = 'none';
   document.getElementById('campBackBtn').style.display = 'none';
 
@@ -1160,7 +1188,9 @@ async function startGenerate() {
   let i = 0;
   for(const lvl of levels) {
     if(stepEl) stepEl.textContent = 'Generating ' + lvl.label + ' sequence (' + (i+1) + ' of 3)...';
-    const prompt = 'You are a ServiceNow BDR named Jacob Rubis. Write a ' + emailCount + '-email cold outbound sequence.\n\nProduct: ' + product + '\nPersona: ' + personas + '\nJob Level: ' + lvl.label + ' — ' + levelPrompts[lvl.label] + '\nMotion: ' + motion + '\nCampaign: ' + name + '\nContext: ' + (notes||'none') + '\n\nRules:\n- Problem-first framing, no product pitch in email 1\n- Fifth-grade reading level, short paragraphs\n- No em dashes, no semicolons, no hyphens in prose\n- Curiosity-led CTAs, do not ask for a meeting in emails 1-2\n- Each email is a different angle on the same problem\n- Final email: honest last note, easy out\n\nReturn ONLY a JSON array, no markdown:\n[{"emailNum":1,"subject":"...","body":"..."}]';
+    const isCustomerOutbound = selectedCampType === 'Cold Outbound — Customer';
+  const campTypeContext = isCustomerOutbound ? 'IMPORTANT: This is a cold outbound campaign to existing ServiceNow customers. Every email MUST open with a variation of: \'I\'m reaching out as part of the account team supporting the relationship between ServiceNow and [Company]\'. This establishes credibility and context before anything else. The rest of the email still follows problem-first framing.' : 'Campaign type: ' + selectedCampType + '.';
+  const prompt = 'You are a ServiceNow BDR named Jacob Rubis. Write a ' + emailCount + '-email cold outbound sequence.\n\nProduct: ' + product + '\nPersona: ' + personas + '\nJob Level: ' + lvl.label + ' — ' + levelPrompts[lvl.label] + '\nMotion: ' + motion + '\nCampaign type context: ' + campTypeContext + '\nCampaign: ' + name + '\nContext: ' + (notes||'none') + '\n\nRules:\n- Problem-first framing, no product pitch in email 1\n- Fifth-grade reading level, short paragraphs\n- No em dashes, no semicolons, no hyphens in prose\n- Curiosity-led CTAs, do not ask for a meeting in emails 1-2\n- Each email is a different angle on the same problem\n- Final email: honest last note, easy out\n\nReturn ONLY a JSON array, no markdown:\n[{"emailNum":1,"subject":"...","body":"..."}]';
 
     try {
       const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1333,7 +1363,8 @@ function openNewCampaign() {
   generatedEmails = [];
   addedTocamp = new Set();
   currentPhase = 1;
-  document.querySelectorAll('.persona-chip,.level-chip').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.persona-chip,.level-chip,.camp-type-card').forEach(el=>{el.classList.remove('on');el.style.borderColor='var(--s200)';el.style.background='';});
+  selectedCampType = '';
   document.querySelectorAll('.camp-ae-btn').forEach(el=>el.classList.remove('on'));
   document.querySelectorAll('[name="nc-ae"]').forEach(cb=>cb.checked=false);
   document.querySelectorAll('[name="nc-emails"]').forEach(r=>r.checked=r.value==='3');
@@ -1364,21 +1395,54 @@ renderDetail();
         <div style="font-size:11px;color:var(--s400);margin-top:2px" id="campPhaseLabel">Step 1 of 4 — Configure</div>
       </div>
       <div style="display:flex;align-items:center;gap:12px">
-        <div class="step-indicator" style="margin:0;gap:6px">
-          <div class="step-dot active" id="s1dot">1</div><span class="step-lbl active" style="font-size:10px">Configure</span>
-          <div class="step-line" style="width:40px;margin:0 4px"></div>
-          <div class="step-dot pending" id="s2dot">2</div><span class="step-lbl pending" style="font-size:10px">Accounts</span>
-          <div class="step-line" style="width:40px;margin:0 4px"></div>
-          <div class="step-dot pending" id="s3dot">3</div><span class="step-lbl pending" style="font-size:10px">Contacts</span>
-          <div class="step-line" style="width:40px;margin:0 4px"></div>
-          <div class="step-dot pending" id="s4dot">4</div><span class="step-lbl pending" style="font-size:10px">Generate</span>
+        <div class="step-indicator" style="margin:0;gap:4px">
+          <div class="step-dot active" id="s1dot">1</div><span class="step-lbl active" style="font-size:10px">Type</span>
+          <div class="step-line" style="width:28px;margin:0 3px"></div>
+          <div class="step-dot pending" id="s2dot">2</div><span class="step-lbl pending" style="font-size:10px">Configure</span>
+          <div class="step-line" style="width:28px;margin:0 3px"></div>
+          <div class="step-dot pending" id="s3dot">3</div><span class="step-lbl pending" style="font-size:10px">Accounts</span>
+          <div class="step-line" style="width:28px;margin:0 3px"></div>
+          <div class="step-dot pending" id="s4dot">4</div><span class="step-lbl pending" style="font-size:10px">Contacts</span>
+          <div class="step-line" style="width:28px;margin:0 3px"></div>
+          <div class="step-dot pending" id="s5dot">5</div><span class="step-lbl pending" style="font-size:10px">Generate</span>
         </div>
         <button class="modal-close" onclick="closeNewCampaign()">×</button>
       </div>
     </div>
 
+    <!-- PHASE 1: CAMPAIGN TYPE -->
+    <div id="camp-phase-1" class="modal-body" style="display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:13px;color:var(--s600);margin-bottom:4px">What kind of campaign is this?</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="camp-type-card" data-type="Cold Outbound — New Logo" onclick="selectCampType(this)" style="border:2px solid var(--s200);border-radius:10px;padding:16px 18px;cursor:pointer;transition:.12s;display:flex;align-items:flex-start;gap:12px">
+          <div style="font-size:22px;flex-shrink:0">🎯</div>
+          <div><div style="font-size:13px;font-weight:700;color:var(--s800);margin-bottom:3px">Cold Outbound — New Logo</div><div style="font-size:11px;color:var(--s500)">Prospects with no prior ServiceNow relationship</div></div>
+        </div>
+        <div class="camp-type-card" data-type="Cold Outbound — Customer" onclick="selectCampType(this)" style="border:2px solid var(--s200);border-radius:10px;padding:16px 18px;cursor:pointer;transition:.12s;display:flex;align-items:flex-start;gap:12px">
+          <div style="font-size:22px;flex-shrink:0">🏢</div>
+          <div><div style="font-size:13px;font-weight:700;color:var(--s800);margin-bottom:3px">Cold Outbound — Customer</div><div style="font-size:11px;color:var(--s500)">Existing customers — opens as part of the account team</div></div>
+        </div>
+        <div class="camp-type-card" data-type="Event / Webinar — Customer" onclick="selectCampType(this)" style="border:2px solid var(--s200);border-radius:10px;padding:16px 18px;cursor:pointer;transition:.12s;display:flex;align-items:flex-start;gap:12px">
+          <div style="font-size:22px;flex-shrink:0">🎟️</div>
+          <div><div style="font-size:13px;font-weight:700;color:var(--s800);margin-bottom:3px">Event / Webinar — Customer</div><div style="font-size:11px;color:var(--s500)">Follow-up for existing customers who attended</div></div>
+        </div>
+        <div class="camp-type-card" data-type="Event / Webinar — New Logo" onclick="selectCampType(this)" style="border:2px solid var(--s200);border-radius:10px;padding:16px 18px;cursor:pointer;transition:.12s;display:flex;align-items:flex-start;gap:12px">
+          <div style="font-size:22px;flex-shrink:0">📣</div>
+          <div><div style="font-size:13px;font-weight:700;color:var(--s800);margin-bottom:3px">Event / Webinar — New Logo</div><div style="font-size:11px;color:var(--s500)">Prospects who attended or registered for an event</div></div>
+        </div>
+        <div class="camp-type-card" data-type="Cross-sell — New BU" onclick="selectCampType(this)" style="border:2px solid var(--s200);border-radius:10px;padding:16px 18px;cursor:pointer;transition:.12s;display:flex;align-items:flex-start;gap:12px">
+          <div style="font-size:22px;flex-shrink:0">➕</div>
+          <div><div style="font-size:13px;font-weight:700;color:var(--s800);margin-bottom:3px">Cross-sell — New BU</div><div style="font-size:11px;color:var(--s500)">Expand into a new buying group at an existing customer</div></div>
+        </div>
+        <div class="camp-type-card" data-type="Upsell — Customer" onclick="selectCampType(this)" style="border:2px solid var(--s200);border-radius:10px;padding:16px 18px;cursor:pointer;transition:.12s;display:flex;align-items:flex-start;gap:12px">
+          <div style="font-size:22px;flex-shrink:0">📈</div>
+          <div><div style="font-size:13px;font-weight:700;color:var(--s800);margin-bottom:3px">Upsell — Customer</div><div style="font-size:11px;color:var(--s500)">Expand license or tier within a current customer account</div></div>
+        </div>
+      </div>
+    </div>
+
     <!-- PHASE 1: CONFIGURE -->
-    <div id="camp-phase-1" class="modal-body" style="display:flex;flex-direction:column;gap:14px">
+    <div id="camp-phase-2" class="modal-body" style="display:flex;flex-direction:column;gap:14px">
       <div class="camp-modal-grid">
         <div>
           <label class="form-label">Campaign Name *</label>
@@ -1447,7 +1511,7 @@ renderDetail();
     </div>
 
     <!-- PHASE 2: SELECT ACCOUNTS -->
-    <div id="camp-phase-2" class="modal-body" style="display:none;flex-direction:column;gap:12px">
+    <div id="camp-phase-3" class="modal-body" style="display:none;flex-direction:column;gap:12px">
       <div style="display:grid;grid-template-columns:200px 1fr;gap:14px;min-height:400px">
         <!-- LEFT: AE SELECTOR -->
         <div>
@@ -1479,7 +1543,7 @@ renderDetail();
     </div>
 
     <!-- PHASE 3: SELECT CONTACTS -->
-    <div id="camp-phase-3" class="modal-body" style="display:none;flex-direction:column;gap:10px">
+    <div id="camp-phase-4" class="modal-body" style="display:none;flex-direction:column;gap:10px">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
           <div style="font-size:13px;font-weight:600;color:var(--s800)">Contacts from selected accounts</div>
@@ -1501,7 +1565,7 @@ renderDetail();
     </div>
 
     <!-- PHASE 4: GENERATE & REVIEW -->
-    <div id="camp-phase-4" class="modal-body" style="display:none;flex-direction:column;gap:12px;padding-bottom:8px">
+    <div id="camp-phase-5" class="modal-body" style="display:none;flex-direction:column;gap:12px;padding-bottom:8px">
       <div id="gen-loading-area" style="display:flex;flex-direction:column;align-items:center;padding:32px;text-align:center">
         <div style="font-size:28px;margin-bottom:12px">✦</div>
         <div style="font-size:15px;font-weight:700;color:var(--s900);margin-bottom:6px">Generating 3 persona-level sequences...</div>
