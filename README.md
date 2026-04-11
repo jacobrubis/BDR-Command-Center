@@ -93,7 +93,7 @@ Data lives in JavaScript arrays at the top of each file. The dashboard is intent
 
 ## Background
 
-This project started as a personal workflow tool and grew into a full system over roughly 18 months. The core goal was to close the gap between what CRM shows and what a BDR actually needs to know on any given morning — who to call, what to say, which leads are expiring, and what each AE needs from you before the next 1:1.
+This project started as a personal workflow tool and grew into a full system. The core goal was to close the gap between what CRM shows and what a BDR actually needs to know on any given morning — who to call, what to say, which leads are expiring, and what each AE needs from you before the next 1:1.
 
 It's also a live demonstration of what an AI-native sales workflow looks like in practice: tools built by the person using them, grounded in real data, designed for speed.
 
@@ -101,14 +101,12 @@ It's also a live demonstration of what an AI-native sales workflow looks like in
 
 ## Usage
 
-Or visit the live site at [jacobrubis.github.io/BDR-Command-Center](https://jacobrubis.github.io/BDR-Command-Center).
+Visit the live site at [jacobrubis.github.io/BDR-Command-Center](https://jacobrubis.github.io/BDR-Command-Center).
 
 ---
 
 ## Notes
 
-All account names, contact names, opportunity data, and lead records in this dashboard are either real accounts from the territory (company names only, no personal data) or fictional for demonstration purposes. No proprietary ServiceNow data is included.
+All account names, contact names, opportunity data, and lead records in this dashboard are fictional for demonstration purposes.
 
 ---
-
-*Built by Jacob Rubis · ServiceNow BDR · GBA Commercial Illinois & Midwest*
