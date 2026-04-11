@@ -73,7 +73,7 @@ button{font-family:inherit;}
 .phdr-acts{display:flex;align-items:center;gap:7px;flex-shrink:0;}
 .page-body{display:flex;flex:1;min-height:0;}
 .body-main{flex:1;padding:16px 22px 48px;display:flex;flex-direction:column;gap:14px;min-width:0;}
-.body-side{width:268px;flex-shrink:0;border-left:1px solid var(--s200);background:var(--white);padding:14px 15px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;position:sticky;top:calc(44px + 170px);max-height:calc(100vh - 44px - 170px);align-self:flex-start;}
+.body-side{width:400px;flex-shrink:0;border-left:1px solid var(--s200);background:var(--white);padding:14px 15px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;position:sticky;top:calc(44px + 170px);max-height:calc(100vh - 44px - 170px);align-self:flex-start;}
 
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;transition:.12s;white-space:nowrap;text-decoration:none;}
@@ -202,6 +202,22 @@ button{font-family:inherit;}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 .fade-in{animation:fadeIn .18s ease;}
+
+/* CROSS-PAGE TABS */
+.ptabs{display:flex;align-items:center;border-bottom:1px solid var(--s200);margin:0;padding:0;overflow-x:auto;background:var(--white);}
+.ptabs::-webkit-scrollbar{height:0;}
+.ptab{display:inline-flex;align-items:center;gap:5px;padding:10px 14px;font-size:13px;font-weight:500;color:var(--s500);border-bottom:2px solid transparent;white-space:nowrap;transition:.1s;text-decoration:none;cursor:pointer;}
+.ptab:hover{color:var(--s700);}
+.ptab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.ptab-ct{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
+.ptab.on .ptab-ct{background:var(--ink);color:var(--white);}
+
+.prod-card{flex:0 0 140px;background:var(--white);border:1px solid var(--s200);border-radius:9px;padding:10px 12px;box-shadow:var(--sh-xs);}
+.prod-lbl{font-size:11px;font-weight:600;color:var(--s700);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.prod-pipe{font-size:17px;font-weight:700;font-family:'DM Mono',monospace;line-height:1;margin-bottom:5px;}
+.prod-bar-track{height:3px;background:var(--s200);border-radius:2px;margin-bottom:4px;}
+.prod-bar-fill{height:100%;border-radius:2px;}
+.prod-count{font-size:10px;color:var(--s400);}
 </style>
 </head>
 <body>
@@ -238,25 +254,15 @@ button{font-family:inherit;}
 <!-- ── SIDEBAR ── -->
 <aside class="sbar">
   <div class="sbar-sec">
-    <span class="sbar-lbl">My Work</span>
-    <a href="index.html"            class="sbar-item"     title="Command Center"><span class="sbar-ic">⌂</span>Command Center</a>
-    <a href="outreach-center.html"  class="sbar-item"     title="Outreach Center"><span class="sbar-ic">📋</span>Outreach Center</a>
-    <a href="buying-groups.html"    class="sbar-item"     title="Buying Groups"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
-    <a href="leads.html"            class="sbar-item"     title="Leads"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
-    <a href="#"                     class="sbar-item"     title="Tasks"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
-  </div>
-  <div class="sdiv"></div>
-  <div class="sbar-sec">
-    <span class="sbar-lbl">Customers</span>
-    <a href="#"                     class="sbar-item"     title="Accounts"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
-    <a href="#"                     class="sbar-item"     title="Contacts"><span class="sbar-ic">👥</span>Contacts</a>
-    <a href="opportunities.html"    class="sbar-item on"  title="Opportunities"><span class="sbar-ic">💼</span>Opportunities</a>
-  </div>
-  <div class="sdiv"></div>
-  <div class="sbar-sec">
-    <span class="sbar-lbl">Marketing</span>
-    <a href="#"                     class="sbar-item"     title="Campaigns"><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
-    <a href="#"                     class="sbar-item"     title="Reports"><span class="sbar-ic">📊</span>Reports</a>
+    <a href="index.html"            class="sbar-item"    ><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="campaigns.html"        class="sbar-item"    ><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="buying-groups.html"    class="sbar-item"    ><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"            class="sbar-item"    ><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#"                     class="sbar-item"    ><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+    <a href="accounts.html"         class="sbar-item"    ><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="opportunities.html"    class="sbar-item on" ><span class="sbar-ic">💼</span>Opportunities</a>
+    <a href="book-of-business.html" class="sbar-item"    ><span class="sbar-ic">📖</span>Book of Business</a>
+    <a href="ae-alignment.html"     class="sbar-item"    ><span class="sbar-ic">🤝</span>AE Alignment</a>
   </div>
   <div class="sbar-footer">ServiceNow Confidential</div>
 </aside>
@@ -278,47 +284,30 @@ button{font-family:inherit;}
       </div>
     </div>
 
-    <!-- KPI STRIP -->
-    <div class="stat-row">
-      <div class="stat-card">
-        <div class="stat-lbl">Pipeline (QTD)</div>
-        <div class="stat-val">$4.2M</div>
-        <div class="stat-d du">↑ $340K this week</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-lbl">Active Opportunities</div>
-        <div class="stat-val">18</div>
-        <div class="stat-d">Stages 1–6</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-lbl">Closing This Quarter</div>
-        <div class="stat-val">6</div>
-        <div class="stat-d dw">⚠ 2 at risk</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-lbl">Closed Won (FY26)</div>
-        <div class="stat-val">$755K</div>
-        <div class="stat-d">3 deals · Q1–Q2</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-lbl">BDR Sourced Pipeline</div>
-        <div class="stat-val">$1.8M</div>
-        <div class="stat-d du">43% of total</div>
-      </div>
+    <div class="ptabs">
+      <a href="index.html"            class="ptab">Today</a>
+      <a href="campaigns.html"        class="ptab">Campaigns <span class="ptab-ct">5</span></a>
+      <a href="buying-groups.html"    class="ptab">Buying Groups <span class="ptab-ct">12</span></a>
+      <a href="leads.html"            class="ptab">Leads <span class="ptab-ct">39</span></a>
+      <a href="accounts.html"         class="ptab">Accounts <span class="ptab-ct">340</span></a>
+      <a href="opportunities.html"    class="ptab on">Opportunities <span class="ptab-ct">5</span></a>
+      <a href="book-of-business.html" class="ptab">Book of Business</a>
+      <a href="ae-alignment.html"     class="ptab">AE Alignment</a>
     </div>
 
-    <!-- STAGE TABS -->
+    <div id="productCards" style="display:flex;gap:8px;padding:10px 0 8px;overflow-x:auto;flex-wrap:nowrap;"></div>
     <div class="stage-tabs" id="stageTabs">
-      <button class="stab on" data-tab="s12" onclick="switchTab('s12',this)">Stage 1 <span class="cnt" id="cnt-s12">5</span></button>
-      <button class="stab"    data-tab="s34" onclick="switchTab('s34',this)">Stage 2–3 <span class="cnt" id="cnt-s34">6</span></button>
-      <button class="stab"    data-tab="s56" onclick="switchTab('s56',this)">Stage 4+ <span class="cnt" id="cnt-s56">4</span></button>
-      <button class="stab won" data-tab="won" onclick="switchTab('won',this)">Closed Won <span class="cnt" id="cnt-won">3</span></button>
-      <button class="stab lost" data-tab="lost" onclick="switchTab('lost',this)">Closed Lost <span class="cnt" id="cnt-lost">3</span></button>
-      <button class="stab nd"  data-tab="nd"  onclick="switchTab('nd',this)">Closed No Decision <span class="cnt" id="cnt-nd">2</span></button>
+      <button class="stab on" data-tab="all" onclick="switchTab('all',this)">All <span class="cnt" id="cnt-all">23</span></button>
+      <button class="stab" data-tab="s12" onclick="switchTab('s12',this)">Stage 1 <span class="cnt" id="cnt-s12">7</span></button>
+      <button class="stab"    data-tab="s34" onclick="switchTab('s34',this)">Stage 2–3 <span class="cnt" id="cnt-s34">8</span></button>
+      <button class="stab"    data-tab="s56" onclick="switchTab('s56',this)">Stage 4+ <span class="cnt" id="cnt-s56">6</span></button>
+      <button class="stab won" data-tab="won" onclick="switchTab('won',this)">Closed Won <span class="cnt" id="cnt-won">2</span></button>
+      <button class="stab lost" data-tab="lost" onclick="switchTab('lost',this)">Closed Lost <span class="cnt" id="cnt-lost">1</span></button>
+      <button class="stab nd"  data-tab="nd"  onclick="switchTab('nd',this)">Closed No Decision <span class="cnt" id="cnt-nd">0</span></button>
     </div>
-  </div>
+  </div><!-- /page-hdr -->
 
-  <div class="page-body">
+<div class="page-body">
     <!-- MAIN CONTENT -->
     <div class="body-main">
 
@@ -344,14 +333,14 @@ button{font-family:inherit;}
         <table class="opty-table" id="optyTable">
           <thead>
             <tr>
-              <th>OPTY <span class="sort">↕</span></th>
-              <th>Account / Solution</th>
-              <th>Stage <span class="sort">↕</span></th>
-              <th>AE</th>
-              <th>Amount <span class="sort">↕</span></th>
-              <th>Close Date <span class="sort">↕</span></th>
-              <th>BDR Role</th>
-              <th>Last Activity</th>
+              <th>OPTY</th>
+              <th>Company</th>
+              <th>Rep</th>
+              <th>Date Scheduled</th>
+              <th>Stage</th>
+              <th>Business Unit</th>
+              <th style="text-align:right">Pipeline</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody id="optyBody"></tbody>
@@ -367,14 +356,12 @@ button{font-family:inherit;}
           <span>Opportunity Updates</span>
           <span class="side-link" onclick="showAllUpdates()">View all</span>
         </div>
-        <div style="display:flex;flex-direction:column;gap:8px;" id="updatesFeed"></div>
+        <div style="display:flex;flex-direction:column;gap:8px;max-height:calc(100vh - 280px);overflow-y:auto;padding-right:4px" id="updatesFeed"></div>
       </div>
 
       <!-- QUICK STATS BY AE -->
-      <div>
-        <div class="side-hd"><span>Pipeline by AE</span></div>
-        <div style="display:flex;flex-direction:column;gap:6px;" id="aeBreakdown"></div>
       </div>
+    </div>
     </div>
 
   </div><!-- /page-body -->
@@ -397,41 +384,64 @@ const AE_STYLES = {
 };
 
 const OPTIES = [
-  // ── STAGE 1 ──
-  {id:'OPTY2847391', account:'Badger Meter, Inc.',           product:'ITSM Pro',                 stage:'Stage 1', stageN:1, ae:'Tony',    amt:85000,  close:'2026-05-30', bdr:'Source', lastAct:'Apr 8',  tab:'s12'},
-  {id:'OPTY3829471', account:'Quinnox Inc.',                 product:'Now Assist for ITSM',       stage:'Stage 1', stageN:1, ae:'Jeff',    amt:125000, close:'2026-06-15', bdr:'Source', lastAct:'Apr 9',  tab:'s12'},
-  {id:'OPTY5618293', account:'Madison Air',                  product:'HR Service Delivery',       stage:'Stage 1', stageN:1, ae:'Katie',   amt:95000,  close:'2026-05-15', bdr:'Source', lastAct:'Apr 7',  tab:'s12'},
-  {id:'OPTY7391847', account:'Atkore International',         product:'ITAM + HAM',                stage:'Stage 1', stageN:1, ae:'Seamus',  amt:145000, close:'2026-06-30', bdr:'Co-Source', lastAct:'Apr 6', tab:'s12'},
-  {id:'OPTY2847562', account:'Gerber Collision & Glass',     product:'ITSM Pro',                  stage:'Stage 1', stageN:1, ae:'Brian',   amt:110000, close:'2026-07-15', bdr:'Source', lastAct:'Apr 5',  tab:'s12'},
-
-  // ── STAGE 2-3 ──
-  {id:'OPTY5327104', account:'Acme Corp',                    product:'AI Control Tower',          stage:'Stage 2', stageN:2, ae:'Tony',    amt:285000, close:'2026-07-31', bdr:'Source', lastAct:'Apr 10', tab:'s34'},
-  {id:'OPTY4812937', account:'Echo Global Logistics, Inc.',  product:'ITOM AIOps',                stage:'Stage 3', stageN:3, ae:'Riley',   amt:195000, close:'2026-06-30', bdr:'Co-Source', lastAct:'Apr 9', tab:'s34'},
-  {id:'OPTY3847291', account:'AIT Worldwide Logistics',      product:'Employee Workflows',         stage:'Stage 2', stageN:2, ae:'Brian',   amt:165000, close:'2026-05-31', bdr:'Source', lastAct:'Apr 8',  tab:'s34'},
-  {id:'OPTY6291847', account:'DMI Inc.',                     product:'Security Operations',        stage:'Stage 3', stageN:3, ae:'Seamus',  amt:220000, close:'2026-06-15', bdr:'Assist',  lastAct:'Apr 7', tab:'s34'},
-  {id:'OPTY8473921', account:'S&S Activewear',               product:'HR Service Delivery',       stage:'Stage 2', stageN:2, ae:'Mikaela', amt:175000, close:'2026-07-15', bdr:'Source', lastAct:'Apr 6',  tab:'s34'},
-  {id:'OPTY9283741', account:'Batteries Plus LLC',           product:'ITSM + CSM',                stage:'Stage 2', stageN:2, ae:'Tony',    amt:140000, close:'2026-06-01', bdr:'Co-Source', lastAct:'Apr 4', tab:'s34'},
-
-  // ── STAGE 4+ ──
-  {id:'OPTY5438291', account:'TTX Company',                  product:'ITAM Enterprise',           stage:'Stage 5', stageN:5, ae:'Seamus',  amt:340000, close:'2026-04-30', bdr:'Source', lastAct:'Apr 9',  tab:'s56'},
-  {id:'OPTY7284739', account:'Stepan Co.',                   product:'IRM + GRC',                 stage:'Stage 4', stageN:4, ae:'Seamus',  amt:280000, close:'2026-05-15', bdr:'Assist',  lastAct:'Apr 8', tab:'s56'},
-  {id:'OPTY3849271', account:'Consilio LLC',                 product:'Veza Identity Governance',  stage:'Stage 5', stageN:5, ae:'Mikaela', amt:195000, close:'2026-04-30', bdr:'Source', lastAct:'Apr 10', tab:'s56'},
-  {id:'OPTY6482917', account:'GATX Corporation',             product:'Platform Licensing',         stage:'Stage 4', stageN:4, ae:'Riley',   amt:450000, close:'2026-05-31', bdr:'Co-Source', lastAct:'Apr 7', tab:'s56'},
-
-  // ── CLOSED WON ──
-  {id:'OPTY2847193', account:'Hollister Incorporated',       product:'HR Pro + Now Assist',       stage:'Closed Won', stageN:7, ae:'Katie',   amt:245000, close:'2026-01-15', bdr:'Source', lastAct:'Jan 15', tab:'won', wonDate:'Jan 15, 2026'},
-  {id:'OPTY5839271', account:'Kirkland & Ellis LLP',         product:'Legal Service Management',  stage:'Closed Won', stageN:7, ae:'Riley',   amt:190000, close:'2026-02-28', bdr:'Co-Source', lastAct:'Feb 28', tab:'won', wonDate:'Feb 28, 2026'},
-  {id:'OPTY3492817', account:'Federal Home Loan Bank of Chicago', product:'ITSM Enterprise',      stage:'Closed Won', stageN:7, ae:'Riley',   amt:320000, close:'2026-03-15', bdr:'Source', lastAct:'Mar 15', tab:'won', wonDate:'Mar 15, 2026'},
-
-  // ── CLOSED LOST ──
-  {id:'OPTY7391283', account:'Breakthru Beverage Group',     product:'Employee Workflows',        stage:'Closed Lost', stageN:8, ae:'Brian',  amt:210000, close:'2026-02-14', bdr:'Assist',  lastAct:'Feb 14', tab:'lost', lostTo:'ServiceNow (Internal Budget Cut)'},
-  {id:'OPTY4829371', account:'Parts Town LLC',               product:'ITSM Pro',                  stage:'Closed Lost', stageN:8, ae:'Riley',  amt:155000, close:'2026-01-31', bdr:'Source', lastAct:'Jan 31', tab:'lost', lostTo:'BMC Remedy'},
-  {id:'OPTY8374928', account:'Wilson Sporting Goods Co.',    product:'ITAM',                      stage:'Closed Lost', stageN:8, ae:'Riley',  amt:130000, close:'2026-03-31', bdr:'Source', lastAct:'Mar 31', tab:'lost', lostTo:'Cherwell (Budget deferral)'},
-
-  // ── CLOSED NO DECISION ──
-  {id:'OPTY6283947', account:'Hub Group Inc.',               product:'ITSM + ITOM',               stage:'No Decision', stageN:9, ae:'Seamus', amt:285000, close:'2026-03-31', bdr:'Source', lastAct:'Mar 28', tab:'nd'},
-  {id:'OPTY4728391', account:'Amsted Industries Inc.',       product:'IRM',                       stage:'No Decision', stageN:9, ae:'Riley',  amt:175000, close:'2026-02-28', bdr:'Co-Source', lastAct:'Feb 20', tab:'nd'},
+  {company:'Crash Champions',          rep:'Brian',   date:'Jan 29, 2026', stage:'Stage 4', bu:'EAM',               pipe:130000,  opty:'OPTY-5313647', status:'Discovery Call'},
+  {company:'Blue Cross Blue Shield',   rep:'Brian',   date:'Feb 3, 2026',  stage:'Stage 4', bu:'MoveWorks',         pipe:134000,  opty:'OPTY-5314787', status:'Discovery Call'},
+  {company:'Parts Town LLC',           rep:'Riley',   date:'Feb 9, 2026',  stage:'Closed Lost',bu:'CSM Pro+',        pipe:0,       opty:'OPTY-5316357', status:'Closed Lost'},
+  {company:'Parts Town LLC',           rep:'Riley',   date:'Feb 9, 2026',  stage:'Stage 2', bu:'ITOM Pro+',         pipe:705000,  opty:'OPTY-5316360', status:'Discovery Call'},
+  {company:"Portillo's",               rep:'Jeff',    date:'Feb 11, 2026', stage:'Stage 2', bu:'CSM Pro+',          pipe:119000,  opty:'OPTY-5317345', status:'Discovery Call'},
+  {company:'AIT Worldwide Logistics',  rep:'Brian',   date:'Feb 20, 2026', stage:'Closed Won',bu:'CSM HRSD',        pipe:46000,   opty:'OPTY-5319616', status:'Closed Won'},
+  {company:'Afni Inc',                 rep:'Riley',   date:'Feb 20, 2026', stage:'Stage 2', bu:'ITOM',              pipe:97000,   opty:'OPTY-5319618', status:'Discovery Call'},
+  {company:'Consilio LLC',             rep:'Mikaela', date:'Feb 25, 2026', stage:'Stage 4', bu:'FSM',               pipe:2500000, opty:'OPTY-5320708', status:'Discovery Call'},
+  {company:'Echo Global Logistics',    rep:'Riley',   date:'Mar 4, 2026',  stage:'Stage 4', bu:'ITOM AIOps',        pipe:217000,  opty:'OPTY-5322544', status:'Discovery Call'},
+  {company:'Echo Global Logistics',    rep:'Riley',   date:'Mar 4, 2026',  stage:'Stage 4', bu:'EmployeeWorks',     pipe:242000,  opty:'OPTY-5322545', status:'Discovery Call'},
+  {company:'Blue Cross Blue Shield',   rep:'Brian',   date:'Mar 5, 2026',  stage:'Stage 2', bu:'VR-AI CT',          pipe:176000,  opty:'OPTY-5322739', status:'Discovery Call'},
+  {company:'Encore Event Technologies',rep:'Seamus',  date:'Mar 9, 2026',  stage:'Stage 2', bu:'CPQ',               pipe:80000,   opty:'OPTY-5333632', status:'Discovery Call'},
+  {company:'Culligan International',   rep:'Brian',   date:'Mar 13, 2026', stage:'Stage 1', bu:'ITSM',              pipe:73000,   opty:'OPTY-5334064', status:'Discovery Call'},
+  {company:'GATX Corporation',         rep:'Riley',   date:'Mar 18, 2026', stage:'Stage 4', bu:'ITOM AIOps',        pipe:350000,  opty:'OPTY-5336201', status:'Discovery Call'},
+  {company:'Paylocity Corporation',    rep:'Riley',   date:'Mar 20, 2026', stage:'Stage 3', bu:'Now Assist',        pipe:220000,  opty:'OPTY-5337445', status:'Discovery Call'},
+  {company:'Crash Champions',          rep:'Brian',   date:'Mar 22, 2026', stage:'Stage 3', bu:'Now Assist HR',     pipe:170000,  opty:'OPTY-5338712', status:'Discovery Call'},
+  {company:'DMI Inc',                  rep:'Seamus',  date:'Mar 25, 2026', stage:'Stage 2', bu:'SecOps',            pipe:115000,  opty:'OPTY-5339884', status:'Discovery Call'},
+  {company:'Eversana',                 rep:'Seamus',  date:'Mar 28, 2026', stage:'Stage 5', bu:'Veza IGA',          pipe:58000,   opty:'OPTY-5341230', status:'Discovery Call'},
+  {company:'Sub-Zero Group Inc',       rep:'Tony',    date:'Apr 1, 2026',  stage:'Stage 2', bu:'HRSD',              pipe:275000,  opty:'OPTY-5343615', status:'Discovery Call'},
+  {company:'Kirkland & Ellis LLP',     rep:'Riley',   date:'Apr 3, 2026',  stage:'Stage 3', bu:'Legal Service Mgmt',pipe:210000,  opty:'OPTY-5344892', status:'Discovery Call'},
+  {company:'Badger Meter, Inc.',       rep:'Tony',    date:'Apr 5, 2026',  stage:'Stage 4', bu:'ITSM Pro',          pipe:285000,  opty:'OPTY-5345331', status:'Discovery Call'},
+  {company:'AIT Worldwide Logistics',  rep:'Brian',   date:'Apr 7, 2026',  stage:'Stage 2', bu:'Employee Workflows',pipe:140000,  opty:'OPTY-5346820', status:'Closed Won'},
+  {company:'West Monroe Partners',     rep:'Brian',   date:'Apr 9, 2026',  stage:'Stage 2', bu:'Now Assist + AICT', pipe:90000,   opty:'OPTY-5348210', status:'Discovery Call'},
 ];
+
+// Derive product summary cards from OPTIES
+function buildProductCards() {
+  const byProduct = {};
+  OPTIES.forEach(o => {
+    const bu = o.bu;
+    if(!byProduct[bu]) byProduct[bu] = {count:0, pipe:0};
+    byProduct[bu].count++;
+    byProduct[bu].pipe += o.pipe;
+  });
+  const sorted = Object.entries(byProduct).sort((a,b) => b[1].pipe - a[1].pipe);
+  const maxPipe = sorted[0][1].pipe;
+  const BU_COLORS = {
+    'EAM':'#d97706','MoveWorks':'#7c3aed','CSM Pro+':'#0369a1','CSM HRSD':'#059669',
+    'ITOM':'#1d4ed8','ITOM AIOps':'#1d4ed8','FSM':'#0e7490','VR-AI CT':'#7e22ce',
+    'CPQ':'#9333ea','Now Assist':'#6d28d9','Now Assist HR':'#7c3aed','HRSD':'#059669',
+    'Legal Service Mgmt':'#0f766e','ITSM Pro':'#032D42','EmployeeWorks':'#15803d',
+    'SecOps':'#dc2626','Veza IGA':'#b91c1c','Employee Workflows':'#15803d','ITSM':'#032D42',
+    'AI Control Tower':'#4338ca',
+  };
+  const container = document.getElementById('productCards');
+  if(!container) return;
+  container.innerHTML = sorted.slice(0,8).map(([bu, {count, pipe}]) => {
+    const pct = Math.round(pipe / maxPipe * 100);
+    const col = BU_COLORS[bu] || '#475569';
+    const fmt = pipe >= 1000000 ? '$'+(pipe/1000000).toFixed(1)+'M' : '$'+Math.round(pipe/1000)+'K';
+    return '<div class="prod-card">' +
+      '<div class="prod-lbl" title="'+bu+'">'+bu+'</div>' +
+      '<div class="prod-pipe" style="color:'+col+'">'+fmt+'</div>' +
+      '<div class="prod-bar-track"><div class="prod-bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div>' +
+      '<div class="prod-count">'+count+' deal'+(count!==1?'s':'')+'</div>' +
+    '</div>';
+  }).join('');
+}
 
 // ── OPTY UPDATES ──────────────────────────────────────────────────────────
 const UPDATES = [
@@ -489,10 +499,65 @@ const UPDATES = [
     author: 'Brian Disher',
     body: `4/8 — AIT Worldwide CHRO introduced into the deal. Previously only had VP of IT engaged. HR team experiencing significant pain around onboarding — currently takes 18 business days average to fully onboard a new logistics coordinator.\n\nMoveworks also in evaluation but price point is a concern for AIT. Brian positioning EW as the consolidation play — AIT already on ITSM so incremental cost argument is strong. Demo scheduled April 17.`
   }
+,
+  {
+    optyId: 'OPTY-5346820',
+    account: 'AIT Worldwide Logistics',
+    product: 'Employee Workflows',
+    ae: 'Brian',
+    date: 'Apr 9',
+    author: 'Brian Disher',
+    body: '4/9 — CHRO Lisa Park confirmed she is joining the Apr 17 demo alongside VP IT. Moveworks is still in play but price point is becoming a concern for AIT. Brian positioning EW as the consolidation play given AIT is already on ITSM. The incremental cost argument is resonating. Expect Stage 3 progression post-demo.'
+  },
+  {
+    optyId: 'OPTY-5343615',
+    account: 'Sub-Zero Group Inc',
+    product: 'HRSD',
+    ae: 'Tony',
+    date: 'Apr 7',
+    author: 'Tony Riebel',
+    body: '4/7 — Sub-Zero CHRO confirmed she will join the next call. Brandon Joyce (VP IT) asked for a comparison between HRSD and current ServiceNow ITSM onboarding workflows. Strong champion in place. Tony to bring in SC for technical validation call week of Apr 14. Stage 2 progressed — opty created Apr 1.'
+  },
+  {
+    optyId: 'OPTY-5345331',
+    account: 'Badger Meter, Inc.',
+    product: 'ITSM Pro',
+    ae: 'Tony',
+    date: 'Apr 5',
+    author: 'Tony Riebel',
+    body: '4/5 — VP IT confirmed budget allocated for Q2 ITSM Pro upgrade. Procurement wants to move before June. Decision committee: VP IT + IT Manager + Finance Director. No competitive threat identified. Tony to prep platform demo for Apr 18. Jacob sourced this through K26 pre-event outreach.'
+  },
+  {
+    optyId: 'OPTY-5337445',
+    account: 'Paylocity Corporation',
+    product: 'Now Assist for ITSM',
+    ae: 'Riley',
+    date: 'Apr 7',
+    author: 'Riley Scott',
+    body: '4/7 — CIO Sarah Mitchell confirmed for demo week of Apr 14. Paylocity is already on ITSM Pro — this is a pure Now Assist expansion conversation. Sarah submitted the demo request herself via servicenow.com, which is a strong intent signal. Riley bringing SC for the technical deep dive. Jacob holds the sourced credit.'
+  },
+  {
+    optyId: 'OPTY-5344892',
+    account: 'Kirkland & Ellis LLP',
+    product: 'Legal Service Mgmt',
+    ae: 'Riley',
+    date: 'Apr 3',
+    author: 'Riley Scott',
+    body: "4/3 — Jennifer Torres replied to Jacob's Email 1 in the Legal IT Webinar sequence. Strong champion signal — she owns the evaluation. Asking about matter management integrations specifically. Riley created the opty immediately. Legal Service Management is the primary motion, with ITSM Pro as an expansion conversation. No competitor confirmed yet."
+  },
+  {
+    optyId: 'OPTY-5339884',
+    account: 'DMI Inc',
+    product: 'Security Operations',
+    ae: 'Seamus',
+    date: 'Mar 26',
+    author: 'Seamus Donovan',
+    body: '3/26 — Robert Kim (Head of IT Security) submitted a Contact Us form. Already in an ITAM conversation with Seamus — SecOps is the natural expansion. High intent. Seamus aligned on positioning SecOps as the risk reduction layer on top of existing ITSM/ITAM platform. Potential for a bundled conversation.'
+  }
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────────
-let activeTab = 's12';
+let activeTab = 'all';
 let activeAE  = 'all';
 
 // ── STAGE METADATA ────────────────────────────────────────────────────────
@@ -537,51 +602,65 @@ function progressBar(stage) {
 // ── RENDER TABLE ──────────────────────────────────────────────────────────
 function renderTable() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const activeTabEl = document.querySelector('.stab.on');
+  const tab = activeTabEl ? activeTabEl.dataset.tab : 's12';
+  
+  const stageMap = {
+    'all': null, // null means show everything
+    's12': ['Stage 1'],
+    's34': ['Stage 2','Stage 3'],
+    's56': ['Stage 4','Stage 5','Stage 6'],
+    'won': ['Closed Won'],
+    'lost': ['Closed Lost'],
+    'nd': ['No Decision']
+  };
+  const allowedStages = stageMap[tab];
+  
   const rows = OPTIES.filter(o => {
-    if(o.tab !== activeTab) return false;
-    if(activeAE !== 'all' && o.ae !== activeAE) return false;
-    if(q && !o.account.toLowerCase().includes(q) && !o.product.toLowerCase().includes(q) && !o.id.toLowerCase().includes(q)) return false;
+    const stageOk = allowedStages === null || allowedStages.some(s => o.stage.startsWith(s));
+    if(!stageOk) return false;
+    if(activeAE !== 'all' && o.rep !== activeAE) return false;
+    if(q && !o.company.toLowerCase().includes(q) && !o.bu.toLowerCase().includes(q) && !o.opty.toLowerCase().includes(q)) return false;
     return true;
   });
 
   const body = document.getElementById('optyBody');
+  document.getElementById('filterTotal').textContent = rows.length + ' opportunit' + (rows.length===1?'y':'ies');
+
   if(!rows.length) {
-    body.innerHTML = `<tr><td colspan="8"><div class="empty"><div class="empty-icon">💼</div><div class="empty-msg">No opportunities match this filter</div><div class="empty-sub">Try adjusting the AE filter or search.</div></div></td></tr>`;
-    document.getElementById('filterTotal').textContent = '0 opportunities';
+    body.innerHTML = '<tr><td colspan="8"><div class="empty"><div class="empty-icon">💼</div><div class="empty-msg">No opportunities match this filter</div></div></td></tr>';
     return;
   }
 
-  document.getElementById('filterTotal').textContent = rows.length + ' opportunit' + (rows.length === 1 ? 'y' : 'ies');
+  const STAGE_COLORS = {
+    'Stage 1':'#94a3b8','Stage 2':'#2563eb','Stage 3':'#a855f7','Stage 4':'#f59e0b',
+    'Stage 5':'#22c55e','Closed Won':'#16a34a','Closed Lost':'#ef4444'
+  };
 
-  body.innerHTML = rows.map(o => `
-    <tr class="clickable fade-in" onclick="openOptyModal('${o.id}')">
-      <td>
-        <div class="opty-id">${o.id}</div>
-      </td>
-      <td>
-        <div class="opty-name">${o.account}</div>
-        <div class="opty-product">${o.product}</div>
-      </td>
-      <td>
-        ${stagePill(o.stage, o.stageN)}
-        ${o.stageN <= 6 ? '<br><div style="margin-top:5px">' + progressBar(o.stageN) + '</div>' : ''}
-        ${o.lostTo ? `<div style="font-size:10px;color:var(--s400);margin-top:3px">Lost to: ${o.lostTo}</div>` : ''}
-      </td>
-      <td>${aeBubble(o.ae)}</td>
-      <td>
-        <div class="amt">${fmtAmt(o.amt)}</div>
-      </td>
-      <td>${fmtClose(o.close, o.tab)}</td>
-      <td>${bdrTag(o.bdr)}</td>
-      <td><span style="font-size:11px;color:var(--s500)">${o.lastAct}</span></td>
-    </tr>
-  `).join('');
+  body.innerHTML = rows.map(o => {
+    const stCol = STAGE_COLORS[o.stage] || '#64748b';
+    const fmtPipe = o.pipe >= 1000000 ? '$'+(o.pipe/1000000).toFixed(1)+'M' : '$'+Math.round(o.pipe/1000)+'K';
+    const ae = o.rep;
+    const s = AE_STYLES[ae] || {bg:'rgba(100,116,139,.1)',color:'#475569'};
+    const closed = o.stage.startsWith('Closed');
+    const statusCol = o.status==='Closed Won'?'var(--g600)':o.status==='Closed Lost'?'var(--r600)':'var(--b600)';
+    return '<tr class="clickable fade-in">' +
+      '<td><span style="font-size:10px;font-family:monospace;color:var(--b600)">'+o.opty+'</span></td>' +
+      '<td><span style="font-size:13px;font-weight:600;color:var(--s900)">'+o.company+'</span></td>' +
+      '<td style="display:flex;align-items:center;gap:6px;padding:9px 12px"><div class="ae-dot" style="background:'+s.bg+';color:'+s.color+'">'+ae.slice(0,2).toUpperCase()+'</div><span style="font-size:12px;color:var(--s600)">'+ae+'</span></td>' +
+      '<td style="font-size:11px;color:var(--s500)">'+o.date+'</td>' +
+      '<td><span class="spill" style="background:'+stCol+'22;color:'+stCol+';border:1px solid '+stCol+'44">'+o.stage+'</span></td>' +
+      '<td><span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px;background:var(--ink);color:#fff;white-space:nowrap">'+o.bu+'</span></td>' +
+      '<td style="text-align:right;font-family:monospace;font-weight:700;color:'+(o.pipe===0?'var(--r500)':'var(--s800)')+'">'+fmtPipe+'</td>' +
+      '<td style="font-size:11px;font-weight:600;color:'+statusCol+'">'+o.status+'</td>' +
+    '</tr>';
+  }).join('');
 }
 
 // ── RENDER UPDATES FEED ───────────────────────────────────────────────────
 function renderUpdates() {
   const feed = document.getElementById('updatesFeed');
-  feed.innerHTML = UPDATES.slice(0, 4).map((u, i) => `
+  feed.innerHTML = UPDATES.map((u, i) => `
     <div class="opu-card" onclick="openUpdateModal(${i})">
       <div class="opu-chip">${u.optyId}</div>
       <div class="opu-title">${u.account}</div>
@@ -607,7 +686,9 @@ function renderAEBreakdown() {
   const sorted = Object.entries(byAE).sort((a,b) => b[1].total - a[1].total);
   const maxAmt = sorted[0]?.[1].total || 1;
 
-  document.getElementById('aeBreakdown').innerHTML = sorted.map(([ae, {count, total}]) => {
+  const aeBD = document.getElementById('aeBreakdown');
+  if(!aeBD) return;
+  aeBD.innerHTML = sorted.map(([ae, {count, total}]) => {
     const s = AE_STYLES[ae] || {};
     const pct = Math.round((total/maxAmt)*100);
     return `<div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="setAEFilter('${ae}',null)">
@@ -777,6 +858,7 @@ function closeModal() {
 
 // ── INIT ──────────────────────────────────────────────────────────────────
 renderTable();
+buildProductCards();
 renderUpdates();
 renderAEBreakdown();
 </script>
