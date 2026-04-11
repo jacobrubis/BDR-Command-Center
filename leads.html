@@ -175,6 +175,7 @@ tr:hover .qv-btn{opacity:1;}
 .st-booked{background:rgba(22,163,74,.12);color:var(--g600);}
 .st-nurture{background:rgba(180,83,9,.1);color:var(--a600);}
 .st-dead{background:var(--s100);color:var(--s400);}
+.st-future{background:rgba(91,33,182,.08);color:var(--p600);border:1px solid rgba(91,33,182,.15);}
 
 /* AE BUBBLE */
 .ae-dot{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0;}
@@ -223,6 +224,15 @@ tr:hover .qv-btn{opacity:1;}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(3px);}to{opacity:1;transform:translateY(0);}}
 .fade-in{animation:fadeIn .16s ease;}
+
+/* CROSS-PAGE TABS */
+.ptabs{display:flex;align-items:center;border-bottom:1px solid var(--s200);margin:0;padding:0;overflow-x:auto;background:var(--white);}
+.ptabs::-webkit-scrollbar{height:0;}
+.ptab{display:inline-flex;align-items:center;gap:5px;padding:10px 14px;font-size:13px;font-weight:500;color:var(--s500);border-bottom:2px solid transparent;white-space:nowrap;transition:.1s;text-decoration:none;cursor:pointer;}
+.ptab:hover{color:var(--s700);}
+.ptab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.ptab-ct{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
+.ptab.on .ptab-ct{background:var(--ink);color:var(--white);}
 </style>
 </head>
 <body>
@@ -259,25 +269,15 @@ tr:hover .qv-btn{opacity:1;}
 <!-- ── SIDEBAR ── -->
 <aside class="sbar">
   <div class="sbar-sec">
-    <span class="sbar-lbl">My Work</span>
-    <a href="index.html"           class="sbar-item"    title="Command Center"><span class="sbar-ic">⌂</span>Command Center</a>
-    <a href="outreach-center.html" class="sbar-item"    title="Outreach Center"><span class="sbar-ic">📋</span>Outreach Center</a>
-    <a href="buying-groups.html"   class="sbar-item"    title="Buying Groups"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
-    <a href="leads.html"           class="sbar-item on" title="Leads"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
-    <a href="#"                    class="sbar-item"    title="Tasks"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
-  </div>
-  <div class="sdiv"></div>
-  <div class="sbar-sec">
-    <span class="sbar-lbl">Customers</span>
-    <a href="#"                    class="sbar-item"    title="Accounts"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
-    <a href="#"                    class="sbar-item"    title="Contacts"><span class="sbar-ic">👥</span>Contacts</a>
-    <a href="opportunities.html"   class="sbar-item"    title="Opportunities"><span class="sbar-ic">💼</span>Opportunities</a>
-  </div>
-  <div class="sdiv"></div>
-  <div class="sbar-sec">
-    <span class="sbar-lbl">Marketing</span>
-    <a href="#"                    class="sbar-item"    title="Campaigns"><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
-    <a href="#"                    class="sbar-item"    title="Reports"><span class="sbar-ic">📊</span>Reports</a>
+    <a href="index.html"            class="sbar-item"    ><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="campaigns.html"        class="sbar-item"    ><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="buying-groups.html"    class="sbar-item"    ><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"            class="sbar-item on" ><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#"                     class="sbar-item"    ><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+    <a href="accounts.html"         class="sbar-item"    ><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="opportunities.html"    class="sbar-item"    ><span class="sbar-ic">💼</span>Opportunities</a>
+    <a href="book-of-business.html" class="sbar-item"    ><span class="sbar-ic">📖</span>Book of Business</a>
+    <a href="ae-alignment.html"     class="sbar-item"    ><span class="sbar-ic">🤝</span>AE Alignment</a>
   </div>
   <div class="sbar-footer">ServiceNow Confidential</div>
 </aside>
@@ -329,15 +329,26 @@ tr:hover .qv-btn{opacity:1;}
       </div>
     </div>
 
+    <div class="ptabs" style="border-top:1px solid var(--s200);margin:4px -24px 0;padding:0 24px;">
+      <a href="index.html"            class="ptab">Today</a>
+      <a href="campaigns.html"        class="ptab">Campaigns <span class="ptab-ct">5</span></a>
+      <a href="buying-groups.html"    class="ptab">Buying Groups <span class="ptab-ct">12</span></a>
+      <a href="leads.html"            class="ptab on">Leads <span class="ptab-ct">39</span></a>
+      <a href="accounts.html"         class="ptab">Accounts <span class="ptab-ct">340</span></a>
+      <a href="opportunities.html"    class="ptab">Opportunities <span class="ptab-ct">5</span></a>
+      <a href="book-of-business.html" class="ptab">Book of Business</a>
+      <a href="ae-alignment.html"     class="ptab">AE Alignment</a>
+    </div>
     <!-- TABS -->
     <div class="stage-tabs">
       <button class="stab crit on" data-tab="critical" onclick="switchTab('critical',this)">🔴 SLA Critical <span class="cnt">7</span></button>
       <button class="stab"         data-tab="open"     onclick="switchTab('open',this)">All Open <span class="cnt">39</span></button>
       <button class="stab responded" data-tab="responded" onclick="switchTab('responded',this)">Responded <span class="cnt">8</span></button>
       <button class="stab booked"  data-tab="booked"   onclick="switchTab('booked',this)">Meeting Booked <span class="cnt">5</span></button>
-      <button class="stab"         data-tab="nurture"  onclick="switchTab('nurture',this)">Nurture <span class="cnt">11</span></button>
-      <button class="stab"         data-tab="dead"     onclick="switchTab('dead',this)">Dead / Unqualified <span class="cnt">9</span></button>
+      <button class="stab"         data-tab="future"   onclick="switchTab('future',this)">Re-engage Later <span class="cnt">9</span></button>
     </div>
+  
+
   </div>
 
   <div class="page-body">
@@ -550,26 +561,41 @@ const LEADS = [
    meetingDate:'Apr 21, 2026 · 1pm', notes:'Attended ITAM webinar. Head of IT at Stepan — existing customer site visit happening Apr 7. Tomas confirmed for group meeting.'},
 
   // ── NURTURE ──
-  {id:'LD-47801', name:'Alan Fitch',        title:'IT Manager',          company:'Badger Meter, Inc.',        source:'Content',      campaign:'ITSM ROI Guide',      product:'ITSM Pro',                slaHours:null, score:44, ae:'Tony',    status:'nurture', tab:'nurture', received:'Mar 15',
+  {id:'LD-47801', name:'Alan Fitch',        title:'IT Manager',          company:'Badger Meter, Inc.',        source:'Content',      campaign:'ITSM ROI Guide',      product:'ITSM Pro',                slaHours:null, score:44, ae:'Tony',    status:'future', tab:'future', received:'Mar 15', followUpDate:'Jun 1, 2026', followUpNote:'Said the ITSM upgrade conversation needs to wait until their fiscal year closes in May. Reach back June 1.',
    email:'afitch@badgermeter.com', phone:'+1 414-355-0400', state:'WI - Wisconsin', territory:'COMMIDW-TER-1', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'ITSM', parentAccount:'Badger Meter',
    notes:'Downloaded ROI guide. Low engagement since. IT Manager — not the budget holder. Nurturing with educational content.'},
-  {id:'LD-47812', name:'Diana Cruz',        title:'HR Business Partner', company:'Faith Technologies Inc.',   source:'Webinar',      campaign:'EW Webinar',          product:'Employee Workflows',      slaHours:null, score:48, ae:'Tony',    status:'nurture', tab:'nurture', received:'Mar 12',
+  {id:'LD-47812', name:'Diana Cruz',        title:'HR Business Partner', company:'Faith Technologies Inc.',   source:'Webinar',      campaign:'EW Webinar',          product:'Employee Workflows',      slaHours:null, score:48, ae:'Tony',    status:'future', tab:'future', received:'Mar 12', followUpDate:'Jul 15, 2026', followUpNote:'Not the budget owner — told me to reach back when they have a new HR Director in seat, hiring in Q3.',
    email:'diana.cruz@faithtechnologies.com', phone:'+1 920-738-5500', state:'WI - Wisconsin', territory:'COMMIDW-TER-1', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'Employee Workflows', parentAccount:'Faith Technologies',
    notes:'Attended webinar but low intent signals. HR Business Partner — influencer role. Enrolled in nurture track.'},
-  {id:'LD-47823', name:'Mark Osei',         title:'Dir. HR Operations',  company:'BlueCross BlueShield Assoc.',source:'Content',     campaign:'EW Buyers Guide',     product:'Employee Workflows',      slaHours:null, score:51, ae:'Brian',   status:'nurture', tab:'nurture', received:'Mar 10',
+  {id:'LD-47823', name:'Mark Osei',         title:'Dir. HR Operations',  company:'BlueCross BlueShield Assoc.',source:'Content',     campaign:'EW Buyers Guide',     product:'Employee Workflows',      slaHours:null, score:51, ae:'Brian',   status:'future', tab:'future', received:'Mar 10', followUpDate:'Jun 30, 2026', followUpNote:'Emailed back: budget conversations have not started. Said end of Q2 is when they plan for H2 spend.',
    email:'mark.osei@bcbsa.com', phone:'+1 312-297-6000', state:'IL - Illinois', territory:'COMMIDW-TER-2', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'Employee Workflows', parentAccount:'BlueCross BlueShield',
    notes:'Downloaded EW buyers guide. HR Operations Director — budget conversations have not started. Long runway deal. Part of EW campaign.'},
 
-  // ── DEAD ──
-  {id:'LD-47601', name:'Paul Strickland',   title:'IT Analyst',          company:'Parts Town LLC',            source:'Webinar',      campaign:'ITSM Webinar',        product:'ITSM Pro',                slaHours:null, score:22, ae:'Riley',   status:'dead', tab:'dead', received:'Feb 20',
+  // ── RE-ENGAGE LATER ──
+  // (moved inline) - placeholder
+  // ── DEAD (archived) ──
+  {id:'LD-47601', name:'Paul Strickland',   title:'IT Analyst',          company:'Parts Town LLC',            source:'Webinar',      campaign:'ITSM Webinar',        product:'ITSM Pro',                slaHours:null, score:22, ae:'Riley',   status:'future', tab:'future', received:'Feb 20', followUpDate:'Jul 15, 2026', followUpNote:'Asked to reconnect after internal platform review completes in Q3',
    email:'p.strickland@partstown.com', phone:'+1 630-300-4000', state:'IL - Illinois', territory:'COMMIDW-TER-3', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'ITSM', parentAccount:'Parts Town',
-   deadReason:'Do Not Contact — account flagged'},
-  {id:'LD-47612', name:'Tom Bauer',         title:'IT Director',         company:'Addison Group',             source:'Field Event',        campaign:'MidwestTech',         product:'ITSM Pro',                slaHours:null, score:31, ae:'Brian',   status:'dead', tab:'dead', received:'Feb 15',
+   followUpDate:'Jul 15, 2026', followUpNote:'Do Not Contact during active eval. Reconnect Q3 after platform review.'},
+  {id:'LD-47612', name:'Tom Bauer',         title:'IT Director',         company:'Addison Group',             source:'Field Event',        campaign:'MidwestTech',         product:'ITSM Pro',                slaHours:null, score:31, ae:'Brian',   status:'future', tab:'future', received:'Feb 15', followUpDate:'Jun 30, 2026', followUpNote:'No CIO in org currently. Hiring search underway. Reach back out once leadership is in place.',
    email:'tom.bauer@addisongroup.com', phone:'+1 312-469-1700', state:'IL - Illinois', territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Visited Booth', mostRecentBU:'ITSM', parentAccount:'Addison Group',
-   deadReason:'No CIO in org for 12 months — unqualified'},
-  {id:'LD-47623', name:'Chris Watts',       title:'VP IT',               company:'Breakthru Beverage Group',  source:'Contact Us',      campaign:'Organic Search',      product:'Employee Workflows',      slaHours:null, score:28, ae:'Brian',   status:'dead', tab:'dead', received:'Feb 10',
+   followUpDate:'Jun 30, 2026', followUpNote:'No CIO in org currently. Reach back when hiring search resolves end of Q2.'},
+  {id:'LD-47623', name:'Chris Watts',       title:'VP IT',               company:'Breakthru Beverage Group',  source:'Contact Us',      campaign:'Organic Search',      product:'Employee Workflows',      slaHours:null, score:28, ae:'Brian',   status:'future', tab:'future', received:'Feb 10', followUpDate:'Jul 1, 2026', followUpNote:'AE Stage 6 active — do not touch until deal closes. Reconnect at start of Q3 for expansion.',
    email:'chris.watts@breakthrubev.com', phone:'+1 630-300-8000', state:'IL - Illinois', territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Downloaded', mostRecentBU:'Employee Workflows', parentAccount:'Breakthru Beverage',
-   deadReason:'DNC — Stage 6 opportunity active, AE managing'},
+   followUpDate:'Jul 1, 2026', followUpNote:'Stage 6 opty active — AE managing. Reconnect for expansion motion once deal closes Q3.'},
+  // ── RE-ENGAGE LATER ──
+  {id:'LD-47634', name:'Mark Petersen',     title:'VP of IT',            company:'Stepan Co.',                source:'Webinar',      campaign:'ITAM Webinar',        product:'ITAM + HAM',              slaHours:null, score:62, ae:'Seamus', status:'future', tab:'future', received:'Mar 1',
+   email:'mark.petersen@stepan.com', phone:'+1 847-446-7500', state:'IL - Illinois', territory:'COMMIDW-TER-6', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'ITSM', parentAccount:'Stepan Co.',
+   followUpDate:'Jul 1, 2026', followUpNote:'Budget cycle starts Q3. Said to reach back out after July 4th — confirmed by phone on Mar 1.',
+   notes:'Attended ITAM webinar. Strong interest but budget locked through H1. Explicitly asked for Q3 reconnect.'},
+  {id:'LD-47645', name:'Lauren Kim',        title:'Director of Finance',  company:'Crash Champions',           source:'Webinar',      campaign:'FSC Webinar',         product:'Finance & Supply Chain',  slaHours:null, score:58, ae:'Brian',  status:'future', tab:'future', received:'Feb 28',
+   email:'lauren.kim@crashchampions.com', phone:'+1 844-272-7480', state:'IL - Illinois', territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Attended', mostRecentBU:'ITSM', parentAccount:'Crash Champions',
+   followUpDate:'Jun 30, 2026', followUpNote:'Emailed back: not for Q1 or Q2. Reach back out end of Q2 when FY27 planning starts.',
+   notes:'Attended FSC webinar. Finance Director expressed interest in procurement automation. Replied to follow-up: wrong quarter.'},
+  {id:'LD-47656', name:'Andrew Walsh',      title:'CIO',                  company:'Addison Group',             source:'Field Event',       campaign:'MidwestTech',         product:'Platform',                slaHours:null, score:70, ae:'Brian',  status:'future', tab:'future', received:'Feb 25',
+   email:'andrew.walsh@addisongroup.com', phone:'+1 312-469-1700', state:'IL - Illinois', territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Visited Booth', mostRecentBU:'ITSM', parentAccount:'Addison Group',
+   followUpDate:'Aug 1, 2026', followUpNote:'Newly hired CIO — said he needs 90 days to assess the current environment before any vendor conversations. Circle back August.',
+   notes:'Met at MidwestTech. Newly hired CIO. Proactively gave his direct line. Said reach back in 90 days once he has full picture of the tech stack.'},
 ];
 
 // ── STATE ──────────────────────────────────────────────────────────────────
@@ -584,7 +610,7 @@ function srcClass(src) {
 }
 
 function statusPill(st) {
-  const m = {critical:'st-critical Critical',open:'st-open Open',responded:'st-responded Responded',booked:'st-booked Booked',nurture:'st-nurture Nurture',dead:'st-dead Dead'};
+  const m = {critical:'st-critical Critical',open:'st-open Open',responded:'st-responded Responded',booked:'st-booked Booked',nurture:'st-nurture Nurture',future:'st-future Re-engage'};
   const [cls, lbl] = (m[st]||'st-open Open').split(' ');
   return `<span class="status-pill ${cls}">${lbl}</span>`;
 }
@@ -643,7 +669,7 @@ function renderTable() {
       <td>
         <div style="font-size:12px;font-weight:500;color:var(--s800)">${l.product}</div>
       </td>
-      <td>${slaDisplay(l.slaHours)}</td>
+      <td>${l.tab==='future' ? `<div style='font-size:11px;font-weight:600;color:var(--p600)'>${l.followUpDate||'TBD'}</div>${l.followUpNote?`<div style='font-size:10px;color:var(--s500);margin-top:3px;max-width:180px;line-height:1.4'>${l.followUpNote.length>80?l.followUpNote.slice(0,80)+'…':l.followUpNote}</div>`:''} ` : slaDisplay(l.slaHours)}</td>
       <td>${aeBubble(l.ae)}</td>
       <td>${statusPill(l.status)}</td>
       <td><span style="font-size:11px;color:var(--s500)">${l.received}</span></td>
@@ -845,10 +871,16 @@ function openLeadModal(id) {
             </div>
           </div>` : ''}
 
-          ${l.deadReason ? `
+          ${l.followUpDate ? `
           <div class="modal-section">
-            <div class="modal-section-hd">Reason Closed</div>
-            <div style="padding:10px 13px;background:var(--s50);border:1px solid var(--s200);border-radius:8px;font-size:12px;color:var(--s600)">${l.deadReason}</div>
+            <div class="modal-section-hd">Re-engage Date</div>
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(91,33,182,.05);border:1px solid rgba(91,33,182,.15);border-radius:8px">
+              <span style="font-size:18px">📅</span>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--p600)">${l.followUpDate}</div>
+                <div style="font-size:12px;color:var(--s600);margin-top:3px">${l.followUpNote||''}</div>
+              </div>
+            </div>
           </div>` : ''}
 
           <div class="modal-section">
