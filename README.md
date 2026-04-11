@@ -101,14 +101,6 @@ It's also a live demonstration of what an AI-native sales workflow looks like in
 
 ## Usage
 
-Clone the repo and open any HTML file directly in a browser. No server required.
-
-```bash
-git clone https://github.com/jacobrubis/BDR-Command-Center.git
-cd BDR-Command-Center
-open index.html
-```
-
 Or visit the live site at [jacobrubis.github.io/BDR-Command-Center](https://jacobrubis.github.io/BDR-Command-Center).
 
 ---
