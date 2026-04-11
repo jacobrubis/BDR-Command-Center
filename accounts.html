@@ -128,6 +128,23 @@ tbody tr:hover td{background:var(--s50);}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(2px);}to{opacity:1;transform:translateY(0);}}
 .fade-in{animation:fadeIn .12s ease;}
+
+/* CROSS-PAGE TABS */
+.ptabs{display:flex;align-items:center;border-bottom:1px solid var(--s200);margin:0;padding:0;overflow-x:auto;background:var(--white);}
+.ptabs::-webkit-scrollbar{height:0;}
+.ptab{display:inline-flex;align-items:center;gap:5px;padding:10px 14px;font-size:13px;font-weight:500;color:var(--s500);border-bottom:2px solid transparent;white-space:nowrap;transition:.1s;text-decoration:none;cursor:pointer;}
+.ptab:hover{color:var(--s700);}
+.ptab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.ptab-ct{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
+.ptab.on .ptab-ct{background:var(--ink);color:var(--white);}
+
+.nav-tabs{display:flex;align-items:center;border-top:1px solid var(--s200);overflow-x:auto;margin:6px -22px 0;padding:0 22px;background:var(--white);}
+.nav-tabs::-webkit-scrollbar{height:0;}
+.ntab{display:inline-flex;align-items:center;gap:5px;padding:9px 14px;font-size:13px;font-weight:500;color:var(--s500);border-bottom:2px solid transparent;white-space:nowrap;transition:.1s;text-decoration:none;}
+.ntab:hover{color:var(--s700);}
+.ntab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.ntab-ct{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
+.ntab.on .ntab-ct{background:var(--ink);color:var(--white);}
 </style>
 </head>
 <body>
@@ -150,26 +167,15 @@ tbody tr:hover td{background:var(--s50);}
 
 <aside class="sbar">
   <div class="sbar-sec">
-    <span class="sbar-lbl">My Work</span>
-    <a href="index.html" class="sbar-item"><span class="sbar-ic">⌂</span>Command Center</a>
-    <a href="outreach-center.html" class="sbar-item"><span class="sbar-ic">📋</span>Outreach Center</a>
-    <a href="buying-groups.html" class="sbar-item"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
-    <a href="leads.html" class="sbar-item"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
-    <a href="#" class="sbar-item"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
-  </div>
-  <div class="sdiv"></div>
-  <div class="sbar-sec">
-    <span class="sbar-lbl">Customers</span>
-    <a href="accounts.html" class="sbar-item on"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
-    <a href="#" class="sbar-item"><span class="sbar-ic">👥</span>Contacts</a>
-    <a href="opportunities.html" class="sbar-item"><span class="sbar-ic">💼</span>Opportunities</a>
-  </div>
-  <div class="sdiv"></div>
-  <div class="sbar-sec">
-    <span class="sbar-lbl">Reports</span>
-    <a href="book-of-business.html" class="sbar-item"><span class="sbar-ic">📖</span>Book of Business</a>
-    <a href="ae-alignment.html" class="sbar-item"><span class="sbar-ic">🤝</span>AE Alignment</a>
-    <a href="#" class="sbar-item"><span class="sbar-ic">📊</span>Reports</a>
+    <a href="index.html"            class="sbar-item"    ><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="campaigns.html"        class="sbar-item"    ><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="buying-groups.html"    class="sbar-item"    ><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"            class="sbar-item"    ><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="#"                     class="sbar-item"    ><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+    <a href="accounts.html"         class="sbar-item on" ><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="opportunities.html"    class="sbar-item"    ><span class="sbar-ic">💼</span>Opportunities</a>
+    <a href="book-of-business.html" class="sbar-item"    ><span class="sbar-ic">📖</span>Book of Business</a>
+    <a href="ae-alignment.html"     class="sbar-item"    ><span class="sbar-ic">🤝</span>AE Alignment</a>
   </div>
   <div class="sbar-footer">ServiceNow Confidential</div>
 </aside>
@@ -190,14 +196,25 @@ tbody tr:hover td{background:var(--s50);}
 
     <div class="kpi-row" id="kpiRow"></div>
 
-    <div class="page-tabs">
+    <div class="ptabs">
+      <a href="index.html" class="ptab">Today</a>
+      <a href="campaigns.html" class="ptab">Campaigns <span class="ptab-ct">5</span></a>
+      <a href="buying-groups.html" class="ptab">Buying Groups <span class="ptab-ct">12</span></a>
+      <a href="leads.html" class="ptab">Leads <span class="ptab-ct">39</span></a>
+      <a href="accounts.html" class="ptab on">Accounts <span class="ptab-ct">340</span></a>
+      <a href="opportunities.html" class="ptab">Opportunities <span class="ptab-ct">5</span></a>
+      <a href="book-of-business.html" class="ptab">Book of Business</a>
+      <a href="ae-alignment.html" class="ptab">AE Alignment</a>
+    </div>
+
+        <div class="page-tabs">
       <button class="ptab on" onclick="switchTab('all',this)">All <span class="ct" id="ct-all">—</span></button>
       <button class="ptab" onclick="switchTab('customer',this)">Customers <span class="ct" id="ct-customer">—</span></button>
       <button class="ptab" onclick="switchTab('newlogo',this)">New Logos <span class="ct" id="ct-newlogo">—</span></button>
       <button class="ptab" onclick="switchTab('bigbet',this)">⭐ Big Bets <span class="ct" id="ct-bigbet">—</span></button>
       <button class="ptab" onclick="switchTab('dnc',this)">🚫 Do Not Contact <span class="ct" id="ct-dnc">—</span></button>
     </div>
-  </div>
+    
 
   <div class="page-body">
     <!-- FILTERS -->
