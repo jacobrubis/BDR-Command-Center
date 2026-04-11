@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Territory Leads — BDR Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+:root{
+  --ink:#032D42;--ink-nav:#01161f;--ink-mid:#043d5a;
+  --wasabi:#63DF4E;--wdk:#4ab83a;
+  --white:#fff;--bg:#f1f5f9;
+  --s50:#f8fafc;--s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;
+  --s400:#94a3b8;--s500:#64748b;--s600:#475569;--s700:#334155;
+  --s800:#1e293b;--s900:#0f172a;
+  --b50:#eff6ff;--b600:#2563eb;
+  --g50:#f0fdf4;--g500:#22c55e;--g600:#16a34a;
+  --a50:#fffbeb;--a500:#f59e0b;--a600:#d97706;
+  --r50:#fff1f2;--r500:#ef4444;--r600:#dc2626;
+  --p50:#faf5ff;--p500:#a855f7;
+  --sh-xs:0 1px 2px rgba(0,0,0,.05);
+  --sh-sm:0 1px 3px rgba(0,0,0,.10);
+}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--s800);font-size:13px;line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--s300);border-radius:2px;}
+
+/* NAV */
+.gnav{height:44px;background:var(--ink-nav);display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:300;border-bottom:1px solid rgba(255,255,255,.06);}
+.gnav-logo{display:flex;align-items:center;padding:0 14px;height:44px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.gnav-tabs{display:flex;align-items:center;}
+.gnav-tab{display:flex;align-items:center;height:44px;padding:0 13px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;white-space:nowrap;}
+.gnav-pill-wrap{flex:1;display:flex;justify-content:center;}
+.gnav-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);}
+.gnav-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--wasabi);}
+.gnav-r{display:flex;align-items:center;gap:2px;padding:0 10px;}
+.gnav-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:rgba(255,255,255,.45);font-size:13px;border:none;background:transparent;cursor:pointer;}
+.gnav-btn:hover{background:rgba(255,255,255,.07);}
+.gnav-av{width:28px;height:28px;background:var(--wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ink);cursor:pointer;margin-left:4px;}
+
+/* SIDEBAR */
+.sbar{position:fixed;top:44px;left:0;bottom:0;width:44px;background:#0d1f2b;border-right:1px solid rgba(255,255,255,.05);z-index:200;display:flex;flex-direction:column;overflow:hidden;transition:width .22s cubic-bezier(.4,0,.2,1);}
+.sbar:hover{width:180px;box-shadow:4px 0 20px rgba(0,0,0,.25);}
+.sbar-sec{padding:10px 0 4px;}
+.sbar-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:background .12s,color .12s;text-decoration:none;white-space:nowrap;}
+.sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.sbar-item.on{color:var(--wasabi);border-left-color:var(--wasabi);background:rgba(99,223,78,.06);font-weight:500;}
+.sbar-ic{width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;}
+.sbar-item.on .sbar-ic::after{content:"";display:block;width:4px;height:4px;border-radius:50%;background:var(--wasabi);margin:1px auto 0;}
+.sbar:hover .sbar-item.on .sbar-ic::after{display:none;}
+.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);opacity:0;transition:opacity .1s;flex-shrink:0;}
+.sbar:hover .sb{opacity:1;}
+.sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
+.sbar-footer{padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);margin-top:auto;white-space:nowrap;opacity:0;transition:opacity .15s;}
+.sbar:hover .sbar-footer{opacity:1;}
+
+/* LAYOUT */
+.main{margin-top:44px;margin-left:44px;display:flex;flex-direction:column;height:calc(100vh - 44px);}
+.page-hdr{background:var(--white);border-bottom:1px solid var(--s200);padding:16px 20px 0;position:sticky;top:44px;z-index:100;flex-shrink:0;}
+.page-body{flex:1;display:grid;grid-template-columns:280px 1fr;min-height:0;overflow:hidden;transition:grid-template-columns .22s cubic-bezier(.4,0,.2,1);}
+.page-body.panel-collapsed{grid-template-columns:40px 1fr;}
+
+/* FILTER PANEL */
+.filter-panel{background:var(--white);border-right:1px solid var(--s200);overflow-y:auto;display:flex;flex-direction:column;transition:width .22s cubic-bezier(.4,0,.2,1);min-width:0;}
+.filter-panel.collapsed{width:40px!important;overflow:hidden;}
+.filter-panel.collapsed .fp-expanded-only, .filter-panel.collapsed .fp-section{display:none!important;}
+.fp-collapse-btn{width:26px;height:26px;border-radius:50%;background:var(--s100);border:1px solid var(--s200);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:.15s;}
+.fp-collapse-btn:hover{background:var(--s200);}
+.fp-collapsed-icon{display:none;align-items:center;justify-content:center;padding:14px 0 10px;cursor:pointer;width:100%;}
+.filter-panel.collapsed .fp-collapsed-icon{display:flex;}
+.fp-hdr{padding:12px 16px;border-bottom:1px solid var(--s200);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.fp-title{font-size:12px;font-weight:700;color:var(--s700);}
+.fp-clear{font-size:11px;color:var(--b600);cursor:pointer;background:none;border:none;}
+.fp-section{border-bottom:1px solid var(--s100);}
+.fp-section-hd{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;cursor:pointer;user-select:none;}
+.fp-section-hd:hover{background:var(--s50);}
+.fp-section-label{font-size:12px;font-weight:600;color:var(--s700);}
+.fp-section-body{padding:4px 14px 12px;display:none;}
+.fp-section.open .fp-section-body{display:block;}
+.fp-section-toggle{font-size:12px;color:var(--s400);transition:.15s;}
+.fp-section.open .fp-section-toggle{transform:rotate(45deg);}
+/* Filter items */
+.fp-search{width:100%;padding:7px 10px;border:1px solid var(--s200);border-radius:7px;font-size:12px;font-family:inherit;margin-bottom:8px;color:var(--s800);}
+.fp-search:focus{outline:none;border-color:var(--s400);}
+.fp-check-item{display:flex;align-items:center;gap:8px;padding:5px 2px;cursor:pointer;font-size:12px;color:var(--s700);}
+.fp-check-item input{accent-color:var(--ink);cursor:pointer;}
+.fp-check-item:hover{color:var(--s900);}
+/* Tree */
+.tree-item{display:flex;align-items:center;gap:6px;padding:5px 2px;cursor:pointer;font-size:12px;color:var(--s700);}
+.tree-item input{accent-color:var(--ink);cursor:pointer;}
+.tree-toggle{font-size:10px;color:var(--s400);width:12px;cursor:pointer;}
+.tree-children{margin-left:18px;display:none;}
+.tree-item.expanded + .tree-children{display:block;}
+/* Chips */
+.filter-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.fchip{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 8px;border-radius:12px;background:var(--b50);color:var(--b600);border:1px solid rgba(37,99,235,.2);cursor:pointer;}
+.fchip.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+.fchip:hover{opacity:.8;}
+
+/* MAIN TABLE AREA */
+.table-area{display:flex;flex-direction:column;overflow:hidden;}
+.toolbar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--white);border-bottom:1px solid var(--s200);flex-shrink:0;}
+.toolbar-left{display:flex;align-items:center;gap:8px;flex:1;}
+.toolbar-search{position:relative;flex:1;max-width:320px;}
+.toolbar-search input{width:100%;padding:7px 10px 7px 30px;border:1px solid var(--s200);border-radius:7px;font-size:12px;font-family:inherit;color:var(--s800);}
+.toolbar-search input:focus{outline:none;border-color:var(--s400);}
+.toolbar-search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--s400);}
+.result-count{font-size:12px;color:var(--s400);}
+.btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;transition:.12s;white-space:nowrap;}
+.btn-g{background:transparent;color:var(--s600);border-color:var(--s200);}
+.btn-g:hover{background:var(--s50);}
+.btn-p{background:var(--ink);color:#fff;border-color:var(--ink);}
+.btn-p:hover{background:var(--ink-mid);}
+.btn-w{background:rgba(99,223,78,.15);color:#166534;border-color:rgba(99,223,78,.3);font-weight:600;}
+.btn-w:hover{background:rgba(99,223,78,.25);}
+.btn-sm{font-size:11px;padding:5px 11px;}
+.btn-tag{background:var(--ink);color:#fff;border-color:var(--ink);display:none;}
+.btn-tag.visible{display:inline-flex;}
+
+/* TABLE */
+.tbl-wrap{flex:1;overflow-y:auto;overflow-x:auto;}
+.tbl{width:100%;border-collapse:collapse;min-width:960px;}
+.tbl th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);padding:9px 12px;text-align:left;border-bottom:1px solid var(--s200);background:var(--s50);white-space:nowrap;position:sticky;top:0;z-index:2;}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--s100);vertical-align:middle;font-size:12px;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--s50);}
+.tbl tr.selected td{background:rgba(3,45,66,.04);}
+.lead-name{font-weight:600;color:var(--s900);}
+.lead-title{font-size:11px;color:var(--s500);margin-top:1px;}
+/* AE bubble */
+.ae-dot{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0;}
+/* Status */
+.status-pill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;white-space:nowrap;}
+.sp-sla{background:rgba(220,38,38,.1);color:var(--r600);}
+.sp-open{background:rgba(3,45,66,.07);color:var(--ink);}
+.sp-resp{background:rgba(22,163,74,.1);color:var(--g600);}
+.sp-booked{background:rgba(22,163,74,.15);color:var(--g600);border:1px solid rgba(22,163,74,.25);}
+.sp-reengage{background:rgba(168,85,247,.08);color:var(--p500);}
+/* Campaign lock */
+.lock-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;background:rgba(239,68,68,.08);color:var(--r600);border:1px solid rgba(239,68,68,.2);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+/* Contact tag chip */
+.ctag-chip{display:inline-flex;align-items:center;font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px;background:rgba(3,45,66,.07);color:var(--ink);margin:1px;}
+/* Level badge */
+.level-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:8px;}
+.lv-c{background:rgba(220,38,38,.08);color:var(--r600);}
+.lv-vp{background:rgba(37,99,235,.08);color:var(--b600);}
+.lv-dir{background:rgba(100,116,139,.1);color:var(--s600);}
+.lv-mgr{background:rgba(245,158,11,.08);color:var(--a600);}
+.lv-ic{background:var(--s100);color:var(--s500);}
+
+/* ACTIVE FILTERS BAR */
+.active-filters{display:flex;align-items:center;gap:6px;padding:6px 16px;background:var(--white);border-bottom:1px solid var(--s200);flex-wrap:wrap;flex-shrink:0;min-height:38px;}
+.af-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 10px;border-radius:12px;background:rgba(3,45,66,.08);color:var(--ink);border:1px solid rgba(3,45,66,.15);}
+.af-pill button{background:none;border:none;cursor:pointer;color:var(--ink);font-size:12px;padding:0;line-height:1;margin-left:2px;}
+.af-none{font-size:11px;color:var(--s400);}
+
+/* PTABS */
+.ptabs{display:flex;align-items:center;border-bottom:1px solid var(--s200);overflow-x:auto;margin-top:8px;}
+.ptabs::-webkit-scrollbar{height:0;}
+.ptab{display:inline-flex;align-items:center;gap:5px;padding:9px 14px;font-size:13px;font-weight:500;color:var(--s500);border-bottom:2px solid transparent;white-space:nowrap;transition:.1s;text-decoration:none;cursor:pointer;}
+.ptab:hover{color:var(--s700);}
+.ptab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.ptab-ct{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
+.ptab.on .ptab-ct{background:var(--ink);color:#fff;}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(3px);}
+.modal{background:var(--white);border-radius:12px;width:min(560px,96vw);max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+.modal-hd{padding:16px 20px;border-bottom:1px solid var(--s200);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:2;}
+.modal-title{font-size:15px;font-weight:700;color:var(--s900);}
+.modal-close{width:28px;height:28px;border-radius:50%;background:var(--s100);border:none;color:var(--s500);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.modal-body{padding:20px;display:flex;flex-direction:column;gap:14px;}
+.form-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s500);margin-bottom:5px;display:block;}
+.camp-type-card{border:2px solid var(--s200);border-radius:10px;padding:14px 16px;cursor:pointer;transition:.12s;display:flex;align-items:flex-start;gap:12px;}
+.camp-type-card:hover{border-color:var(--s300);background:var(--s50);}
+.camp-type-card.on{border-color:var(--ink);background:rgba(3,45,66,.04);}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn .14s ease;}
+
+.tbl-view-tab{padding:10px 16px;font-size:13px;font-weight:500;color:var(--s500);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;white-space:nowrap;}
+.tbl-view-tab:hover{color:var(--s700);}
+.tbl-view-tab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.sel-action-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:.1s;}
+.sel-action-btn:hover{background:rgba(255,255,255,.22);}
+
+.tag-select-row:hover{background:var(--s50);border-color:var(--s300)!important;}
+.form-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s500);margin-bottom:5px;display:block;}
+</style>
+</head>
+<body>
+
+<nav class="gnav">
+  <div class="gnav-logo">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="5" fill="#63DF4E"/>
+      <rect x="7" y="7" width="18" height="18" rx="3" fill="#032D42"/>
+      <rect x="11" y="11" width="10" height="10" rx="1.5" fill="#63DF4E"/>
+    </svg>
+  </div>
+  <div class="gnav-tabs">
+    <span class="gnav-tab">Favorites</span>
+    <span class="gnav-tab">History</span>
+    <span class="gnav-tab">Workspaces</span>
+  </div>
+  <div class="gnav-pill-wrap">
+    <div class="gnav-pill"><div class="gnav-pill-dot"></div><span>GBA Commercial Illinois &amp; Midwest · Q2 FY26</span></div>
+  </div>
+  <div class="gnav-r">
+    <button class="gnav-btn">🔍</button><button class="gnav-btn">🔔</button><button class="gnav-btn">⚙️</button>
+    <div class="gnav-av">JR</div>
+  </div>
+</nav>
+
+<aside class="sbar">
+  <div class="sbar-sec">
+    <a href="index.html"              class="sbar-item"><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="campaigns.html"          class="sbar-item"><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="buying-groups.html"      class="sbar-item"><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"              class="sbar-item"><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="territory-leads.html"    class="sbar-item on"><span class="sbar-ic">🗺</span>Territory Leads<span class="sb">200</span></a>
+    <a href="#"                       class="sbar-item"><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+    <a href="accounts.html"           class="sbar-item"><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="opportunities.html"      class="sbar-item"><span class="sbar-ic">💼</span>Opportunities</a>
+    <a href="book-of-business.html"   class="sbar-item"><span class="sbar-ic">📖</span>Book of Business</a>
+    <a href="ae-alignment.html"       class="sbar-item"><span class="sbar-ic">🤝</span>AE Alignment</a>
+  </div>
+  <div class="sbar-footer">ServiceNow Confidential</div>
+</aside>
+
+<div class="main">
+  <div class="page-hdr">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
+      <div>
+        <div style="font-size:11px;color:var(--s400);margin-bottom:2px">Friday, April 10, 2026</div>
+        <div style="font-size:22px;font-weight:700;color:var(--s900);letter-spacing:-.02em">Territory Leads</div>
+        <div style="font-size:12px;color:var(--s500)">GBA Commercial Illinois &amp; Midwest · 340 accounts · 200 leads imported</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;padding-top:4px">
+
+<div id="tagBtns" style="display:none"></div><span id="tagCount" style="display:none"></span>
+      </div>
+    </div>
+    <div class="ptabs">
+      <a href="index.html"            class="ptab">Today</a>
+      <a href="campaigns.html"        class="ptab">Campaigns <span class="ptab-ct">5</span></a>
+      <a href="buying-groups.html"    class="ptab">Buying Groups <span class="ptab-ct">12</span></a>
+      <a href="leads.html"            class="ptab">Leads <span class="ptab-ct">39</span></a>
+      <a href="accounts.html"         class="ptab">Accounts <span class="ptab-ct">340</span></a>
+      <a href="territory-leads.html"  class="ptab on">Territory Leads <span class="ptab-ct">200</span></a>
+      <a href="opportunities.html"    class="ptab">Opportunities</a>
+      <a href="book-of-business.html" class="ptab">Book of Business</a>
+      <a href="ae-alignment.html"     class="ptab">AE Alignment</a>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <!-- LEFT: FILTER PANEL -->
+    <div class="filter-panel">
+      <!-- EXPANDED HEADER -->
+      <div class="fp-hdr fp-expanded-only">
+        <span class="fp-title">Filters</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="fp-clear" onclick="clearAllFilters()">Clear all</button>
+          <button class="fp-collapse-btn" onclick="toggleFilterPanel()" id="fp-collapse-btn" title="Collapse">‹</button>
+        </div>
+      </div>
+      <!-- COLLAPSED ICON (only shown when collapsed) -->
+      <div class="fp-collapsed-icon" onclick="toggleFilterPanel()" title="Expand filters">
+        <div style="position:relative">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#032D42" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="12" y1="18" x2="20" y2="18"/></svg>
+          <div id="fp-active-dot" style="display:none;position:absolute;top:-4px;right:-4px;width:8px;height:8px;border-radius:50%;background:#2563eb;border:2px solid #fff"></div>
+        </div>
+      </div>
+
+      <!-- CONTACTS -->
+      <div class="fp-section open" id="sec-contacts">
+        <div class="fp-section-hd" onclick="toggleSection('sec-contacts')">
+          <span class="fp-section-label">Contacts</span>
+          <span class="fp-section-toggle">+</span>
+        </div>
+        <div class="fp-section-body">
+          <input class="fp-search" type="text" placeholder="Name or email..." oninput="applyFilters()" id="f-name">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);margin:8px 0 5px">Buying Group</div>
+          <label class="fp-check-item"><input type="checkbox" value="IT Workflows" onchange="applyFilters()" class="f-bg"> IT Workflows</label>
+          <label class="fp-check-item"><input type="checkbox" value="Employee Workflows" onchange="applyFilters()" class="f-bg"> Employee Workflows</label>
+          <label class="fp-check-item"><input type="checkbox" value="Security &amp; Risk" onchange="applyFilters()" class="f-bg"> Security &amp; Risk</label>
+          <label class="fp-check-item"><input type="checkbox" value="Customer Workflows" onchange="applyFilters()" class="f-bg"> Customer Workflows</label>
+          <label class="fp-check-item"><input type="checkbox" value="Finance &amp; Supply Chain" onchange="applyFilters()" class="f-bg"> Finance &amp; Supply Chain</label>
+
+        </div>
+      </div>
+
+      <!-- COMPANIES -->
+      <div class="fp-section" id="sec-companies">
+        <div class="fp-section-hd" onclick="toggleSection('sec-companies')">
+          <span class="fp-section-label">Companies</span>
+          <span class="fp-section-toggle">+</span>
+        </div>
+        <div class="fp-section-body">
+          <input class="fp-search" type="text" placeholder="Company name..." oninput="applyFilters()" id="f-company">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s400);margin:8px 0 5px">Account Executive</div>
+          <label class="fp-check-item"><input type="checkbox" value="tony" onchange="applyFilters()" class="f-ae"> <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:14px;border-radius:50%;background:rgba(3,45,66,.15);color:#032D42;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">TO</span>Tony Riebel</span></label>
+          <label class="fp-check-item"><input type="checkbox" value="jeff" onchange="applyFilters()" class="f-ae"> <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:14px;border-radius:50%;background:rgba(4,67,85,.15);color:#044355;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">JE</span>Jeff Wuestenfeld</span></label>
+          <label class="fp-check-item"><input type="checkbox" value="riley" onchange="applyFilters()" class="f-ae"> <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:14px;border-radius:50%;background:rgba(180,83,9,.15);color:#B45309;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">RI</span>Riley Scott</span></label>
+          <label class="fp-check-item"><input type="checkbox" value="katie" onchange="applyFilters()" class="f-ae"> <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:14px;border-radius:50%;background:rgba(91,33,182,.15);color:#5B21B6;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">KA</span>Katie Schneider</span></label>
+          <label class="fp-check-item"><input type="checkbox" value="brian" onchange="applyFilters()" class="f-ae"> <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:14px;border-radius:50%;background:rgba(217,48,37,.15);color:#D93025;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">BD</span>Brian Disher</span></label>
+          <label class="fp-check-item"><input type="checkbox" value="seamus" onchange="applyFilters()" class="f-ae"> <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:14px;border-radius:50%;background:rgba(26,122,0,.15);color:#1a7a00;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">SD</span>Seamus Donovan</span></label>
+          <label class="fp-check-item"><input type="checkbox" value="mikaela" onchange="applyFilters()" class="f-ae"> <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:14px;border-radius:50%;background:rgba(3,105,161,.15);color:#0369A1;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700">MY</span>Mikaela Youpa</span></label>
+
+        </div>
+      </div>
+
+      <!-- DEPARTMENTS -->
+      <div class="fp-section" id="sec-depts">
+        <div class="fp-section-hd" onclick="toggleSection('sec-depts')">
+          <span class="fp-section-label">Departments &amp; Job Functions</span>
+          <span class="fp-section-toggle">+</span>
+        </div>
+        <div class="fp-section-body">
+          <input class="fp-search" type="text" placeholder="Search department..." oninput="filterDeptTree(this.value)" id="f-dept-search">
+          <div id="dept-tree">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- JOB LEVEL -->
+      <div class="fp-section" id="sec-levels">
+        <div class="fp-section-hd" onclick="toggleSection('sec-levels')">
+          <span class="fp-section-label">Job Level / Seniority</span>
+          <span class="fp-section-toggle">+</span>
+        </div>
+        <div class="fp-section-body">
+          <label class="fp-check-item"><input type="checkbox" value="C-Suite" onchange="applyFilters()" class="f-level"> C-Suite</label>
+          <label class="fp-check-item"><input type="checkbox" value="VP" onchange="applyFilters()" class="f-level"> VP</label>
+          <label class="fp-check-item"><input type="checkbox" value="Director" onchange="applyFilters()" class="f-level"> Director</label>
+          <label class="fp-check-item"><input type="checkbox" value="Manager" onchange="applyFilters()" class="f-level"> Manager</label>
+          <label class="fp-check-item"><input type="checkbox" value="IC" onchange="applyFilters()" class="f-level"> IC / Individual Contributor</label>
+        </div>
+      </div>
+
+      <!-- LEAD SOURCE -->
+      <div class="fp-section" id="sec-source">
+        <div class="fp-section-hd" onclick="toggleSection('sec-source')">
+          <span class="fp-section-label">Lead Source</span>
+          <span class="fp-section-toggle">+</span>
+        </div>
+        <div class="fp-section-body">
+          <label class="fp-check-item"><input type="checkbox" value="Imported Lead" onchange="applyFilters()" class="f-source"> Imported Lead</label>
+          <label class="fp-check-item"><input type="checkbox" value="K26 Pre-event" onchange="applyFilters()" class="f-source"> K26 Pre-event</label>
+          <label class="fp-check-item"><input type="checkbox" value="Webinar" onchange="applyFilters()" class="f-source" data-partial="true"> Webinar</label>
+          <label class="fp-check-item"><input type="checkbox" value="Demo" onchange="applyFilters()" class="f-source" data-partial="true"> Demo</label>
+          <label class="fp-check-item"><input type="checkbox" value="ROI Guide" onchange="applyFilters()" class="f-source" data-partial="true"> Content / Guide</label>
+          <label class="fp-check-item"><input type="checkbox" value="Summit" onchange="applyFilters()" class="f-source" data-partial="true"> Summit / Event</label>
+          <label class="fp-check-item"><input type="checkbox" value="Contact Us" onchange="applyFilters()" class="f-source"> Contact Us</label>
+        </div>
+      </div>
+
+      <!-- CONTACT TAGS -->
+      <div class="fp-section" id="sec-ctags">
+        <div class="fp-section-hd" onclick="toggleSection('sec-ctags')">
+          <span class="fp-section-label">Contact Tags</span>
+          <span class="fp-section-toggle">+</span>
+        </div>
+        <div class="fp-section-body">
+          <input class="fp-search" type="text" placeholder="Search contact tags..." oninput="filterContactTagList(this.value)" id="f-ctag-search">
+          <div id="contact-tag-filter" style="max-height:180px;overflow-y:auto;display:flex;flex-direction:column;gap:2px"></div>
+        </div>
+      </div>
+
+      <!-- COMPANY TAGS -->
+      <div class="fp-section" id="sec-camptags">
+        <div class="fp-section-hd" onclick="toggleSection('sec-camptags')">
+          <span class="fp-section-label">Company Tags</span>
+          <span class="fp-section-toggle">+</span>
+        </div>
+        <div class="fp-section-body">
+          <div id="campaign-tag-filter" style="max-height:160px;overflow-y:auto;display:flex;flex-direction:column;gap:2px"></div>
+        </div>
+      </div>
+
+      <!-- CAMPAIGN STATUS -->
+      <div class="fp-section" id="sec-campstatus">
+        <div class="fp-section-hd" onclick="toggleSection('sec-campstatus')">
+          <span class="fp-section-label">Campaign Status</span>
+          <span class="fp-section-toggle">+</span>
+        </div>
+        <div class="fp-section-body">
+          <label class="fp-check-item"><input type="checkbox" value="available" onchange="applyFilters()" class="f-campstatus"> Available (not in campaign)</label>
+          <label class="fp-check-item"><input type="checkbox" value="locked" onchange="applyFilters()" class="f-campstatus"> 🔒 Locked (active campaign)</label>
+        </div>
+      </div>
+
+      <!-- INDUSTRY -->
+      <div class="fp-section" id="sec-industry">
+        <div class="fp-section-hd" onclick="toggleSection('sec-industry')">
+          <span class="fp-section-label">Industry</span>
+          <span class="fp-section-toggle">+</span>
+        </div>
+        <div class="fp-section-body">
+          <input class="fp-search" type="text" placeholder="Search industry..." oninput="filterIndustryList(this.value)" id="f-industry-search">
+          <div id="industry-list" style="max-height:180px;overflow-y:auto;display:flex;flex-direction:column;gap:1px"></div>
+        </div>
+      </div>
+
+    </div><!-- /filter-panel -->
+
+    <!-- RIGHT: TABLE AREA -->
+    <div class="table-area">
+      <!-- ACTIVE FILTERS BAR -->
+      <div class="active-filters" id="activeFilterBar">
+        <span class="af-none" id="noFiltersMsg">No filters applied — showing all 100 leads</span>
+      </div>
+
+      <!-- VIEW TABS: CONTACTS / COMPANIES -->
+      <div style="display:flex;align-items:center;border-bottom:1px solid var(--s200);background:var(--white);padding:0 16px;flex-shrink:0">
+        <button class="tbl-view-tab on" id="tab-contacts" onclick="switchView('contacts')">Contacts <span id="contacts-count-tab" style="font-size:11px;font-weight:600;color:var(--b600);margin-left:4px">100</span></button>
+        <button class="tbl-view-tab" id="tab-companies" onclick="switchView('companies')">Companies <span id="companies-count-tab" style="font-size:11px;font-weight:600;color:var(--s400);margin-left:4px">0</span></button>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <div class="toolbar-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" id="tableSearch" placeholder="Search leads, companies, titles..." oninput="applyFilters()">
+          </div>
+          <span class="result-count" id="resultCount">100 leads</span>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <div id="selectBanner" style="display:none;font-size:11px;color:var(--b600);font-weight:600"></div>
+          <button class="btn btn-g btn-sm" onclick="selectAll()">Select All</button>
+          <button class="btn btn-g btn-sm" onclick="clearSelection()">Clear</button>
+        </div>
+      </div>
+      
+      <!-- SELECTION ACTION BAR (shown when rows selected) -->
+      <div id="selActionBar" style="display:none;background:var(--ink);padding:8px 16px;flex-shrink:0;align-items:center;gap:10px">
+        <span style="font-size:12px;font-weight:600;color:#fff" id="selActionCount">0 selected</span>
+        <div style="width:1px;height:16px;background:rgba(255,255,255,.2)"></div>
+        <button class="sel-action-btn" onclick="openTagModal('campaign')">📣 Tag to Campaign</button>
+        <button class="sel-action-btn" onclick="openTagModal('contact')">🏷 Tag Contacts</button>
+        <button class="sel-action-btn" id="tag-companies-btn" onclick="openTagModal('company')" style="display:none">🏢 Tag Companies</button>
+
+        <button onclick="clearSelection()" style="margin-left:auto;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer">✕ Clear</button>
+      </div>
+
+      <!-- TABLE -->
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th style="width:36px"><input type="checkbox" id="selectAllChk" onchange="toggleSelectAll(this)" style="accent-color:var(--ink)"></th>
+              <th>Name</th>
+              <th>Title</th>
+              <th>Level</th>
+              <th>Company</th>
+              <th>Industry</th>
+              <th>Account Executive</th>
+              <th>Lead Source</th>
+              <th>Campaign Tag</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="modal-root"></div>
+
+<script>
+const TERRITORY_LEADS = [
+  {id:"tl001",first:"Greg",last:"Halverson",name:"Greg Halverson",title:"CIO",company:"Charter Manufacturing Co Inc",industry:"Manufacturing",aeId:"tony",dept:"C-Suite",level:"C-Suite",source:"K26 Pre-event",status:"SLA Critical",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 9"},
+  {id:"tl002",first:"Diane",last:"Muller",name:"Diane Muller",title:"VP of IT",company:"Charter Manufacturing Co Inc",industry:"Manufacturing",aeId:"tony",dept:"Information Technology",level:"VP",source:"ITSM ROI Guide",status:"Open",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 7"},
+  {id:"tl003",first:"James",last:"Kowalski",name:"James Kowalski",title:"Director of IT Operations",company:"Charter Manufacturing Co Inc",industry:"Manufacturing",aeId:"tony",dept:"Information Technology",level:"Director",source:"MidwestTech Summit",status:"Open",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 5"},
+  {id:"tl004",first:"Rachel",last:"Simmons",name:"Rachel Simmons",title:"IT Operations Director",company:"Charter Manufacturing Co Inc",industry:"Manufacturing",aeId:"tony",dept:"Information Technology",level:"Director",source:"ITSM Buyers Guide",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 28"},
+  {id:"tl005",first:"Mark",last:"Herdegen",name:"Mark Herdegen",title:"CTO",company:"Cielo Talent",industry:"Staffing & Recruiting",aeId:"tony",dept:"C-Suite",level:"C-Suite",source:"ITSM Webinar",status:"SLA Critical",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl006",first:"Karen",last:"Vitale",name:"Karen Vitale",title:"VP of Technology",company:"Cielo Talent",industry:"Staffing & Recruiting",aeId:"tony",dept:"Information Technology",level:"VP",source:"IT Leader Webinar",status:"Responded",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 8"},
+  {id:"tl007",first:"Brett",last:"Schoewe",name:"Brett Schoewe",title:"Dir. of IT Infrastructure",company:"Cielo Talent",industry:"Staffing & Recruiting",aeId:"tony",dept:"Information Technology",level:"Director",source:"Platform Demo",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 3"},
+  {id:"tl008",first:"Robert",last:"Mack",name:"Robert Mack",title:"CIO",company:"Badger Meter, Inc.",industry:"Manufacturing",aeId:"tony",dept:"C-Suite",level:"C-Suite",source:"Forrester Report",status:"SLA Critical",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 9"},
+  {id:"tl009",first:"Susan",last:"Fleischer",name:"Susan Fleischer",title:"VP of IT",company:"Badger Meter, Inc.",industry:"Manufacturing",aeId:"tony",dept:"Information Technology",level:"VP",source:"ITSM ROI Calculator",status:"Responded",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 6"},
+  {id:"tl010",first:"Phil",last:"Novak",name:"Phil Novak",title:"Dir. of IT Service Management",company:"Badger Meter, Inc.",industry:"Manufacturing",aeId:"tony",dept:"Information Technology",level:"Director",source:"K26 Pre-event",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 31"},
+  {id:"tl011",first:"Tim",last:"Ohlrogge",name:"Tim Ohlrogge",title:"CIO",company:"The Boldt Group Inc",industry:"Construction",aeId:"tony",dept:"C-Suite",level:"C-Suite",source:"Biz Journal Article",status:"SLA Critical",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 8"},
+  {id:"tl012",first:"Shannon",last:"Murphy",name:"Shannon Murphy",title:"VP of IT",company:"The Boldt Group Inc",industry:"Construction",aeId:"tony",dept:"Information Technology",level:"VP",source:"ITSM Webinar",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 2"},
+  {id:"tl013",first:"Chris",last:"Felton",name:"Chris Felton",title:"CIO",company:"Batteries Plus LLC",industry:"Retail",aeId:"tony",dept:"C-Suite",level:"C-Suite",source:"IT Executive Summit",status:"SLA Critical",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl014",first:"Ryan",last:"Haugen",name:"Ryan Haugen",title:"VP of IT",company:"Batteries Plus LLC",industry:"Retail",aeId:"tony",dept:"Information Technology",level:"VP",source:"ITSM ROI Guide",status:"Responded",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 7"},
+  {id:"tl015",first:"Brandon",last:"Joyce",name:"Brandon Joyce",title:"VP of IT",company:"Sub-Zero Group Inc",industry:"Manufacturing",aeId:"tony",dept:"Information Technology",level:"VP",source:"HRSD Demo",status:"SLA Critical",contactTags:["HR · Customer"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl016",first:"Kevin",last:"Ostrander",name:"Kevin Ostrander",title:"IT Director",company:"Sargento Foods Inc",industry:"Food & Beverage",aeId:"tony",dept:"Information Technology",level:"Director",source:"ITAM Whitepaper",status:"SLA Critical",contactTags:[],campaignTag:null,lastActivity:"Apr 9"},
+  {id:"tl017",first:"Diana",last:"Cruz",name:"Diana Cruz",title:"HR Business Partner",company:"Faith Technologies Inc",industry:"Construction",aeId:"tony",dept:"Human Resources",level:"Manager",source:"EW Webinar",status:"Re-engage",contactTags:["HR · Customer"],campaignTag:null,lastActivity:"Mar 14"},
+  {id:"tl018",first:"Paul",last:"Wiegand",name:"Paul Wiegand",title:"VP of Operations",company:"JJ Keller & Associates Inc",industry:"Compliance & Safety",aeId:"tony",dept:"Operations",level:"VP",source:"Imported Lead",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 20"},
+  {id:"tl019",first:"Sandra",last:"Brueggeman",name:"Sandra Brueggeman",title:"Director of IT",company:"Milwaukee Electric Tool Corp",industry:"Manufacturing",aeId:"tony",dept:"Information Technology",level:"Director",source:"K26 Pre-event",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 1"},
+  {id:"tl020",first:"Tom",last:"Keyes",name:"Tom Keyes",title:"Dir. of IT Operations",company:"Batteries Plus LLC",industry:"Retail",aeId:"tony",dept:"Information Technology",level:"Director",source:"ITSM Buyers Guide",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 25"},
+  {id:"tl021",first:"Wei",last:"Zhang",name:"Wei Zhang",title:"CIO",company:"Videojet Technologies Inc",industry:"Manufacturing",aeId:"jeff",dept:"C-Suite",level:"C-Suite",source:"K25 Booth",status:"Booked",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl022",first:"Amanda",last:"Foster",name:"Amanda Foster",title:"Dir. of HR Systems",company:"Quinnox Inc.",industry:"Technology",aeId:"jeff",dept:"Human Resources",level:"Director",source:"EW HR Webinar",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 6"},
+  {id:"tl023",first:"Vijay",last:"Reddy",name:"Vijay Reddy",title:"VP of Information Technology",company:"Quinnox Inc.",industry:"Technology",aeId:"jeff",dept:"Information Technology",level:"VP",source:"Now Assist Webinar",status:"Responded",contactTags:["Now Assist · New Logo"],campaignTag:null,lastActivity:"Apr 9"},
+  {id:"tl024",first:"Suresh",last:"Patel",name:"Suresh Patel",title:"CTO",company:"Quinnox Inc.",industry:"Technology",aeId:"jeff",dept:"C-Suite",level:"C-Suite",source:"Imported Lead",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 18"},
+  {id:"tl025",first:"David",last:"Chen",name:"David Chen",title:"VP of Engineering",company:"Chicago Mercantile Exchange Inc",industry:"Financial Services",aeId:"jeff",dept:"Engineering & Technical",level:"VP",source:"Platform Demo",status:"Open",contactTags:["Platform · New Logo"],campaignTag:null,lastActivity:"Apr 4"},
+  {id:"tl026",first:"Linda",last:"Garza",name:"Linda Garza",title:"Director of IT Infrastructure",company:"Sidley Austin LLP",industry:"Legal",aeId:"jeff",dept:"Information Technology",level:"Director",source:"IT Leader Webinar",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 29"},
+  {id:"tl027",first:"Thomas",last:"Nguyen",name:"Thomas Nguyen",title:"Director of IT Ops",company:"Holcim Building Envelope",industry:"Construction",aeId:"jeff",dept:"Information Technology",level:"Director",source:"K26 Pre-event",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 2"},
+  {id:"tl028",first:"Colleen",last:"Moriarty",name:"Colleen Moriarty",title:"CIO",company:"Promega Corp",industry:"Life Sciences",aeId:"jeff",dept:"C-Suite",level:"C-Suite",source:"Imported Lead",status:"Open",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Mar 22"},
+  {id:"tl029",first:"Adam",last:"Winfield",name:"Adam Winfield",title:"VP of IT",company:"Total Administrative Services Corp",industry:"Insurance",aeId:"jeff",dept:"Information Technology",level:"VP",source:"ITSM ROI Guide",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 30"},
+  {id:"tl030",first:"Nadia",last:"Torres",name:"Nadia Torres",title:"Director of Logistics Technology",company:"Seko Logistics",industry:"Logistics",aeId:"jeff",dept:"Information Technology",level:"Director",source:"Imported Lead",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 15"},
+  {id:"tl031",first:"Sarah",last:"Mitchell",name:"Sarah Mitchell",title:"CIO",company:"Paylocity Corporation",industry:"Technology",aeId:"riley",dept:"C-Suite",level:"C-Suite",source:"Now Assist Demo",status:"SLA Critical",contactTags:["Now Assist · Customer"],campaignTag:"Veza · Customer · Mikaela",lastActivity:"Apr 10"},
+  {id:"tl032",first:"Jennifer",last:"Torres",name:"Jennifer Torres",title:"IT Director",company:"Kirkland & Ellis LLP",industry:"Legal",aeId:"riley",dept:"Information Technology",level:"Director",source:"Legal IT Webinar",status:"Responded",contactTags:["Legal IT"],campaignTag:null,lastActivity:"Apr 8"},
+  {id:"tl033",first:"Michael",last:"Chang",name:"Michael Chang",title:"VP of IT",company:"GATX Corporation",industry:"Transportation",aeId:"riley",dept:"Information Technology",level:"VP",source:"MidwestTech Summit",status:"Responded",contactTags:["Platform · Customer"],campaignTag:null,lastActivity:"Apr 7"},
+  {id:"tl034",first:"Sandra",last:"Kowalski",name:"Sandra Kowalski",title:"Dir. of HR Tech",company:"Federal Home Loan Bank Of Chicago",industry:"Financial Services",aeId:"riley",dept:"Human Resources",level:"Director",source:"HRSD Demo",status:"Responded",contactTags:["HR · Customer"],campaignTag:null,lastActivity:"Apr 5"},
+  {id:"tl035",first:"Sarah",last:"Chen",name:"Sarah Chen",title:"VP IT",company:"Echo Global Logistics, Inc.",industry:"Logistics",aeId:"riley",dept:"Information Technology",level:"VP",source:"ITSM Demo",status:"Open",contactTags:["ITOM · Customer"],campaignTag:null,lastActivity:"Apr 9"},
+  {id:"tl036",first:"Nicholas",last:"Parker",name:"Nicholas Parker",title:"IT Director",company:"Echo Global Logistics, Inc.",industry:"Logistics",aeId:"riley",dept:"Information Technology",level:"Director",source:"WS-DemoNow",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 3"},
+  {id:"tl037",first:"Claire",last:"Desjardins",name:"Claire Desjardins",title:"CIO",company:"GATX Corporation",industry:"Transportation",aeId:"riley",dept:"C-Suite",level:"C-Suite",source:"Imported Lead",status:"Open",contactTags:["Platform · Customer"],campaignTag:null,lastActivity:"Mar 28"},
+  {id:"tl038",first:"Kyle",last:"Ramos",name:"Kyle Ramos",title:"IT Director",company:"Parts Town LLC",industry:"Distribution",aeId:"riley",dept:"Information Technology",level:"Director",source:"Platform Sequence Email 2",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 6"},
+  {id:"tl039",first:"Michael",last:"Petersen",name:"Michael Petersen",title:"Dir. of IT",company:"Afni Inc",industry:"Business Services",aeId:"riley",dept:"Information Technology",level:"Director",source:"Imported Lead",status:"Re-engage",contactTags:[],campaignTag:null,lastActivity:"Feb 28"},
+  {id:"tl040",first:"Donna",last:"Halloran",name:"Donna Halloran",title:"VP of IT",company:"Dot Foods Inc",industry:"Food & Beverage",aeId:"riley",dept:"Information Technology",level:"VP",source:"Imported Lead",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 18"},
+  {id:"tl041",first:"Tom",last:"Vanderburg",name:"Tom Vanderburg",title:"Director of IT Operations",company:"Amsted Industries Inc",industry:"Manufacturing",aeId:"riley",dept:"Information Technology",level:"Director",source:"K26 Pre-event",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 1"},
+  {id:"tl042",first:"Grace",last:"Liu",name:"Grace Liu",title:"CHRO",company:"Hollister Incorporated",industry:"Medical Devices",aeId:"katie",dept:"Human Resources",level:"C-Suite",source:"Deloitte Referral",status:"Open",contactTags:["HR Customers Katie"],campaignTag:null,lastActivity:"Apr 7"},
+  {id:"tl043",first:"Ashley",last:"Tokarz",name:"Ashley Tokarz",title:"Director of IT",company:"S&C Electric Co.",industry:"Manufacturing",aeId:"katie",dept:"Information Technology",level:"Director",source:"Google Partner",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 5"},
+  {id:"tl044",first:"Annie",last:"Hoffman",name:"Annie Hoffman",title:"VP of Finance Systems",company:"S&C Electric Co.",industry:"Manufacturing",aeId:"katie",dept:"Finance",level:"VP",source:"FSC Webinar",status:"Responded",contactTags:["Finance · Customer"],campaignTag:null,lastActivity:"Apr 9"},
+  {id:"tl045",first:"Carlos",last:"Reyes",name:"Carlos Reyes",title:"IT Security Manager",company:"Sysmex America, Inc.",industry:"Medical Devices",aeId:"katie",dept:"Security",level:"Manager",source:"SecOps Playbook",status:"Responded",contactTags:[],campaignTag:null,lastActivity:"Apr 8"},
+  {id:"tl046",first:"Grace",last:"Turner",name:"Grace Turner",title:"VP of People Operations",company:"Madison Air",industry:"Distribution",aeId:"katie",dept:"Human Resources",level:"VP",source:"HR Webinar",status:"Open",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Apr 6"},
+  {id:"tl047",first:"Ryan",last:"Cassidy",name:"Ryan Cassidy",title:"Chief People Officer",company:"Madison Air",industry:"Distribution",aeId:"katie",dept:"C-Suite",level:"C-Suite",source:"Imported Lead",status:"Open",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Mar 20"},
+  {id:"tl048",first:"Deshawn",last:"Morris",name:"Deshawn Morris",title:"VP of IT",company:"Circana",industry:"Technology",aeId:"katie",dept:"Information Technology",level:"VP",source:"ITSM ROI Guide",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 25"},
+  {id:"tl049",first:"Renata",last:"Vasquez",name:"Renata Vasquez",title:"Director of IT Operations",company:"Griffith Foods Inc",industry:"Food & Beverage",aeId:"katie",dept:"Information Technology",level:"Director",source:"Imported Lead",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 12"},
+  {id:"tl050",first:"Patricia",last:"Hensley",name:"Patricia Hensley",title:"CIO",company:"Rogers Memorial Hospital Inc",industry:"Healthcare",aeId:"katie",dept:"C-Suite",level:"C-Suite",source:"Healthcare IT Summit",status:"Open",contactTags:["Healthcare IT"],campaignTag:null,lastActivity:"Apr 2"},
+  {id:"tl051",first:"Marcus",last:"Obuobi",name:"Marcus Obuobi",title:"VP of Technology",company:"Sysmex America, Inc.",industry:"Medical Devices",aeId:"katie",dept:"Information Technology",level:"VP",source:"K26 Pre-event",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 4"},
+  {id:"tl052",first:"Leah",last:"Brennan",name:"Leah Brennan",title:"HR Technology Manager",company:"Madison Air",industry:"Distribution",aeId:"katie",dept:"Human Resources",level:"Manager",source:"EW Buyers Guide",status:"Open",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Apr 5"},
+  {id:"tl053",first:"Lisa",last:"Park",name:"Lisa Park",title:"CHRO",company:"Crash Champions",industry:"Automotive Services",aeId:"brian",dept:"Human Resources",level:"C-Suite",source:"Now Assist HR",status:"Booked",contactTags:["HR · Customer"],campaignTag:null,lastActivity:"Apr 9"},
+  {id:"tl054",first:"Mark",last:"Osei",name:"Mark Osei",title:"Dir. HR Operations",company:"BlueCross BlueShield Association",industry:"Insurance",aeId:"brian",dept:"Human Resources",level:"Director",source:"EW Buyers Guide",status:"Re-engage",contactTags:["HR · Customer"],campaignTag:"Veza · Customer · Mikaela",lastActivity:"Mar 10"},
+  {id:"tl055",first:"Lisa",last:"Rodriguez",name:"Lisa Rodriguez",title:"IT Manager",company:"Crash Champions",industry:"Automotive Services",aeId:"brian",dept:"Information Technology",level:"Manager",source:"ITSM Buyers Guide",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 6"},
+  {id:"tl056",first:"Eric",last:"Sandoval",name:"Eric Sandoval",title:"CTO",company:"West Monroe Partners LLC.",industry:"Consulting",aeId:"brian",dept:"C-Suite",level:"C-Suite",source:"AI Readiness Guide",status:"Open",contactTags:["AI Platform"],campaignTag:null,lastActivity:"Apr 7"},
+  {id:"tl057",first:"Ramprasad",last:"Kalan",name:"Ramprasad Kalan",title:"Solutions Architect",company:"BlueCross BlueShield Association",industry:"Insurance",aeId:"brian",dept:"Engineering & Technical",level:"Manager",source:"Automation Engine",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 3"},
+  {id:"tl058",first:"Lorenzo",last:"De Luca",name:"Lorenzo De Luca",title:"IoT Engineer",company:"Culligan International Company",industry:"Manufacturing",aeId:"brian",dept:"Engineering & Technical",level:"IC",source:"MWC Barcelona",status:"SLA Critical",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl059",first:"Natalie",last:"Brooks",name:"Natalie Brooks",title:"VP Operations",company:"Culligan International Company",industry:"Manufacturing",aeId:"brian",dept:"Operations",level:"VP",source:"Organic Search",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 4"},
+  {id:"tl060",first:"Lisa",last:"Park",name:"Lisa Park",title:"CHRO",company:"AIT Worldwide Logistics",industry:"Logistics",aeId:"brian",dept:"Human Resources",level:"C-Suite",source:"EW Webinar",status:"Open",contactTags:["HR · Customer"],campaignTag:"EW · New Logo · Brian, Katie",lastActivity:"Apr 8"},
+  {id:"tl061",first:"Marcus",last:"Tran",name:"Marcus Tran",title:"VP of Human Resources",company:"AIT Worldwide Logistics",industry:"Logistics",aeId:"brian",dept:"Human Resources",level:"VP",source:"EW Webinar",status:"Open",contactTags:["HR · Customer"],campaignTag:"EW · New Logo · Brian, Katie",lastActivity:"Apr 6"},
+  {id:"tl062",first:"Sandra",last:"Lewis",name:"Sandra Lewis",title:"VP of Human Resources",company:"BlueCross BlueShield Association",industry:"Insurance",aeId:"brian",dept:"Human Resources",level:"VP",source:"Imported Lead",status:"Open",contactTags:["HR · Customer"],campaignTag:null,lastActivity:"Mar 22"},
+  {id:"tl063",first:"Derek",last:"Hutchins",name:"Derek Hutchins",title:"CIO",company:"Crash Champions",industry:"Automotive Services",aeId:"brian",dept:"C-Suite",level:"C-Suite",source:"Imported Lead",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 15"},
+  {id:"tl064",first:"Stacey",last:"Brenner",name:"Stacey Brenner",title:"Director of IT",company:"Advanced Technology Services, Inc.",industry:"Technology",aeId:"brian",dept:"Information Technology",level:"Director",source:"ITSM ROI Guide",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 5"},
+  {id:"tl065",first:"Owen",last:"Fitzgerald",name:"Owen Fitzgerald",title:"VP of IT",company:"Gerber Collision And Glass - ITSM",industry:"Automotive Services",aeId:"brian",dept:"Information Technology",level:"VP",source:"K26 Pre-event",status:"Open",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 7"},
+  {id:"tl066",first:"David",last:"Blasdell",name:"David Blasdell",title:"VP of IT",company:"TTX Company",industry:"Transportation",aeId:"seamus",dept:"Information Technology",level:"VP",source:"ITAM Webinar",status:"Open",contactTags:["ITAM · Customer"],campaignTag:"ITAM · Customer · Seamus",lastActivity:"Apr 9"},
+  {id:"tl067",first:"Patricia",last:"Emmons",name:"Patricia Emmons",title:"CIO",company:"TTX Company",industry:"Transportation",aeId:"seamus",dept:"C-Suite",level:"C-Suite",source:"Imported Lead",status:"Open",contactTags:["ITAM · Customer"],campaignTag:"ITAM · Customer · Seamus",lastActivity:"Apr 8"},
+  {id:"tl068",first:"Tomas",last:"Rivera",name:"Tomas Rivera",title:"Head of IT",company:"Stepan Co.",industry:"Chemicals",aeId:"seamus",dept:"Information Technology",level:"VP",source:"ITAM Webinar",status:"Booked",contactTags:["ITAM · Customer"],campaignTag:"ITAM · Customer · Seamus",lastActivity:"Apr 10"},
+  {id:"tl069",first:"Mark",last:"Petersen",name:"Mark Petersen",title:"VP of IT",company:"Stepan Co.",industry:"Chemicals",aeId:"seamus",dept:"Information Technology",level:"VP",source:"ITAM Webinar",status:"Re-engage",contactTags:["ITAM · Customer"],campaignTag:null,lastActivity:"Mar 12"},
+  {id:"tl070",first:"Robert",last:"Kim",name:"Robert Kim",title:"Head of IT Security",company:"DMI Inc.",industry:"Technology",aeId:"seamus",dept:"Security",level:"VP",source:"Contact Us",status:"SLA Critical",contactTags:["SecOps · Customer"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl071",first:"Priya",last:"Nair",name:"Priya Nair",title:"CISO",company:"Eversana",industry:"Life Sciences",aeId:"seamus",dept:"Security",level:"C-Suite",source:"Veza Security Brief",status:"SLA Critical",contactTags:["SecOps · Customer"],campaignTag:null,lastActivity:"Apr 9"},
+  {id:"tl072",first:"Derek",last:"Okafor",name:"Derek Okafor",title:"VP of Cybersecurity",company:"Eversana",industry:"Life Sciences",aeId:"seamus",dept:"Security",level:"VP",source:"Veza Awareness Email",status:"Open",contactTags:["SecOps · Customer"],campaignTag:null,lastActivity:"Apr 7"},
+  {id:"tl073",first:"Angela",last:"Ferris",name:"Angela Ferris",title:"CIO",company:"Stepan Co.",industry:"Chemicals",aeId:"seamus",dept:"C-Suite",level:"C-Suite",source:"Imported Lead",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 18"},
+  {id:"tl074",first:"Jordan",last:"Watkins",name:"Jordan Watkins",title:"Director of IT",company:"Hub Group Inc",industry:"Logistics",aeId:"seamus",dept:"Information Technology",level:"Director",source:"ITSM Buyers Guide",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 3"},
+  {id:"tl075",first:"Brian",last:"Holcomb",name:"Brian Holcomb",title:"GRC Manager",company:"Stepan Co.",industry:"Chemicals",aeId:"seamus",dept:"Security",level:"Manager",source:"IRM Webinar",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 25"},
+  {id:"tl076",first:"Tomas",last:"Nguyen",name:"Tomas Nguyen",title:"VP of IT",company:"Encore Event Technologies",industry:"Events",aeId:"seamus",dept:"Information Technology",level:"VP",source:"CPQ Webinar",status:"Open",contactTags:["CPQ · New Logo"],campaignTag:null,lastActivity:"Apr 5"},
+  {id:"tl077",first:"Keisha",last:"Williams",name:"Keisha Williams",title:"Director of IT",company:"Atkore International",industry:"Manufacturing",aeId:"seamus",dept:"Information Technology",level:"Director",source:"K26 Pre-event",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 4"},
+  {id:"tl078",first:"Mark",last:"Albright",name:"Mark Albright",title:"Director, GRC",company:"DMI Inc.",industry:"Technology",aeId:"seamus",dept:"Security",level:"Director",source:"Imported Lead",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 20"},
+  {id:"tl079",first:"Scott",last:"Flanagan",name:"Scott Flanagan",title:"IT Asset Manager",company:"TTX Company",industry:"Transportation",aeId:"seamus",dept:"Information Technology",level:"Manager",source:"ITAM Content",status:"Open",contactTags:["ITAM · Customer"],campaignTag:"ITAM · Customer · Seamus",lastActivity:"Apr 6"},
+  {id:"tl080",first:"Darin",last:"Wolf",name:"Darin Wolf",title:"Risk & Compliance Director",company:"Stepan Co.",industry:"Chemicals",aeId:"seamus",dept:"Security",level:"Director",source:"IRM Webinar",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 28"},
+  {id:"tl081",first:"Priya",last:"Nair",name:"Priya Nair",title:"CISO",company:"Consilio LLC",industry:"Legal",aeId:"mikaela",dept:"Security",level:"C-Suite",source:"Veza Webinar",status:"SLA Critical",contactTags:["Veza · Customer"],campaignTag:"Veza · Customer · Mikaela",lastActivity:"Apr 10"},
+  {id:"tl082",first:"Derek",last:"Okafor",name:"Derek Okafor",title:"VP of Cybersecurity",company:"Consilio LLC",industry:"Legal",aeId:"mikaela",dept:"Security",level:"VP",source:"Veza Awareness Email",status:"Open",contactTags:["Veza · Customer"],campaignTag:"Veza · Customer · Mikaela",lastActivity:"Apr 8"},
+  {id:"tl083",first:"Wei",last:"Park",name:"Wei Park",title:"CTO",company:"Consilio LLC",industry:"Legal",aeId:"mikaela",dept:"C-Suite",level:"C-Suite",source:"Imported Lead",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 15"},
+  {id:"tl084",first:"Laura",last:"Shin",name:"Laura Shin",title:"Security Operations Manager",company:"Consilio LLC",industry:"Legal",aeId:"mikaela",dept:"Security",level:"Manager",source:"SecOps Playbook",status:"Responded",contactTags:["Veza · Customer"],campaignTag:null,lastActivity:"Apr 7"},
+  {id:"tl085",first:"Elena",last:"Vasquez",name:"Elena Vasquez",title:"VP of IT",company:"Invenergy LLC",industry:"Energy",aeId:"mikaela",dept:"Information Technology",level:"VP",source:"ITSM ROI Guide",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 3"},
+  {id:"tl086",first:"James",last:"Okonkwo",name:"James Okonkwo",title:"CIO",company:"S&S Activewear",industry:"Distribution",aeId:"mikaela",dept:"C-Suite",level:"C-Suite",source:"Imported Lead",status:"Open",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Mar 22"},
+  {id:"tl087",first:"Tamara",last:"Collins",name:"Tamara Collins",title:"CHRO",company:"S&S Activewear",industry:"Distribution",aeId:"mikaela",dept:"Human Resources",level:"C-Suite",source:"HRSD Demo",status:"Open",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Apr 4"},
+  {id:"tl088",first:"Bryan",last:"Nakamura",name:"Bryan Nakamura",title:"Director of IT",company:"Lyra Technology Group",industry:"Technology",aeId:"mikaela",dept:"Information Technology",level:"Director",source:"K26 Pre-event",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 5"},
+  {id:"tl089",first:"Veronica",last:"Hargrove",name:"Veronica Hargrove",title:"VP of Human Resources",company:"Empire Today LLC",industry:"Retail",aeId:"mikaela",dept:"Human Resources",level:"VP",source:"EW Webinar",status:"Responded",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Apr 8"},
+  {id:"tl090",first:"Christopher",last:"Pham",name:"Christopher Pham",title:"CIO",company:"Help At Home Inc",industry:"Healthcare",aeId:"mikaela",dept:"C-Suite",level:"C-Suite",source:"Healthcare IT Summit",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 28"},
+  {id:"tl091",first:"Anika",last:"Johnson",name:"Anika Johnson",title:"VP of IT",company:"Bswift LLC",industry:"Technology",aeId:"mikaela",dept:"Information Technology",level:"VP",source:"Platform Demo",status:"Open",contactTags:["Platform · New Logo"],campaignTag:null,lastActivity:"Apr 6"},
+  {id:"tl092",first:"Rebecca",last:"Stamos",name:"Rebecca Stamos",title:"Director of IT Operations",company:"Springfield Clinic LLP",industry:"Healthcare",aeId:"mikaela",dept:"Information Technology",level:"Director",source:"Imported Lead",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 19"},
+  {id:"tl093",first:"Kyle",last:"Montoya",name:"Kyle Montoya",title:"CISO",company:"S&S Activewear",industry:"Distribution",aeId:"mikaela",dept:"Security",level:"C-Suite",source:"Veza Webinar",status:"Open",contactTags:["Veza · Customer"],campaignTag:null,lastActivity:"Apr 9"},
+  {id:"tl094",first:"Monica",last:"Tran",name:"Monica Tran",title:"Director of HR Systems",company:"Empire Today LLC",industry:"Retail",aeId:"mikaela",dept:"Human Resources",level:"Director",source:"EW HR Webinar",status:"Open",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Apr 4"},
+  {id:"tl095",first:"Sean",last:"Galloway",name:"Sean Galloway",title:"IT Security Director",company:"Invenergy LLC",industry:"Energy",aeId:"mikaela",dept:"Security",level:"Director",source:"Veza Security Brief",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Apr 2"},
+  {id:"tl096",first:"Jennifer",last:"Walsh",name:"Jennifer Walsh",title:"VP of Finance",company:"GATX Corporation",industry:"Transportation",aeId:"riley",dept:"Finance",level:"VP",source:"Imported Lead",status:"Open",contactTags:[],campaignTag:null,lastActivity:"Mar 28"},
+  {id:"tl097",first:"Patrick",last:"Sullivan",name:"Patrick Sullivan",title:"VP of Technology",company:"Hollister Incorporated",industry:"Medical Devices",aeId:"katie",dept:"Information Technology",level:"VP",source:"K25 Brief Engagement",status:"Open",contactTags:["IT · Customer"],campaignTag:null,lastActivity:"Apr 6"},
+  {id:"tl098",first:"Emma",last:"Holloway",name:"Emma Holloway",title:"Director of IT Security",company:"West Monroe Partners LLC.",industry:"Consulting",aeId:"brian",dept:"Security",level:"Director",source:"AI Readiness Guide",status:"Open",contactTags:["AI Platform"],campaignTag:null,lastActivity:"Apr 3"},
+  {id:"tl099",first:"Andrew",last:"Kowalczyk",name:"Andrew Kowalczyk",title:"VP of IT",company:"Videojet Technologies Inc",industry:"Manufacturing",aeId:"jeff",dept:"Information Technology",level:"VP",source:"Imported Lead",status:"Open",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 7"},
+  {id:"tl100",first:"Maria",last:"Espinoza",name:"Maria Espinoza",title:"Chief HR Officer",company:"Paylocity Corporation",industry:"Technology",aeId:"riley",dept:"Human Resources",level:"C-Suite",source:"HRSD Demo",status:"Open",contactTags:["HR · Customer"],campaignTag:null,lastActivity:"Apr 5"},
+  {id:"tl101",first:"Jennifer",last:"Wiegand",name:"Jennifer Wiegand",title:"VP of Operations",company:"JJ Keller & Associates Inc",aeId:"tony",dept:"Operations",level:"VP",source:"Lead Import",status:"Open",industry:"Compliance & Safety",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl102",first:"Scott",last:"Andrzejewski",name:"Scott Andrzejewski",title:"Director of IT",company:"Milwaukee Electric Tool Corp",aeId:"tony",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl103",first:"Rachel",last:"Halverson",name:"Rachel Halverson",title:"CIO",company:"Sargento Foods Inc",aeId:"tony",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Food & Beverage",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl104",first:"Brian",last:"Tacheny",name:"Brian Tacheny",title:"VP of IT",company:"Sargento Foods Inc",aeId:"tony",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Food & Beverage",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl105",first:"Carla",last:"Pieper",name:"Carla Pieper",title:"Director of IT Operations",company:"Faith Technologies Inc",aeId:"tony",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Construction",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl106",first:"Marcus",last:"Lundgren",name:"Marcus Lundgren",title:"CIO",company:"Alliance Laundry Systems LLC",aeId:"tony",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl107",first:"Tricia",last:"Buchanan",name:"Tricia Buchanan",title:"Director of IT",company:"Green Bay Packers Inc",aeId:"tony",dept:"Information Technology",level:"Director",source:"K26 Pre-event",status:"Open",industry:"Sports & Entertainment",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl108",first:"Dale",last:"Timmerman",name:"Dale Timmerman",title:"VP of Technology",company:"Mayville Engineering Company, Inc.",aeId:"tony",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl109",first:"Amy",last:"Schroeder",name:"Amy Schroeder",title:"IT Director",company:"Waupaca Foundry Inc",aeId:"tony",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl110",first:"Chris",last:"Baumann",name:"Chris Baumann",title:"CIO",company:"Green Bay Packaging Inc",aeId:"tony",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl111",first:"Kari",last:"Derse",name:"Kari Derse",title:"VP of HR",company:"Sub-Zero Group Inc",aeId:"tony",dept:"Human Resources",level:"VP",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:["HR · Customer"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl112",first:"Logan",last:"Garske",name:"Logan Garske",title:"Director of IT Security",company:"Badger Meter, Inc.",aeId:"tony",dept:"Security",level:"Director",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl113",first:"Meredith",last:"Hoffmann",name:"Meredith Hoffmann",title:"VP of Finance",company:"Charter Manufacturing Co Inc",aeId:"tony",dept:"Finance",level:"VP",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl114",first:"Nathan",last:"Zastrow",name:"Nathan Zastrow",title:"Director of IT",company:"Batteries Plus LLC",aeId:"tony",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Retail",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl115",first:"Patricia",last:"Gallagher",name:"Patricia Gallagher",title:"CIO",company:"Sidley Austin LLP",aeId:"jeff",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Legal",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl116",first:"Robert",last:"Loughney",name:"Robert Loughney",title:"VP of IT",company:"Insurance Auto Auctions Inc",aeId:"jeff",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Automotive Services",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl117",first:"Cassie",last:"Reimer",name:"Cassie Reimer",title:"Director of IT",company:"CF Industries Enterprises, LLC",aeId:"jeff",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Chemicals",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl118",first:"Marcus",last:"Welch",name:"Marcus Welch",title:"CIO",company:"A.T. Kearney Inc",aeId:"jeff",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Consulting",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl119",first:"Denise",last:"Kuster",name:"Denise Kuster",title:"VP of HR",company:"Athletico Management, LLC",aeId:"jeff",dept:"Human Resources",level:"VP",source:"Lead Import",status:"Open",industry:"Healthcare",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl120",first:"Todd",last:"Hannemann",name:"Todd Hannemann",title:"Director of Operations IT",company:"Amrize Cement Inc",aeId:"jeff",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Construction",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl121",first:"Samantha",last:"Voigt",name:"Samantha Voigt",title:"VP of Technology",company:"Ritchie Bros. Auctioneers (Canada) Ltd.",aeId:"jeff",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Automotive Services",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl122",first:"Kevin",last:"Brinker",name:"Kevin Brinker",title:"CIO",company:"Holcim Building Envelope",aeId:"jeff",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Construction",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl123",first:"Laura",last:"Schwenk",name:"Laura Schwenk",title:"Director of IT",company:"Veralto",aeId:"jeff",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl124",first:"Andrew",last:"Maciulewicz",name:"Andrew Maciulewicz",title:"VP of Finance Systems",company:"Trustmark Insurance Company",aeId:"jeff",dept:"Finance",level:"VP",source:"Lead Import",status:"Open",industry:"Insurance",contactTags:["Finance · Customer"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl125",first:"Erica",last:"Stobbe",name:"Erica Stobbe",title:"Director of IT",company:"Ozinga Brothers Inc",aeId:"jeff",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Construction",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl126",first:"Jim",last:"Baumgartner",name:"Jim Baumgartner",title:"CISO",company:"Chicago Mercantile Exchange Inc",aeId:"jeff",dept:"Security",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Financial Services",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl127",first:"Monica",last:"Pruitt",name:"Monica Pruitt",title:"VP of IT",company:"Promega Corp",aeId:"jeff",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Life Sciences",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl128",first:"Derek",last:"Polzin",name:"Derek Polzin",title:"Director of IT Operations",company:"Cardinal Logistics Management Inc",aeId:"jeff",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Logistics",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl129",first:"Nicole",last:"Anderton",name:"Nicole Anderton",title:"Director of IT Security",company:"Echo Global Logistics, Inc.",aeId:"riley",dept:"Security",level:"Director",source:"Lead Import",status:"Open",industry:"Logistics",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl130",first:"Aaron",last:"Feldkamp",name:"Aaron Feldkamp",title:"VP of IT",company:"Afni Inc",aeId:"riley",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Business Services",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl131",first:"Kristen",last:"Stange",name:"Kristen Stange",title:"CIO",company:"Wheatland Tube, LLC",aeId:"riley",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl132",first:"Brian",last:"Morrissey",name:"Brian Morrissey",title:"Director of IT",company:"Parts Town LLC",aeId:"riley",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Distribution",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl133",first:"Amy",last:"Vandenburg",name:"Amy Vandenburg",title:"VP of HR",company:"Huron Consulting Group Inc",aeId:"riley",dept:"Human Resources",level:"VP",source:"Lead Import",status:"Open",industry:"Consulting",contactTags:["HR · Customer"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl134",first:"Rick",last:"Lindblom",name:"Rick Lindblom",title:"Director of IT Operations",company:"GATX Corporation",aeId:"riley",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Transportation",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl135",first:"Brooke",last:"Henning",name:"Brooke Henning",title:"CIO",company:"Foremost Farms USA Cooperative",aeId:"riley",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Food & Beverage",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl136",first:"Jeff",last:"Prellwitz",name:"Jeff Prellwitz",title:"VP of IT",company:"Federal Home Loan Bank Of Chicago",aeId:"riley",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Financial Services",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl137",first:"Tricia",last:"Heenan",name:"Tricia Heenan",title:"Director of IT",company:"Convergint Technologies LLC",aeId:"riley",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl138",first:"Dan",last:"Freiberg",name:"Dan Freiberg",title:"VP of Finance",company:"Paylocity Corporation",aeId:"riley",dept:"Finance",level:"VP",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl139",first:"Susan",last:"Troutman",name:"Susan Troutman",title:"Director of IT",company:"Dot Foods Inc",aeId:"riley",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Food & Beverage",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl140",first:"Paul",last:"Heitkamp",name:"Paul Heitkamp",title:"CHRO",company:"Kirkland & Ellis LLP",aeId:"riley",dept:"Human Resources",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Legal",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl141",first:"Dawn",last:"Rasmussen",name:"Dawn Rasmussen",title:"VP of IT",company:"Amsted Industries Inc",aeId:"riley",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl142",first:"Gary",last:"Kleinhans",name:"Gary Kleinhans",title:"CIO",company:"Griffith Foods Inc",aeId:"katie",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Food & Beverage",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl143",first:"Shannon",last:"Burtch",name:"Shannon Burtch",title:"VP of IT",company:"Hollister Incorporated",aeId:"katie",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Medical Devices",contactTags:["IT · Customer"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl144",first:"Thomas",last:"Petricca",name:"Thomas Petricca",title:"Director of IT",company:"Rogers Memorial Hospital Inc",aeId:"katie",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Healthcare",contactTags:["Healthcare IT"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl145",first:"Heather",last:"Wennlund",name:"Heather Wennlund",title:"VP of HR",company:"Griffith Foods Inc",aeId:"katie",dept:"Human Resources",level:"VP",source:"Lead Import",status:"Open",industry:"Food & Beverage",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl146",first:"Mark",last:"Tauscheck",name:"Mark Tauscheck",title:"Director of IT Security",company:"S&C Electric Co.",aeId:"katie",dept:"Security",level:"Director",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl147",first:"Angela",last:"Laux",name:"Angela Laux",title:"CIO",company:"Weber-Stephen Products LLC",aeId:"katie",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl148",first:"Stephen",last:"Kuta",name:"Stephen Kuta",title:"VP of IT",company:"Sysmex America, Inc.",aeId:"katie",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Medical Devices",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl149",first:"Rebecca",last:"Hopp",name:"Rebecca Hopp",title:"Director of IT",company:"Circana",aeId:"katie",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl150",first:"Craig",last:"Hester",name:"Craig Hester",title:"VP of Finance",company:"Clayco Construction Co Inc",aeId:"katie",dept:"Finance",level:"VP",source:"Lead Import",status:"Open",industry:"Construction",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl151",first:"Mallory",last:"Engel",name:"Mallory Engel",title:"Director of HR",company:"Madison Air",aeId:"katie",dept:"Human Resources",level:"Director",source:"Lead Import",status:"Open",industry:"Distribution",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl152",first:"Kevin",last:"Farrington",name:"Kevin Farrington",title:"CIO",company:"Output Service Group, Inc.",aeId:"katie",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl153",first:"Nicole",last:"Hendricks",name:"Nicole Hendricks",title:"VP of IT",company:"Titan Intl Inc",aeId:"katie",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl154",first:"Jason",last:"Yochum",name:"Jason Yochum",title:"Director of IT Operations",company:"Circana",aeId:"katie",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl155",first:"Patricia",last:"Montalvo",name:"Patricia Montalvo",title:"VP of IT",company:"US LBM LLC",aeId:"brian",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Distribution",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl156",first:"Kevin",last:"Delaney",name:"Kevin Delaney",title:"Director of IT",company:"Sentinel Technologies, Inc",aeId:"brian",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl157",first:"Andrea",last:"Vasile",name:"Andrea Vasile",title:"CIO",company:"Cloud5 Communications",aeId:"brian",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl158",first:"Justin",last:"Ostrowski",name:"Justin Ostrowski",title:"Director of IT",company:"Addison Group",aeId:"brian",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Staffing & Recruiting",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl159",first:"Christina",last:"Ruffalo",name:"Christina Ruffalo",title:"VP of HR",company:"West Monroe Partners LLC.",aeId:"brian",dept:"Human Resources",level:"VP",source:"Lead Import",status:"Open",industry:"Consulting",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl160",first:"David",last:"Schuett",name:"David Schuett",title:"CIO",company:"Gerber Collision And Glass - ITSM",aeId:"brian",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Automotive Services",contactTags:["ITSM · New Logo"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl161",first:"Melissa",last:"Ciulla",name:"Melissa Ciulla",title:"Director of IT",company:"MAT Holdings Inc",aeId:"brian",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl162",first:"Todd",last:"Viegut",name:"Todd Viegut",title:"VP of IT",company:"Advanced Technology Services, Inc.",aeId:"brian",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl163",first:"Angela",last:"Doherty",name:"Angela Doherty",title:"CHRO",company:"US LBM LLC",aeId:"brian",dept:"Human Resources",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Distribution",contactTags:["HR · Customer"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl164",first:"Ryan",last:"Doeringer",name:"Ryan Doeringer",title:"Director of IT Security",company:"Crash Champions",aeId:"brian",dept:"Security",level:"Director",source:"Lead Import",status:"Open",industry:"Automotive Services",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl165",first:"Lisa",last:"Grabowski",name:"Lisa Grabowski",title:"VP of Finance",company:"Advanced Technology Services, Inc.",aeId:"brian",dept:"Finance",level:"VP",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl166",first:"Joseph",last:"Kucharik",name:"Joseph Kucharik",title:"Director of IT",company:"Inotiv Inc",aeId:"brian",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Life Sciences",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl167",first:"Sarah",last:"Sager",name:"Sarah Sager",title:"CIO",company:"Federal Signal Corporation",aeId:"brian",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl168",first:"Matthew",last:"Klapperich",name:"Matthew Klapperich",title:"VP of IT",company:"Culligan International Company",aeId:"brian",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl169",first:"Colleen",last:"Lindsey",name:"Colleen Lindsey",title:"Director of IT",company:"Hub Group Inc",aeId:"seamus",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Logistics",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl170",first:"Derek",last:"Harrington",name:"Derek Harrington",title:"VP of IT",company:"Tate & Lyle Inc",aeId:"seamus",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Food & Beverage",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl171",first:"Angie",last:"Gallagher",name:"Angie Gallagher",title:"CIO",company:"Primient",aeId:"seamus",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Chemicals",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl172",first:"Jason",last:"Helwig",name:"Jason Helwig",title:"Director of IT",company:"HydraForce Inc",aeId:"seamus",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl173",first:"Stephanie",last:"Weiland",name:"Stephanie Weiland",title:"VP of HR",company:"Eversana",aeId:"seamus",dept:"Human Resources",level:"VP",source:"Lead Import",status:"Open",industry:"Life Sciences",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl174",first:"Chris",last:"Brinkman",name:"Chris Brinkman",title:"Director of IT",company:"SRAM LLC",aeId:"seamus",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl175",first:"Gary",last:"Schweitzer",name:"Gary Schweitzer",title:"CIO",company:"ENTRUST Solutions Group",aeId:"seamus",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl176",first:"Bridget",last:"Moran",name:"Bridget Moran",title:"VP of IT",company:"Charter Next Generation",aeId:"seamus",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl177",first:"Nick",last:"Lindstrom",name:"Nick Lindstrom",title:"Director of IT Security",company:"DMI Inc.",aeId:"seamus",dept:"Security",level:"Director",source:"Lead Import",status:"Open",industry:"Technology",contactTags:["SecOps · Customer"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl178",first:"Amy",last:"Scofield",name:"Amy Scofield",title:"VP of Finance",company:"Stepan Co.",aeId:"seamus",dept:"Finance",level:"VP",source:"Lead Import",status:"Open",industry:"Chemicals",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl179",first:"Chris",last:"Callahan",name:"Chris Callahan",title:"Director of IT",company:"Atkore International",aeId:"seamus",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl180",first:"Renee",last:"Stelmach",name:"Renee Stelmach",title:"CHRO",company:"Hub Group Inc",aeId:"seamus",dept:"Human Resources",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Logistics",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl181",first:"Brian",last:"Wisniewski",name:"Brian Wisniewski",title:"CIO",company:"Encore Event Technologies",aeId:"seamus",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Events",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl182",first:"Melissa",last:"Riopelle",name:"Melissa Riopelle",title:"VP of IT",company:"Applied Systems Inc",aeId:"seamus",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl183",first:"Todd",last:"Sommer",name:"Todd Sommer",title:"VP of IT",company:"CCC Intelligent Solutions",aeId:"mikaela",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl184",first:"Beth",last:"Grunewald",name:"Beth Grunewald",title:"Director of HR",company:"Delta Dental",aeId:"mikaela",dept:"Human Resources",level:"Director",source:"Lead Import",status:"Open",industry:"Insurance",contactTags:["HR · Customer"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl185",first:"Jason",last:"Drabik",name:"Jason Drabik",title:"CIO",company:"K2 Services LLC",aeId:"mikaela",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl186",first:"Michelle",last:"Lathrop",name:"Michelle Lathrop",title:"VP of IT",company:"Resource Point of Sale LLC",aeId:"mikaela",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Retail",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl187",first:"Andrew",last:"Gundlach",name:"Andrew Gundlach",title:"Director of IT",company:"GoHealth Inc",aeId:"mikaela",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Insurance",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl188",first:"Carrie",last:"Krumbholz",name:"Carrie Krumbholz",title:"VP of HR",company:"Help At Home Inc",aeId:"mikaela",dept:"Human Resources",level:"VP",source:"Lead Import",status:"Open",industry:"Healthcare",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl189",first:"Gary",last:"Sayers",name:"Gary Sayers",title:"Director of IT",company:"Lyra Technology Group",aeId:"mikaela",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl190",first:"Rachel",last:"Voelker",name:"Rachel Voelker",title:"CIO",company:"Fellowes Inc",aeId:"mikaela",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl191",first:"Jim",last:"Kachelski",name:"Jim Kachelski",title:"VP of IT",company:"Springfield Clinic LLP",aeId:"mikaela",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Healthcare",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl192",first:"Dana",last:"Reigel",name:"Dana Reigel",title:"Director of IT Security",company:"Consilio LLC",aeId:"mikaela",dept:"Security",level:"Director",source:"Lead Import",status:"Open",industry:"Legal",contactTags:["Veza · Customer"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl193",first:"Kevin",last:"Hanneman",name:"Kevin Hanneman",title:"VP of Finance",company:"Empire Today LLC",aeId:"mikaela",dept:"Finance",level:"VP",source:"Lead Import",status:"Open",industry:"Retail",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl194",first:"Alicia",last:"Bowers",name:"Alicia Bowers",title:"Director of IT",company:"Bswift LLC",aeId:"mikaela",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Technology",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl195",first:"Marcus",last:"Webb",name:"Marcus Webb",title:"CISO",company:"Invenergy LLC",aeId:"mikaela",dept:"Security",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Energy",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl196",first:"Diane",last:"Schaefer",name:"Diane Schaefer",title:"VP of HR",company:"S&S Activewear",aeId:"mikaela",dept:"Human Resources",level:"VP",source:"Lead Import",status:"Open",industry:"Distribution",contactTags:["HR · New Logo"],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl197",first:"Tom",last:"Szulczewski",name:"Tom Szulczewski",title:"Director of IT",company:"SigmaTron International, Inc.",aeId:"mikaela",dept:"Information Technology",level:"Director",source:"Lead Import",status:"Open",industry:"Manufacturing",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl198",first:"Lindsay",last:"Brandt",name:"Lindsay Brandt",title:"CIO",company:"Enlivant",aeId:"mikaela",dept:"C-Suite",level:"C-Suite",source:"Lead Import",status:"Open",industry:"Healthcare",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl199",first:"Eric",last:"Strohmeyer",name:"Eric Strohmeyer",title:"VP of IT",company:"Hearthside Food Solutions LLC",aeId:"mikaela",dept:"Information Technology",level:"VP",source:"Lead Import",status:"Open",industry:"Food & Beverage",contactTags:[],campaignTag:null,lastActivity:"Apr 10"},
+  {id:"tl200",first:"Jessica",last:"Gruber",name:"Jessica Gruber",title:"Director of HR Systems",company:"CCC Intelligent Solutions",aeId:"mikaela",dept:"Human Resources",level:"Director",source:"Lead Import",status:"Open",industry:"Technology",contactTags:["HR · Customer"],campaignTag:null,lastActivity:"Apr 10"}
+];
+
+const AE_STYLES = {
+  tony:    {hex:'#032D42',bg:'rgba(3,45,66,.12)',label:'Tony'},
+  jeff:    {hex:'#044355',bg:'rgba(4,67,85,.12)',label:'Jeff'},
+  riley:   {hex:'#B45309',bg:'rgba(180,83,9,.12)',label:'Riley'},
+  katie:   {hex:'#5B21B6',bg:'rgba(91,33,182,.12)',label:'Katie'},
+  brian:   {hex:'#D93025',bg:'rgba(217,48,37,.12)',label:'Brian'},
+  seamus:  {hex:'#1a7a00',bg:'rgba(26,122,0,.12)',label:'Seamus'},
+  mikaela: {hex:'#0369A1',bg:'rgba(3,105,161,.12)',label:'Mikaela'},
+};
+
+const DEPT_TO_BG = {
+  'Information Technology': 'IT Workflows',
+  'Human Resources': 'Employee Workflows',
+  'Security': 'Security & Risk',
+  'Finance': 'Finance & Supply Chain',
+  'Engineering & Technical': 'IT Workflows',
+  'Operations': 'IT Workflows',
+  'C-Suite': null, // C-Suite spans all
+};
+
+const DEPTS = ['C-Suite','Engineering & Technical','Finance','Human Resources','Information Technology','Legal','Marketing','Operations','Security'];
+
+const COMPANY_TAGS = ['Tony - Top 10 Territory','Jeff - Top 9 Territory','Riley - Top 11 Territory','Katie - Top 10 Territory','Brian - Top 8 Territory','Seamus - Top 8 Customers','Mikaela - Top 5 NNL'];
+const CONTACT_TAGS_ALL = [...new Set(TERRITORY_LEADS.flatMap(l => l.contactTags))].filter(Boolean).sort();
+
+// Build all unique company tags and contact tags from data
+let selectedRows = new Set();
+let filteredLeads = [...TERRITORY_LEADS];
+let activeDeptFilters = new Set();
+let activeContactTagFilters = new Set();
+
+// ── INIT FILTER CHIPS ───────────────────────────────────────────────────
+function initFilterChips() {
+  const ctEl = document.getElementById('contact-tag-filter');
+  if(ctEl) {
+    ctEl.innerHTML = '';
+    CONTACT_TAGS_ALL.forEach(t => {
+      const span = document.createElement('span');
+      span.className = 'fchip';
+      span.dataset.tag = t;
+      span.textContent = t;
+      span.addEventListener('click', () => toggleContactTagFilter(span, t));
+      ctEl.appendChild(span);
+    });
+  }
+  const compEl = document.getElementById('company-tag-filter');
+  if(compEl) {
+    compEl.innerHTML = '';
+    COMPANY_TAGS.forEach(t => {
+      const span = document.createElement('span');
+      span.className = 'fchip';
+      span.dataset.tag = t;
+      span.textContent = t;
+      span.addEventListener('click', () => toggleCompanyTagFilter(span, t));
+      compEl.appendChild(span);
+    });
+  }
+}
+
+function toggleContactTagFilter(el, tag) {
+  if(!tag) tag = el.dataset.tag;
+  if(activeContactTagFilters.has(tag)) {
+    activeContactTagFilters.delete(tag);
+    el.classList.remove('active');
+  } else {
+    activeContactTagFilters.add(tag);
+    el.classList.add('active');
+  }
+  applyFilters();
+}
+
+function toggleCompanyTagFilter(el, tag) {
+  if(!tag) tag = el.dataset.tag;
+  // Company tags filter by AE — map tag to aeId
+  const aeMap = {'Tony - Top 10 Territory':'tony','Jeff - Top 9 Territory':'jeff','Riley - Top 11 Territory':'riley','Katie - Top 10 Territory':'katie','Brian - Top 8 Territory':'brian','Seamus - Top 8 Customers':'seamus','Mikaela - Top 5 NNL':'mikaela'};
+  const ae = aeMap[tag];
+  if(!ae) return;
+  const cb = document.querySelector('.f-ae[value="'+ae+'"]');
+  if(cb) {
+    cb.checked = !cb.checked;
+    el.classList.toggle('active', cb.checked);
+    applyFilters();
+  }
+}
+
+// ── DEPT TREE ────────────────────────────────────────────────────────────
+function renderDeptTree(q) {
+  q = (q||'').toLowerCase();
+  const tree = document.getElementById('dept-tree');
+  if(!tree) return;
+  const items = DEPTS.filter(d => !q || d.toLowerCase().includes(q));
+  tree.innerHTML = '';
+  items.forEach(d => {
+    const checked = activeDeptFilters.has(d);
+    const label = document.createElement('label');
+    label.className = 'tree-item';
+    label.innerHTML = '<input type="checkbox" style="accent-color:var(--ink)"> <span>'+d+'</span>';
+    const cb = label.querySelector('input');
+    cb.checked = checked;
+    cb.addEventListener('change', function() { toggleDeptFilter(this, d); });
+    tree.appendChild(label);
+  });
+}
+
+function toggleDeptFilter(cb, dept) {
+  if(cb.checked) activeDeptFilters.add(dept);
+  else activeDeptFilters.delete(dept);
+  applyFilters();
+}
+
+function filterDeptTree(q) { renderDeptTree(q); }
+
+// ── FILTER LOGIC ─────────────────────────────────────────────────────────
+function applyFilters() {
+  const nameQ = (document.getElementById('f-name')?.value||'').toLowerCase();
+  const compQ = (document.getElementById('f-company')?.value||'').toLowerCase();
+  const tableQ = (document.getElementById('tableSearch')?.value||'').toLowerCase();
+  const q = tableQ || '';
+
+  const bgChecked = [...document.querySelectorAll('.f-bg:checked')].map(c=>c.value);
+  const aeChecked = [...document.querySelectorAll('.f-ae:checked')].map(c=>c.value);
+  const levelChecked = [...document.querySelectorAll('.f-level:checked')].map(c=>c.value);
+  const statusChecked = [...document.querySelectorAll('.f-status:checked')].map(c=>c.value);
+  const campStatusChecked = [...document.querySelectorAll('.f-campstatus:checked')].map(c=>c.value);
+  const sourceChecked = [...document.querySelectorAll('.f-source:checked')];
+
+  filteredLeads = TERRITORY_LEADS.filter(l => {
+    if(nameQ && !l.name.toLowerCase().includes(nameQ) && !l.title.toLowerCase().includes(nameQ)) return false;
+    if(compQ && !l.company.toLowerCase().includes(compQ)) return false;
+    if(q && !l.name.toLowerCase().includes(q) && !l.company.toLowerCase().includes(q) && !l.title.toLowerCase().includes(q)) return false;
+    if(aeChecked.length && !aeChecked.includes(l.aeId)) return false;
+    if(levelChecked.length && !levelChecked.includes(l.level)) return false;
+    if(statusChecked.length && !statusChecked.includes(l.status)) return false;
+    if(activeDeptFilters.size && !activeDeptFilters.has(l.dept)) return false;
+    if(bgChecked.length) {
+      const leadBG = DEPT_TO_BG[l.dept];
+      if(!leadBG || !bgChecked.includes(leadBG)) {
+        // C-Suite can match any BG - skip if C-Suite and any BG checked
+        if(l.dept !== 'C-Suite') return false;
+      }
+    }
+    if(activeIndustryFilters.size && !activeIndustryFilters.has(l.industry||'Other')) return false;
+    if(activeCampTagFilters.size) { const compTagAes = [...activeCampTagFilters].map(t => AE_BY_COMPANY_TAG[t]).filter(Boolean); if(compTagAes.length && !compTagAes.includes(l.aeId)) return false; }
+    if(campStatusChecked.length) {
+      const isLocked = !!l.campaignTag;
+      if(campStatusChecked.includes('available') && !campStatusChecked.includes('locked') && isLocked) return false;
+      if(campStatusChecked.includes('locked') && !campStatusChecked.includes('available') && !isLocked) return false;
+    }
+    if(activeContactTagFilters.size) {
+      const hasTag = [...activeContactTagFilters].every(t => l.contactTags.includes(t));
+      if(!hasTag) return false;
+    }
+    if(sourceChecked.length) {
+      const srcMatch = sourceChecked.some(cb => {
+        return cb.dataset.partial === 'true'
+          ? l.source.toLowerCase().includes(cb.value.toLowerCase())
+          : l.source === cb.value;
+      });
+      if(!srcMatch) return false;
+    }
+    return true;
+  });
+
+  if(currentView === 'companies') {
+    const companies = getCompaniesFromLeads(filteredLeads);
+    document.getElementById('companies-count-tab').textContent = companies.length;
+    document.getElementById('contacts-count-tab').textContent = filteredLeads.length;
+    renderCompaniesView(companies);
+  } else {
+    const comps = getCompaniesFromLeads(filteredLeads);
+    document.getElementById('companies-count-tab').textContent = comps.length;
+    document.getElementById('contacts-count-tab').textContent = filteredLeads.length;
+    restoreContactsHeaders();
+    renderTable();
+  }
+  updateActiveFilterBar();
+  updateSelectBanner();
+  updateFilterDot();
+}
+
+// ── TABLE RENDER ─────────────────────────────────────────────────────────
+function renderTable() {
+  const tbody = document.getElementById('leadsTableBody');
+  const countEl = document.getElementById('resultCount');
+  if(countEl) countEl.textContent = filteredLeads.length + ' lead' + (filteredLeads.length===1?'':'s');
+  if(!filteredLeads.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--s400)">No leads match your filters</td></tr>';
+    return;
+  }
+  const aeFullNames = {tony:'Tony Riebel',jeff:'Jeff Wuestenfeld',riley:'Riley Scott',katie:'Katie Schneider',brian:'Brian Disher',seamus:'Seamus Donovan',mikaela:'Mikaela Youpa'};
+  tbody.innerHTML = '';
+  filteredLeads.forEach(l => {
+    const ae = AE_STYLES[l.aeId] || {hex:'#64748b',bg:'rgba(100,116,139,.1)',label:l.aeId};
+    const isSelected = selectedRows.has(l.id);
+    const levelCls = {'C-Suite':'lv-c','VP':'lv-vp','Director':'lv-dir','Manager':'lv-mgr','IC':'lv-ic'}[l.level]||'lv-mgr';
+    const campTagEl = l.campaignTag ? '<span class="lock-badge">🔒 '+l.campaignTag+'</span>' : '<span style="color:var(--s300)">—</span>';
+    const tr = document.createElement('tr');
+    tr.className = (isSelected?'selected':'') + ' fade-in';
+    tr.innerHTML =
+      '<td><input type="checkbox" '+(isSelected?'checked':'')+' onclick="event.stopPropagation();toggleRowCheck(event,\''+l.id+'\')" style="accent-color:var(--ink)"></td>' +
+      '<td style="font-weight:600;color:var(--s900);white-space:nowrap">'+l.first+' '+l.last+'</td>' +
+      '<td style="font-size:11px;color:var(--s600)">'+l.title+'</td>' +
+      '<td><span class="level-badge '+levelCls+'">'+l.level+'</span></td>' +
+      '<td style="font-size:12px;color:var(--s700)">'+l.company+'</td>' +
+      '<td style="font-size:11px;color:var(--s500)">'+(l.industry||'—')+'</td>' +
+      '<td style="font-size:12px;color:var(--s600);white-space:nowrap">'+(aeFullNames[l.aeId]||ae.label)+'</td>' +
+      '<td style="font-size:11px;color:var(--s500)">'+l.source+'</td>' +
+      '<td>'+campTagEl+'</td>';
+    tr.addEventListener('click', e => { if(e.target.tagName !== 'INPUT') toggleRow(e, l.id); });
+    tbody.appendChild(tr);
+  });
+}
+
+// ── SELECTION ─────────────────────────────────────────────────────────────
+function toggleRow(e, id) {
+  if(e.target.tagName === 'INPUT') return;
+  if(selectedRows.has(id)) selectedRows.delete(id);
+  else selectedRows.add(id);
+  renderTable();
+  updateSelectBanner();
+}
+
+function toggleRowCheck(e, id) {
+  if(e.target.checked) selectedRows.add(id);
+  else selectedRows.delete(id);
+  renderTable();
+  updateSelectBanner();
+}
+
+function toggleSelectAll(cb) {
+  if(cb.checked) filteredLeads.forEach(l => selectedRows.add(l.id));
+  else selectedRows.clear();
+  renderTable();
+  updateSelectBanner();
+}
+
+function selectAll() {
+  filteredLeads.forEach(l => selectedRows.add(l.id));
+  renderTable();
+  updateSelectBanner();
+}
+
+function clearSelection() {
+  selectedRows.clear();
+  renderTable();
+  updateSelectBanner();
+  const chk = document.getElementById('selectAllChk');
+  if(chk) chk.checked = false;
+}
+
+function updateSelectBanner() {
+  const count = selectedRows.size;
+  const banner = document.getElementById('selectBanner');
+  const tagBtn = document.getElementById('tagBtn');
+  const tagCount = document.getElementById('tagCount');
+  const selBar = document.getElementById('selActionBar');
+  const selCount = document.getElementById('selActionCount');
+  if(banner) banner.style.display = 'none';
+  if(selBar) selBar.style.display = count > 0 ? 'flex' : 'none';
+  if(selCount) selCount.textContent = count + ' selected';
+  const tagBtns = document.getElementById('tagBtns');
+  if(tagBtns) tagBtns.style.display = count > 0 ? 'flex' : 'none';
+  if(tagCount) tagCount.textContent = count + ' selected';
+
+  // Update tab counts to reflect selection when rows are selected
+  const contactTab = document.getElementById('contacts-count-tab');
+  const compTab = document.getElementById('companies-count-tab');
+  if(count > 0) {
+    // Selected contacts count
+    if(contactTab) contactTab.textContent = count;
+    // Unique companies from selected contacts
+    const selLeads = TERRITORY_LEADS.filter(l => selectedRows.has(l.id));
+    const selCompanies = new Set(selLeads.map(l => l.company)).size;
+    if(compTab) compTab.textContent = selCompanies;
+  } else {
+    // Reset to filtered totals
+    if(contactTab) contactTab.textContent = filteredLeads.length;
+    const allComps = getCompaniesFromLeads(filteredLeads).length;
+    if(compTab) compTab.textContent = allComps;
+  }
+}
+
+// ── ACTIVE FILTER BAR ─────────────────────────────────────────────────────
+function updateActiveFilterBar() {
+  const bar = document.getElementById('activeFilterBar');
+  const noMsg = document.getElementById('noFiltersMsg');
+  const pills = [];
+
+  const aeChecked = [...document.querySelectorAll('.f-ae:checked')];
+  aeChecked.forEach(c => { const ae = AE_STYLES[c.value]; pills.push({label: ae?ae.label:c.value, key:'ae', val:c.value}); });
+
+  const levelChecked = [...document.querySelectorAll('.f-level:checked')];
+  levelChecked.forEach(c => pills.push({label:c.value, key:'level', val:c.value}));
+
+  const statusChecked = [...document.querySelectorAll('.f-status:checked')];
+  statusChecked.forEach(c => pills.push({label:c.value, key:'status', val:c.value}));
+
+  activeDeptFilters.forEach(d => pills.push({label:d, key:'dept', val:d}));
+  activeContactTagFilters.forEach(t => pills.push({label:t, key:'ctag', val:t}));
+
+  if(!pills.length) {
+    if(noMsg) noMsg.textContent = 'No filters applied — showing all '+filteredLeads.length+' leads';
+    noMsg.style.display = 'block';
+    bar.innerHTML = '';
+    bar.appendChild(noMsg);
+    return;
+  }
+  if(noMsg) noMsg.style.display = 'none';
+  bar.innerHTML = pills.map(p =>
+    '<span class="af-pill">'+p.label+'<button onclick="removeFilter(\''+p.key+'\',\''+p.val+'\')">×</button></span>'
+  ).join('');
+}
+
+function removeFilter(key, val) {
+  if(key === 'ae') { const cb = document.querySelector('.f-ae[value="'+val+'"]'); if(cb) cb.checked=false; }
+  if(key === 'level') { const cb = document.querySelector('.f-level[value="'+val+'"]'); if(cb) cb.checked=false; }
+  if(key === 'status') { const cb = document.querySelector('.f-status[value="'+val+'"]'); if(cb) cb.checked=false; }
+  if(key === 'dept') { activeDeptFilters.delete(val); renderDeptTree(); }
+  if(key === 'ctag') {
+    activeContactTagFilters.delete(val);
+    const chip = document.querySelector('#contact-tag-filter .fchip[data-tag="'+val+'"]');
+    if(chip) chip.classList.remove('active');
+  }
+  applyFilters();
+}
+
+function clearAllFilters() {
+  document.querySelectorAll('.f-ae,.f-level,.f-status,.f-bg,.f-source,.f-campstatus').forEach(c => c.checked=false);
+  document.getElementById('f-name').value='';
+  document.getElementById('f-company').value='';
+  document.getElementById('tableSearch').value='';
+  activeDeptFilters.clear();
+  activeContactTagFilters.clear();
+  activeIndustryFilters.clear();
+  activeCampTagFilters.clear();
+  document.querySelectorAll('.fchip').forEach(c => c.classList.remove('active'));
+  renderDeptTree();
+  applyFilters();
+}
+
+// ── ACCORDION ─────────────────────────────────────────────────────────────
+function toggleSection(id) {
+  const sec = document.getElementById(id);
+  if(!sec) return;
+  sec.classList.toggle('open');
+}
+
+// ── TAGGING MODAL ─────────────────────────────────────────────────────────
+let selectedTagType = '';
+
+function openTagModal(mode) {
+  mode = mode || 'campaign';
+  if(mode === 'campaign') { openCampaignTagModal(); return; }
+  if(mode === 'contact') { openContactTagModal(); return; }
+  if(mode === 'company') { openCompanyTagModal(); return; }
+}
+
+function openContactTagModal() {
+  const count = selectedRows.size;
+  if(!count) return;
+  const sel = TERRITORY_LEADS.filter(l => selectedRows.has(l.id));
+
+  document.getElementById('modal-root').innerHTML = `
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-hd">
+          <div>
+            <div class="modal-title">🏷 Tag Contacts</div>
+            <div style="font-size:11px;color:var(--s500);margin-top:2px">${count} contact${count!==1?'s':''} selected</div>
+          </div>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="form-label">Add to existing tag</div>
+            <div style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;padding:2px">
+              ${CONTACT_TAGS_ALL.map(t => `
+                <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--s200);border-radius:8px;cursor:pointer;transition:.1s" class="tag-select-row">
+                  <input type="checkbox" value="${t}" style="accent-color:var(--ink);flex-shrink:0">
+                  <span style="font-size:12px;font-weight:600;color:var(--s800)">${t}</span>
+                </label>`).join('')}
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--s200);padding-top:14px">
+            <div class="form-label">Or create a new tag</div>
+            <div style="display:flex;gap:8px">
+              <input type="text" id="new-contact-tag" placeholder="e.g. SecOps · New Logo" style="flex:1;padding:8px 11px;border:1px solid var(--s200);border-radius:8px;font-size:13px;font-family:inherit;color:var(--s800)">
+              <button class="btn btn-g btn-sm" onclick="createAndApplyContactTag()">Create</button>
+            </div>
+          </div>
+        </div>
+        <div style="padding:14px 20px;border-top:1px solid var(--s200);display:flex;justify-content:flex-end;gap:8px">
+          <button class="btn btn-g" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-p" onclick="applyContactTags()">Apply Tags</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function applyContactTags() {
+  const checked = [...document.querySelectorAll('#modal-root .tag-select-row input:checked')].map(c => c.value);
+  if(!checked.length) { alert('Select at least one tag to apply.'); return; }
+  let applied = 0;
+  TERRITORY_LEADS.forEach(l => {
+    if(!selectedRows.has(l.id)) return;
+    checked.forEach(t => { if(!l.contactTags.includes(t)) l.contactTags.push(t); });
+    applied++;
+  });
+  closeModal();
+  applyFilters();
+  showToast(checked.length + ' tag' + (checked.length!==1?'s':'') + ' applied to ' + applied + ' contact' + (applied!==1?'s':''), 'ok');
+}
+
+function createAndApplyContactTag() {
+  const val = document.getElementById('new-contact-tag')?.value.trim();
+  if(!val) return;
+  let applied = 0;
+  TERRITORY_LEADS.forEach(l => {
+    if(!selectedRows.has(l.id)) return;
+    if(!l.contactTags.includes(val)) l.contactTags.push(val);
+    applied++;
+  });
+  if(!CONTACT_TAGS_ALL.includes(val)) CONTACT_TAGS_ALL.push(val);
+  closeModal();
+  applyFilters();
+  showToast('New tag "' + val + '" created and applied to ' + applied + ' contact' + (applied!==1?'s':''), 'ok');
+}
+
+function openCompanyTagModal() {
+  const sel = TERRITORY_LEADS.filter(l => selectedRows.has(l.id));
+  const companies = [...new Set(sel.map(l => l.company))];
+  if(!companies.length) return;
+
+  document.getElementById('modal-root').innerHTML = `
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-hd">
+          <div>
+            <div class="modal-title">🏢 Tag Companies</div>
+            <div style="font-size:11px;color:var(--s500);margin-top:2px">${companies.length} compan${companies.length!==1?'ies':'y'}: ${companies.slice(0,3).join(', ')}${companies.length>3?' +' + (companies.length-3) + ' more':''}</div>
+          </div>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="form-label">Add to existing company tag</div>
+            <div style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;padding:2px">
+              ${COMPANY_TAGS_LIST.map(t => {
+                const ae = AE_BY_COMPANY_TAG[t];
+                const aeS = ae ? AE_STYLES[ae] : null;
+                const dot = aeS ? '<span style="width:14px;height:14px;border-radius:50%;background:'+aeS.bg+';color:'+aeS.hex+';display:inline-flex;align-items:center;justify-content:center;font-size:6px;font-weight:700">'+aeS.label.slice(0,2).toUpperCase()+'</span>' : '';
+                return `<label style="display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--s200);border-radius:8px;cursor:pointer;transition:.1s" class="tag-select-row">
+                  <input type="checkbox" value="${t}" style="accent-color:var(--ink);flex-shrink:0">
+                  <div style="display:flex;align-items:center;gap:6px;flex:1">
+                    ${dot}
+                    <span style="font-size:12px;font-weight:600;color:var(--s800)">${t}</span>
+                  </div>
+                </label>`;
+              }).join('')}
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--s200);padding-top:14px">
+            <div class="form-label">Or create a new company tag</div>
+            <div style="display:flex;gap:8px">
+              <input type="text" id="new-company-tag" placeholder="e.g. Tony - Manufacturing Q2" style="flex:1;padding:8px 11px;border:1px solid var(--s200);border-radius:8px;font-size:13px;font-family:inherit;color:var(--s800)">
+              <button class="btn btn-g btn-sm" onclick="createCompanyTag()">Create</button>
+            </div>
+          </div>
+        </div>
+        <div style="padding:14px 20px;border-top:1px solid var(--s200);display:flex;justify-content:flex-end;gap:8px">
+          <button class="btn btn-g" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-p" onclick="applyCompanyTags()">Apply Tags</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function applyCompanyTags() {
+  const checked = [...document.querySelectorAll('#modal-root .tag-select-row input:checked')].map(c => c.value);
+  if(!checked.length) { alert('Select at least one tag.'); return; }
+  closeModal();
+  showToast(checked.length + ' company tag' + (checked.length!==1?'s':'') + ' applied', 'ok');
+}
+
+function createCompanyTag() {
+  const val = document.getElementById('new-company-tag')?.value.trim();
+  if(!val) return;
+  if(!COMPANY_TAGS_LIST.includes(val)) COMPANY_TAGS_LIST.push(val);
+  closeModal();
+  initCampTagList();
+  showToast('Company tag "' + val + '" created', 'ok');
+}
+
+function openCampaignTagModal() {
+  const count = selectedRows.size;
+  if(!count) return;
+
+  const selected = TERRITORY_LEADS.filter(l => selectedRows.has(l.id));
+  const locked = selected.filter(l => !!l.campaignTag);
+  const available = selected.filter(l => !l.campaignTag);
+  const aeSet = new Set(selected.map(l => l.aeId));
+  const aeNames = [...aeSet].map(id => AE_STYLES[id]?.label||id).join(', ');
+
+  const lockedWarning = locked.length > 0
+    ? '<div style="padding:10px 14px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:8px;font-size:12px;color:var(--r600);margin-bottom:14px"><strong>'+locked.length+' lead'+(locked.length!==1?'s are':' is')+' blocked</strong> — already in an active campaign. They will be excluded unless you choose an Event / Webinar type.<br><span style="font-size:11px;color:var(--s500)">Blocked: '+locked.map(l=>l.name).join(', ')+'</span></div>'
+    : '';
+
+  const CAMP_TYPES = [
+    {type:'Cold Outbound — New Logo',icon:'🎯',desc:'Prospects with no prior ServiceNow relationship'},
+    {type:'Cold Outbound — Customer',icon:'🏢',desc:'Existing customers — opens as part of the account team'},
+    {type:'Event / Webinar — Customer',icon:'🎟️',desc:'Drive attendance — customer motion'},
+    {type:'Event / Webinar — New Logo',icon:'📣',desc:'Drive attendance — new logo motion'},
+    {type:'Cross-sell — New BU',icon:'➕',desc:'Expand into a new buying group at an existing customer'},
+    {type:'Upsell — Customer',icon:'📈',desc:'Expand license or tier within a current customer'},
+  ];
+
+  document.getElementById('modal-root').innerHTML = `
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-hd">
+          <div>
+            <div class="modal-title">📣 Tag to Campaign — ${count} Lead${count!==1?'s':''}</div>
+            <div style="font-size:11px;color:var(--s500);margin-top:2px">AEs: ${aeNames} · ${available.length} available, ${locked.length} blocked</div>
+          </div>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          ${lockedWarning}
+          <div>
+            <div class="form-label">Select Campaign Type</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              ${CAMP_TYPES.map(t => `
+                <div class="camp-type-card" data-type="${t.type}" onclick="selectTagType(this,'${t.type}')">
+                  <div style="font-size:18px;flex-shrink:0">${t.icon}</div>
+                  <div>
+                    <div style="font-size:12px;font-weight:700;color:var(--s800);margin-bottom:1px">${t.type}</div>
+                    <div style="font-size:11px;color:var(--s500)">${t.desc}</div>
+                  </div>
+                </div>`).join('')}
+            </div>
+          </div>
+          <div id="tag-preview" style="display:none">
+            <div class="form-label">Tag Name Preview</div>
+            <div id="tag-name-preview" style="font-size:13px;font-weight:700;padding:10px 14px;background:rgba(3,45,66,.06);border-radius:8px;font-family:monospace;color:var(--ink)"></div>
+            <div style="font-size:11px;color:var(--s400);margin-top:5px">Edit if needed:</div>
+            <input id="tag-name-edit" type="text" style="width:100%;padding:8px 11px;border:1px solid var(--s200);border-radius:8px;font-size:12px;font-family:inherit;margin-top:6px;color:var(--s800)">
+          </div>
+        </div>
+        <div style="padding:14px 20px;border-top:1px solid var(--s200);display:flex;justify-content:flex-end;gap:8px">
+          <button class="btn btn-g" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-p" id="applyTagBtn" onclick="applyTag()" disabled style="opacity:.5">Apply Tag</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function selectTagType(el, type) {
+  document.querySelectorAll('#modal-root .camp-type-card').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  selectedTagType = type;
+
+  // Build auto tag name
+  const selected = TERRITORY_LEADS.filter(l => selectedRows.has(l.id));
+  const isEvent = type.includes('Event') || type.includes('Webinar');
+  const available = selected.filter(l => !l.campaignTag || isEvent);
+  const aeSet = new Set(available.map(l => l.aeId));
+  const aeNames = [...aeSet].map(id => AE_STYLES[id]?.label||id).join(', ');
+
+  // Guess product from contact tags
+  const allCtags = available.flatMap(l => l.contactTags);
+  const firstTag = allCtags[0] || '';
+  const productGuess = firstTag.split(' ')[0] || 'Tag';
+  const autoName = productGuess + ' · ' + type.split(' ')[0] + ' · ' + aeNames;
+
+  const preview = document.getElementById('tag-preview');
+  const namePreview = document.getElementById('tag-name-preview');
+  const nameEdit = document.getElementById('tag-name-edit');
+  const applyBtn = document.getElementById('applyTagBtn');
+  if(preview) preview.style.display='block';
+  if(namePreview) namePreview.textContent = autoName;
+  if(nameEdit) nameEdit.value = autoName;
+  if(applyBtn) { applyBtn.disabled=false; applyBtn.style.opacity='1'; }
+}
+
+function applyTag() {
+  const tagName = document.getElementById('tag-name-edit')?.value.trim();
+  if(!tagName) return;
+  const isEvent = selectedTagType.includes('Event') || selectedTagType.includes('Webinar');
+  let applied = 0, skipped = 0;
+  TERRITORY_LEADS.forEach(l => {
+    if(!selectedRows.has(l.id)) return;
+    if(l.campaignTag && !isEvent) { skipped++; return; }
+    l.contactTags.push(tagName);
+    applied++;
+  });
+  closeModal();
+  clearSelection();
+  applyFilters();
+  showToast(applied + ' lead'+( applied!==1?'s':'')+' tagged: "'+tagName+'"'+(skipped?' · '+skipped+' blocked':''), 'ok');
+}
+
+function closeModal() { document.getElementById('modal-root').innerHTML = ''; }
+
+let _tt;
+function showToast(msg, type) {
+  let el = document.getElementById('toast-el');
+  if(!el) { el=document.createElement('div'); el.id='toast-el'; el.style.cssText='position:fixed;bottom:20px;right:20px;padding:9px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:9999;transform:translateY(50px);opacity:0;transition:all .22s;font-family:inherit;box-shadow:0 4px 16px rgba(0,0,0,.2)'; document.body.appendChild(el); }
+  el.textContent = msg;
+  el.style.background = type==='ok'?'#16a34a':'#032D42';
+  el.style.color = '#fff';
+  setTimeout(()=>{el.style.transform='translateY(0)';el.style.opacity='1';},10);
+  clearTimeout(_tt); _tt = setTimeout(()=>{el.style.transform='translateY(50px)';el.style.opacity='0';},3000);
+}
+
+
+function toggleFilterPanel() {
+  const panel = document.querySelector('.filter-panel');
+  const body = document.querySelector('.page-body');
+  const btn = document.getElementById('fp-collapse-btn');
+  const isCollapsed = panel.classList.contains('collapsed');
+  panel.classList.toggle('collapsed');
+  if(body) body.classList.toggle('panel-collapsed');
+  if(btn) btn.textContent = isCollapsed ? '‹' : '›';
+}
+
+function updateFilterDot() {
+  const hasFilters = document.querySelectorAll('.f-ae:checked,.f-level:checked,.f-bg:checked,.f-campstatus:checked,.f-source:checked').length > 0
+    || activeDeptFilters.size > 0 || activeContactTagFilters.size > 0 || activeIndustryFilters.size > 0 || activeCampTagFilters.size > 0;
+  const dot = document.getElementById('fp-active-dot');
+  if(dot) dot.style.display = hasFilters ? 'block' : 'none';
+}
+
+
+let currentView = 'contacts'; // 'contacts' | 'companies'
+
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll('.tbl-view-tab').forEach(t => t.classList.toggle('on', t.id === 'tab-'+view));
+  const compBtn = document.getElementById('tag-companies-btn');
+  if(compBtn) compBtn.style.display = view === 'companies' ? 'inline-flex' : 'none';
+  applyFilters();
+  updateSelectBanner();
+}
+
+function getCompaniesFromLeads(leads) {
+  const map = {};
+  leads.forEach(l => {
+    if(!map[l.company]) map[l.company] = {company:l.company, aeId:l.aeId, industry:l.industry||'—', leads:0, levels:new Set(), contactTags:new Set()};
+    map[l.company].leads++;
+    map[l.company].levels.add(l.level);
+    l.contactTags.forEach(t => map[l.company].contactTags.add(t));
+  });
+  return Object.values(map);
+}
+
+function renderCompaniesView(companies) {
+  const tbody = document.getElementById('leadsTableBody');
+  const countEl = document.getElementById('resultCount');
+  if(countEl) countEl.textContent = companies.length + ' compan' + (companies.length===1?'y':'ies');
+  document.getElementById('companies-count-tab').textContent = companies.length;
+
+  if(!companies.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--s400)">No companies match</td></tr>';
+    return;
+  }
+
+  // Update thead for companies view
+  const thead = document.querySelector('.tbl thead tr');
+  if(thead) thead.innerHTML = `
+    <th style="width:36px"><input type="checkbox" id="selectAllChk" onchange="toggleSelectAll(this)" style="accent-color:var(--ink)"></th>
+    <th>Company</th>
+    <th>Account Executive</th>
+    <th>Industry</th>
+    <th>Leads in Territory</th>
+    <th>Levels Present</th>
+    <th>Contact Tags</th>
+    <th>Status</th>`;
+
+  tbody.innerHTML = '';
+  companies.forEach(c => {
+    const ae = AE_STYLES[c.aeId] || {hex:'#64748b',bg:'rgba(100,116,139,.1)',label:c.aeId};
+    // A company is "selected" if any of its contacts are selected
+    const companyLeads = TERRITORY_LEADS.filter(l => l.company === c.company);
+    const isSelected = companyLeads.some(l => selectedRows.has(l.id)) || selectedRows.has(c.company);
+    const levels = [...c.levels].join(', ');
+    const tags = [...c.contactTags].map(t => '<span class="ctag-chip">'+t+'</span>').join('');
+    const tr = document.createElement('tr');
+    tr.className = isSelected ? 'selected fade-in' : 'fade-in';
+    tr.innerHTML =
+      '<td><input type="checkbox" '+(isSelected?'checked':'')+' data-company="'+c.company+'" onclick="event.stopPropagation();toggleCompanyCheck(event,this.dataset.company)" style="accent-color:var(--ink)"></td>' +
+      '<td style="font-weight:600;color:var(--s900)">'+c.company+'</td>' +
+      '<td><div style="display:flex;align-items:center;gap:6px"><div class="ae-dot" style="background:'+ae.bg+';color:'+ae.hex+'">'+ae.label.slice(0,2).toUpperCase()+'</div><span style="font-size:11px;color:var(--s600)">'+ae.label+'</span></div></td>' +
+      '<td style="font-size:11px;color:var(--s500)">'+c.industry+'</td>' +
+      '<td style="font-size:12px;font-weight:600;color:var(--s800)">'+c.leads+'</td>' +
+      '<td style="font-size:11px;color:var(--s600)">'+levels+'</td>' +
+      '<td>'+(tags||'<span style="color:var(--s300)">—</span>')+'</td>' +
+      '<td style="font-size:11px;color:var(--s400)">Active</td>';
+    tr.addEventListener('click', e => { if(e.target.tagName !== 'INPUT') toggleCompanyRow(e, c.company); });
+    tbody.appendChild(tr);
+  });
+}
+
+function toggleCompanyRow(e, company) {
+  if(selectedRows.has(company)) selectedRows.delete(company);
+  else selectedRows.add(company);
+  renderTable();
+  updateSelectBanner();
+}
+
+function toggleCompanyCheck(e, company) {
+  if(e.target.checked) selectedRows.add(company);
+  else selectedRows.delete(company);
+  updateSelectBanner();
+}
+
+function restoreContactsHeaders() {
+  const thead = document.querySelector('.tbl thead tr');
+  if(!thead) return;
+  thead.innerHTML =
+    '<th style="width:36px"><input type="checkbox" id="selectAllChk" onchange="toggleSelectAll(this)" style="accent-color:var(--ink)"></th>' +
+    '<th>Name</th><th>Title</th><th>Level</th><th>Company</th><th>Industry</th><th>Account Executive</th><th>Lead Source</th><th>Campaign Tag</th>';
+}
+
+
+// Update companies count on load
+document.addEventListener('DOMContentLoaded',()=>{const c=getCompaniesFromLeads(TERRITORY_LEADS);const el=document.getElementById('companies-count-tab');if(el)el.textContent=c.length;});
+// ── INIT ──────────────────────────────────────────────────────────────────
+
+const ALL_INDUSTRIES = [...new Set(TERRITORY_LEADS.map(l => l.industry||'Other'))].filter(Boolean).sort();
+const ALL_CAMPAIGN_TAGS = [...new Set(TERRITORY_LEADS.map(l => l.campaignTag).filter(Boolean))].sort();
+const COMPANY_TAGS_LIST = ['Tony - Top 10 Territory','Jeff - Top 9 Territory','Riley - Top 11 Territory','Katie - Top 10 Territory','Brian - Top 8 Territory','Seamus - Top 8 Customers','Mikaela - Top 5 NNL'];
+const AE_BY_COMPANY_TAG = {'Tony - Top 10 Territory':'tony','Jeff - Top 9 Territory':'jeff','Riley - Top 11 Territory':'riley','Katie - Top 10 Territory':'katie','Brian - Top 8 Territory':'brian','Seamus - Top 8 Customers':'seamus','Mikaela - Top 5 NNL':'mikaela'};
+let activeIndustryFilters = new Set();
+let activeCampTagFilters = new Set();
+
+function initIndustryList(q) {
+  const el = document.getElementById('industry-list');
+  if(!el) return;
+  el.innerHTML = '';
+  ALL_INDUSTRIES.filter(i => !q || i.toLowerCase().includes(q.toLowerCase())).forEach(ind => {
+    const label = document.createElement('label');
+    label.className = 'fp-check-item';
+    label.innerHTML = '<input type="checkbox" style="accent-color:var(--ink)"> ' + ind;
+    const cb = label.querySelector('input');
+    cb.checked = activeIndustryFilters.has(ind);
+    cb.addEventListener('change', () => {
+      if(cb.checked) activeIndustryFilters.add(ind); else activeIndustryFilters.delete(ind);
+      applyFilters();
+    });
+    el.appendChild(label);
+  });
+}
+
+function filterIndustryList(q) { initIndustryList(q); }
+
+function initContactTagList(q) {
+  const el = document.getElementById('contact-tag-filter');
+  if(!el) return;
+  el.innerHTML = '';
+  CONTACT_TAGS_ALL.filter(t => !q || t.toLowerCase().includes(q.toLowerCase())).forEach(t => {
+    const label = document.createElement('label');
+    label.className = 'fp-check-item';
+    label.innerHTML = '<input type="checkbox" style="accent-color:var(--ink)"> <span style="font-size:11px">'+t+'</span>';
+    const cb = label.querySelector('input');
+    cb.checked = activeContactTagFilters.has(t);
+    cb.addEventListener('change', () => {
+      if(cb.checked) activeContactTagFilters.add(t); else activeContactTagFilters.delete(t);
+      applyFilters();
+    });
+    el.appendChild(label);
+  });
+}
+
+function filterContactTagList(q) { initContactTagList(q); }
+
+function initCampTagList() {
+  const el = document.getElementById('campaign-tag-filter');
+  if(!el) return;
+  el.innerHTML = '';
+  COMPANY_TAGS_LIST.forEach(t => {
+    const ae = AE_BY_COMPANY_TAG[t];
+    const aeStyle = ae ? AE_STYLES[ae] : null;
+    const label = document.createElement('label');
+    label.className = 'fp-check-item';
+    const dot = aeStyle ? '<span style="width:12px;height:12px;border-radius:50%;background:'+aeStyle.bg+';color:'+aeStyle.hex+';display:inline-flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;flex-shrink:0">'+aeStyle.label.slice(0,2).toUpperCase()+'</span>' : '';
+    label.innerHTML = '<input type="checkbox" style="accent-color:var(--ink)"> <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px">'+dot+t+'</span>';
+    const cb = label.querySelector('input');
+    cb.checked = activeCampTagFilters.has(t);
+    cb.addEventListener('change', () => {
+      // Filter by AE when company tag selected
+      const aeCb = document.querySelector('.f-ae[value="'+ae+'"]');
+      if(aeCb) { aeCb.checked = cb.checked; }
+      if(cb.checked) activeCampTagFilters.add(t); else { activeCampTagFilters.delete(t); }
+      applyFilters();
+    });
+    el.appendChild(label);
+  });
+}
+
+initContactTagList();
+initIndustryList();
+initCampTagList();
+renderDeptTree();
+renderTable();
+updateActiveFilterBar();
+</script>
+</body>
+</html>
