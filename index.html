@@ -353,7 +353,7 @@ button{font-family:inherit;}
     <a href="campaigns.html"        class="sbar-item "   ><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
     <a href="buying-groups.html"    class="sbar-item "     ><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
     <a href="leads.html"            class="sbar-item "  ><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
-    <a href="#"                     class="sbar-item "  ><span class="sbar-ic">📅</span>Tasks<span class="sb r">17</span></a>
+    <a href="territory-leads.html"    class="sbar-item"    ><span class="sbar-ic">🗺</span>Territory Leads<span class="sb">200</span></a>
     <a href="accounts.html"         class="sbar-item "  ><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
     <a href="opportunities.html"    class="sbar-item "   ><span class="sbar-ic">💼</span>Opportunities</a>
     <a href="book-of-business.html" class="sbar-item "    ><span class="sbar-ic">📖</span>Book of Business</a>
@@ -427,6 +427,7 @@ button{font-family:inherit;}
       <a href="buying-groups.html" class="ptab">Buying Groups <span class="ptab-ct">12</span></a>
       <a href="leads.html" class="ptab">Leads <span class="ptab-ct">39</span></a>
       <a href="accounts.html" class="ptab">Accounts <span class="ptab-ct">340</span></a>
+      <a href="territory-leads.html" class="ptab">Territory Leads <span class="ptab-ct">200</span></a>
       <a href="opportunities.html" class="ptab">Opportunities <span class="ptab-ct">5</span></a>
       <a href="book-of-business.html" class="ptab">Book of Business</a>
       <a href="ae-alignment.html" class="ptab">AE Alignment</a>
@@ -484,7 +485,7 @@ button{font-family:inherit;}
             <span style="font-size:12px;font-weight:600;color:var(--s700)">Top of Mind</span>
             <span style="font-size:11px;color:var(--s400)">Things to remember before you act</span>
           </div>
-          <button class="btn btn-w btn-xs" onclick="addTOM()">+ Add Note</button>
+          <button class="btn btn-w btn-xs" onclick="openTOMModal()">+ Add Note</button>
         </div>
         <div class="tom-toolbar">
           <select class="tom-sel"><option>Verdana</option><option>DM Sans</option></select>
@@ -502,33 +503,42 @@ button{font-family:inherit;}
         <div id="tomList">
 
           <div class="tom-note" id="tom-1">
-            <div class="tom-av" style="background:#7c3aed">RS</div>
+            <div class="tom-av" style="background:#B45309">RS</div>
             <div class="tom-bd">
               <div class="tom-name">FHLBC — Do not prospect <span class="tom-tg tg-r">Do not contact</span><span class="tom-ts">Riley Scott · Today</span></div>
               <div class="tom-txt">"Lets take FHLBC off your prospecting list. The platform owner just pinged me about the K26 invite you sent and asked me to filter all outreach through her."</div>
               <div class="tom-sub">Federal Home Loan Bank of Chicago · All outreach routes through AE only</div>
             </div>
-            <button class="tom-x" onclick="dismissTOM('tom-1')">✕</button>
+            <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+              <button class="tom-x" onclick="editTOMNote('tom-1')" title="Edit" style="color:var(--s400)">✎</button>
+              <button class="tom-x" onclick="removeTOMNote('tom-1')" title="Delete">✕</button>
+            </div>
           </div>
 
           <div class="tom-note" id="tom-2">
-            <div class="tom-av" style="background:var(--ink)">TR</div>
+            <div class="tom-av" style="background:#032D42">TR</div>
             <div class="tom-bd">
               <div class="tom-name">Echo Global — Hold BDR outreach <span class="tom-tg tg-a">Coordinate first</span><span class="tom-ts">Tony Riebel · Mar 4</span></div>
               <div class="tom-txt">Tony called after ITOM Discovery call — Sarah Chen is key champion and he wants to control the outreach cadence.</div>
               <div class="tom-sub">Echo Global Logistics · ITOM AIOps · OPTY 543211</div>
             </div>
-            <button class="tom-x" onclick="dismissTOM('tom-2')">✕</button>
+            <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+              <button class="tom-x" onclick="editTOMNote('tom-2')" title="Edit" style="color:var(--s400)">✎</button>
+              <button class="tom-x" onclick="removeTOMNote('tom-2')" title="Delete">✕</button>
+            </div>
           </div>
 
           <div class="tom-note" id="tom-3">
-            <div class="tom-av" style="background:#059669">BD</div>
+            <div class="tom-av" style="background:#D93025">BD</div>
             <div class="tom-bd">
               <div class="tom-name">AIT Worldwide <span class="tom-tg tg-g">Stage 5</span><span class="tom-ts">Brian Disher · Feb 20</span></div>
               <div class="tom-txt">Brian asked to pause all BDR activity. Contract negotiations in legal — any unsolicited outreach could disrupt the close.</div>
               <div class="tom-sub">AIT Worldwide Logistics · AI Control Tower · OPTY 543211</div>
             </div>
-            <button class="tom-x" onclick="dismissTOM('tom-3')">✕</button>
+            <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+              <button class="tom-x" onclick="editTOMNote('tom-3')" title="Edit" style="color:var(--s400)">✎</button>
+              <button class="tom-x" onclick="removeTOMNote('tom-3')" title="Delete">✕</button>
+            </div>
           </div>
 
         </div>
@@ -795,22 +805,6 @@ function dismissTOM(id){
   setTimeout(function(){el.remove();},380);
 }
 
-// Add TOM note
-function addTOM(){
-  var note=prompt('Add a note (e.g. "Riley — FHLBC — do not prospect"):');
-  if(!note||!note.trim())return;
-  var list=document.getElementById('tomList');
-  if(!list)return;
-  var id='tom-'+Date.now(),div=document.createElement('div');
-  div.className='tom-note';div.id=id;
-  div.innerHTML='<div class="tom-av" style="background:var(--s500)">📌</div>'+
-    '<div class="tom-bd"><div class="tom-name">New note <span class="tom-ts">Just now</span></div>'+
-    '<div class="tom-txt">'+note.replace(/</g,'&lt;')+'</div></div>'+
-    '<button class="tom-x" onclick="dismissTOM(\''+id+'\')">✕</button>';
-  list.appendChild(div);
-  div.style.opacity='0';
-  setTimeout(function(){div.style.transition='opacity .3s';div.style.opacity='1';},10);
-}
 
 // Side tab switching
 function switchTab(tab,containerId){
@@ -820,5 +814,216 @@ function switchTab(tab,containerId){
   tab.classList.add('on');
 }
 </script>
+
+<script>
+// ── TOP OF MIND CRUD ──────────────────────────────────────────────────────
+var TOM_EDITING_ID = null;
+var TAG_LABELS_TOM = {'do-not-contact':'Do not contact','coordinate':'Coordinate first','in-progress':'In progress','stage-5':'Stage 5','follow-up':'Follow up'};
+var TAG_CLS_TOM = {'do-not-contact':'tg-r','coordinate':'tg-a','in-progress':'tg-a','stage-5':'tg-g','follow-up':'tg-g'};
+function escH(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function removeTOMNote(id){var el=document.getElementById(id);if(!el)return;el.style.transition='opacity .2s,max-height .25s,padding .25s';el.style.opacity='0';el.style.maxHeight=el.offsetHeight+'px';setTimeout(function(){el.style.maxHeight='0';el.style.overflow='hidden';el.style.padding='0';},20);setTimeout(function(){el.remove();},280);}
+function dismissTOM(id){removeTOMNote(id);}
+function openTOMModal(editId){TOM_EDITING_ID=editId||null;var bg=document.getElementById('tomModalBg');var titleEl=document.getElementById('tomModalTitle');var deleteBtn=document.getElementById('tomDeleteBtn');['tomTitle','tomNote','tomSub','tomCustomTag'].forEach(function(f){var e=document.getElementById(f);if(e)e.value='';});var ae=document.getElementById('tomAE');var tg=document.getElementById('tomTag');var cw=document.getElementById('tomCustomTagWrap');if(ae)ae.value='';if(tg)tg.value='';if(cw)cw.style.display='none';if(editId){var ne=document.getElementById(editId);if(ne){var nm=ne.querySelector('.tom-name');var tx=ne.querySelector('.tom-txt');var sb=ne.querySelector('.tom-sub');if(nm){var cl=nm.cloneNode(true);cl.querySelectorAll('span').forEach(function(s){s.remove();});document.getElementById('tomTitle').value=cl.textContent.trim();}if(tx)document.getElementById('tomNote').value=tx.textContent.replace(/^"|"$/g,'').trim();if(sb)document.getElementById('tomSub').value=sb.textContent.trim();}if(titleEl)titleEl.textContent='✏️ Edit Note';if(deleteBtn)deleteBtn.style.display='inline-flex';}else{if(titleEl)titleEl.textContent='📌 Add Note';if(deleteBtn)deleteBtn.style.display='none';}if(bg)bg.style.display='flex';setTimeout(function(){var t=document.getElementById('tomTitle');if(t)t.focus();},80);}
+function addTOM(){openTOMModal(null);}
+function editTOMNote(id){openTOMModal(id);}
+function closeTOMModal(){var bg=document.getElementById('tomModalBg');if(bg)bg.style.display='none';}
+function saveTOM(){var title=document.getElementById('tomTitle').value.trim();var note=document.getElementById('tomNote').value.trim();if(!title&&!note){document.getElementById('tomTitle').focus();return;}var aeVal=document.getElementById('tomAE').value;var aeName='',aeColor='var(--s500)',aeInit='📌';if(aeVal){var p=aeVal.split('|');aeName=p[0];aeColor=p[1]||aeColor;aeInit=p[0].split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();}var tagVal=document.getElementById('tomTag').value;var tag=tagVal==='custom'?(document.getElementById('tomCustomTag').value.trim()||''):tagVal;var sub=document.getElementById('tomSub').value.trim();var now=new Date();var dateStr=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate();var tagHtml=tag?'<span class="tom-tg '+(TAG_CLS_TOM[tag]||'tg-a')+'">'+(TAG_LABELS_TOM[tag]||tag)+'</span>':'';var aeDate=[aeName,dateStr].filter(Boolean).join(' · ');if(TOM_EDITING_ID){var ex=document.getElementById(TOM_EDITING_ID);if(ex){var av=ex.querySelector('.tom-av');var nm=ex.querySelector('.tom-name');var tx=ex.querySelector('.tom-txt');var sb=ex.querySelector('.tom-sub');if(av){av.style.background=aeColor;av.textContent=aeInit;}if(nm)nm.innerHTML=escH(title)+' '+tagHtml+'<span class="tom-ts">'+escH(aeDate)+'</span>';if(tx)tx.textContent=note;if(sb)sb.textContent=sub;}}else{var list=document.getElementById('tomList');var id='tom-'+Date.now();var div=document.createElement('div');div.className='tom-note';div.id=id;div.style.opacity='0';div.innerHTML='<div class="tom-av" style="background:'+aeColor+'">'+aeInit+'</div><div class="tom-bd"><div class="tom-name">'+escH(title)+' '+tagHtml+'<span class="tom-ts">'+escH(aeDate)+'</span></div><div class="tom-txt">'+escH(note)+'</div>'+(sub?'<div class="tom-sub">'+escH(sub)+'</div>':'')+'</div><div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0"><button class="tom-x" onclick="editTOMNote(''+id+'')" title="Edit" style="color:var(--s400)">✎</button><button class="tom-x" onclick="removeTOMNote(''+id+'')" title="Delete">✕</button></div>';list.insertBefore(div,list.firstChild);setTimeout(function(){div.style.transition='opacity .3s';div.style.opacity='1';},10);}closeTOMModal();}
+function deleteTOMFromModal(){var id=TOM_EDITING_ID;if(id){closeTOMModal();setTimeout(function(){removeTOMNote(id);},50);}}
+document.addEventListener('DOMContentLoaded',function(){var s=document.getElementById('tomTag');if(s)s.addEventListener('change',function(){var cw=document.getElementById('tomCustomTagWrap');if(cw)cw.style.display=this.value==='custom'?'block':'none';});});
+</script>
+<script>
+var TOM_EDITING_ID = null;
+var TAG_LABELS_TOM = {'do-not-contact':'Do not contact','coordinate':'Coordinate first','in-progress':'In progress','stage-5':'Stage 5','follow-up':'Follow up'};
+var TAG_CLS_TOM = {'do-not-contact':'tg-r','coordinate':'tg-a','in-progress':'tg-a','stage-5':'tg-g','follow-up':'tg-g'};
+
+function escH(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function removeTOMNote(id){
+  var el=document.getElementById(id);
+  if(!el)return;
+  el.style.transition='opacity .2s,max-height .25s,padding .25s';
+  el.style.opacity='0';
+  el.style.maxHeight=el.offsetHeight+'px';
+  setTimeout(function(){el.style.maxHeight='0';el.style.overflow='hidden';el.style.padding='0';},20);
+  setTimeout(function(){el.remove();},280);
+}
+
+function dismissTOM(id){removeTOMNote(id);}
+
+function openTOMModal(editId){
+  TOM_EDITING_ID=editId||null;
+  var bg=document.getElementById('tomModalBg');
+  var titleEl=document.getElementById('tomModalTitle');
+  var deleteBtn=document.getElementById('tomDeleteBtn');
+  ['tomTitle','tomNote','tomSub','tomCustomTag'].forEach(function(f){
+    var e=document.getElementById(f);if(e)e.value='';
+  });
+  var ae=document.getElementById('tomAE');
+  var tg=document.getElementById('tomTag');
+  var cw=document.getElementById('tomCustomTagWrap');
+  if(ae)ae.value='';
+  if(tg)tg.value='';
+  if(cw)cw.style.display='none';
+  if(editId){
+    var ne=document.getElementById(editId);
+    if(ne){
+      var nm=ne.querySelector('.tom-name');
+      var tx=ne.querySelector('.tom-txt');
+      var sb=ne.querySelector('.tom-sub');
+      if(nm){var cl=nm.cloneNode(true);cl.querySelectorAll('span').forEach(function(s){s.remove();});document.getElementById('tomTitle').value=cl.textContent.trim();}
+      if(tx)document.getElementById('tomNote').value=tx.textContent.replace(/^"|"$/g,'').trim();
+      if(sb)document.getElementById('tomSub').value=sb.textContent.trim();
+    }
+    if(titleEl)titleEl.textContent='\u270f\ufe0f Edit Note';
+    if(deleteBtn)deleteBtn.style.display='inline-flex';
+  } else {
+    if(titleEl)titleEl.textContent='\ud83d\udccc Add Note';
+    if(deleteBtn)deleteBtn.style.display='none';
+  }
+  if(bg)bg.style.display='flex';
+  setTimeout(function(){var t=document.getElementById('tomTitle');if(t)t.focus();},80);
+}
+
+function addTOM(){openTOMModal(null);}
+function editTOMNote(id){openTOMModal(id);}
+
+function closeTOMModal(){
+  var bg=document.getElementById('tomModalBg');
+  if(bg)bg.style.display='none';
+}
+
+function saveTOM(){
+  var title=document.getElementById('tomTitle').value.trim();
+  var note=document.getElementById('tomNote').value.trim();
+  if(!title&&!note){document.getElementById('tomTitle').focus();return;}
+  var aeVal=document.getElementById('tomAE').value;
+  var aeName='',aeColor='var(--s500)',aeInit='\ud83d\udccc';
+  if(aeVal){
+    var p=aeVal.split('|');
+    aeName=p[0];aeColor=p[1]||aeColor;
+    aeInit=p[0].split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
+  }
+  var tagVal=document.getElementById('tomTag').value;
+  var tag=tagVal==='custom'?(document.getElementById('tomCustomTag').value.trim()||''):tagVal;
+  var sub=document.getElementById('tomSub').value.trim();
+  var now=new Date();
+  var dateStr=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate();
+  var tagHtml=tag?'<span class="tom-tg '+(TAG_CLS_TOM[tag]||'tg-a')+'">'+(TAG_LABELS_TOM[tag]||tag)+'</span>':'';
+  var aeDate=[aeName,dateStr].filter(Boolean).join(' \u00b7 ');
+
+  if(TOM_EDITING_ID){
+    var ex=document.getElementById(TOM_EDITING_ID);
+    if(ex){
+      var av=ex.querySelector('.tom-av');
+      var nm=ex.querySelector('.tom-name');
+      var tx=ex.querySelector('.tom-txt');
+      var sb=ex.querySelector('.tom-sub');
+      if(av){av.style.background=aeColor;av.textContent=aeInit;}
+      if(nm)nm.innerHTML=escH(title)+' '+tagHtml+'<span class="tom-ts">'+escH(aeDate)+'</span>';
+      if(tx)tx.textContent=note;
+      if(sb)sb.textContent=sub;
+    }
+  } else {
+    var list=document.getElementById('tomList');
+    var id='tom-'+Date.now();
+    var div=document.createElement('div');
+    div.className='tom-note';div.id=id;div.style.opacity='0';
+    var actDiv=document.createElement('div');
+    actDiv.style.cssText='display:flex;flex-direction:column;gap:4px;flex-shrink:0';
+    var editBtn=document.createElement('button');
+    editBtn.className='tom-x';editBtn.title='Edit';editBtn.style.color='var(--s400)';editBtn.textContent='\u270e';
+    editBtn.addEventListener('click',function(){editTOMNote(id);});
+    var delBtn=document.createElement('button');
+    delBtn.className='tom-x';delBtn.title='Delete';delBtn.textContent='\u2715';
+    delBtn.addEventListener('click',function(){removeTOMNote(id);});
+    actDiv.appendChild(editBtn);actDiv.appendChild(delBtn);
+    div.innerHTML='<div class="tom-av" style="background:'+aeColor+'">'+aeInit+'</div>'+
+      '<div class="tom-bd">'+
+        '<div class="tom-name">'+escH(title)+' '+tagHtml+'<span class="tom-ts">'+escH(aeDate)+'</span></div>'+
+        '<div class="tom-txt">'+escH(note)+'</div>'+
+        (sub?'<div class="tom-sub">'+escH(sub)+'</div>':'')+
+      '</div>';
+    div.appendChild(actDiv);
+    list.insertBefore(div,list.firstChild);
+    setTimeout(function(){div.style.transition='opacity .3s';div.style.opacity='1';},10);
+  }
+  closeTOMModal();
+}
+
+function deleteTOMFromModal(){
+  var id=TOM_EDITING_ID;
+  if(id){closeTOMModal();setTimeout(function(){removeTOMNote(id);},50);}
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  var s=document.getElementById('tomTag');
+  if(s)s.addEventListener('change',function(){
+    var cw=document.getElementById('tomCustomTagWrap');
+    if(cw)cw.style.display=this.value==='custom'?'block':'none';
+  });
+});
+</script>
+<!-- TOM MODAL -->
+<div id="tomModalBg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(3px)">
+  <div style="background:#fff;border-radius:12px;width:min(520px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)">
+    <div style="padding:16px 20px;border-bottom:1px solid var(--s200);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:2">
+      <div id="tomModalTitle" style="font-size:15px;font-weight:700;color:var(--s900)">📌 Add Note</div>
+      <button onclick="closeTOMModal()" style="width:28px;height:28px;border-radius:50%;background:var(--s100);border:none;color:var(--s500);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">×</button>
+    </div>
+    <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+      <input type="hidden" id="tomEditId">
+      <div>
+        <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s500);display:block;margin-bottom:5px">Title / Account</label>
+        <input id="tomTitle" type="text" placeholder="e.g. FHLBC — Do not prospect" style="width:100%;padding:8px 11px;border:1px solid var(--s200);border-radius:8px;font-size:13px;font-family:inherit;color:var(--s800)">
+      </div>
+      <div>
+        <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s500);display:block;margin-bottom:5px">Note</label>
+        <textarea id="tomNote" rows="3" placeholder="What do you need to remember?" style="width:100%;padding:8px 11px;border:1px solid var(--s200);border-radius:8px;font-size:13px;font-family:inherit;color:var(--s800);resize:vertical;line-height:1.5"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s500);display:block;margin-bottom:5px">Account Executive</label>
+          <select id="tomAE" style="width:100%;padding:8px 11px;border:1px solid var(--s200);border-radius:8px;font-size:13px;font-family:inherit;color:var(--s800)">
+            <option value="">— None —</option>
+            <option value="Tony Riebel|#032D42">Tony Riebel</option>
+            <option value="Jeff Wuestenfeld|#044355">Jeff Wuestenfeld</option>
+            <option value="Riley Scott|#B45309">Riley Scott</option>
+            <option value="Katie Schneider|#5B21B6">Katie Schneider</option>
+            <option value="Brian Disher|#D93025">Brian Disher</option>
+            <option value="Seamus Donovan|#1a7a00">Seamus Donovan</option>
+            <option value="Mikaela Youpa|#0369A1">Mikaela Youpa</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s500);display:block;margin-bottom:5px">Tag</label>
+          <select id="tomTag" style="width:100%;padding:8px 11px;border:1px solid var(--s200);border-radius:8px;font-size:13px;font-family:inherit;color:var(--s800)">
+            <option value="">— None —</option>
+            <option value="do-not-contact">Do not contact</option>
+            <option value="coordinate">Coordinate first</option>
+            <option value="in-progress">In progress</option>
+            <option value="stage-5">Stage 5</option>
+            <option value="follow-up">Follow up</option>
+            <option value="custom">Custom…</option>
+          </select>
+        </div>
+      </div>
+      <div id="tomCustomTagWrap" style="display:none">
+        <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s500);display:block;margin-bottom:5px">Custom Tag Label</label>
+        <input id="tomCustomTag" type="text" placeholder="e.g. Legal Hold" style="width:100%;padding:8px 11px;border:1px solid var(--s200);border-radius:8px;font-size:13px;font-family:inherit;color:var(--s800)">
+      </div>
+      <div>
+        <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s500);display:block;margin-bottom:5px">Sub-context <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <input id="tomSub" type="text" placeholder="e.g. ITOM AIOps · OPTY 543211" style="width:100%;padding:8px 11px;border:1px solid var(--s200);border-radius:8px;font-size:13px;font-family:inherit;color:var(--s800)">
+      </div>
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid var(--s200);display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <button id="tomDeleteBtn" onclick="deleteTOMFromModal()" style="display:none;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid rgba(220,38,38,.3);background:rgba(220,38,38,.06);color:var(--r600)">🗑 Delete Note</button>
+      <div style="display:flex;gap:8px;margin-left:auto">
+        <button onclick="closeTOMModal()" style="font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid var(--s200);background:transparent;color:var(--s600)">Cancel</button>
+        <button onclick="saveTOM()" style="font-family:inherit;font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;cursor:pointer;border:none;background:var(--ink);color:#fff">Save Note</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
