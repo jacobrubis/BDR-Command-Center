@@ -284,43 +284,144 @@ button{font-family:inherit;}
 .pl-val{font-size:12px;color:var(--s700);font-weight:500;flex:1;text-align:right;}
 .pl-val.link{color:var(--b600);cursor:pointer;}
 
-/* FORECAST */
-.fstage-row{display:flex;align-items:center;gap:6px;margin-bottom:10px;}
-.fstage-dots{display:flex;gap:4px;flex:1;}
-.fsdot{height:5px;flex:1;border-radius:3px;background:var(--s100);}
-.fsdot.filled{background:var(--ink);}
-.fsdot.active{background:var(--wasabi);}
-.fdate{background:var(--s50);border:1px solid var(--s200);border-radius:var(--r);padding:8px 11px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
-.fdate:hover{border-color:var(--s300);}
-.fdate-lbl{font-size:10px;color:var(--s400);margin-bottom:2px;}
-.fdate-val{font-size:12px;font-weight:600;color:var(--s700);}
-
 /* WHO KNOWS WHOM */
 .wkw-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--s50);border-radius:var(--rmd);border:1px solid var(--s100);}
 
-
-/* PRE-CALL TALKING POINTS */
+/* ── PRE-CALL TALKING POINTS (REDESIGNED) ── */
 .pct-card{background:var(--white);border:1px solid var(--s200);border-radius:var(--rlg);overflow:hidden;box-shadow:var(--sh-xs);margin-bottom:12px;}
-.pct-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;cursor:pointer;user-select:none;border-bottom:1px solid var(--s100);transition:.12s;}
-.pct-hd:hover{background:var(--s50);}
-.pct-title-row{display:flex;align-items:center;gap:8px;}
-.pct-main-title{font-size:12px;font-weight:700;color:var(--s800);}
-.pct-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;background:rgba(3,45,66,.07);color:var(--ink);}
-.pct-arrow{font-size:11px;color:var(--s400);transition:.2s;}
-.pct-body{border-top:1px solid var(--s100);}
-.pct-section{border-bottom:1px solid var(--s100);}
-.pct-section:last-child{border-bottom:none;}
-.pct-sec-hd{display:flex;align-items:center;justify-content:space-between;padding:9px 15px;cursor:pointer;font-size:11px;font-weight:600;color:var(--s600);background:var(--s50);transition:.1s;}
-.pct-sec-hd:hover{color:var(--s800);background:var(--s100);}
-.pct-sec-title{display:flex;align-items:center;gap:6px;}
-.pct-sec-body{display:none;padding:10px 15px;background:var(--white);}
-.pct-sec-body.open{display:block;}
-.pct-script{font-size:12px;color:var(--s700);line-height:1.65;font-style:italic;padding:10px 13px;background:rgba(3,45,66,.03);border-left:3px solid var(--ink);border-radius:0 6px 6px 0;}
-.pct-item{display:flex;gap:7px;align-items:flex-start;font-size:12px;color:var(--s600);line-height:1.5;padding:5px 0;border-bottom:1px solid var(--s50);}
-.pct-item:last-child{border-bottom:none;}
-.pct-item::before{content:'→';color:var(--wdk);font-weight:700;flex-shrink:0;}
+.pct-hd{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;cursor:pointer;user-select:none;background:var(--s50);border-bottom:1px solid var(--s200);transition:.12s;}
+.pct-hd:hover{background:var(--s100);}
+.pct-hd-left{display:flex;align-items:center;gap:8px;}
+.pct-hd-title{font-size:12px;font-weight:700;color:var(--s800);}
+.pct-hd-sub{font-size:11px;color:var(--s400);}
+.pct-toggle{font-size:11px;color:var(--s400);transition:transform .2s;}
+.pct-toggle.open{transform:rotate(180deg);}
+.pct-body{display:none;}
+.pct-body.open{display:block;}
+
+/* Situation chips */
+.sit-row{display:flex;align-items:center;gap:6px;padding:10px 15px;border-bottom:1px solid var(--s100);background:var(--s50);flex-wrap:wrap;}
+.sit-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid;}
+.sit-customer{background:var(--g50);color:var(--g600);border-color:rgba(22,163,74,.25);}
+.sit-newlogo{background:var(--b50);color:var(--b600);border-color:rgba(59,130,246,.25);}
+.sit-opp-active{background:var(--a50);color:#92400e;border-color:rgba(217,119,6,.3);}
+.sit-opp-none{background:var(--s100);color:var(--s500);border-color:var(--s200);}
+.sit-source{background:var(--p50);color:var(--p600);border-color:rgba(168,85,247,.2);}
+
+/* Opener section */
+.pct-opener{padding:12px 15px;border-bottom:1px solid var(--s100);}
+.pct-sec-label{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--s400);margin-bottom:7px;display:flex;align-items:center;gap:6px;}
+.pct-sec-label::after{content:'';flex:1;height:1px;background:var(--s100);}
+.pct-script-block{font-size:12px;color:var(--s700);line-height:1.7;font-style:italic;padding:10px 13px;background:rgba(3,45,66,.03);border-left:3px solid var(--ink);border-radius:0 6px 6px 0;position:relative;}
+.pct-script-block .script-quote{position:absolute;top:6px;right:10px;font-size:18px;color:var(--s200);font-style:normal;line-height:1;}
+
+/* Questions section */
+.pct-questions{padding:12px 15px;border-bottom:1px solid var(--s100);}
+.pct-q-group{margin-bottom:10px;}
+.pct-q-group:last-child{margin-bottom:0;}
+.pct-q-group-label{font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;margin-bottom:6px;display:inline-flex;align-items:center;gap:5px;}
+.pct-q-label-expansion{background:rgba(217,119,6,.08);color:#92400e;}
+.pct-q-label-discovery{background:rgba(3,45,66,.07);color:var(--ink);}
+.pct-q-label-qualification{background:rgba(22,163,74,.08);color:var(--g600);}
+.pct-q-label-advancement{background:rgba(59,130,246,.08);color:var(--b600);}
+.pct-q-list{display:flex;flex-direction:column;gap:5px;}
+.pct-q-item{display:flex;gap:8px;align-items:flex-start;padding:6px 9px;border-radius:var(--rmd);border:1px solid var(--s100);background:var(--s50);cursor:pointer;transition:.1s;}
+.pct-q-item:hover{border-color:var(--s300);background:var(--white);}
+.pct-q-num{font-size:10px;font-weight:700;color:var(--s400);min-width:16px;padding-top:1px;font-family:'DM Mono',monospace;}
+.pct-q-text{font-size:12px;color:var(--s700);line-height:1.5;flex:1;}
+.pct-q-copy{font-size:10px;color:var(--s400);flex-shrink:0;opacity:0;transition:.1s;}
+.pct-q-item:hover .pct-q-copy{opacity:1;}
+
+/* Value prop block */
+.pct-valueprop{padding:11px 15px;border-bottom:1px solid var(--s100);background:linear-gradient(135deg,rgba(3,45,66,.03) 0%,rgba(99,223,78,.04) 100%);}
+.pct-vp-inner{display:flex;gap:10px;align-items:flex-start;padding:10px 13px;background:var(--white);border:1px solid rgba(3,45,66,.12);border-left:3px solid var(--wasabi);border-radius:0 var(--rmd) var(--rmd) 0;position:relative;}
+.pct-vp-text{font-size:12px;color:var(--s800);line-height:1.65;flex:1;font-weight:500;}
+.pct-vp-copy{font-size:10px;color:var(--s400);flex-shrink:0;padding:3px 7px;border-radius:4px;border:1px solid var(--s200);background:var(--s50);cursor:pointer;white-space:nowrap;transition:.1s;}
+.pct-vp-copy:hover{background:var(--s100);color:var(--s600);}
+.pct-vp-level{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--wdk);margin-bottom:5px;}
+
+/* Objection handles */
+.pct-objections{padding:12px 15px;}
+.pct-obj-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--s100);}
+.pct-obj-item:last-child{border-bottom:none;}
+.pct-obj-left{flex:1;min-width:0;}
+.pct-obj-trigger{font-size:11px;font-weight:600;color:var(--r600);margin-bottom:3px;}
+.pct-obj-response{font-size:11px;color:var(--s600);line-height:1.5;font-style:italic;}
+.pct-obj-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;flex-shrink:0;margin-top:2px;text-transform:uppercase;letter-spacing:.04em;}
+.pct-obj-tag-redirect{background:var(--b50);color:var(--b600);}
+.pct-obj-tag-qualify{background:var(--g50);color:var(--g600);}
+.pct-obj-tag-timing{background:var(--a50);color:var(--a600);}
+
+/* Active Upsell card */
+.upsell-card{background:var(--white);border:1px solid rgba(245,158,11,.35);border-radius:var(--rlg);overflow:hidden;box-shadow:0 0 0 1px rgba(245,158,11,.08),var(--sh-xs);margin-bottom:12px;}
+.upsell-hd{background:linear-gradient(135deg,#78350f 0%,#92400e 100%);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;}
+.upsell-hd-left{display:flex;align-items:center;gap:7px;}
+.upsell-hd-title{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#fef3c7;}
+.upsell-hd-dot{width:6px;height:6px;border-radius:50%;background:#fbbf24;animation:pulse 2s infinite;}
+.upsell-none{padding:14px 15px;display:flex;align-items:center;gap:10px;}
+.upsell-none-ic{width:28px;height:28px;border-radius:50%;background:var(--s100);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.upsell-row{padding:11px 14px;border-bottom:1px solid rgba(245,158,11,.1);display:flex;align-items:flex-start;gap:10px;transition:.1s;}
+.upsell-row:last-child{border-bottom:none;}
+.upsell-row:hover{background:rgba(245,158,11,.03);}
+.upsell-bu-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.upsell-bu-name{font-size:12px;font-weight:700;color:var(--s800);margin-bottom:2px;}
+.upsell-bu-meta{font-size:11px;color:var(--s500);}
+.upsell-amt{font-size:14px;font-weight:700;color:var(--g600);font-family:'DM Mono',monospace;white-space:nowrap;margin-left:auto;padding-left:8px;}
+.upsell-call-note{margin:0 14px 12px;padding:8px 11px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:var(--rmd);font-size:11px;color:#92400e;line-height:1.5;}
+.upsell-call-note strong{color:#78350f;}
+
+/* Contact Assist Card */
+.cac-card{background:var(--white);border:1px solid var(--s200);border-radius:var(--rlg);overflow:hidden;box-shadow:var(--sh-xs);margin-bottom:12px;}
+.cac-hd{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;cursor:pointer;user-select:none;transition:.12s;}
+.cac-hd:hover{background:var(--s50);}
+.cac-hd-left{display:flex;align-items:center;gap:8px;}
+.cac-hd-title{font-size:12px;font-weight:700;color:var(--s800);}
+.cac-body{display:none;border-top:1px solid var(--s100);}
+.cac-body.open{display:block;}
+.cac-tabs{display:flex;border-bottom:1px solid var(--s100);}
+.cac-tab{flex:1;padding:9px 12px;font-size:11px;font-weight:500;color:var(--s500);cursor:pointer;text-align:center;border-bottom:2px solid transparent;transition:.1s;user-select:none;}
+.cac-tab:hover{color:var(--s700);background:var(--s50);}
+.cac-tab.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:600;}
+.cac-pane{display:none;padding:14px 15px;}
+.cac-pane.on{display:block;}
+.cac-item{padding:8px 0;border-bottom:1px solid var(--s50);}
+.cac-item:last-child{border-bottom:none;}
+.cac-item-title{font-size:12px;font-weight:700;color:var(--s800);margin-bottom:3px;display:flex;align-items:center;gap:6px;}
+.cac-item-title::before{content:'➤';font-size:10px;color:var(--wdk);flex-shrink:0;}
+.cac-item-desc{font-size:11px;color:var(--s600);line-height:1.55;padding-left:16px;}
+.cac-sn-solution{font-size:10px;font-weight:600;color:var(--ink);background:rgba(3,45,66,.06);padding:2px 7px;border-radius:3px;display:inline-flex;margin-top:4px;margin-left:16px;}
+.cac-link{font-size:11px;color:var(--b600);text-decoration:none;display:flex;align-items:flex-start;gap:7px;padding:7px 0;border-bottom:1px solid var(--s50);}
+.cac-link:last-child{border-bottom:none;}
+.cac-link:hover{color:var(--b500);text-decoration:underline;}
+.cac-link-outcome{font-size:10px;color:var(--s400);margin-top:2px;}
+.cac-loading{padding:20px 15px;display:flex;flex-direction:column;gap:8px;}
+.skel{background:linear-gradient(90deg,var(--s100) 25%,var(--s50) 50%,var(--s100) 75%);background-size:200% 100%;animation:skel 1.4s infinite;border-radius:4px;}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Call flow branches */
+.call-flow{padding:6px 15px 9px;background:var(--s50);border-bottom:1px solid var(--s100);}
+.cf-row{display:flex;align-items:baseline;gap:5px;padding:2px 0;font-size:11px;line-height:1.4;}
+.cf-arrow{color:var(--s300);flex-shrink:0;font-size:10px;}
+.cf-if{color:var(--s500);flex-shrink:0;}
+.cf-then{font-weight:600;}
+.cf-yes .cf-then{color:var(--g600);}
+.cf-alt .cf-then{color:var(--a600);}
+.cf-mute .cf-then{color:var(--s500);}
+
+/* DRAFT EMAIL CARD */
+.email-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(3px);}
+.email-card{background:var(--white);border-radius:var(--rlg);width:min(560px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+.email-card-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--s200);background:var(--s50);}
+.email-card-title{font-size:13px;font-weight:700;color:var(--s900);}
+.email-close{width:26px;height:26px;border-radius:50%;background:var(--s200);border:none;color:var(--s600);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.email-to-bar{padding:10px 18px;border-bottom:1px solid var(--s200);display:flex;align-items:center;gap:8px;font-size:12px;}
+.email-body-wrap{padding:16px 18px;}
+.email-body{width:100%;min-height:200px;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--s800);line-height:1.7;resize:none;background:transparent;}
+.email-actions{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid var(--s200);background:var(--s50);}
+
 /* LEAD SOURCE CARD */
 .src-card-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+
 /* FRESHNESS BAR */
 .freshness-block{padding:11px 15px;border-bottom:1px solid var(--s100);background:var(--s50);}
 .freshness-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
@@ -334,27 +435,6 @@ button{font-family:inherit;}
 .fn-ok{background:var(--g50);color:var(--g600);}
 .fn-warn{background:var(--a50);color:var(--a600);}
 .fn-danger{background:var(--r50);color:var(--r600);}
-/* PRODUCT OWNERSHIP */
-.po-product{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--s100);}
-.po-product:last-child{border-bottom:none;}
-.po-name{font-size:12px;font-weight:600;color:var(--s800);}
-.po-meta{font-size:10px;color:var(--s400);margin-top:1px;}
-.po-pill{font-size:10px;font-weight:600;padding:3px 9px;border-radius:8px;}
-.po-owned{background:var(--g50);color:var(--g600);border:1px solid rgba(22,163,74,.2);}
-.po-target{background:rgba(3,45,66,.07);color:var(--ink);border:1px solid rgba(3,45,66,.15);}
-.po-none{background:var(--s100);color:var(--s400);}
-
-
-/* DRAFT EMAIL CARD */
-.email-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(3px);}
-.email-card{background:var(--white);border-radius:var(--rlg);width:min(560px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
-.email-card-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--s200);background:var(--s50);}
-.email-card-title{font-size:13px;font-weight:700;color:var(--s900);}
-.email-close{width:26px;height:26px;border-radius:50%;background:var(--s200);border:none;color:var(--s600);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;}
-.email-to-bar{padding:10px 18px;border-bottom:1px solid var(--s200);display:flex;align-items:center;gap:8px;font-size:12px;}
-.email-body-wrap{padding:16px 18px;}
-.email-body{width:100%;min-height:200px;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--s800);line-height:1.7;resize:none;background:transparent;}
-.email-actions{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid var(--s200);background:var(--s50);}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 .fade-in{animation:fadeIn .2s ease forwards;}
@@ -419,16 +499,12 @@ button{font-family:inherit;}
 
 <!-- ── MAIN ── -->
 <div class="main">
-  <div class="rec-hdr" id="recHdr">
-    <!-- rendered by JS -->
-  </div>
-  <div class="page-body" id="pageBody">
-    <!-- rendered by JS -->
-  </div>
+  <div class="rec-hdr" id="recHdr"></div>
+  <div class="page-body" id="pageBody"></div>
 </div>
 
 <script>
-// ── LEAD DATA ─────────────────────────────────────────────────────────────
+// ── DATA ──────────────────────────────────────────────────────────────────
 const AE_STYLES = {
   Tony:    {bg:'rgba(3,45,66,0.1)',   color:'#032D42', hex:'#032D42'},
   Jeff:    {bg:'rgba(4,67,85,0.1)',   color:'#044355', hex:'#044355'},
@@ -454,6 +530,53 @@ const LEADS = [
   {id:'LD-48281', name:'Eric Sandoval',     title:'CTO',                 company:'West Monroe Partners',      source:'Content',    campaign:'AI Readiness Guide',  product:'Now Assist + AICT',        slaHours:72,  ae:'Brian',   status:'open',     received:'Apr 7',  email:'esandoval@westmonroe.com',              phone:'+1 312-282-7200', state:'IL - Illinois',  territory:'COMMIDW-TER-4', leadRating:'MQL', memberStatus:'Downloaded',    mostRecentBU:'AI Platform Foundation',parentAccount:'West Monroe Partners',           notes:'Downloaded AI readiness guide and executive AI brief in same session. CTO at consulting firm — potential partner angle.'},
 ];
 
+const PRODUCT_PORTFOLIO = {
+  'Sub-Zero Group Inc.': [
+    {bu:'ITSM',                   cacv:285,  nnacv:0},
+    {bu:'ITOM',                   cacv:0,    nnacv:0},
+    {bu:'Asset Management',        cacv:0,    nnacv:0},
+    {bu:'Security',               cacv:0,    nnacv:0},
+    {bu:'HR Service Delivery',    cacv:0,    nnacv:180},
+    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:95},
+    {bu:'Creator App Engine',      cacv:0,    nnacv:0},
+  ],
+  'Paylocity Corporation': [
+    {bu:'ITSM',                   cacv:410,  nnacv:-50},
+    {bu:'ITOM',                   cacv:120,  nnacv:0},
+    {bu:'Asset Management',        cacv:0,    nnacv:0},
+    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:220},
+    {bu:'AI Platform Foundations', cacv:0,    nnacv:0},
+  ],
+  'GATX Corporation': [
+    {bu:'ITSM',                   cacv:1240, nnacv:180},
+    {bu:'ITOM',                   cacv:380,  nnacv:350},
+    {bu:'Asset Management',        cacv:210,  nnacv:0},
+    {bu:'Security',               cacv:0,    nnacv:0},
+    {bu:'Creator App Engine',      cacv:0,    nnacv:0},
+    {bu:'AI Platform Foundations', cacv:0,    nnacv:0},
+  ],
+  'Crash Champions': [
+    {bu:'ITSM',                   cacv:95,   nnacv:0},
+    {bu:'HR Service Delivery',    cacv:0,    nnacv:140},
+    {bu:'Now Assist for HR',       cacv:0,    nnacv:85},
+  ],
+  'Eversana': [
+    {bu:'ITSM',                   cacv:320,  nnacv:0},
+    {bu:'Security',               cacv:0,    nnacv:190},
+    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:0},
+  ],
+  'Kirkland & Ellis LLP': [
+    {bu:'ITSM',                   cacv:480,  nnacv:0},
+    {bu:'Legal and Contract Ops', cacv:0,    nnacv:210},
+    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:120},
+  ],
+  'Sargento Foods Inc.': [
+    {bu:'ITSM',                   cacv:175,  nnacv:0},
+    {bu:'Asset Management',        cacv:80,   nnacv:160},
+    {bu:'ITOM',                   cacv:0,    nnacv:0},
+  ],
+};
+
 const TIMELINE_TEMPLATES = {
   'Attended':      [{type:'Event',       icon:'tl-event', dir:'Inbound',  st:'closed', preview:'Attended {campaign} — registered and confirmed session attendance', outcome:'✓ Attended',             dt:-30, rep:'Marketing Automation'},
                     {type:'Email',       icon:'tl-email', dir:'Outbound', st:'closed', preview:'Follow-up: Thank you for attending {campaign} — Hi {first}, We appreciated having you with us...', outcome:'✓ Opened', dt:-28, rep:'Jacob Rubis'},
@@ -472,81 +595,178 @@ const TIMELINE_TEMPLATES = {
                     {type:'Email',       icon:'tl-email', dir:'Outbound', st:'open',   preview:'Quick question — {first}, I noticed you explored our {product} content recently...', outcome:null, dt:-2, rep:'Jacob Rubis'}],
 };
 
+// ── VALUE PROP MAP ─────────────────────────────────────────────────────────
+function getValueProp(bu, title, product) {
+  const isCLevel = /cio|cto|ciso|ceo|chief|president|evp|chro/i.test(title);
+  const isVP     = /\bvp\b|vice president|svp/i.test(title);
 
+  const buKey = (bu + ' ' + (product||'')).toLowerCase();
+  let text = '';
 
-function getTalkingPoints(l) {
-  const OWNED = {
-    'Sub-Zero Group Inc.':  {prods:['ITSM Pro','Service Portal'], competitors:{HR:'Workday'}, bgSignals:['Multiple contacts from Sub-Zero engaging with HR content this quarter','Brandon is the only confirmed lead — expand outreach to CHRO and VP HR','Buying group for IT BU has 3 confirmed members, HR buying group not yet mapped']},
-    'Paylocity Corporation':{prods:['ITSM Pro','ITOM Visibility'], competitors:{}, bgSignals:['CIO-level engagement — strong Economic Buyer signal','No other contacts in the buying group yet — this is the first thread']},
-    'GATX Corporation':     {prods:['ITSM Enterprise','ITOM Health','CMDB'], competitors:{AIOps:'Datadog'}, bgSignals:['Michael Chang is a confirmed buying group member — VP of IT, high engagement','3,000 alerts/day confirmed as a pain point directly by the contact','AE Riley has existing relationship with GATX leadership']},
-    'Crash Champions':      {prods:['ITSM Standard'], competitors:{HR:'ADP'}, bgSignals:['CHRO Lisa Park has a confirmed meeting April 17 — warm buying group','VP IT also confirmed for the meeting — dual Economic Buyer signal']},
-    'Eversana':             {prods:['ITSM Pro'], competitors:{Security:'Okta'}, bgSignals:['Priya Nair is CISO — single thread, buying group not yet mapped','Post-acquisition signal — identity governance is a timely topic across the org']},
-    'Kirkland & Ellis LLP': {prods:['ITSM Pro'], competitors:{}, bgSignals:['Jennifer Torres replied to outreach — warm lead, buying group not mapped','Legal IT service desk is well-established — expansion conversation, not net new']},
-  };
-  const acct = OWNED[l.company] || {prods:[], competitors:{}, bgSignals:[]};
-  const isCustomer = acct.prods.length > 0;
-
-  // Products section
-  const productPoints = [];
-  if (isCustomer) {
-    productPoints.push(`<strong>Owns:</strong> ${acct.prods.join(', ')} — reference the existing relationship, ask how the platform is performing`);
-    const notOwned = [l.product].filter(p => !acct.prods.some(op => p.toLowerCase().includes(op.toLowerCase().split(' ')[0])));
-    if (notOwned.length) productPoints.push(`<strong>Does not own:</strong> ${notOwned.join(', ')} — this is what we are selling. Frame as expansion, not replacement`);
+  if (buKey.includes('employee') || buKey.includes('hrsd') || buKey.includes('hr service')) {
+    text = isCLevel
+      ? 'HR Service Delivery replaces the email chain and the spreadsheet tracker your HR team uses to manage requests. Employees submit onboarding tasks, benefits questions, and policy requests through a single portal — HR handles what needs a human and the rest resolves automatically.'
+      : isVP
+      ? 'HR Service Delivery gives employees one place to submit any HR request — onboarding, leave, benefits, policy questions — and routes it automatically. Your team stops being the inbox and starts handling the work that actually needs them.'
+      : 'HR Service Delivery automates the repeatable HR requests so your team is not answering the same questions every week. Employees get a portal, requests get tracked, and your team gets time back.';
+  } else if (buKey.includes('now assist') && (buKey.includes('hr') || buKey.includes('employee'))) {
+    text = 'Now Assist for HR adds generative AI on top of HR Service Delivery — employees ask questions in plain language and get instant answers pulled from your actual policies. Cases that used to hit your team never get created.';
+  } else if (buKey.includes('now assist') || buKey.includes('aict')) {
+    text = isCLevel
+      ? 'Now Assist embeds generative AI directly into your existing ServiceNow workflows — it deflects repetitive requests, summarizes open cases for agents, and suggests next actions. No separate AI platform to manage or integrate.'
+      : 'Now Assist sits inside the workflows your team already uses. It deflects common requests automatically, writes case summaries, and surfaces next steps — your team gets the same volume done in less time.';
+  } else if (buKey.includes('itom') || buKey.includes('aiops')) {
+    text = isCLevel
+      ? 'IT Operations Management correlates alerts across your entire infrastructure and surfaces what actually needs attention. Your team stops triaging noise and starts resolving real incidents faster — mean time to resolution drops without adding headcount.'
+      : 'ITOM takes the raw alert flood from your monitoring tools and correlates it into meaningful incidents. Your on-call team sees the story, not the noise — and has full context to resolve it in one place.';
+  } else if (buKey.includes('security') || buKey.includes('veza') || buKey.includes('secops')) {
+    text = isCLevel
+      ? 'Security Operations connects your SIEM alerts, vulnerability data, and threat intel into automated response playbooks. Incidents that take days to contain get resolved in hours — with a full audit trail attached to every action.'
+      : 'SecOps gives your analysts one place to work a case from detection to closure. Playbooks trigger automatically, tools stop requiring manual correlation, and every action is documented without extra effort.';
+  } else if (buKey.includes('asset') || buKey.includes('itam') || buKey.includes('ham')) {
+    text = isCLevel
+      ? 'IT Asset Management gives you a real-time inventory of every hardware and software asset you own — license usage, contract dates, lifecycle status, and cost. Most organizations find immediate savings just from eliminating licenses nobody is using.'
+      : 'ITAM tracks every asset from purchase to retirement in the same platform as your service desk. You know exactly what you own, what it costs, and what is coming up for renewal — no more spreadsheet reconciliation at audit time.';
   } else {
-    productPoints.push(`<strong>No existing ServiceNow footprint</strong> — new logo. Position the platform story, not a single product`);
-    productPoints.push(`<strong>Selling into:</strong> ${l.product} — lead with the business problem, not the product name`);
-  }
-  const compNames = Object.values(acct.competitors);
-  if (compNames.length) productPoints.push(`<strong>Incumbent competitor:</strong> ${Object.entries(acct.competitors).map(([fn,n])=>`${n} (${fn})`).join(', ')} — do not pitch against it, ask what gaps they are running into`);
-
-  // Account signals section
-  const signalPoints = acct.bgSignals.length ? acct.bgSignals : [
-    `No confirmed buying group members yet — ${l.name} is the first thread into ${l.company}`,
-    `Map the org after this call: ask who else is involved in technology and ${l.mostRecentBU.toLowerCase()} decisions`,
-  ];
-
-  // Lead source section
-  const sourcePoints = [];
-  const sourceMessages = {
-    'Attended':      [`${l.name} attended <strong>${l.campaign}</strong> — live session attendance is high intent. They carved out time for this`, `Ask: what specifically stood out to you in the demo — was it the employee portal, the case management, or the reporting?`, `Ask: is this tied to an active initiative, or were you exploring to get ahead of a potential need?`],
-    'Visited Booth': [`${l.name} stopped at the ServiceNow booth at <strong>${l.campaign}</strong> and initiated the scan — they drove the interaction`, `Reference the event directly. Ask what brought them to the session and what they were hoping to find`, `Ask: did anything from the conversation stick, or do you want to pick up where we left off?`],
-    'Downloaded':    [`${l.name} downloaded <strong>${l.campaign}</strong> from servicenow.com — someone went looking for this content specifically`, `Ask: what prompted the search — are you in the early stages of evaluating options, or is there a specific project behind this?`, `Ask: did the content answer what you were looking for, or were there gaps?`],
-    'Contact Us':    [`${l.name} submitted a <strong>Contact Us form</strong> — the most direct inbound signal. They asked to be contacted`, `Keep the opener simple: you are calling because they reached out. Ask what prompted the inquiry`, `Ask: what does the timeline look like on your end — are you exploring, or is there something more immediate driving this?`],
-  };
-  (sourceMessages[l.memberStatus] || sourceMessages['Downloaded']).forEach(p => sourcePoints.push(p));
-
-  // Job title section
-  const t = l.title;
-  const isCLevel   = /cio|cto|ciso|ceo|chief|president|evp/i.test(t);
-  const isVP       = /\bvp\b|vice president|svp/i.test(t);
-  const isDir      = /director|head of/i.test(t);
-  const isIT       = /it |information tech|infrastructure|service desk|operations|technology/i.test(t);
-  const isHR       = /hr|human resources|people|chro|hris|talent/i.test(t);
-  const isSecurity = /ciso|security|risk|compliance|grc/i.test(t);
-
-  const titlePoints = [];
-  if (isCLevel) {
-    titlePoints.push(`<strong>${t}</strong> — executive level. Do not open with product. Ask what their team is trying to accomplish in the next two quarters and where the friction is`);
-    titlePoints.push(`Ask: who on your team would own the day-to-day evaluation if we moved forward?`);
-    titlePoints.push(`Ask: is budget earmarked for this area, or would this require a new conversation internally?`);
-  } else if (isVP) {
-    titlePoints.push(`<strong>${t}</strong> — VP level. They translate strategy into execution. Ask about team efficiency, delivery pressure, and what manual work is slowing them down`);
-    titlePoints.push(`Ask: what does success look like for your team in the next 6 months, and what is the biggest thing getting in the way?`);
-    if (isIT && l.mostRecentBU === 'Employee Workflows') {
-      titlePoints.push(`Note: IT VP engaging with HR content is a cross-functional signal. Ask who on the HR side is involved — there may be a joint evaluation happening`);
-    }
-  } else if (isDir) {
-    titlePoints.push(`<strong>${t}</strong> — Director level. Operational driver, likely the internal champion. They feel the pain directly and will own the implementation`);
-    titlePoints.push(`Ask: walk me through how this process works today — where does it break down most often?`);
-    titlePoints.push(`Ask: if you had this solved, what would change for your team week to week?`);
-  } else {
-    titlePoints.push(`<strong>${t}</strong> — practitioner or manager level. Ask what a typical week looks like and where the most time gets wasted`);
-    titlePoints.push(`Ask: is there someone above you who would need to be involved in a decision like this?`);
+    // ITSM default
+    text = isCLevel
+      ? 'IT Service Management gives your entire service desk one system — incidents, requests, changes, and assets all route, track, and resolve in one place. Most IT leaders use it to cut cost-per-ticket and improve employee experience at the same time.'
+      : isVP
+      ? 'ITSM replaces the ticket-in-email, update-in-Slack, resolve-in-a-different-tool workflow your team is running today. Everything — request, incident, change, asset — lives in one place and resolves faster.'
+      : 'ITSM gives your team one place to handle every IT request. No more routing tickets manually, no more following up across tools. Work comes in, gets assigned, and gets resolved — all tracked in one system.';
   }
 
-  return { products: productPoints, signals: signalPoints, source: sourcePoints, title: titlePoints };
+  return { text };
 }
 
+// ── TALKING POINTS (REDESIGNED) ────────────────────────────────────────────
+function getTalkingPoints(l) {
+  const first = l.name.split(' ')[0];
+
+  // ── 1. Account status ──────────────────────────────────────────────────
+  const OWNED_PRODUCTS = {
+    'Sub-Zero Group Inc.': ['ITSM'],
+    'Paylocity Corporation': ['ITSM Pro', 'ITOM Visibility'],
+    'GATX Corporation': ['ITSM Enterprise', 'ITOM Health', 'CMDB', 'Asset Management'],
+    'Crash Champions': ['ITSM Standard'],
+    'Eversana': ['ITSM Pro'],
+    'Kirkland & Ellis LLP': ['ITSM Pro'],
+    'Sargento Foods Inc.': ['ITSM', 'Asset Management'],
+  };
+  const ownedProds = OWNED_PRODUCTS[l.company] || [];
+  const isCustomer = ownedProds.length > 0;
+
+  // ── 2. Active opp in this BU ───────────────────────────────────────────
+  const portfolio = PRODUCT_PORTFOLIO[l.company] || [];
+  const buKeywords = l.mostRecentBU.toLowerCase().split(/\s+/);
+  const productKeywords = l.product.toLowerCase().split(/[\s+]+/);
+  const activeOppRow = portfolio.find(row => {
+    const rowBu = row.bu.toLowerCase();
+    return row.nnacv > 0 && (
+      buKeywords.some(k => rowBu.includes(k)) ||
+      productKeywords.some(k => k.length > 3 && rowBu.includes(k))
+    );
+  });
+  const hasActiveOpp = !!activeOppRow;
+  const activeOppBU  = activeOppRow ? activeOppRow.bu : null;
+  const activeOppAmt = activeOppRow ? activeOppRow.nnacv : 0;
+
+  // ── 3. Title seniority ─────────────────────────────────────────────────
+  const t = l.title;
+  const isCLevel = /cio|cto|ciso|ceo|chief|president|evp/i.test(t);
+  const isVP     = /\bvp\b|vice president|svp/i.test(t);
+  const isDir    = /director|head of/i.test(t);
+  // default = manager / practitioner
+
+  // ── 4. Call opener — proper cold call intro ────────────────────────────
+  const triggerLine = {
+    'Attended':      `You attended our ${l.campaign} recently and I wanted to reach out while it was still fresh.`,
+    'Visited Booth': `We crossed paths at ${l.campaign} and I wanted to follow up — you stopped by the ServiceNow booth.`,
+    'Downloaded':    `You pulled down our ${l.campaign} content and I wanted to reach out while it was top of mind.`,
+    'Contact Us':    `You submitted a request through our website and I want to make sure you get to the right person.`,
+  };
+  const trigger = triggerLine[l.memberStatus] || triggerLine['Downloaded'];
+  const opener = `Hi ${first}, it's Jacob Rubis calling from ServiceNow — I know I'm catching you out of the blue. ${trigger} Do you have 30 seconds?`;
+
+  // ── 5. Poke the bear — one challenger question to surface latent pain ───
+  const buKey = l.mostRecentBU.toLowerCase();
+  let pokeBear = '';
+  if (buKey.includes('employee') || buKey.includes('hr')) {
+    pokeBear = isCustomer
+      ? `Most HR teams I talk to tell me their biggest problem isn't headcount — it's that employees just email someone directly because the portal is too slow. Is that showing up at ${l.company}?`
+      : `A lot of HR leaders tell me their team spends more time answering the same questions than doing real HR work. Does that sound familiar?`;
+  } else if (buKey.includes('itom') || buKey.includes('aiops')) {
+    pokeBear = `Most ops teams I talk to aren't drowning in incidents — they're drowning in alert noise that makes it impossible to find the real ones. Is that something your team is dealing with?`;
+  } else if (buKey.includes('security') || buKey.includes('risk')) {
+    pokeBear = `The CISO-level folks I talk to usually say their team is fast at detecting threats but slow at containing them because the response workflow lives in too many places. Does that track?`;
+  } else if (buKey.includes('asset') || buKey.includes('itam')) {
+    pokeBear = `Most IT directors I talk to tell me they have no idea how many software licenses they're paying for that nobody uses. Is that a known problem at ${l.company}, or is it more of a blind spot?`;
+  } else if (buKey.includes('ai') || buKey.includes('now assist')) {
+    pokeBear = isCLevel
+      ? `A lot of tech leaders I talk to have an AI mandate from the board but no clear answer on where it actually fits into operations. Is that the conversation you're navigating right now?`
+      : `Most teams exploring AI tools end up with something that requires a dedicated workflow to manage. Does that match what you're seeing?`;
+  } else {
+    // ITSM default
+    pokeBear = isCustomer
+      ? `The IT teams I talk to who are already on ServiceNow usually tell me the platform covers 80% of what they need — but there's always a pocket of work that still lives in email or spreadsheets. Where is that pocket for your team?`
+      : `Most IT leaders I talk to say their service desk is functional but their team spends more time routing tickets than resolving them. Does that sound familiar at ${l.company}?`;
+  }
+
+
+  // ── 6. Three open-ended questions ─────────────────────────────────────
+  const questions = [];
+  if (l.memberStatus === 'Attended') {
+    questions.push(`What specifically drew you to the ${l.campaign} session — was there a problem you were hoping it would address?`);
+  } else if (l.memberStatus === 'Visited Booth') {
+    questions.push(`At the event you stopped by our booth — what were you hoping to find? Was there something specific that brought you there?`);
+  } else if (l.memberStatus === 'Downloaded') {
+    questions.push(`The ${l.campaign} content — what made you go looking for that? Was there something specific going on that prompted it?`);
+  } else {
+    questions.push(`You reached out through our website — what was going on that sent you there?`);
+  }
+
+  if (isCustomer && hasActiveOpp) {
+    questions.push(`We have a conversation going on the ${activeOppBU} side — are you personally looped into that, or is someone else driving it internally?`);
+  } else if (isCustomer) {
+    questions.push(isCLevel
+      ? `Outside of what you're already running with us, where is the team still dealing with work that should be on the platform but isn't?`
+      : `Where does the process still break down for your team today — what are people working around that they shouldn't have to?`);
+  } else {
+    questions.push(isCLevel
+      ? `What's driving the focus here right now — is there a specific initiative, or a pain point that finally got loud enough internally?`
+      : `Walk me through how this works at ${l.company} today — where does the current process break down most often?`);
+  }
+
+  questions.push(isCLevel
+    ? `If this turned into something worth pursuing, who would own the evaluation day-to-day — and is there budget already allocated for this area?`
+    : isVP
+    ? `Is this something you're trying to solve this quarter, or still in early exploration? I want to make sure we're using each other's time well.`
+    : `Is there someone above you who would need to be part of this conversation, and is there a project it would connect to?`);
+
+  // ── 6. Metrics They Care About — role-level ────────────────────────────
+  let metricsCaresAbout = [];
+  if (isCLevel) {
+    const roleMap = {
+      cio:  ['Cost per IT interaction / cost per ticket','Employee satisfaction with IT (ESAT/NPS)','Platform ROI and vendor consolidation progress','SLA compliance rate across the org'],
+      cto:  ['Engineering velocity and deployment frequency','Tech debt reduction over time','Platform adoption rate across teams','Build vs. buy decision outcomes'],
+      ciso: ['Mean time to detect and contain (MTTD / MTTC)','Compliance audit pass rate','Vulnerability remediation SLA adherence','Security program maturity score'],
+      chro: ['HR case volume per rep per month','Time-to-resolution for employee requests','Self-service adoption rate','Time-to-productivity for new hires'],
+    };
+    const roleKey = Object.keys(roleMap).find(k => new RegExp(k,'i').test(l.title)) || 'cio';
+    metricsCaresAbout = roleMap[roleKey];
+  } else if (isVP) {
+    metricsCaresAbout = ['SLA compliance rate and breach volume','First-contact resolution rate','Escalation rate to senior teams','MTTR — mean time to resolve'];
+  } else if (isDir) {
+    metricsCaresAbout = ['Ticket backlog size and trend','Agent utilization and workload distribution','Automation coverage — % of requests handled without human touch','SLA breach rate by category'];
+  } else {
+    metricsCaresAbout = ['Volume handled per day per agent','Time spent on manual routing and follow-up','Repeat ticket rate (same issue, different ticket)','Average handle time per request type'];
+  }
+
+  const valueProp = getValueProp(l.mostRecentBU, l.title, l.product);
+  return { isCustomer, hasActiveOpp, activeOppBU, activeOppAmt, ownedProds, opener, pokeBear, questions, metricsCaresAbout, valueProp };
+}
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
 function getTimeline(lead) {
   const tpl = TIMELINE_TEMPLATES[lead.memberStatus] || TIMELINE_TEMPLATES['Downloaded'];
   const now = new Date('2026-04-10');
@@ -604,29 +824,10 @@ function aiTags(l) {
   return tags;
 }
 
-function nbaItems(l) {
-  const items = [];
-  if(l.status==='critical'||l.status==='open') {
-    items.push({primary:true,  ic:'nba-ic-w', icon:'📞', action:'Schedule Discovery Call', sub:`${l.source} signal + ${l.memberStatus.toLowerCase()} — reach out now`, cta:'nba-cta-wg', ctaLabel:'Start →'});
-    items.push({primary:false, ic:'nba-ic-g', icon:'✉️', action:`Send ${l.product} Follow-Up`, sub:`Reference ${l.campaign} — use AI to draft`, cta:'nba-cta-g', ctaLabel:'Draft'});
-    items.push({primary:false, ic:'nba-ic-b', icon:'💼', action:'Connect on LinkedIn', sub:'No LinkedIn connection yet — sequence step 3', cta:'nba-cta-g', ctaLabel:'Send'});
-    items.push({primary:false, ic:'nba-ic-a', icon:'🎯', action:'Add to Buying Group', sub:`${l.mostRecentBU} buying group match — map now`, cta:'nba-cta-g', ctaLabel:'Map'});
-  } else if(l.status==='responded') {
-    items.push({primary:true,  ic:'nba-ic-w', icon:'📅', action:'Book Discovery Call', sub:`Lead replied: "${(l.respondedMsg||'').slice(0,60)}…"`, cta:'nba-cta-wg', ctaLabel:'Book →'});
-    items.push({primary:false, ic:'nba-ic-g', icon:'✉️', action:'Send Meeting Confirmation', sub:'Lock in date, time, and agenda', cta:'nba-cta-g', ctaLabel:'Send'});
-    items.push({primary:false, ic:'nba-ic-b', icon:'📋', action:'Build Discovery Prep Brief', sub:'Prepare SPICED questions for call', cta:'nba-cta-g', ctaLabel:'Build'});
-  } else if(l.status==='booked') {
-    items.push({primary:true,  ic:'nba-ic-w', icon:'📋', action:'Prep Discovery Brief', sub:`Meeting confirmed: ${l.meetingDate||''}`, cta:'nba-cta-wg', ctaLabel:'Prep →'});
-    items.push({primary:false, ic:'nba-ic-b', icon:'🤝', action:'Loop in AE: '+l.ae, sub:'Share lead context before the call', cta:'nba-cta-g', ctaLabel:'Share'});
-    items.push({primary:false, ic:'nba-ic-a', icon:'🎯', action:'Map to Buying Group', sub:`${l.mostRecentBU} role coverage incomplete`, cta:'nba-cta-g', ctaLabel:'Map'});
-  }
-  return items;
-}
-
 function researchBullets(l) {
   const companyMap = {
     'Sub-Zero Group Inc.': {overview:['<strong>Sub-Zero Group Inc</strong> — premium appliance manufacturer, ~4,200 employees, HQ Madison WI','Revenue ~$800M; private, family-owned since 1945','IT org running SAP + legacy ITSM stack; aging service desk infrastructure'],signals:['<strong>Hiring:</strong> 3 open IT Service Desk roles — suggests platform pain','<strong>Initiative:</strong> Digital workplace transformation in 2024 company update','<strong>Event:</strong> Contact attended K25 — HRSD session engagement noted'],pain:['IT and HR service delivery fragmented across legacy tools','Cross-functional requests managed manually; no unified portal']},
-    'default': {overview:[`<strong>${l.company}</strong> — mid-market enterprise; established business with active IT/operations footprint`,'IT org evaluating modern service management and workflow automation','Existing ServiceNow footprint or adjacent technology stack in place'],signals:[`<strong>${l.memberStatus}:</strong> ${l.campaign} — high-intent interaction signal`,`<strong>Product interest:</strong> ${l.product} — maps to active buying initiative`,'<strong>Timing:</strong> Q2 FY26 budget cycle in progress — good timing signal'],pain:[`Manual workflows and disconnected systems in ${l.mostRecentBU.replace('Employee Workflows','HR')} function`,'Limited visibility and reporting across service operations']}
+    'default': {overview:[`<strong>${l.company}</strong> — mid-market enterprise; established business with active IT/operations footprint`,'IT org evaluating modern service management and workflow automation','Existing ServiceNow footprint or adjacent technology stack in place'],signals:[`<strong>${l.memberStatus}:</strong> ${l.campaign} — high-intent interaction signal`,`<strong>Product interest:</strong> ${l.product} — maps to active buying initiative`,'<strong>Timing:</strong> Q2 FY26 budget cycle in progress — good timing signal'],pain:[`Manual workflows and disconnected systems in ${l.mostRecentBU.toLowerCase()} function`,'Limited visibility and reporting across service operations']}
   };
   return companyMap[l.company] || companyMap['default'];
 }
@@ -643,7 +844,6 @@ function renderPage() {
   const slaInfo = slaText(l.slaHours);
   const ae = AE_STYLES[l.ae] || {hex:'#032D42'};
 
-  // Source card display
   const SRC_DISPLAY = {
     Webinar:      {icon:'🎙️', bg:'#eff6ff',  badgeBg:'#dbeafe',  badgeColor:'#1d4ed8'},
     Demo:         {icon:'🖥️', bg:'#f0fdf4',  badgeBg:'#dcfce7',  badgeColor:'#15803d'},
@@ -653,71 +853,19 @@ function renderPage() {
     Partner:      {icon:'🤝', bg:'#fdf4ff',  badgeBg:'#fae8ff',  badgeColor:'#86198f'},
   };
   const srcD = SRC_DISPLAY[l.source] || {icon:'📋', bg:'var(--s50)', badgeBg:'var(--s100)', badgeColor:'var(--s600)'};
-  const srcBg = srcD.bg, srcIcon = srcD.icon, srcBadgeBg = srcD.badgeBg, srcBadgeColor = srcD.badgeColor;
 
   // Pre-call talking points
   const tp = getTalkingPoints(l);
+  window._cacMeta = { isCustomer: tp.isCustomer, ownedProds: tp.ownedProds };
 
-  // Research freshness (90-day quarterly cycle)
+  // Research freshness
   const ageDays = 14;
   const maxDays = 90;
-  const freshPct = Math.min(100, Math.round(ageDays / maxDays * 100));
-  const freshColor = ageDays < 30 ? 'var(--g500)' : ageDays < 60 ? 'var(--a500)' : 'var(--r500)';
-  const freshLabel = ageDays < 30 ? `Fresh — ${ageDays} days old` : ageDays < 60 ? `Getting stale — ${ageDays} days old` : 'Outdated — refresh now';
-  const quarterLabel = ageDays < 30 ? 'Q2 FY26 · Current' : ageDays < 60 ? 'Q2 FY26 · Aging' : 'Q1 FY26 · Expired';
-  const daysLeft = maxDays - ageDays;
-  const fnCls = daysLeft < 20 ? 'fn-danger' : daysLeft < 45 ? 'fn-warn' : 'fn-ok';
 
-  // Product ownership by account
-  // BU Portfolio: {workflow, health:'red'|'orange'|null, bu, cacv, nnacv}
-  const PRODUCT_PORTFOLIO = {
-    'Sub-Zero Group Inc.': [
-      {workflow:'Technology Workflow', health:null,     bu:'ITSM',                   cacv:285,  nnacv:0},
-      {workflow:null,                  health:null,     bu:'ITOM',                   cacv:0,    nnacv:0},
-      {workflow:null,                  health:null,     bu:'Asset Management',        cacv:0,    nnacv:0},
-      {workflow:null,                  health:'orange', bu:'Security',               cacv:0,    nnacv:0},
-      {workflow:'Employee Workflow',   health:null,     bu:'HR Service Delivery',    cacv:0,    nnacv:180},
-      {workflow:'AI Platform',         health:null,     bu:'Now Assist for ITSM',    cacv:0,    nnacv:95},
-      {workflow:null,                  health:null,     bu:'Creator App Engine',      cacv:0,    nnacv:0},
-    ],
-    'Paylocity Corporation': [
-      {workflow:'Technology Workflow', health:'red',    bu:'ITSM',                   cacv:410,  nnacv:-50},
-      {workflow:null,                  health:null,     bu:'ITOM',                   cacv:120,  nnacv:0},
-      {workflow:null,                  health:null,     bu:'Asset Management',        cacv:0,    nnacv:0},
-      {workflow:'AI Platform',         health:null,     bu:'Now Assist for ITSM',    cacv:0,    nnacv:220},
-      {workflow:null,                  health:null,     bu:'AI Platform Foundations', cacv:0,    nnacv:0},
-    ],
-    'GATX Corporation': [
-      {workflow:'Technology Workflow', health:null,     bu:'ITSM',                   cacv:1240, nnacv:180},
-      {workflow:null,                  health:'orange', bu:'ITOM',                   cacv:380,  nnacv:350},
-      {workflow:null,                  health:null,     bu:'Asset Management',        cacv:210,  nnacv:0},
-      {workflow:null,                  health:null,     bu:'Security',               cacv:0,    nnacv:0},
-      {workflow:'AI Platform',         health:null,     bu:'Creator App Engine',      cacv:0,    nnacv:0},
-      {workflow:null,                  health:null,     bu:'AI Platform Foundations', cacv:0,    nnacv:0},
-    ],
-    'Crash Champions': [
-      {workflow:'Technology Workflow', health:'orange', bu:'ITSM',                   cacv:95,   nnacv:0},
-      {workflow:'Employee Workflow',   health:null,     bu:'HR Service Delivery',    cacv:0,    nnacv:140},
-      {workflow:'AI Platform',         health:null,     bu:'Now Assist for HR',       cacv:0,    nnacv:85},
-    ],
-    'Eversana': [
-      {workflow:'Technology Workflow', health:null,     bu:'ITSM',                   cacv:320,  nnacv:0},
-      {workflow:null,                  health:'orange', bu:'Security',               cacv:0,    nnacv:190},
-      {workflow:'AI Platform',         health:null,     bu:'Now Assist for ITSM',    cacv:0,    nnacv:0},
-    ],
-    'Kirkland & Ellis LLP': [
-      {workflow:'Technology Workflow', health:null,     bu:'ITSM',                   cacv:480,  nnacv:0},
-      {workflow:'Core Business',       health:null,     bu:'Legal and Contract Ops', cacv:0,    nnacv:210},
-      {workflow:'AI Platform',         health:null,     bu:'Now Assist for ITSM',    cacv:0,    nnacv:120},
-    ],
-  };
   const portfolio = PRODUCT_PORTFOLIO[l.company] || [];
-  const prods = []; // kept for talking points compat
-
   const timeline = getTimeline(l);
   const research = researchBullets(l);
 
-  // Group timeline by date
   const grouped = {};
   timeline.forEach(t => {
     const dk = formatDate(t.date);
@@ -725,11 +873,11 @@ function renderPage() {
     grouped[dk].push(t);
   });
 
-  // Status pill class
   const statusCls = {critical:'sp-open',open:'sp-open',responded:'sp-working',booked:'sp-qualified',nurture:'sp-working',dead:'sp-dq'};
   const statusLabel = {critical:'SLA Critical',open:'Open',responded:'Responded',booked:'Meeting Booked',nurture:'Nurture',dead:'Disqualified'};
+  const tags = aiTags(l);
 
-  // ── HEADER ──
+  // ── HEADER ──────────────────────────────────────────────────────────────
   document.getElementById('recHdr').innerHTML = `
     <div class="rec-hdr-top">
       <div class="breadcrumb">
@@ -745,54 +893,49 @@ function renderPage() {
             <span class="rec-badge">Lead</span>
             <span class="rec-mono">${l.id}</span>
           </div>
-          <div class="rec-meta">
-            <div class="rec-meta-item">🏢 <a href="#">${l.company}</a></div>
-            <div class="rec-meta-dot"></div>
-            <div class="rec-meta-item">💼 ${l.title}</div>
-            <div class="rec-meta-dot"></div>
-            <div class="rec-meta-item">📍 ${l.state}</div>
-            <div class="rec-meta-dot"></div>
-            <div class="rec-meta-item">✉️ ${l.email}</div>
-            <div class="rec-meta-dot"></div>
-            <div class="rec-meta-item">📞 ${l.phone}</div>
-          </div>
         </div>
       </div>
       <div class="rec-acts">
-        <a href="mailto:${l.email}" class="btn btn-g btn-sm">📧 Email</a>
-        <a href="tel:${l.phone.replace(/\s/g,'')}" class="btn btn-g btn-sm">📞 Call</a>
-        <button class="btn btn-g btn-sm">💼 LinkedIn</button>
         <button class="btn btn-g btn-sm">↗ Add to Sequence</button>
         <button class="btn btn-w btn-sm">⬆ Import to Outreach</button>
       </div>
     </div>
-
-    <div class="status-bar">
-      <div class="status-pill ${statusCls[l.status]||'sp-open'}">
-        <div class="sp-dot" style="background:${l.status==='booked'?'var(--g500)':l.status==='responded'?'var(--a500)':'var(--b500)'}"></div>
-        ${statusLabel[l.status]||'Open'}
+    <div class="status-bar" style="gap:0;padding:0;border-top:1px solid var(--s200)">
+      <!-- Left: MQL + SLA bubbles -->
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 16px;border-right:1px solid var(--s200)">
+        <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:rgba(3,45,66,.07);color:var(--ink);border:1px solid rgba(3,45,66,.12)">${l.leadRating}</span>
+        ${l.slaHours!==null ? `<span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;color:${slaInfo.col};background:${l.slaHours<0?'var(--r50)':l.slaHours<=8?'var(--a50)':'var(--g50)'};border:1px solid ${l.slaHours<0?'rgba(220,38,38,.2)':l.slaHours<=8?'rgba(245,158,11,.2)':'rgba(22,163,74,.2)'}">SLA Critical · ${slaInfo.t}</span>` : ''}
       </div>
-      <div class="owner-chip">
-        <div class="owner-av" style="background:var(--ink)">JR</div>
-        Jacob Rubis
-      </div>
-      <div class="owner-chip">
-        <div class="owner-av" style="background:${ae.hex}">${l.ae.slice(0,2).toUpperCase()}</div>
-        AE: ${l.ae}
-      </div>
-      <div class="score-chip">⚡ Score: ${l.slaHours!==null&&l.slaHours<0?72+Math.abs(l.slaHours):Math.min(95,60+(l.slaHours||30))} <span style="opacity:.6;font-weight:400">/100</span></div>
-      <div style="font-size:11px;color:var(--s400)">Territory: <strong style="color:var(--s700)">${l.territory}</strong></div>
-      <div style="font-size:11px;color:var(--s400)">${l.leadRating}</div>
-      <div style="margin-left:auto;display:flex;align-items:center;gap:7px">
-        <button class="btn btn-g btn-sm">✓ Validate Lead</button>
-        <button class="btn btn-g btn-sm">🔄 ZoomInfo Enrich</button>
-        <button class="btn btn-p btn-sm">Convert to Contact →</button>
+      <!-- Right: Status + Owner pushed to far right -->
+      <div style="margin-left:auto;display:flex;align-items:stretch">
+        <!-- Status selector -->
+        <div style="position:relative;display:inline-block;border-left:1px solid var(--s200)">
+          <div onclick="toggleStatusDrop()" style="display:flex;align-items:center;gap:10px;padding:7px 16px;cursor:pointer;height:100%" onmouseover="this.style.background='var(--s50)'" onmouseout="this.style.background='transparent'">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--s900)" id="statusLabel">Open</div>
+              <div style="font-size:10px;color:var(--s400);margin-top:1px">Status</div>
+            </div>
+            <span style="font-size:10px;color:var(--s400)">▾</span>
+          </div>
+          <div id="statusDropdown" style="display:none;position:absolute;top:100%;right:0;background:var(--white);border:1px solid var(--s200);border-radius:var(--rmd);box-shadow:var(--sh-md);z-index:200;min-width:140px;overflow:hidden">
+            ${['Open','Engaged','Remarket','Rejected'].map(s=>`<div onclick="setStatus('${s}')" style="padding:9px 14px;font-size:12px;font-weight:500;color:var(--s700);cursor:pointer;transition:.1s" onmouseover="this.style.background='var(--s50)'" onmouseout="this.style.background='transparent'">${s}</div>`).join('')}
+          </div>
+        </div>
+        <!-- Owner -->
+        <div style="display:flex;align-items:center;gap:9px;padding:7px 16px;border-left:1px solid var(--s200)">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--wasabi);flex-shrink:0;position:relative">
+            JR
+            <div style="position:absolute;bottom:0;right:0;width:8px;height:8px;border-radius:50%;background:var(--g500);border:1.5px solid var(--white)"></div>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--s800)">Jacob Rubis</div>
+            <div style="font-size:10px;color:var(--s400)">Owner</div>
+          </div>
+        </div>
       </div>
     </div>
-
     <div class="tab-nav">
-      <div class="tab-it research on">📌 Research</div>
-      <div class="tab-it">Summary</div>
+      <div class="tab-it on">Summary</div>
       <div class="tab-it">Account Details</div>
       <div class="tab-it">Outreach Engagement <span class="tab-ct">18</span></div>
       <div class="tab-it">Campaign History <span class="tab-ct">3</span></div>
@@ -800,16 +943,95 @@ function renderPage() {
       <div class="tab-it">Buying Groups</div>
       <div class="tab-it">Opportunities</div>
       <div class="tab-it">LinkedIn Profile</div>
+      <div class="tab-it" style="margin-left:auto">📌 Research</div>
     </div>`;
 
-  // ── BODY ──
-  const nba = nbaItems(l);
-  const tags = aiTags(l);
+  // ── PRE-CALL CARD HTML ──────────────────────────────────────────────────
+  const sitChips = [
+    tp.isCustomer
+      ? `<span class="sit-chip sit-customer">🏢 Existing Customer</span>`
+      : `<span class="sit-chip sit-newlogo">🆕 New Logo</span>`,
+    tp.hasActiveOpp
+      ? `<span class="sit-chip sit-opp-active">⚡ Active Opp: ${tp.activeOppBU}</span>`
+      : `<span class="sit-chip sit-opp-none">○ No Open Opp in BU</span>`,
+    `<span class="sit-chip sit-source">${l.memberStatus === 'Attended' ? '🎙 Event Attendee' : l.memberStatus === 'Visited Booth' ? '🏪 Booth Visitor' : l.memberStatus === 'Downloaded' ? '⬇ Content Download' : '📬 Inbound Inquiry'}</span>`,
+    tp.isCustomer && tp.ownedProds.length
+      ? `<span class="sit-chip" style="background:rgba(3,45,66,.06);color:var(--ink);border-color:rgba(3,45,66,.15)">Owns: ${tp.ownedProds.join(', ')}</span>`
+      : '',
+  ].filter(Boolean).join('');
 
+  const questionsHtml = tp.questions.map((q, i) => `
+    <div class="pct-q-item">
+      <span class="pct-q-num">${i + 1}</span>
+      <span class="pct-q-text">${q}</span>
+    </div>`).join('');
+
+  const preCallCard = `
+    <div class="pct-card">
+      <div class="pct-hd" id="pctHd" onclick="togglePct()">
+        <div class="pct-hd-left">
+          <span style="font-size:14px">📞</span>
+          <span class="pct-hd-title">Pre-Call Talking Points</span>
+        </div>
+        <span class="pct-toggle" id="pctToggle">▼</span>
+      </div>
+      <div class="pct-body" id="pctBody">
+
+        <!-- Situation chips -->
+        <div class="sit-row">${sitChips}</div>
+
+        <!-- Metrics They Care About -->
+        <div style="padding:11px 15px;border-bottom:1px solid var(--s100)">
+          <div class="pct-sec-label">Metrics They Care About</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 12px;margin-top:1px">
+            ${tp.metricsCaresAbout.map(m => `
+              <div style="font-size:11px;color:var(--s500);line-height:1.4;padding:2px 0;display:flex;gap:5px;align-items:baseline">
+                <span style="color:var(--s300);flex-shrink:0">·</span>${m}
+              </div>`).join('')}
+          </div>
+        </div>
+
+        <!-- Value Prop -->
+        <div class="pct-valueprop">
+          <div class="pct-sec-label">Value Prop</div>
+          <div style="font-size:12px;color:var(--s700);line-height:1.65;padding:9px 12px;background:rgba(3,45,66,.03);border-left:3px solid var(--wasabi);border-radius:0 6px 6px 0">
+            ${tp.valueProp.text}
+          </div>
+        </div>
+
+        <!-- Poke the Bear -->
+        <div style="padding:11px 15px;border-bottom:1px solid var(--s100)">
+          <div class="pct-sec-label">Poke the Bear</div>
+          <div style="font-size:12px;color:var(--s700);line-height:1.65;padding:9px 12px;background:rgba(245,158,11,.04);border-left:3px solid var(--a500);border-radius:0 6px 6px 0">
+            ${tp.pokeBear}
+          </div>
+        </div>
+
+        <!-- Ask These -->
+        <div style="padding:11px 15px">
+          <div class="pct-sec-label">Ask These</div>
+          <div class="pct-q-list">${questionsHtml}</div>
+          <div style="margin-top:10px;padding:8px 11px;background:rgba(3,45,66,.04);border-radius:var(--rmd);font-size:11px;color:var(--s600)">
+            <strong style="color:var(--ink)">Goal:</strong> Surface a driver, a timeline, and who else is involved — then ask for 20 minutes with ${l.ae}.
+          </div>
+        </div>
+
+      </div>
+    </div>`;
+
+  // ── PAGE BODY ────────────────────────────────────────────────────────────
   document.getElementById('pageBody').innerHTML = `
-    <!-- LEFT -->
+    <!-- LEFT COL -->
     <div class="fade-in">
-      <!-- How They Became a Lead -->
+      <div class="panel" style="margin-bottom:8px">
+        <div class="panel-hd" style="padding:8px 12px"><span class="panel-title" style="font-size:9px">Account Executive</span></div>
+        <div style="padding:7px 12px;display:flex;align-items:center;gap:8px">
+          <div style="width:24px;height:24px;border-radius:50%;background:${ae.hex};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--white);flex-shrink:0">${l.ae.slice(0,2).toUpperCase()}</div>
+          <div style="font-size:12px;font-weight:600;color:var(--s800)">${{'Tony':'Tony Riebel','Jeff':'Jeff Wuestenfeld','Riley':'Riley Scott','Katie':'Katie Schneider','Brian':'Brian Disher','Seamus':'Seamus Donovan','Mikaela':'Mikaela Youpa'}[l.ae] || l.ae}</div>
+        </div>
+      </div>
+
+
       <div class="panel">
         <div class="panel-hd">
           <span class="panel-title">How They Became a Lead</span>
@@ -817,52 +1039,66 @@ function renderPage() {
         </div>
         <div style="padding:13px 15px;display:flex;flex-direction:column;gap:0">
           <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--s100)">
-            <div style="width:34px;height:34px;border-radius:8px;background:${srcBg};display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">${srcIcon}</div>
+            <div style="width:34px;height:34px;border-radius:8px;background:${srcD.bg};display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">${srcD.icon}</div>
             <div>
               <div style="font-size:13px;font-weight:700;color:var(--s900)">${l.source}</div>
               <div style="font-size:11px;color:var(--s500);margin-top:1px">${l.memberStatus}</div>
             </div>
-            <span style="margin-left:auto;font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;background:${srcBadgeBg};color:${srcBadgeColor}">${l.memberStatus}</span>
+            <span style="margin-left:auto;font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;background:${srcD.badgeBg};color:${srcD.badgeColor}">${l.memberStatus}</span>
           </div>
           <div class="fr" style="padding-top:8px"><span class="fl">Campaign</span><span class="fv" style="font-size:10px;font-family:'DM Mono',monospace;color:var(--s600)">${l.campaign}</span></div>
           <div class="fr"><span class="fl">Product Interest</span><span class="fv" style="font-weight:600;color:var(--s800)">${l.product}</span></div>
           <div class="fr"><span class="fl">Most Recent BU</span><span class="fv"><span style="display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;background:${BU_BG[l.mostRecentBU]||'var(--s100)'};color:${BU_COLORS[l.mostRecentBU]||'var(--s600)'}">${l.mostRecentBU}</span></span></div>
-          <div class="fr"><span class="fl">Lead Rating</span><span class="fv"><span class="ftag ftag-ink">${l.leadRating}</span></span></div>
-          ${l.slaHours!==null ? `<div class="fr"><span class="fl">SLA</span><span class="fv" style="color:${slaInfo.col};font-weight:700;font-family:'DM Mono',monospace">${slaInfo.t}</span></div>` : ''}
           ${l.meetingDate ? `<div class="fr"><span class="fl">Meeting</span><span class="fv" style="color:var(--g600);font-weight:600">${l.meetingDate}</span></div>` : ''}
+        </div>
+        <div style="border-top:1px solid var(--s100)">
+          <div onclick="toggleLeadDetail()" style="display:flex;align-items:center;justify-content:space-between;padding:8px 15px;cursor:pointer;font-size:11px;font-weight:600;color:var(--b600);background:var(--s50);transition:.1s" onmouseover="this.style.background='var(--s100)'" onmouseout="this.style.background='var(--s50)'">
+            <span>View source details</span>
+            <span id="leadDetailToggleIcon">▾</span>
+          </div>
+          <div id="leadDetailExpanded" style="display:none;padding:12px 15px;border-top:1px solid var(--s100);background:var(--white)">
+            <div class="fr" style="margin-bottom:4px"><span class="fl">Member Status</span><span class="fv">${l.memberStatus}</span></div>
+            <div class="fr" style="margin-bottom:10px"><span class="fl">Date</span><span class="fv">${l.received}</span></div>
+            <a href="https://www.servicenow.com/events" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--rmd);border:1px solid var(--b500);background:var(--b50);text-decoration:none;transition:.1s" onmouseover="this.style.background='#dbeafe'" onmouseout="this.style.background='var(--b50)'">
+              <span style="font-size:14px">${srcD.icon}</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:11px;font-weight:600;color:var(--b600)">${l.campaign}</div>
+                <div style="font-size:10px;color:var(--s400);margin-top:1px">servicenow.com · ${l.source}</div>
+              </div>
+              <span style="font-size:11px;color:var(--b500)">↗</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      <!-- Contact Info -->
       <div class="panel">
         <div class="panel-hd"><span class="panel-title">Contact Information</span><span class="panel-act">Edit</span></div>
-        <div class="fg">
-          <div class="fg-lbl">Identity</div>
-          <div class="fr"><span class="fl">Full Name</span><span class="fv" style="font-weight:700;color:var(--s900)">${l.name}</span></div>
-          <div class="fr"><span class="fl">Company</span><span class="fv link">${l.company}</span></div>
-          <div class="fr"><span class="fl">Job Title</span><span class="fv">${l.title}</span></div>
-          <div class="fr"><span class="fl">Parent Account</span><span class="fv link">${l.parentAccount}</span></div>
+        <div style="padding:11px 15px;border-bottom:1px solid var(--s100);display:flex;align-items:center;gap:11px">
+          <div style="width:40px;height:40px;background:linear-gradient(135deg,var(--ink),var(--ink-mid));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--wasabi);flex-shrink:0">${initials}</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--s900);line-height:1.2">${l.name}</div>
+            <div style="font-size:12px;color:var(--s500);margin-top:2px">${l.title}</div>
+            <div style="font-size:12px;font-weight:500;color:var(--b600);margin-top:1px">${l.company}</div>
+          </div>
         </div>
-        <div class="fg">
-          <div class="fg-lbl">Contact Details</div>
-          <div class="fr"><span class="fl">Email</span><span class="fv link" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0"><a href="mailto:${l.email}" title="${l.email}" style="color:var(--b600);font-size:11px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.email}</a></span></div>
-          <div class="fr"><span class="fl">Business Phone</span><span class="fv"><a href="tel:${l.phone.replace(/\s/g,'')}" style="color:var(--s700)">${l.phone}</a></span></div>
-          <div class="fr"><span class="fl">LinkedIn</span><span class="fv"><a href="${l.linkedin || 'https://linkedin.com/in/'}" target="_blank" style="color:var(--b600);display:inline-flex;align-items:center;gap:4px;font-weight:500">💼 View Profile ↗</a></span></div>
-          <div class="fr"><span class="fl">State</span><span class="fv">${l.state}</span></div>
-          <div class="fr"><span class="fl">Do Not Email</span><span class="fv"><span class="ftag ftag-green">Allowed</span></span></div>
-          <div class="fr"><span class="fl">Do Not Call</span><span class="fv"><span class="ftag ftag-green">Allowed</span></span></div>
-        </div>
-        <div class="fg">
-          <div class="fg-lbl">Lead Details</div>
-          <div class="fr"><span class="fl">Source</span><span class="fv">${l.source}</span></div>
-          <div class="fr"><span class="fl">Member Status</span><span class="fv">${l.memberStatus}</span></div>
-          <div class="fr"><span class="fl">Received</span><span class="fv">${l.received}</span></div>
-          ${l.slaHours!==null ? `<div class="fr"><span class="fl">SLA</span><span class="fv" style="color:${slaInfo.col};font-weight:700">${slaInfo.t}</span></div>` : ''}
-          ${l.meetingDate ? `<div class="fr"><span class="fl">Meeting</span><span class="fv" style="color:var(--g600);font-weight:600">${l.meetingDate}</span></div>` : ''}
+        <div style="padding:10px 15px;display:flex;flex-direction:column;gap:5px">
+          <a href="mailto:${l.email}" style="display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:var(--rmd);border:1px solid var(--s200);background:var(--s50);text-decoration:none;transition:.1s" onmouseover="this.style.background='var(--s100)'" onmouseout="this.style.background='var(--s50)'">
+            <span style="font-size:12px;width:16px;text-align:center">📧</span>
+            <span style="font-size:11px;color:var(--b600);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.email}</span>
+            <span style="margin-left:auto;font-size:9px;font-weight:600;color:var(--g600);flex-shrink:0">OK</span>
+          </a>
+          <a href="tel:${l.phone.replace(/\s/g,'')}" style="display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:var(--rmd);border:1px solid var(--s200);background:var(--s50);text-decoration:none;transition:.1s" onmouseover="this.style.background='var(--s100)'" onmouseout="this.style.background='var(--s50)'">
+            <span style="font-size:12px;width:16px;text-align:center">📞</span>
+            <span style="font-size:11px;color:var(--s700);font-weight:500">${l.phone}</span>
+            <span style="margin-left:auto;font-size:9px;font-weight:600;color:var(--g600);flex-shrink:0">OK</span>
+          </a>
+          <a href="#" style="display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:var(--rmd);border:1px solid var(--s200);background:var(--s50);text-decoration:none;transition:.1s" onmouseover="this.style.background='var(--s100)'" onmouseout="this.style.background='var(--s50)'">
+            <span style="font-size:12px;width:16px;text-align:center">💼</span>
+            <span style="font-size:11px;color:var(--b600);font-weight:500">View LinkedIn ↗</span>
+          </a>
         </div>
       </div>
 
-      <!-- Buying Groups -->
       <div class="panel">
         <div class="panel-hd"><span class="panel-title">Buying Groups</span><span class="panel-act">+ Add</span></div>
         <div class="bu-strip">
@@ -878,7 +1114,6 @@ function renderPage() {
         </div>
       </div>
 
-      <!-- Engagement -->
       <div class="panel">
         <div class="panel-hd"><span class="panel-title">Engagement Snapshot</span></div>
         <div class="eng-grid">
@@ -895,48 +1130,57 @@ function renderPage() {
       </div>
     </div>
 
-    <!-- CENTER -->
+    <!-- CENTER COL -->
     <div class="fade-in" style="animation-delay:.06s">
-      <!-- AI Card -->
-      <div class="ai-card">
-        <div class="ai-card-hd">
-          <div class="ai-lbl"><div class="ai-pulse"></div> AI Contact Summary</div>
-          <div class="ai-card-btns">
-            <button class="ai-btn ai-btn-out">↻ Refresh</button>
-            <button class="ai-btn ai-btn-out">📋 Copy</button>
-            <button class="ai-btn ai-btn-solid" onclick="openDraftEmail()">⚡ Draft Email</button>
-          </div>
-        </div>
-        <div class="ai-summary">${aiSummary(l)}</div>
-        <div class="ai-tags">${tags.map(t=>`<span class="ai-tag ${t.cls}">${t.t}</span>`).join('')}</div>
-      </div>
 
-      <!-- Pre-Call Talking Points -->
-      <div class="pct-card">
-        <div class="pct-hd" onclick="var b=this.nextElementSibling;b.style.display=b.style.display==='block'?'none':'block';this.querySelector('.pct-arrow').textContent=b.style.display==='block'?'▲':'▼'">
-          <div class="pct-title-row">
-            <span style="font-size:15px">📞</span>
-            <span class="pct-main-title">Pre-Call Talking Points</span>
-            <span class="pct-tag">${l.product.split('+')[0].trim()}</span>
+      <!-- Contact Assist Card (collapsed by default) -->
+      <div class="cac-card" id="cacCard">
+        <div class="cac-hd" onclick="toggleCac()">
+          <div class="cac-hd-left">
+            <div class="ai-pulse" style="width:7px;height:7px;background:var(--wasabi);border-radius:50%"></div>
+            <span class="cac-hd-title">AI Contact Summary</span>
+            <span style="font-size:10px;color:var(--s400);font-weight:400">· ${l.name} · ${l.company}</span>
           </div>
-          <span class="pct-arrow">▼</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="ai-btn" style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:4px;cursor:pointer;border:1px solid var(--s200);background:transparent;color:var(--s600);font-family:inherit" onclick="event.stopPropagation();refreshCac()">↻ Refresh</button>
+            <span id="cacToggleIcon" style="font-size:11px;color:var(--s400)">▼</span>
+          </div>
         </div>
-        <div class="pct-body-inner" style="display:none">
-          ${[
-            {label:'📦 Products', icon:'bg:rgba(3,45,66,.06)', items: tp.products},
-            {label:'📡 Account Signals', icon:'bg:rgba(99,223,78,.06)', items: tp.signals},
-            {label:'🎯 Lead Source', icon:'bg:rgba(59,130,246,.06)', items: tp.source},
-            {label:'👤 Title & Level', icon:'bg:rgba(168,85,247,.06)', items: tp.title},
-          ].map(sec=>`<div style="border-bottom:1px solid var(--s100)">
-            <div style="padding:8px 15px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s500);background:var(--s50)">${sec.label}</div>
-            <div style="padding:6px 15px 10px">
-              ${sec.items.map(pt=>`<div class="pct-item">${pt}</div>`).join('')}
+        <div class="cac-body" id="cacBody">
+          <div class="cac-tabs">
+            <div class="cac-tab on" onclick="switchCacTab('interactions')">📋 Key Interactions</div>
+            <div class="cac-tab" onclick="switchCacTab('pain')">⚡ Pain Points</div>
+            <div class="cac-tab" onclick="switchCacTab('cases')">📎 Case Studies</div>
+          </div>
+          <div class="cac-pane on" id="cac-pane-interactions">
+            <div class="cac-loading" id="cac-loading-interactions">
+              <div class="skel" style="height:13px;width:70%"></div>
+              <div class="skel" style="height:10px;width:90%"></div>
+              <div class="skel" style="height:10px;width:80%"></div>
+              <div class="skel" style="height:13px;width:60%;margin-top:4px"></div>
+              <div class="skel" style="height:10px;width:85%"></div>
             </div>
-          </div>`).join('')}
+          </div>
+          <div class="cac-pane" id="cac-pane-pain">
+            <div class="cac-loading" id="cac-loading-pain">
+              <div class="skel" style="height:13px;width:75%"></div>
+              <div class="skel" style="height:10px;width:90%"></div>
+              <div class="skel" style="height:10px;width:70%"></div>
+            </div>
+          </div>
+          <div class="cac-pane" id="cac-pane-cases">
+            <div class="cac-loading" id="cac-loading-cases">
+              <div class="skel" style="height:12px;width:80%"></div>
+              <div class="skel" style="height:10px;width:60%"></div>
+              <div class="skel" style="height:12px;width:75%;margin-top:4px"></div>
+              <div class="skel" style="height:10px;width:65%"></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Timeline -->
+      ${preCallCard}
+
       <div class="tl-panel">
         <div class="tl-hd">
           <div class="tl-title">Activity Timeline</div>
@@ -981,21 +1225,13 @@ function renderPage() {
       </div>
     </div>
 
-    <!-- RIGHT -->
+    <!-- RIGHT COL -->
     <div class="fade-in" style="animation-delay:.12s">
-      <!-- Research -->
       <div class="rp">
         <div class="rp-hd">
           <div class="rp-title">📌 Account Research</div>
-          <span class="rp-badge ${ageDays < 30 ? 'rp-fresh' : ageDays < 60 ? 'rp-stale' : 'rp-stale'}">${ageDays} of 90 days</span>
+          <span class="rp-badge ${ageDays < 30 ? 'rp-fresh' : 'rp-stale'}">${ageDays} of 90 days</span>
         </div>
-        ${ageDays >= 60 ? `<div class="rp-warn">
-          <div style="font-size:13px;flex-shrink:0">⚠️</div>
-          <div>
-            <div class="rp-warn-title">Research getting stale — refresh recommended</div>
-            <div class="rp-warn-sub">Last updated Mar 27 — ${l.company} may have new initiatives this quarter</div>
-          </div>
-        </div>` : ''}
         <div class="rp-body">
           <div class="rp-date">📅 Last updated Mar 27, 2026 · ${l.company}</div>
           <div class="rp-sec">
@@ -1018,7 +1254,6 @@ function renderPage() {
         </div>
       </div>
 
-      <!-- Product Usage Sheet -->
       <div class="panel" style="margin-bottom:12px;overflow:hidden">
         <div class="panel-hd" style="background:var(--s50)">
           <span class="panel-title">Product Usage</span>
@@ -1041,23 +1276,27 @@ function renderPage() {
                 </tr>
               </thead>
               <tbody>
-                ${portfolio.map(row=>`<tr style="border-bottom:1px solid var(--s100)">
-                  <td style="padding:8px 10px;font-size:12px;color:var(--s800);font-weight:500">${row.bu}</td>
-                  <td style="padding:8px 10px;font-size:12px;text-align:right;font-family:'DM Mono',monospace;font-weight:${row.cacv>0?'600':'400'};color:${row.cacv>0?'var(--s800)':'var(--s300)'}">${row.cacv>0?'$'+row.cacv+'K':'$0K'}</td>
-                  <td style="padding:8px 10px;font-size:12px;text-align:right;font-family:'DM Mono',monospace;font-weight:${row.nnacv!==0?'600':'400'};color:${row.nnacv>0?'var(--g600)':row.nnacv<0?'var(--r600)':'var(--s300)'}">${row.nnacv>0?'$'+row.nnacv+'K':row.nnacv<0?'-$'+Math.abs(row.nnacv)+'K':'$0K'}</td>
+                ${portfolio.map(row=>`<tr style="border-bottom:1px solid var(--s100);${row.nnacv>0?'background:rgba(245,158,11,.03);':''}">
+                  <td style="padding:8px 10px;font-size:12px;color:var(--s800);font-weight:500"><span style="display:inline-flex;align-items:center;gap:6px">${row.nnacv>0?'<span style="width:6px;height:6px;border-radius:50%;background:#f59e0b;display:inline-block;flex-shrink:0"></span>':'<span style="width:6px;height:6px;display:inline-block;flex-shrink:0"></span>'}${row.bu}</span></td>
+                  <td style="padding:8px 10px;font-size:12px;text-align:right;font-family:'DM Mono',monospace;font-weight:${row.cacv>0?'600':'400'};color:${row.cacv>0?'var(--s800)':'var(--s300)'}">${row.cacv>0?'$'+row.cacv+'K':'—'}</td>
+                  <td style="padding:8px 10px;font-size:12px;text-align:right;font-family:'DM Mono',monospace;font-weight:${row.nnacv!==0?'600':'400'};color:${row.nnacv>0?'var(--a600)':row.nnacv<0?'var(--r600)':'var(--s300)'}">${row.nnacv>0?'$'+row.nnacv+'K ⚡':row.nnacv<0?'-$'+Math.abs(row.nnacv)+'K':'—'}</td>
                 </tr>`).join('')}
-                ${(()=>{const totalCacv=portfolio.reduce((s,r)=>s+r.cacv,0);const totalNnacv=portfolio.reduce((s,r)=>s+r.nnacv,0);return `<tr style="background:var(--s50);border-top:2px solid var(--s200)">
-                  <td style="padding:8px 10px;font-size:11px;font-weight:700;color:var(--s600)">Total</td>
-                  <td style="padding:8px 10px;font-size:12px;font-weight:700;text-align:right;font-family:'DM Mono',monospace;color:var(--s800)">$${totalCacv}K</td>
-                  <td style="padding:8px 10px;font-size:12px;font-weight:700;text-align:right;font-family:'DM Mono',monospace;color:${totalNnacv>0?'var(--g600)':totalNnacv<0?'var(--r600)':'var(--s400)'}">$${totalNnacv}K</td>
-                </tr>`;})()} 
+                ${(()=>{const tc=portfolio.reduce((s,r)=>s+r.cacv,0);const tn=portfolio.reduce((s,r)=>s+r.nnacv,0);return `<tr style="background:var(--s50);border-top:2px solid var(--s200)"><td style="padding:8px 10px;font-size:11px;font-weight:700;color:var(--s600)">Total</td><td style="padding:8px 10px;font-size:12px;font-weight:700;text-align:right;font-family:'DM Mono',monospace;color:var(--s800)">$${tc}K</td><td style="padding:8px 10px;font-size:12px;font-weight:700;text-align:right;font-family:'DM Mono',monospace;color:${tn>0?'var(--a600)':tn<0?'var(--r600)':'var(--s400)'}">$${tn>0?tn+'K':tn<0?'-$'+Math.abs(tn)+'K':'—'}</td></tr>`;})()}
               </tbody>
             </table>
           </div>
+          ${(()=>{
+            const activeRows = portfolio.filter(r=>r.nnacv>0);
+            if(!activeRows.length) return '';
+            const BU_DOT_COLORS = {'ITSM':'#3b82f6','ITOM':'#0e7490','HR Service Delivery':'#7e22ce','Now Assist for ITSM':'#6d28d9','Now Assist for HR':'#7e22ce','Security':'#dc2626','Asset Management':'#0369a1','Legal and Contract Ops':'#92400e','AI Platform Foundations':'#6d28d9'};
+            return `<div style="padding:8px 12px;border-top:1px solid rgba(245,158,11,.2);background:rgba(245,158,11,.04);display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <span style="font-size:10px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.06em">⚡ Active Pipeline:</span>
+              ${activeRows.map(r=>`<span style="font-size:11px;font-weight:600;color:#78350f;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);padding:2px 8px;border-radius:4px">${r.bu} · $${r.nnacv}K</span>`).join('')}
+            </div>`;
+          })()}
         `}
       </div>
 
-      <!-- Who Knows Whom -->
       <div class="panel">
         <div class="panel-hd"><span class="panel-title">Who Knows Whom</span></div>
         <div style="padding:13px 15px;display:flex;flex-direction:column;gap:8px">
@@ -1075,24 +1314,192 @@ function renderPage() {
       </div>
     </div>`;
 
-  // Timeline filter interaction
+  // ── Event listeners ──────────────────────────────────────────────────────
   document.querySelectorAll('.tlfil').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.tlfil').forEach(b => b.classList.remove('on'));
       this.classList.add('on');
     });
   });
-
-  // Tab interaction
   document.querySelectorAll('.tab-it').forEach(t => {
     t.addEventListener('click', function() {
       document.querySelectorAll('.tab-it').forEach(x => x.classList.remove('on'));
       this.classList.add('on');
     });
   });
+
+  // Pre-call card starts collapsed
 }
 
-renderPage();
+// ── CONTACT ASSIST CARD ────────────────────────────────────────────────────
+let _cacLoaded = false;
+
+function toggleCac() {
+  const body = document.getElementById('cacBody');
+  const icon = document.getElementById('cacToggleIcon');
+  if (!body) return;
+  const open = body.classList.toggle('open');
+  if (icon) icon.textContent = open ? '▲' : '▼';
+  if (open && !_cacLoaded) loadCacContent(window._currentLead);
+}
+
+function switchCacTab(tab) {
+  document.querySelectorAll('.cac-tab').forEach((t,i) => {
+    const keys = ['interactions','pain','cases'];
+    t.classList.toggle('on', keys[i] === tab);
+  });
+  document.querySelectorAll('.cac-pane').forEach(p => p.classList.remove('on'));
+  const pane = document.getElementById('cac-pane-' + tab);
+  if (pane) pane.classList.add('on');
+}
+
+function refreshCac() {
+  _cacLoaded = false;
+  ['interactions','pain','cases'].forEach(k => {
+    const pane = document.getElementById('cac-pane-' + k);
+    if (pane) pane.innerHTML = `<div class="cac-loading"><div class="skel" style="height:13px;width:70%"></div><div class="skel" style="height:10px;width:90%"></div><div class="skel" style="height:10px;width:80%"></div></div>`;
+  });
+  const body = document.getElementById('cacBody');
+  if (body && body.classList.contains('open')) loadCacContent(window._currentLead);
+}
+
+async function loadCacContent(l) {
+  if (!l || _cacLoaded) return;
+  const prompt = `You are a ServiceNow BDR assistant generating contact intelligence for a sales call. Return ONLY valid JSON, no markdown, no preamble.
+
+Lead data:
+- Name: ${l.name}
+- Title: ${l.title}  
+- Company: ${l.company}
+- Engagement: ${l.memberStatus} on "${l.campaign}" (${l.source})
+- Product Interest: ${l.product}
+- Business Unit: ${l.mostRecentBU}
+- Notes: ${l.notes}
+- Existing Customer: ${window._cacMeta?.isCustomer ? 'Yes, owns: ' + window._cacMeta.ownedProds.join(', ') : 'No'}
+
+Return JSON with exactly this structure:
+{
+  "interactions": [
+    {"title": "short bold title", "description": "1-2 sentence insight about their engagement or situation"},
+    {"title": "...", "description": "..."},
+    {"title": "...", "description": "..."}
+  ],
+  "painPoints": [
+    {"title": "pain point name", "description": "why this person likely has this pain", "solution": "ServiceNow product name"},
+    {"title": "...", "description": "...", "solution": "..."},
+    {"title": "...", "description": "...", "solution": "..."}
+  ],
+  "caseStudies": [
+    {"title": "Company - brief outcome headline", "outcome": "specific metric or result", "url": "#"},
+    {"title": "...", "outcome": "...", "url": "#"},
+    {"title": "...", "outcome": "...", "url": "#"}
+  ]
+}
+
+Make interactions specific to their engagement signal. Pain points must be realistic for their title and industry. Case studies should match their BU and industry.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{role: 'user', content: prompt}]
+      })
+    });
+    const data = await res.json();
+    const raw = data.content.map(c => c.text || '').join('').replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(raw);
+    _cacLoaded = true;
+    renderCacContent(parsed);
+  } catch(e) {
+    ['interactions','pain','cases'].forEach(k => {
+      const pane = document.getElementById('cac-pane-' + k);
+      if (pane) pane.innerHTML = `<div style="padding:14px;font-size:11px;color:var(--r600)">Unable to load. <span style="cursor:pointer;text-decoration:underline;color:var(--b600)" onclick="refreshCac()">Try again</span></div>`;
+    });
+  }
+}
+
+function renderCacContent(data) {
+  const iPane = document.getElementById('cac-pane-interactions');
+  if (iPane && data.interactions) {
+    iPane.innerHTML = data.interactions.map(i => `
+      <div class="cac-item">
+        <div class="cac-item-title">${i.title}</div>
+        <div class="cac-item-desc">${i.description}</div>
+      </div>`).join('');
+  }
+  const pPane = document.getElementById('cac-pane-pain');
+  if (pPane && data.painPoints) {
+    pPane.innerHTML = data.painPoints.map(p => `
+      <div class="cac-item">
+        <div class="cac-item-title">${p.title}</div>
+        <div class="cac-item-desc">${p.description}</div>
+        <span class="cac-sn-solution">SN: ${p.solution}</span>
+      </div>`).join('');
+  }
+  const cPane = document.getElementById('cac-pane-cases');
+  if (cPane && data.caseStudies) {
+    cPane.innerHTML = data.caseStudies.map(c => `
+      <a href="${c.url}" class="cac-link">
+        <span style="color:var(--wdk);font-size:12px;flex-shrink:0">📄</span>
+        <div>
+          <div style="font-weight:600">${c.title}</div>
+          <div class="cac-link-outcome">${c.outcome}</div>
+        </div>
+        <span style="margin-left:auto;font-size:11px;color:var(--s300)">↗</span>
+      </a>`).join('');
+  }
+}
+
+function toggleStatusDrop() {
+  const d = document.getElementById('statusDropdown');
+  if (d) d.style.display = d.style.display === 'none' ? 'block' : 'none';
+}
+function setStatus(s) {
+  const lbl = document.getElementById('statusLabel');
+  if (lbl) lbl.textContent = s;
+  const d = document.getElementById('statusDropdown');
+  if (d) d.style.display = 'none';
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#statusDropdown') && !e.target.closest('[onclick="toggleStatusDrop()"]')) {
+    const d = document.getElementById('statusDropdown');
+    if (d) d.style.display = 'none';
+  }
+});
+
+function toggleLeadDetail() {
+  const el = document.getElementById('leadDetailExpanded');
+  const icon = document.getElementById('leadDetailToggleIcon');
+  if (!el || !icon) return;
+  const open = el.style.display === 'none';
+  el.style.display = open ? 'block' : 'none';
+  icon.textContent = open ? '▴' : '▾';
+}
+
+function togglePct() {
+  const body = document.getElementById('pctBody');
+  const toggle = document.getElementById('pctToggle');
+  if (!body || !toggle) return;
+  const isOpen = body.classList.toggle('open');
+  toggle.classList.toggle('open', isOpen);
+  toggle.textContent = isOpen ? '▲' : '▼';
+}
+
+function copyVP(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied'; setTimeout(() => { btn.textContent = '📋 Copy'; }, 1800);
+  });
+}
+
+function copyQuestion(el, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const cp = el.querySelector('.pct-q-copy');
+    if (cp) { cp.textContent = '✓'; setTimeout(() => { cp.textContent = '📋'; }, 1500); }
+  });
+}
 
 function openDraftEmail() {
   const l = window._currentLead;
@@ -1114,15 +1521,11 @@ function openDraftEmail() {
     '<div class="email-to-bar"><span style="font-size:10px;font-weight:700;color:var(--s400);text-transform:uppercase;letter-spacing:.06em;width:40px;flex-shrink:0">To</span><span style="font-size:12px;font-weight:600;color:var(--s800)">' + l.name + '</span><span style="font-size:11px;color:var(--s400);margin-left:6px">&lt;' + l.email + '&gt;</span></div>' +
     '<div class="email-to-bar" style="border-top:1px solid var(--s100)"><span style="font-size:10px;font-weight:700;color:var(--s400);text-transform:uppercase;letter-spacing:.06em;width:40px;flex-shrink:0">Subj</span><input id="email-subject" value="' + subject.replace(/"/g,"'") + '" style="flex:1;border:none;outline:none;font-family:inherit;font-size:12px;color:var(--s800);background:transparent"></div>' +
     '<div class="email-body-wrap"><textarea class="email-body" id="email-body">' + body + '</textarea></div>' +
-    '<div class="email-actions">' +
-    '<button class="btn btn-p btn-sm" onclick="copyEmail()">📋 Copy</button>' +
-    '<button class="btn btn-p btn-sm" onclick="openInMail()">📨 Open in Mail</button>' +
-    '<button class="btn btn-g btn-sm" style="margin-left:auto" onclick="closeEmailModal()">Close</button>' +
-    '</div></div></div>';
+    '<div class="email-actions"><button class="btn btn-p btn-sm" onclick="copyEmail()">📋 Copy</button><button class="btn btn-p btn-sm" onclick="openInMail()">📨 Open in Mail</button><button class="btn btn-g btn-sm" style="margin-left:auto" onclick="closeEmailModal()">Close</button></div>' +
+    '</div></div>';
 }
 
 function closeEmailModal() { document.getElementById('email-modal-root').innerHTML = ''; }
-
 function copyEmail() {
   var subj = document.getElementById('email-subject').value;
   var body = document.getElementById('email-body').value;
@@ -1131,7 +1534,6 @@ function copyEmail() {
     setTimeout(function(){ btn.textContent = '📋 Copy'; }, 2000);
   });
 }
-
 function openInMail() {
   var l = window._currentLead;
   var subj = encodeURIComponent(document.getElementById('email-subject').value);
@@ -1139,6 +1541,7 @@ function openInMail() {
   window.open('mailto:' + (l ? l.email : '') + '?subject=' + subj + '&body=' + body);
 }
 
+renderPage();
 </script>
 <div id="modal-root"></div>
 <div id="email-modal-root"></div>
