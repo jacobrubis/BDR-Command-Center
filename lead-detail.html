@@ -595,6 +595,45 @@ const TIMELINE_TEMPLATES = {
                     {type:'Email',       icon:'tl-email', dir:'Outbound', st:'open',   preview:'Quick question — {first}, I noticed you explored our {product} content recently...', outcome:null, dt:-2, rep:'Jacob Rubis'}],
 };
 
+// ── SHARED PAIN POINT LOGIC ────────────────────────────────────────────────
+function getPainPoints(bu, title) {
+  const isCLevel = /cio|cto|ciso|ceo|chief|president|evp|chro/i.test(title);
+  const buKey = bu.toLowerCase();
+  const painMap = {
+    itsm: [
+      { title: 'Fragmented IT service operations', description: isCLevel ? 'The cost per IT interaction rises when requests move across multiple tools with no single record.' : 'Tickets get routed manually, SLAs get missed, and agents context-switch constantly.', solution: 'ITSM Pro + Now Assist' },
+      { title: 'Limited visibility into service performance', description: 'Without unified reporting, it\'s hard to know where the backlog is building or which teams are overloaded.', solution: 'Performance Analytics' },
+      { title: 'AI deflection gap', description: 'Repetitive L1 requests consume agent capacity that should go to complex work. Most orgs deflect less than 20% without automation.', solution: 'Now Assist for ITSM' },
+    ],
+    employee: [
+      { title: 'HR inbox overload', description: 'Employees email HR directly for questions the portal should answer — onboarding, benefits, PTO. Your team becomes the support desk.', solution: 'HR Service Delivery' },
+      { title: 'Disconnected onboarding experience', description: 'New hire tasks span IT, HR, and Facilities with no single handoff point. Delays in access and equipment hurt time-to-productivity.', solution: 'Onboarding & Transitions' },
+      { title: 'No self-service adoption', description: 'Portals exist but employees don\'t use them because they\'re slow or can\'t find answers. Adoption stays low without AI-guided search.', solution: 'Now Assist for HR' },
+    ],
+    itom: [
+      { title: 'Alert noise overwhelming operations teams', description: 'Raw event floods from monitoring tools make it impossible to prioritize. On-call engineers chase noise instead of real incidents.', solution: 'AIOps Event Management' },
+      { title: 'Slow mean time to resolution', description: 'Without correlated incident context, engineers start from scratch on every page. MTTR stays high and SLAs get breached.', solution: 'ITOM Health' },
+      { title: 'Infrastructure blind spots', description: 'Undiscovered or stale CMDB data means changes happen without visibility into downstream impact.', solution: 'CMDB + Service Mapping' },
+    ],
+    security: [
+      { title: 'Slow incident response across siloed tools', description: 'Detection in the SIEM, investigation in one tool, response in another — analysts spend more time coordinating than resolving.', solution: 'Security Operations' },
+      { title: 'Compliance audit gaps', description: 'Manual evidence collection for audits is time-consuming and error-prone. Teams can\'t prove remediation velocity.', solution: 'GRC + Vulnerability Response' },
+      { title: 'Identity governance complexity', description: 'Post-acquisition or org change scenarios leave access rights ungoverned. Veza visibility closes that gap.', solution: 'Veza Identity Governance' },
+    ],
+    asset: [
+      { title: 'Unknown license spend', description: 'Most organizations are paying for 15-30% more software than they use. Without discovery, overspend goes undetected until renewal.', solution: 'Software Asset Management' },
+      { title: 'Hardware lifecycle blind spots', description: 'End-of-life hardware creates support risk and security exposure when not tracked centrally.', solution: 'Hardware Asset Management' },
+      { title: 'Audit readiness gaps', description: 'Reconciling multiple asset lists at audit time is a manual, error-prone process that puts compliance at risk.', solution: 'ITAM' },
+    ],
+  };
+  let key = 'itsm';
+  if (buKey.includes('employee') || buKey.includes('hr')) key = 'employee';
+  else if (buKey.includes('itom') || buKey.includes('aiops')) key = 'itom';
+  else if (buKey.includes('security') || buKey.includes('risk') || buKey.includes('veza')) key = 'security';
+  else if (buKey.includes('asset') || buKey.includes('itam') || buKey.includes('ham')) key = 'asset';
+  return painMap[key] || painMap.itsm;
+}
+
 // ── VALUE PROP MAP ─────────────────────────────────────────────────────────
 function getValueProp(bu, title, product) {
   const isCLevel = /cio|cto|ciso|ceo|chief|president|evp|chro/i.test(title);
@@ -714,36 +753,41 @@ function getTalkingPoints(l) {
 
 
   // ── 6. Three open-ended questions ─────────────────────────────────────
+  // Pain-point-specific questions
+  const pains = getPainPoints(l.mostRecentBU, l.title);
   const questions = [];
-  if (l.memberStatus === 'Attended') {
-    questions.push(`What specifically drew you to the ${l.campaign} session — was there a problem you were hoping it would address?`);
-  } else if (l.memberStatus === 'Visited Booth') {
-    questions.push(`At the event you stopped by our booth — what were you hoping to find? Was there something specific that brought you there?`);
-  } else if (l.memberStatus === 'Downloaded') {
-    questions.push(`The ${l.campaign} content — what made you go looking for that? Was there something specific going on that prompted it?`);
+
+  // Q1: tied to pain point #1, framed as a discovery question
+  const p1 = pains[0];
+  const p1q = {
+    'HR inbox overload':                    `Is HR still the inbox for employee questions at ${l.company} — onboarding, benefits, PTO — or do you have a portal that actually deflects that volume?`,
+    'Fragmented IT service operations':     `When a ticket comes in today, how many tools does it touch before it gets resolved? I'm trying to understand where the handoffs are.`,
+    'Alert noise overwhelming operations teams': `What does alert volume look like for your ops team right now — are they triaging raw events, or do you have correlation in place?`,
+    'Slow incident response across siloed tools': `When a security incident hits, how many tools does your team jump between from detection to closure? I want to understand the workflow.`,
+    'Unknown license spend':                `Do you have a clear picture of what software you're actually using versus what you're paying for? Most teams I talk to say that's a blind spot.`,
+  }[p1.title] || `When it comes to ${p1.title.toLowerCase()} — is that something you're actively dealing with at ${l.company}? Where does it show up most?`;
+  questions.push(p1q);
+
+  // Q2: tied to account context — always pain-point based, never referencing internal deals
+  const p2 = pains[1];
+  if (isCustomer) {
+    questions.push(isCLevel
+      ? `Outside of what you're already running with us, where does ${p2.title.toLowerCase()} still show up as a gap for your team?`
+      : `You're running ${ownedProds.join(' and ')} with us today — where does ${p2.title.toLowerCase()} still show up as a problem?`);
   } else {
-    questions.push(`You reached out through our website — what was going on that sent you there?`);
+    questions.push(isCLevel
+      ? `Is ${p2.title.toLowerCase()} something that's actively on the table, or more of a known issue that hasn't had a home yet?`
+      : `When it comes to ${p2.title.toLowerCase()} — where does it break down most often for your team?`);
   }
 
-  if (isCustomer && hasActiveOpp) {
-    questions.push(`We have a conversation going on the ${activeOppBU} side — are you personally looped into that, or is someone else driving it internally?`);
-  } else if (isCustomer) {
-    questions.push(isCLevel
-      ? `Outside of what you're already running with us, where is the team still dealing with work that should be on the platform but isn't?`
-      : `Where does the process still break down for your team today — what are people working around that they shouldn't have to?`);
-  } else {
-    questions.push(isCLevel
-      ? `What's driving the focus here right now — is there a specific initiative, or a pain point that finally got loud enough internally?`
-      : `Walk me through how this works at ${l.company} today — where does the current process break down most often?`);
-  }
-
+  // Q3: forward-looking / decision path
   questions.push(isCLevel
-    ? `If this turned into something worth pursuing, who would own the evaluation day-to-day — and is there budget already allocated for this area?`
+    ? `If we found something worth pursuing, who would own the evaluation day-to-day — and is budget already allocated for this area?`
     : isVP
-    ? `Is this something you're trying to solve this quarter, or still in early exploration? I want to make sure we're using each other's time well.`
+    ? `Is this something you're trying to solve this quarter, or still early exploration? I want to make sure we're using each other's time well.`
     : `Is there someone above you who would need to be part of this conversation, and is there a project it would connect to?`);
 
-  // ── 6. Metrics They Care About — role-level ────────────────────────────
+  // ── 6. Metrics They Care About ────────────────────────────────────────
   let metricsCaresAbout = [];
   if (isCLevel) {
     const roleMap = {
@@ -832,6 +876,84 @@ function researchBullets(l) {
   return companyMap[l.company] || companyMap['default'];
 }
 
+const ACCOUNT_DETAILS = {
+  'Sub-Zero Group Inc.':       {city:'Madison',        state:'WI - Wisconsin',  country:'US - United States of America', territory:'COMMIDW-TER-1', accountType:'Customer',  segment:'Commercial', customerSince:'2/15/2019', eligibleNewLogo:'No',  collaborations:[{user:'Tony Riebel',        role:'Account Executive',        status:'Active',  primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'},{user:'Sarah Chen',     role:'Solution Consultant',      status:'Active',  primary:false, bu:'Employee Workflows'},{user:'Mike Janssen',  role:'Customer Success Manager', status:'Offline', primary:false, bu:'ITSM'}]},
+  'Paylocity Corporation':     {city:'Schaumburg',     state:'IL - Illinois',   country:'US - United States of America', territory:'COMMIDW-TER-3', accountType:'Customer',  segment:'Commercial', customerSince:'7/1/2021',  eligibleNewLogo:'No',  collaborations:[{user:'Riley Scott',        role:'Account Executive',        status:'Active',  primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'},{user:'Dana Park',      role:'Solution Consultant',      status:'Offline', primary:false, bu:'ITSM'},{user:'Liz Vargas',    role:'Customer Success Manager', status:'Away',    primary:false, bu:'ITSM'}]},
+  'FTI Consulting':            {city:'Chicago',        state:'IL - Illinois',   country:'US - United States of America', territory:'COMMIDW-TER-2', accountType:'New Logo',  segment:'Commercial', customerSince:null,        eligibleNewLogo:'Yes', collaborations:[{user:'Jeff Wuestenfeld',   role:'Account Executive',        status:'Active',  primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'},{user:'Tom Reed',       role:'Solution Consultant',      status:'Active',  primary:false, bu:'ITSM'}]},
+  'Ritchie Bros. Auctioneers': {city:'Chicago',        state:'IL - Illinois',   country:'US - United States of America', territory:'COMMIDW-TER-2', accountType:'New Logo',  segment:'Commercial', customerSince:null,        eligibleNewLogo:'Yes', collaborations:[{user:'Jeff Wuestenfeld',   role:'Account Executive',        status:'Active',  primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'}]},
+  'Sargento Foods Inc.':       {city:'Plymouth',       state:'WI - Wisconsin',  country:'US - United States of America', territory:'COMMIDW-TER-1', accountType:'Customer',  segment:'Commercial', customerSince:'3/12/2020', eligibleNewLogo:'No',  collaborations:[{user:'Tony Riebel',        role:'Account Executive',        status:'Active',  primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'},{user:'Kevin Hall',     role:'Customer Success Manager', status:'Offline', primary:false, bu:'ITSM'}]},
+  'Eversana':                  {city:'Lake Forest',    state:'IL - Illinois',   country:'US - United States of America', territory:'COMMIDW-TER-6', accountType:'Customer',  segment:'Commercial', customerSince:'11/3/2022', eligibleNewLogo:'No',  collaborations:[{user:'Seamus Donovan',     role:'Account Executive',        status:'Active',  primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'},{user:'Amy Torres',     role:'Solution Consultant',      status:'Active',  primary:false, bu:'Security'}]},
+  'DMI Inc.':                  {city:'Bethesda',       state:'IL - Illinois',   country:'US - United States of America', territory:'COMMIDW-TER-6', accountType:'New Logo',  segment:'Commercial', customerSince:null,        eligibleNewLogo:'Yes', collaborations:[{user:'Seamus Donovan',     role:'Account Executive',        status:'Active',  primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'}]},
+  'Kirkland & Ellis LLP':      {city:'Chicago',        state:'IL - Illinois',   country:'US - United States of America', territory:'COMMIDW-TER-3', accountType:'Customer',  segment:'Commercial', customerSince:'5/20/2018', eligibleNewLogo:'No',  collaborations:[{user:'Riley Scott',        role:'Account Executive',        status:'Offline', primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'},{user:'Chris Olson',    role:'Customer Success Manager', status:'Offline', primary:false, bu:'ITSM'}]},
+  'GATX Corporation':          {city:'Chicago',        state:'IL - Illinois',   country:'US - United States of America', territory:'COMMIDW-TER-3', accountType:'Customer',  segment:'Commercial', customerSince:'8/14/2017', eligibleNewLogo:'No',  collaborations:[{user:'Riley Scott',        role:'Account Executive',        status:'Away',    primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'},{user:'Dana Park',      role:'Solution Consultant',      status:'Active',  primary:false, bu:'ITOM'},{user:'Liz Vargas',    role:'Customer Success Manager', status:'Active',  primary:false, bu:'ITSM'}]},
+  'Crash Champions':           {city:'Chicago',        state:'IL - Illinois',   country:'US - United States of America', territory:'COMMIDW-TER-4', accountType:'Customer',  segment:'Commercial', customerSince:'1/7/2024',  eligibleNewLogo:'No',  collaborations:[{user:'Brian Disher',       role:'Account Executive',        status:'Active',  primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'},{user:'Sam Wright',     role:'Solution Consultant',      status:'Active',  primary:false, bu:'Employee Workflows'}]},
+  'Quinnox Inc.':              {city:'Lisle',          state:'IL - Illinois',   country:'US - United States of America', territory:'COMMIDW-TER-2', accountType:'New Logo',  segment:'Commercial', customerSince:null,        eligibleNewLogo:'Yes', collaborations:[{user:'Jeff Wuestenfeld',   role:'Account Executive',        status:'Active',  primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'}]},
+  'West Monroe Partners':      {city:'Chicago',        state:'IL - Illinois',   country:'US - United States of America', territory:'COMMIDW-TER-4', accountType:'New Logo',  segment:'Commercial', customerSince:null,        eligibleNewLogo:'Yes', collaborations:[{user:'Brian Disher',       role:'Account Executive',        status:'Active',  primary:true,  bu:'All BUs'},{user:'Jacob Rubis',   role:'Business Development Rep', status:'Active',  primary:false, bu:'All BUs'},{user:'Tom Reed',       role:'Solution Consultant',      status:'Active',  primary:false, bu:'AI Platform'}]},
+};
+
+function renderAccountDetails(l) {
+  const acct = ACCOUNT_DETAILS[l.company] || {city:'—', state:l.state, country:'US - United States of America', territory:l.territory, accountType: window._cacMeta?.isCustomer ? 'Customer' : 'New Logo', segment:'Commercial', customerSince:null, eligibleNewLogo: window._cacMeta?.isCustomer ? 'No' : 'Yes', collaborations:[]};
+  const statusDot = {Active:'background:var(--g500)', Away:'background:var(--a500)', Offline:'background:var(--s300)'};
+  return `
+    <div style="padding:20px 24px;max-width:900px">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-hd"><span class="panel-title">Account Information</span></div>
+        <div style="display:grid;grid-template-columns:200px 1fr;gap:0">
+          ${[
+            ['Name',         `<span style="font-weight:500">${l.company}</span>`],
+            ['City',         acct.city],
+            ['State / Province', `<span style="color:var(--b600);font-weight:500">${acct.state}</span>`],
+            ['Country',      `<span style="color:var(--b600);font-weight:500">${acct.country}</span>`],
+            ['Territory',    `<span style="color:var(--b600);font-weight:500;font-family:DM Mono,monospace;font-size:11px">${acct.territory}</span>`],
+            ['Account Type', `<span style="font-weight:600;color:${acct.accountType==='Customer'?'var(--g600)':'var(--b600)'}">${acct.accountType}</span>`],
+            ['Segment',      acct.segment],
+            ['Customer Since', acct.customerSince || '—'],
+            ['Eligible New Logo', `<span style="font-weight:500;color:${acct.eligibleNewLogo==='Yes'?'var(--g600)':'var(--s500)'}">${acct.eligibleNewLogo}</span>`],
+          ].map(([label, val]) => `
+            <div style="padding:11px 16px;border-bottom:1px solid var(--s100);font-size:12px;color:var(--s500);display:flex;align-items:center">${label}</div>
+            <div style="padding:11px 16px;border-bottom:1px solid var(--s100);font-size:12px;color:var(--s700)">${val}</div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hd" style="padding:12px 16px">
+          <span class="panel-title">Collaborations (Account)</span>
+          <span style="font-size:11px;color:var(--s400)">${acct.collaborations.length} members</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:560px">
+            <thead>
+              <tr style="background:var(--s50);border-bottom:1px solid var(--s200)">
+                <th style="padding:9px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:left">User</th>
+                <th style="padding:9px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:left">Collaboration Role</th>
+                <th style="padding:9px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:center">Is Primary</th>
+                <th style="padding:9px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:left">Product Business Unit</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${acct.collaborations.map(c => `
+                <tr style="border-bottom:1px solid var(--s100);transition:.1s" onmouseover="this.style.background='var(--s50)'" onmouseout="this.style.background='transparent'">
+                  <td style="padding:10px 14px">
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <div style="width:24px;height:24px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--wasabi);flex-shrink:0;position:relative">
+                        ${c.user.split(' ').map(w=>w[0]).join('').slice(0,2)}
+                        <div style="position:absolute;bottom:0;right:0;width:7px;height:7px;border-radius:50%;${statusDot[c.status]||statusDot.Offline};border:1.5px solid var(--white)"></div>
+                      </div>
+                      <span style="color:var(--b600);font-weight:500;cursor:pointer">${c.user} <span style="font-size:10px;color:var(--s400);font-weight:400">(${c.status})</span></span>
+                    </div>
+                  </td>
+                  <td style="padding:10px 14px;color:var(--s700)">${c.role}</td>
+                  <td style="padding:10px 14px;text-align:center">${c.primary ? `<span style="font-size:11px;font-weight:600;color:var(--g600)">✓ Yes</span>` : `<span style="color:var(--s300)">—</span>`}</td>
+                  <td style="padding:10px 14px;color:var(--s500)">${c.bu}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+}
+
 // ── RENDER ─────────────────────────────────────────────────────────────────
 function renderPage() {
   const params = new URLSearchParams(window.location.search);
@@ -877,6 +999,20 @@ function renderPage() {
   const statusLabel = {critical:'SLA Critical',open:'Open',responded:'Responded',booked:'Meeting Booked',nurture:'Nurture',dead:'Disqualified'};
   const tags = aiTags(l);
 
+  // Situation chips — shown in status bar
+  const sitChips = [
+    tp.isCustomer
+      ? `<span class="sit-chip sit-customer">🏢 Existing Customer</span>`
+      : `<span class="sit-chip sit-newlogo">🆕 New Logo</span>`,
+    tp.hasActiveOpp
+      ? `<span class="sit-chip sit-opp-active">⚡ Active Opp: ${tp.activeOppBU}</span>`
+      : '',
+    `<span class="sit-chip sit-source">${l.memberStatus === 'Attended' ? '🎙 Event Attendee' : l.memberStatus === 'Visited Booth' ? '🏪 Booth Visitor' : l.memberStatus === 'Downloaded' ? '⬇ Content Download' : '📬 Inbound Inquiry'}</span>`,
+    tp.isCustomer && tp.ownedProds.length
+      ? `<span class="sit-chip" style="background:rgba(3,45,66,.06);color:var(--ink);border-color:rgba(3,45,66,.15)">Owns: ${tp.ownedProds.join(', ')}</span>`
+      : '',
+  ].filter(Boolean).join('');
+
   // ── HEADER ──────────────────────────────────────────────────────────────
   document.getElementById('recHdr').innerHTML = `
     <div class="rec-hdr-top">
@@ -905,6 +1041,10 @@ function renderPage() {
       <div style="display:flex;align-items:center;gap:6px;padding:7px 16px;border-right:1px solid var(--s200)">
         <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:rgba(3,45,66,.07);color:var(--ink);border:1px solid rgba(3,45,66,.12)">${l.leadRating}</span>
         ${l.slaHours!==null ? `<span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;color:${slaInfo.col};background:${l.slaHours<0?'var(--r50)':l.slaHours<=8?'var(--a50)':'var(--g50)'};border:1px solid ${l.slaHours<0?'rgba(220,38,38,.2)':l.slaHours<=8?'rgba(245,158,11,.2)':'rgba(22,163,74,.2)'}">SLA Critical · ${slaInfo.t}</span>` : ''}
+      </div>
+      <!-- Middle: situation chips -->
+      <div style="display:flex;align-items:center;gap:5px;padding:7px 14px;flex:1;flex-wrap:wrap">
+        ${sitChips}
       </div>
       <!-- Right: Status + Owner pushed to far right -->
       <div style="margin-left:auto;display:flex;align-items:stretch">
@@ -947,19 +1087,6 @@ function renderPage() {
     </div>`;
 
   // ── PRE-CALL CARD HTML ──────────────────────────────────────────────────
-  const sitChips = [
-    tp.isCustomer
-      ? `<span class="sit-chip sit-customer">🏢 Existing Customer</span>`
-      : `<span class="sit-chip sit-newlogo">🆕 New Logo</span>`,
-    tp.hasActiveOpp
-      ? `<span class="sit-chip sit-opp-active">⚡ Active Opp: ${tp.activeOppBU}</span>`
-      : `<span class="sit-chip sit-opp-none">○ No Open Opp in BU</span>`,
-    `<span class="sit-chip sit-source">${l.memberStatus === 'Attended' ? '🎙 Event Attendee' : l.memberStatus === 'Visited Booth' ? '🏪 Booth Visitor' : l.memberStatus === 'Downloaded' ? '⬇ Content Download' : '📬 Inbound Inquiry'}</span>`,
-    tp.isCustomer && tp.ownedProds.length
-      ? `<span class="sit-chip" style="background:rgba(3,45,66,.06);color:var(--ink);border-color:rgba(3,45,66,.15)">Owns: ${tp.ownedProds.join(', ')}</span>`
-      : '',
-  ].filter(Boolean).join('');
-
   const questionsHtml = tp.questions.map((q, i) => `
     <div class="pct-q-item">
       <span class="pct-q-num">${i + 1}</span>
@@ -976,9 +1103,6 @@ function renderPage() {
         <span class="pct-toggle" id="pctToggle">▼</span>
       </div>
       <div class="pct-body" id="pctBody">
-
-        <!-- Situation chips -->
-        <div class="sit-row">${sitChips}</div>
 
         <!-- Metrics They Care About -->
         <div style="padding:11px 15px;border-bottom:1px solid var(--s100)">
@@ -1059,6 +1183,12 @@ function renderPage() {
           <div id="leadDetailExpanded" style="display:none;padding:12px 15px;border-top:1px solid var(--s100);background:var(--white)">
             <div class="fr" style="margin-bottom:4px"><span class="fl">Member Status</span><span class="fv">${l.memberStatus}</span></div>
             <div class="fr" style="margin-bottom:10px"><span class="fl">Date</span><span class="fv">${l.received}</span></div>
+            <div style="margin-bottom:10px">
+              <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--s400);margin-bottom:5px">Lead Source — Most Recent Notes</div>
+              <div style="padding:9px 11px;background:var(--s50);border-radius:var(--rmd);border:1px solid var(--s200);font-size:12px;color:var(--s700);line-height:1.55">
+                ${getCampaignNote(l.campaign, l.source)}
+              </div>
+            </div>
             <a href="https://www.servicenow.com/events" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--rmd);border:1px solid var(--b500);background:var(--b50);text-decoration:none;transition:.1s" onmouseover="this.style.background='#dbeafe'" onmouseout="this.style.background='var(--b50)'">
               <span style="font-size:14px">${srcD.icon}</span>
               <div style="flex:1;min-width:0">
@@ -1142,7 +1272,7 @@ function renderPage() {
             <span style="font-size:10px;color:var(--s400);font-weight:400">· ${l.name} · ${l.company}</span>
           </div>
           <div style="display:flex;align-items:center;gap:8px">
-            <button class="ai-btn" style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:4px;cursor:pointer;border:1px solid var(--s200);background:transparent;color:var(--s600);font-family:inherit" onclick="event.stopPropagation();refreshCac()">↻ Refresh</button>
+            <button style="font-size:11px;font-weight:600;padding:4px 11px;border-radius:4px;cursor:pointer;border:1px solid var(--wasabi);background:var(--wasabi);color:var(--ink);font-family:inherit" onclick="event.stopPropagation();openDraftEmail()">⚡ Draft Email</button>
             <span id="cacToggleIcon" style="font-size:11px;color:var(--s400)">▼</span>
           </div>
         </div>
@@ -1321,10 +1451,29 @@ function renderPage() {
       this.classList.add('on');
     });
   });
+  // Store summary HTML for tab switching
+  window._summaryHTML = document.getElementById('pageBody').innerHTML;
+
   document.querySelectorAll('.tab-it').forEach(t => {
     t.addEventListener('click', function() {
       document.querySelectorAll('.tab-it').forEach(x => x.classList.remove('on'));
       this.classList.add('on');
+      const label = this.textContent.trim().replace(/\s+\d+$/, '');
+      const pb = document.getElementById('pageBody');
+      if (label === 'Account Details') {
+        pb.style.display = 'block';
+        pb.innerHTML = renderAccountDetails(window._currentLead);
+      } else if (window._summaryHTML) {
+        pb.style.display = '';
+        pb.innerHTML = window._summaryHTML;
+        // Re-attach timeline filter listeners after re-render
+        document.querySelectorAll('.tlfil').forEach(btn => {
+          btn.addEventListener('click', function() {
+            document.querySelectorAll('.tlfil').forEach(b => b.classList.remove('on'));
+            this.classList.add('on');
+          });
+        });
+      }
     });
   });
 
@@ -1333,6 +1482,24 @@ function renderPage() {
 
 // ── CONTACT ASSIST CARD ────────────────────────────────────────────────────
 let _cacLoaded = false;
+
+function getCampaignNote(campaign, source) {
+  const notes = {
+    'HRSD K25 Demo':       'Campaign Asset: HR Service Delivery Live Demo — Knowledge 2025 Breakout Session',
+    'IT Leader Webinar':   'Campaign Asset: IT Leader Webinar — ITSM Modernization & Now Assist for Service Desk',
+    'Now Assist Demo':     'Campaign Asset: Now Assist for ITSM — On-Demand Product Demo',
+    'ChiTech Spring 2026': 'Campaign Asset: ChiTech Spring 2026 — ServiceNow Booth: ITOM & AIOps Platform Session',
+    'ITAM Whitepaper':     'Campaign Asset: Whitepaper — Modernizing IT Asset Management: Hardware, Software & CMDB',
+    'Veza Security Brief': 'Campaign Asset: Executive Brief — ServiceNow + Veza: Identity Governance & Zero-Trust Access',
+    'Organic Search':      'Inbound: Contact Us Form Submission — servicenow.com organic search',
+    'Legal IT Webinar':    'Campaign Asset: Webinar — ITSM for Legal & Professional Services: Matter Management & Service Consolidation',
+    'MidwestTech Summit':  'Campaign Asset: MidwestTech Summit 2026 — ServiceNow Booth: ITOM AIOps & Infrastructure Operations',
+    'Now Assist HR':       'Campaign Asset: Now Assist for HR — Live Demo: Employee Self-Service, Policy Q&A & Case Deflection',
+    'EW HR Webinar':       'Campaign Asset: Webinar — Employee Workflows in Practice: HRSD, Onboarding & Self-Service Adoption',
+    'AI Readiness Guide':  'Campaign Asset: Executive Guide — AI Readiness for Enterprise IT: Now Assist, AI Control Tower & Autonomous Workflows',
+  };
+  return notes[campaign] || 'Campaign Asset: ' + campaign + ' — ' + source;
+}
 
 function toggleCac() {
   const body = document.getElementById('cacBody');
@@ -1365,60 +1532,86 @@ function refreshCac() {
 
 async function loadCacContent(l) {
   if (!l || _cacLoaded) return;
-  const prompt = `You are a ServiceNow BDR assistant generating contact intelligence for a sales call. Return ONLY valid JSON, no markdown, no preamble.
 
-Lead data:
-- Name: ${l.name}
-- Title: ${l.title}  
-- Company: ${l.company}
-- Engagement: ${l.memberStatus} on "${l.campaign}" (${l.source})
-- Product Interest: ${l.product}
-- Business Unit: ${l.mostRecentBU}
-- Notes: ${l.notes}
-- Existing Customer: ${window._cacMeta?.isCustomer ? 'Yes, owns: ' + window._cacMeta.ownedProds.join(', ') : 'No'}
+  // Generate content statically from lead data — works in any environment
+  const meta = window._cacMeta || {};
+  const isCust = meta.isCustomer;
+  const owned = (meta.ownedProds || []).join(', ');
+  const bu = l.mostRecentBU.toLowerCase();
+  const t = l.title;
+  const isCLevel = /cio|cto|ciso|ceo|chief|president|evp|chro/i.test(t);
+  const isVP = /\bvp\b|vice president|svp/i.test(t);
 
-Return JSON with exactly this structure:
-{
-  "interactions": [
-    {"title": "short bold title", "description": "1-2 sentence insight about their engagement or situation"},
-    {"title": "...", "description": "..."},
-    {"title": "...", "description": "..."}
-  ],
-  "painPoints": [
-    {"title": "pain point name", "description": "why this person likely has this pain", "solution": "ServiceNow product name"},
-    {"title": "...", "description": "...", "solution": "..."},
-    {"title": "...", "description": "...", "solution": "..."}
-  ],
-  "caseStudies": [
-    {"title": "Company - brief outcome headline", "outcome": "specific metric or result", "url": "#"},
-    {"title": "...", "outcome": "...", "url": "#"},
-    {"title": "...", "outcome": "...", "url": "#"}
-  ]
-}
-
-Make interactions specific to their engagement signal. Pain points must be realistic for their title and industry. Case studies should match their BU and industry.`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{role: 'user', content: prompt}]
-      })
+  // ── Key Interactions ───────────────────────────────────────────────────
+  const interactions = [];
+  const sourceCtx = {
+    'Attended': `${l.name} attended ${l.campaign} live — they carved out time for this session, which signals active interest, not passive browsing.`,
+    'Visited Booth': `${l.name} stopped at the ServiceNow booth at ${l.campaign} and initiated the badge scan — they drove the interaction, not us.`,
+    'Downloaded': `${l.name} downloaded ${l.campaign} from servicenow.com — someone went looking for this content specifically.`,
+    'Contact Us': `${l.name} submitted a Contact Us form — the most direct inbound signal. They asked to be contacted.`,
+  };
+  interactions.push({
+    title: `${l.memberStatus} — ${l.source}`,
+    description: sourceCtx[l.memberStatus] || `Engaged via ${l.source} on ${l.campaign}.`
+  });
+  if (isCust) {
+    interactions.push({
+      title: 'Existing Customer',
+      description: `${l.company} already runs ${owned} with ServiceNow. This is an expansion conversation, not a net-new pitch. Reference the existing relationship early.`
     });
-    const data = await res.json();
-    const raw = data.content.map(c => c.text || '').join('').replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(raw);
-    _cacLoaded = true;
-    renderCacContent(parsed);
-  } catch(e) {
-    ['interactions','pain','cases'].forEach(k => {
-      const pane = document.getElementById('cac-pane-' + k);
-      if (pane) pane.innerHTML = `<div style="padding:14px;font-size:11px;color:var(--r600)">Unable to load. <span style="cursor:pointer;text-decoration:underline;color:var(--b600)" onclick="refreshCac()">Try again</span></div>`;
+  } else {
+    interactions.push({
+      title: 'New Logo Opportunity',
+      description: `No existing ServiceNow footprint at ${l.company}. Position the platform story first — lead with the business problem, not product names.`
     });
   }
+  interactions.push({
+    title: `Product Interest: ${l.product}`,
+    description: `Campaign engagement maps to ${l.product} — this is the most relevant entry point. Confirm whether this is self-identified or campaign-attributed.`
+  });
+  if (l.notes) {
+    interactions.push({
+      title: 'Context Note',
+      description: l.notes
+    });
+  }
+
+  // ── Pain Points ────────────────────────────────────────────────────────
+  const painPoints = getPainPoints(l.mostRecentBU, l.title);
+  const painKey = (() => { const b = l.mostRecentBU.toLowerCase(); if (b.includes('employee')||b.includes('hr')) return 'employee'; if (b.includes('itom')||b.includes('aiops')) return 'itom'; if (b.includes('security')||b.includes('risk')) return 'security'; if (b.includes('asset')||b.includes('itam')) return 'asset'; return 'itsm'; })();
+
+  // ── Case Studies ──────────────────────────────────────────────────────
+  const caseMap = {
+    itsm: [
+      { title: 'Wiener Linien — 40% reduction in incident resolution time', outcome: 'Unified ITSM across 8,000+ employees on a single platform', url: 'https://www.servicenow.com/customers.html' },
+      { title: 'Deloitte — Service desk agent productivity up 25%', outcome: 'Now Assist deflects repetitive L1 requests automatically', url: 'https://www.servicenow.com/customers.html' },
+      { title: 'Visa — MTTR reduced from hours to minutes', outcome: 'ITSM Pro + AIOps correlation eliminates alert noise across global ops', url: 'https://www.servicenow.com/customers.html' },
+    ],
+    employee: [
+      { title: 'Uber — 8M+ HR cases handled without agent escalation', outcome: 'HRSD self-service portal replaced email-based HR intake globally', url: 'https://www.servicenow.com/customers.html' },
+      { title: 'Wayfair — Onboarding time cut by 50%', outcome: 'Automated cross-department onboarding tasks across IT, HR, and Facilities', url: 'https://www.servicenow.com/customers.html' },
+      { title: 'Levi Strauss & Co. — HR case volume down 30%', outcome: 'Now Assist for HR answers policy questions instantly without agent involvement', url: 'https://www.servicenow.com/customers.html' },
+    ],
+    itom: [
+      { title: 'T-Mobile — 90% reduction in alert noise', outcome: 'AIOps correlation eliminates false positives across 50K+ monitored nodes', url: 'https://www.servicenow.com/customers.html' },
+      { title: 'Siemens — MTTR reduced by 60%', outcome: 'Service mapping + CMDB gives full blast radius visibility before changes', url: 'https://www.servicenow.com/customers.html' },
+      { title: 'BT Group — 40% fewer P1 incidents', outcome: 'Predictive AIOps catches anomalies before they become outages', url: 'https://www.servicenow.com/customers.html' },
+    ],
+    security: [
+      { title: 'Accenture — Incident response 3x faster', outcome: 'Automated SecOps playbooks eliminate manual coordination across tools', url: 'https://www.servicenow.com/customers.html' },
+      { title: 'Elsevier — Vulnerability remediation SLA improved 45%', outcome: 'Integrated VR prioritizes and routes findings to the right teams automatically', url: 'https://www.servicenow.com/customers.html' },
+      { title: 'DXC Technology — Audit evidence time cut by 70%', outcome: 'GRC automation replaces manual evidence collection for SOC 2 and ISO 27001', url: 'https://www.servicenow.com/customers.html' },
+    ],
+    asset: [
+      { title: 'Bayer — $4M in software savings identified in year one', outcome: 'SAM discovery revealed 30% of licenses were unused or over-provisioned', url: 'https://www.servicenow.com/customers.html' },
+      { title: 'Telecom Italia — Full asset lifecycle visibility achieved', outcome: 'HAM tracks 200K+ devices from procurement to retirement in one platform', url: 'https://www.servicenow.com/customers.html' },
+      { title: 'Swiss Re — Audit prep time reduced by 60%', outcome: 'Unified ITAM eliminated manual reconciliation across 12 business units', url: 'https://www.servicenow.com/customers.html' },
+    ],
+  };
+  const caseStudies = caseMap[painKey] || caseMap.itsm;
+
+  _cacLoaded = true;
+  renderCacContent({ interactions, painPoints, caseStudies });
 }
 
 function renderCacContent(data) {
