@@ -354,6 +354,38 @@ button{font-family:inherit;}
 .nai{font-family:inherit;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;border:1px solid var(--s200);background:var(--s50);color:var(--s600);cursor:pointer;margin-top:5px;display:inline-flex;align-items:center;gap:3px;}
 .nai:hover{background:var(--ink);color:var(--white);border-color:var(--ink);}
 
+/* ── AI PREP MODAL ───────────────────────────────────────────────── */
+#prepModalBg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.prep-modal{background:var(--white);border-radius:14px;width:min(680px,95vw);height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.3);}
+.prep-modal-hdr{padding:16px 20px;border-bottom:1px solid var(--s200);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;background:var(--ink);border-radius:14px 14px 0 0;}
+.prep-modal-hdr-l{display:flex;flex-direction:column;gap:3px;}
+.prep-badge{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:10px;background:rgba(99,223,78,.18);color:var(--wasabi);margin-bottom:4px;}
+.prep-modal-name{font-size:18px;font-weight:700;color:var(--white);line-height:1.2;}
+.prep-modal-sub{font-size:11px;color:rgba(255,255,255,.55);}
+.prep-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.1s;}
+.prep-close:hover{background:rgba(255,255,255,.2);color:var(--white);}
+.prep-modal-body{flex:1;overflow-y:auto;min-height:0;padding:18px 20px;}
+.prep-sec{background:var(--s50);border:1px solid var(--s200);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.prep-sec-hdr{display:flex;align-items:center;gap:7px;padding:9px 13px;border-bottom:1px solid var(--s200);background:var(--white);}
+.prep-sec-icon{font-size:14px;}
+.prep-sec-title{font-size:11px;font-weight:700;color:var(--s700);text-transform:uppercase;letter-spacing:.06em;}
+.prep-sec-body{padding:12px 13px;font-size:12px;color:var(--s700);line-height:1.7;}
+.prep-sec-body strong{color:var(--s900);}
+.prep-sec-body ul{padding-left:16px;display:flex;flex-direction:column;gap:5px;}
+.prep-sec-body li{color:var(--s600);line-height:1.55;}
+.spiced-row{display:grid;grid-template-columns:90px 1fr;gap:0;border-bottom:1px solid var(--s200);}
+.spiced-row:last-child{border-bottom:none;}
+.spiced-label{padding:9px 12px;font-size:10px;font-weight:700;color:var(--white);display:flex;align-items:flex-start;background:var(--ink);}
+.spiced-val{padding:9px 12px;font-size:12px;color:var(--s700);line-height:1.55;}
+.prep-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:48px 20px;}
+.prep-spinner{width:32px;height:32px;border:3px solid var(--s200);border-top-color:var(--ink);border-radius:50%;animation:prepSpin .8s linear infinite;}
+@keyframes prepSpin{to{transform:rotate(360deg);}}
+.prep-loading-txt{font-size:12px;color:var(--s500);font-weight:500;}
+.prep-loading-sub{font-size:11px;color:var(--s400);text-align:center;}
+.prep-modal-ftr{padding:12px 20px;border-top:1px solid var(--s200);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--s50);border-radius:0 0 14px 14px;}
+.prep-ftr-note{font-size:10px;color:var(--s400);display:flex;align-items:center;gap:4px;}
+.prep-pulse{width:6px;height:6px;background:var(--wasabi);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
+
 /* FADE */
 .fu{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;}
 </style>
@@ -838,17 +870,35 @@ button{font-family:inherit;}
           <span class="sc-title">Meetings This Week</span>
           <a href="#" class="sc-link">View All</a>
         </div>
-        <div class="si">
-          <div><div class="si-name">David Blasdell</div><div class="si-co">Sterling Manufacturing</div></div>
-          <span class="si-g">Today 2pm</span>
+        <div class="si" style="align-items:center;">
+          <div style="flex:1">
+            <div class="si-name">David Blasdell</div>
+            <div class="si-co">Sterling Manufacturing · ITOM AIOps</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+            <span class="si-g">Today 2pm</span>
+            <button onclick="openPrepModal('david')" style="font-family:inherit;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;white-space:nowrap;">📋 Prep</button>
+          </div>
         </div>
-        <div class="si">
-          <div><div class="si-name">Rashmi Jayarama</div><div class="si-co">NovaTech Systems</div></div>
-          <span class="si-g">Today 3pm</span>
+        <div class="si" style="align-items:center;">
+          <div style="flex:1">
+            <div class="si-name">Rashmi Jayarama</div>
+            <div class="si-co">NovaTech Systems · Now Assist</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+            <span class="si-g">Today 3pm</span>
+            <button onclick="openPrepModal('rashmi')" style="font-family:inherit;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;white-space:nowrap;">📋 Prep</button>
+          </div>
         </div>
-        <div class="si">
-          <div><div class="si-name">Paul Carter</div><div class="si-co">LumaCore Solutions</div></div>
-          <span class="si-s">Tomorrow 10am</span>
+        <div class="si" style="align-items:center;">
+          <div style="flex:1">
+            <div class="si-name">Paul Carter</div>
+            <div class="si-co">LumaCore Solutions · ITSM</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+            <span class="si-s">Tomorrow 10am</span>
+            <button onclick="openPrepModal('paul')" style="font-family:inherit;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;border:1px solid var(--s300);background:var(--white);color:var(--s600);cursor:pointer;white-space:nowrap;">📋 Prep</button>
+          </div>
         </div>
       </div>
 
@@ -877,6 +927,34 @@ button{font-family:inherit;}
 
   </div><!-- /page-body -->
 </div><!-- /main -->
+
+<!-- ── AI PREP MODAL ─────────────────────────────────────────────── -->
+<div id="prepModalBg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div class="prep-modal">
+    <div class="prep-modal-hdr">
+      <div class="prep-modal-hdr-l">
+        <div class="prep-badge"><div class="prep-pulse"></div>✦ AI Generated · Now Assist</div>
+        <div class="prep-modal-name" id="prepName">David Blasdell</div>
+        <div class="prep-modal-sub" id="prepSub">Sterling Manufacturing · ITOM AIOps Discovery · 2:00pm · AE: Brian Disher</div>
+      </div>
+      <button class="prep-close" onclick="closePrepModal()">×</button>
+    </div>
+    <div class="prep-modal-body" id="prepModalBody">
+      <div class="prep-loading">
+        <div class="prep-spinner"></div>
+        <div class="prep-loading-txt">Generating prep brief…</div>
+        <div class="prep-loading-sub">Pulling account intel, CRM history, and SPICED discovery questions</div>
+      </div>
+    </div>
+    <div class="prep-modal-ftr">
+      <div class="prep-ftr-note"><div class="prep-pulse"></div>Generated by Now Assist · Always verify before the call</div>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-g btn-xs" id="prepRegenBtn">↻ Regenerate</button>
+        <button class="btn btn-p btn-xs" onclick="copyBrief()">📋 Copy Brief</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- TOM MODAL -->
 <div id="tomModalBg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(3px)">
@@ -1121,7 +1199,134 @@ function saveTOM(){
   }
   closeTOMModal();
 }
-function deleteTOMFromModal(){var id=TOM_EDITING_ID;if(id){closeTOMModal();setTimeout(function(){removeTOMNote(id);},50);}}
+// ── AI PREP MODAL ──────────────────────────────────────────────────────
+var PREP_DATA = {
+  david: {
+    name: 'David Blasdell',
+    sub: 'Sterling Manufacturing · ITOM AIOps Discovery · Today 2:00pm · AE: Brian Disher',
+    focus: 'Uncover the current state of IT operations at Sterling Manufacturing — specifically alert noise, incident triage, and visibility across distributed plant systems — and establish whether the pain is acute enough to drive a near-term evaluation of ITOM AIOps.',
+    about_company: 'Sterling Manufacturing is a mid-market industrial manufacturer with 2,000+ employees across multiple production facilities in the Midwest. Their IT team manages a complex, distributed environment spanning plant floor OT systems, ERP infrastructure, and corporate IT — all with a lean operations team. They\'ve grown through acquisition, leaving them with fragmented monitoring tools and inconsistent visibility across sites.',
+    servicenow_relationship: 'Customer since 2021. Currently owns ITSM Pro and CSM. Expansion opportunity: ITOM AIOps — no current ServiceNow footprint in IT operations monitoring.',
+    opty_history: 'Prior ITOM conversation in Q3 2024 with a previous IT contact (now departed). Opportunity stalled at discovery — budget freeze due to ERP migration. That migration is now complete as of Q1 2026, making this a re-engagement with improved timing. Brian Disher flagged this account as a priority reopen.',
+    cares: ['Reducing MTTR/MTTD across plant and corporate IT systems', 'Consolidating 4–5 monitoring tools into a single pane of glass without adding headcount', 'Eliminating alert fatigue — his team is triaging 200+ alerts/day manually with no correlation engine', 'Protecting manufacturing uptime — every hour of unplanned downtime costs $50K+ in lost output'],
+    spiced: {
+      situation: 'How is your team currently managing incident detection and response across your facilities — what tools are you running, and how centralized is visibility today?\n\nHow many people are actively involved in IT ops monitoring, and roughly how many alerts or incidents are you triaging per day?',
+      problem: 'When something goes wrong in the environment, what does the process look like to identify root cause — and how long does that typically take?\n\nHow much of your team\'s time would you say goes toward manually correlating alerts versus actually resolving issues?',
+      implication: 'When a network or infrastructure issue hits during production, what\'s the downstream impact — are we talking hours of exposure, and what does that cost the business?\n\nIf this stays the way it is for another 12 months, what does that mean for your team\'s capacity and the reliability commitments you\'ve made to the business?',
+      critical_event: 'Has there been a specific incident recently that made leadership start asking harder questions about visibility and response time?\n\nIs there a deadline — a budget cycle, an audit, or a production peak window — where having better observability would really matter?',
+      decision: 'Beyond yourself, who else would be involved in evaluating and signing off on something like this?\n\nIf this looks like the right fit after today, what would a realistic evaluation and decision timeline look like on your end?'
+    }
+  },
+  rashmi: {
+    name: 'Rashmi Jayarama',
+    sub: 'NovaTech Systems · Now Assist for ITSM Intro · Today 3:00pm · AE: Riley Scott',
+    focus: 'Establish NovaTech\'s current ITSM maturity and AI readiness, surface where agent and analyst time is being wasted on repetitive tasks, and position Now Assist as a measurable productivity lever tied to their growth goals.',
+    about_company: 'NovaTech Systems is a mid-market technology services company with approximately 1,200 employees. They run ServiceNow ITSM Pro and have a growing IT team supporting both internal operations and client-facing service delivery. As they scale, manual ticket handling and repetitive L1 work are creating bottlenecks that leadership wants to address.',
+    servicenow_relationship: 'Customer since 2023. Currently owns ITSM Pro. Inbound demo request submitted through servicenow.com — Rashmi self-identified interest in AI automation for IT. Expansion opportunity: Now Assist for ITSM.',
+    opty_history: 'No prior expansion conversations. This is a net new expansion from an inbound signal — Rashmi registered for the Now Assist IT webinar and submitted a demo request the same day. High intent. Riley Scott flagged as a warm intro opportunity with no competitive noise.',
+    cares: ['Reducing L1 ticket volume and freeing analysts for higher-value work', 'Improving mean time to resolution without adding headcount', 'Demonstrating AI ROI to leadership with measurable productivity metrics', 'Ensuring AI adoption is practical — not just a pilot that sits unused after launch'],
+    spiced: {
+      situation: 'Can you walk me through how your IT team is structured today — how many analysts, and what does a typical day look like in terms of ticket volume and types?\n\nYou came in through our Now Assist webinar — what was the specific thing that caught your attention and made you want to see more?',
+      problem: 'What percentage of your ticket volume would you say is repetitive, predictable work that your team handles the same way every time?\n\nWhere are the biggest bottlenecks right now — is it response time, resolution time, or just the sheer volume your team is absorbing?',
+      implication: 'If ticket volume continues to grow at the current rate, what does that mean for your team\'s capacity and your ability to maintain SLAs?\n\nHas leadership put any pressure around efficiency or headcount — is "do more with the same team" an active conversation?',
+      critical_event: 'Is there a specific milestone — a product launch, a contract renewal, or a business expansion — where having this working would be particularly meaningful?\n\nHave you had any incidents recently where slow IT response had a visible downstream impact on the business?',
+      decision: 'How does a decision like this typically get evaluated at NovaTech — is this primarily your call, or does it go broader?\n\nWhat would you need to see in a demo or pilot to feel confident bringing this forward to the rest of your team?'
+    }
+  },
+  paul: {
+    name: 'Paul Carter',
+    sub: 'LumaCore Solutions · ITSM Qualification · Tomorrow 10:00am · AE: Seamus Donovan',
+    focus: 'Qualify LumaCore\'s ITSM pain and buying readiness — understand their current ticketing environment, validate the economic buyer, and determine whether there\'s a real business case to build a Stage 2 opportunity around.',
+    about_company: 'LumaCore Solutions is a professional services firm with roughly 600 employees operating across consulting and managed services verticals. Their IT team is lean — estimated 8–10 people — managing a growing infrastructure as the firm expands. Current ticketing environment is fragmented, with a mix of email-based support and a legacy ITSM tool that lacks automation or reporting.',
+    servicenow_relationship: 'Net new prospect. No prior ServiceNow relationship. Paul came in through a ZoomInfo outbound sequence targeting Director-level IT contacts at professional services firms in the Midwest. Opened 3 emails, clicked the ITSM overview link twice. Seamus Donovan engaged via LinkedIn before the meeting was set.',
+    opty_history: 'No prior CRM history. This is a first conversation. Territory target account — flagged by Seamus as a strategic net new in the professional services segment. No competitive intelligence yet.',
+    cares: ['Replacing a legacy ticketing tool that the team has outgrown', 'Getting visibility into ticket trends and SLA performance for leadership reporting', 'Reducing the IT team\'s reliance on email and Slack for support requests', 'Keeping implementation simple — professional services firms move fast and don\'t have long IT project runways'],
+    spiced: {
+      situation: 'Can you give me a quick picture of how IT support works at LumaCore today — what tools are you running, and roughly how does work get logged and routed to your team?\n\nHow many people are actively managing IT operations day to day, and what does your support volume look like on a typical week?',
+      problem: 'What\'s the biggest frustration with the way things work today — is it visibility, response time, the tool itself, or something else?\n\nIf I asked your analysts what slows them down the most, what would they say?',
+      implication: 'As LumaCore grows, does the current approach scale — or is there a point where it breaks?\n\nIs the lack of reporting and visibility creating any friction with leadership or clients who want to understand IT performance?',
+      critical_event: 'What\'s prompting the conversation now — has something recently made the current setup feel more urgent to address?\n\nIs there a renewal coming up on your current tool, or a headcount or expansion milestone that\'s creating a natural window to make a change?',
+      decision: 'Who else would be involved in evaluating and approving a move like this — is this your decision, or does it require broader buy-in?\n\nAssuming today goes well, what would a realistic timeline look like for you to move forward?'
+    }
+  }
+};
+
+var currentPrepKey = 'david';
+
+function openPrepModal(key){
+  currentPrepKey = key || 'david';
+  var d = PREP_DATA[currentPrepKey];
+  var bg = document.getElementById('prepModalBg');
+  document.getElementById('prepName').textContent = d.name;
+  document.getElementById('prepSub').textContent = d.sub;
+  document.getElementById('prepModalBody').innerHTML = '<div class="prep-loading"><div class="prep-spinner"></div><div class="prep-loading-txt">Generating prep brief…</div><div class="prep-loading-sub">Pulling account intel, CRM history, and SPICED discovery questions</div></div>';
+  bg.style.display = 'flex';
+  document.getElementById('prepRegenBtn').onclick = function(){ openPrepModal(currentPrepKey); };
+  setTimeout(function(){ renderPrepContent(d); }, 2200);
+}
+
+function closePrepModal(){
+  document.getElementById('prepModalBg').style.display = 'none';
+}
+
+document.getElementById('prepModalBg').addEventListener('click', function(e){ if(e.target===this) closePrepModal(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closePrepModal(); });
+
+function spicedQ(text){
+  var qs = text.split(/\n\n|\r\n\r\n/).map(function(q){ return q.trim(); }).filter(Boolean);
+  if(qs.length <= 1) return '<div style="line-height:1.65">'+text+'</div>';
+  return qs.map(function(q,i){
+    return '<div style="display:flex;gap:8px;margin-bottom:'+(i<qs.length-1?'10px':'0')+'">'
+      +'<span style="flex-shrink:0;width:18px;height:18px;border-radius:50%;background:rgba(99,223,78,.15);color:var(--wdk);font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-top:1px">'+(i+1)+'</span>'
+      +'<span style="line-height:1.6;color:var(--s700)">'+q+'</span>'
+      +'</div>';
+  }).join('');
+}
+
+function renderPrepContent(d){
+  var body = document.getElementById('prepModalBody');
+  var cares = d.cares.map(function(b){ return '<li>'+b+'</li>'; }).join('');
+  body.innerHTML =
+    '<div class="prep-sec"><div class="prep-sec-hdr"><span class="prep-sec-icon">🎯</span><span class="prep-sec-title">Discovery Call Focus</span></div><div class="prep-sec-body">'+d.focus+'</div></div>'
+   +'<div class="prep-sec"><div class="prep-sec-hdr"><span class="prep-sec-icon">🏢</span><span class="prep-sec-title">About the Company</span></div><div class="prep-sec-body">'+d.about_company+'</div></div>'
+   +'<div class="prep-sec"><div class="prep-sec-hdr"><span class="prep-sec-icon">🔗</span><span class="prep-sec-title">ServiceNow Relationship</span></div><div class="prep-sec-body">'+d.servicenow_relationship+'</div></div>'
+   +'<div class="prep-sec"><div class="prep-sec-hdr"><span class="prep-sec-icon">📂</span><span class="prep-sec-title">CRM / Opportunity History</span></div><div class="prep-sec-body">'+d.opty_history+'</div></div>'
+   +'<div class="prep-sec"><div class="prep-sec-hdr"><span class="prep-sec-icon">🧠</span><span class="prep-sec-title">What '+d.name.split(' ')[0]+' Cares About</span></div><div class="prep-sec-body"><ul>'+cares+'</ul></div></div>'
+   +'<div class="prep-sec" style="margin-bottom:0"><div class="prep-sec-hdr"><span class="prep-sec-icon">❓</span><span class="prep-sec-title">SPICED Discovery Questions</span></div>'
+   +'<div style="overflow:hidden;border-radius:0 0 10px 10px;">'
+   +'<div class="spiced-row"><div class="spiced-label">Situation</div><div class="spiced-val">'+spicedQ(d.spiced.situation)+'</div></div>'
+   +'<div class="spiced-row"><div class="spiced-label">Problem</div><div class="spiced-val">'+spicedQ(d.spiced.problem)+'</div></div>'
+   +'<div class="spiced-row"><div class="spiced-label">Implication</div><div class="spiced-val">'+spicedQ(d.spiced.implication)+'</div></div>'
+   +'<div class="spiced-row"><div class="spiced-label">Critical Event</div><div class="spiced-val">'+spicedQ(d.spiced.critical_event)+'</div></div>'
+   +'<div class="spiced-row"><div class="spiced-label">Decision</div><div class="spiced-val">'+spicedQ(d.spiced.decision)+'</div></div>'
+   +'</div></div><div style="height:4px"></div>';
+}
+
+function copyBrief(){
+  var d = PREP_DATA[currentPrepKey];
+  var lines = ['CALL PREP BRIEF — '+d.name.toUpperCase(), d.sub, 'Generated by Now Assist · Always verify before the call', ''];
+  lines.push('── DISCOVERY CALL FOCUS ──\n'+d.focus+'\n');
+  lines.push('── ABOUT THE COMPANY ──\n'+d.about_company+'\n');
+  lines.push('── SERVICENOW RELATIONSHIP ──\n'+d.servicenow_relationship+'\n');
+  lines.push('── CRM / OPPORTUNITY HISTORY ──\n'+d.opty_history+'\n');
+  lines.push('── WHAT '+d.name.split(' ')[0].toUpperCase()+' CARES ABOUT ──');
+  d.cares.forEach(function(c){ lines.push('  • '+c); });
+  lines.push('');
+  lines.push('── SPICED DISCOVERY QUESTIONS ──');
+  ['situation','problem','implication','critical_event','decision'].forEach(function(k){
+    var label = k.replace('_',' ').replace(/\b\w/g,function(l){return l.toUpperCase();});
+    lines.push('['+label.toUpperCase()+']');
+    d.spiced[k].split(/\n\n/).forEach(function(q,i){ lines.push('  '+(i+1)+'. '+q.trim()); });
+    lines.push('');
+  });
+  var text = lines.join('\n');
+  navigator.clipboard.writeText(text).then(function(){
+    var btn = document.querySelector('.prep-modal-ftr .btn-p');
+    if(btn){ btn.textContent='✓ Copied!'; btn.style.background='var(--g600)'; btn.style.borderColor='var(--g600)'; setTimeout(function(){ btn.textContent='📋 Copy Brief'; btn.style.background=''; btn.style.borderColor=''; },2200); }
+  }).catch(function(){
+    var ta=document.createElement('textarea'); ta.value=text; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  });
+}
 document.addEventListener('DOMContentLoaded',function(){
   var s=document.getElementById('tomTag');
   if(s)s.addEventListener('change',function(){var cw=document.getElementById('tomCustomTagWrap');if(cw)cw.style.display=this.value==='custom'?'block':'none';});
