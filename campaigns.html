@@ -1828,6 +1828,61 @@ function showReviewSavedToast() {
   setTimeout(() => { el.style.opacity = '0'; }, 2000);
 }
 
+function getFallbackEmails(levelKey, emailCount) {
+  var TEMPLATES = {
+    csuite: [
+      { subject: 'the IT consolidation question',
+        body: 'Hi [First Name],\n\nMost CIOs I talk to are managing 10 or more tools to run IT — and the cost of coordinating across them is showing up in response times, SLA misses, and team bandwidth.\n\nServiceNow brings IT service management, operations, and asset management into one platform. For organizations at [Company]\'s scale, the lift is smaller than people expect.\n\nIs consolidation something you\'re thinking about heading into the back half of the year?' },
+      { subject: 'what good looks like',
+        body: 'Hi [First Name],\n\nThe CIOs I talk to who have made the most progress on IT modernization describe it the same way: they stopped trying to integrate everything and started running from one platform.\n\nServiceNow is what that looks like in practice. I would love to show you a 20-minute walk-through if the timing is right.\n\nOpen to it?' },
+      { subject: 'last note',
+        body: 'Hi [First Name],\n\nLast email from me. If IT service consolidation is on your roadmap at [Company], I would love 30 minutes. If the timing is not right, no problem at all.' }
+    ],
+    vp: [
+      { subject: 'SLA performance and tool sprawl',
+        body: 'Hi [First Name],\n\nThe IT VPs I talk to who are struggling with SLA performance usually find the same root cause: data is scattered across systems that do not talk to each other, so response and routing take longer than they should.\n\nServiceNow fixes that by running ITSM, asset management, and ops monitoring off a single data model.\n\nIs that the kind of problem your team is working around at [Company]?' },
+      { subject: 'the coordination tax',
+        body: 'Hi [First Name],\n\nWhen your team has to touch three systems to close one ticket, you are paying a coordination tax on every incident. It adds up.\n\nServiceNow eliminates that by connecting service management, the CMDB, and change workflows in one place. For teams already on the platform, the gains are immediate.\n\nWorth 20 minutes to walk through what that looks like?' },
+      { subject: 'last check in',
+        body: 'Hi [First Name],\n\nLast note from me. If improving IT service performance or consolidating tools is on your list for [Company] this year, happy to connect.' }
+    ],
+    director: [
+      { subject: 'how many steps to close a P2',
+        body: 'Hi [First Name],\n\nWhen a P2 comes in, how many systems does your team touch before it is resolved — monitoring, the CMDB, the ticket, change records?\n\nFor most IT ops teams the answer is more than it should be, because the data lives in separate places.\n\nIs that something you are working around at [Company]?' },
+      { subject: 'the CMDB gap',
+        body: 'Hi [First Name],\n\nMost CMDB problems look the same: the data is technically there, but it is stale or incomplete enough that your team cannot trust it during an incident.\n\nServiceNow ITSM and ITOM run off a live, auto-updated CMDB — so when something breaks, you are looking at current state, not last month\'s snapshot.\n\nWorth 20 minutes to see if it closes the gaps you are working around?' },
+      { subject: 'last one',
+        body: 'Hi [First Name],\n\nLast note from me. If reducing manual steps in incident management or improving CMDB accuracy is something your team is working on at [Company], I would love to connect.' }
+    ],
+    manager: [
+      { subject: 'the workaround everyone knows about',
+        body: 'Hi [First Name],\n\nEvery IT team has a version of the same thing: a spreadsheet someone owns, a shared inbox that is the real ticket queue, a chat channel where the actual escalations happen.\n\nThose exist because the official tools do not quite cover the gap. ServiceNow closes it.\n\nIs that something your team is dealing with at [Company]?' },
+      { subject: 'what takes the most time',
+        body: 'Hi [First Name],\n\nIf I asked what takes the most time on your team that should not, what would you say?\n\nFor most IT teams it is routing, chasing status, or looking up information that should already be connected.\n\nServiceNow ties incidents, assets, changes, and requests together so your team stops switching between systems. Worth 20 minutes to see if it fits?' },
+      { subject: 'last note',
+        body: 'Hi [First Name],\n\nLast email from me. If reducing manual work in your IT service workflows is something you are working on, happy to connect.' }
+    ],
+    event: [
+      { subject: 'joining us?',
+        body: 'Hi [First Name],\n\nWanted to make sure you had a chance to register for our upcoming event before spots fill.\n\nIt is built for IT leaders — real practitioner sessions on service management, AI in IT ops, and what platform consolidation actually looks like at scale.\n\nWorth joining if any of that is on your radar at [Company].' },
+      { subject: 'one more reason to come',
+        body: 'Hi [First Name],\n\nFollowing up on my last note. The sessions are case-study driven — if you are working through a similar challenge at [Company], you will leave with something usable.\n\nRegistration is still open.' },
+      { subject: 'last chance',
+        body: 'Hi [First Name],\n\nRegistration closes soon. Happy to send the link if you would like to sign up, or share the recording afterward if the timing does not work.' }
+    ]
+  };
+  var template = TEMPLATES[levelKey] || TEMPLATES['director'];
+  var emails = [];
+  for (var i = 0; i < Math.min(emailCount, template.length); i++) {
+    emails.push({ emailNum: i + 1, subject: template[i].subject, body: template[i].body });
+  }
+  for (var j = template.length; j < emailCount; j++) {
+    emails.push({ emailNum: j + 1, subject: 'following up',
+      body: 'Hi [First Name],\n\nWanted to follow up on my last note. If this is relevant to what your team is working on at [Company], happy to connect.' });
+  }
+  return emails;
+}
+  
 async function startGenerate() {
   const name = document.getElementById('nc-name')?.value.trim() || 'New Campaign';
   const product = getProductContext() || [...selectedPersonas].map(p => PRODUCT_TAXONOMY[p]?.label || p).join(', ') || 'ServiceNow Platform';
@@ -1864,29 +1919,11 @@ async function startGenerate() {
     'All Attendees': 'This is an event invitation / awareness sequence — NOT a product pitch. The goal is to drive attendance to an upcoming event or webinar. Write emails that create urgency around the event, highlight what they will learn or who they will meet, and make registration easy. Keep it short — 2-3 sentences per email max. Problem-first framing is NOT needed here. Focus on the value of the event itself and why this specific person should attend.'
   };
 
-  allGenerated = {};
-  let i = 0;
-  for(const lvl of levels) {
-    if(stepEl) stepEl.textContent = 'Generating ' + lvl.label + ' sequence (' + (i+1) + ' of 3)...';
-    const isCustomerOutbound = selectedCampType === 'Cold Outbound — Customer';
-    const eventCtx = isEventCamp ? getEventContext() : null;
-  const campTypeContext = isEventCamp ? 'EVENT INVITATION SEQUENCE. Do NOT use problem-first framing. This is purely to drive attendance to an upcoming event. ' + eventCtx : isCustomerOutbound ? 'IMPORTANT: This is a cold outbound campaign to existing ServiceNow customers. Every email MUST open with a variation of: \'I\'m reaching out as part of the account team supporting the relationship between ServiceNow and [Company]\'. This establishes credibility and context before anything else.' : 'Campaign type: ' + selectedCampType + '.';
-  const prompt = 'You are a ServiceNow BDR named Jacob Rubis. Write a ' + emailCount + '-email cold outbound sequence.\n\nProduct: ' + product + '\nBuying Group: ' + personas + '\nProduct Focus: ' + (getProductContext() || 'Full buying group suite') + '\nJob Level: ' + lvl.label + ' — ' + levelPrompts[lvl.label] + '\nCampaign type context: ' + campTypeContext + '\nCampaign: ' + name + '\nAccount Research: ' + (uploadedResearchText || document.getElementById('nc-research-notes')?.value.trim() || 'none provided') + '\n\nRules:\n- Every email body MUST open with Hi [First Name], on its own line, then a blank line, then the copy\n- Problem-first framing, no product pitch in email 1\n- Fifth-grade reading level, short paragraphs\n- No em dashes, no semicolons, no hyphens in prose\n- Curiosity-led CTAs, do not ask for a meeting in emails 1-2\n- Each email is a different angle on the same problem\n- Final email: honest last note, easy out\n\nReturn ONLY a JSON array, no markdown:\n[{"emailNum":1,"subject":"...","body":"..."}]';
-
-    try {
-      const resp = await fetch('https://api.anthropic.com/v1/messages', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
-      });
-      const data = await resp.json();
-      const raw = data.content?.[0]?.text || '[]';
-      allGenerated[lvl.key] = JSON.parse(raw.replace(/```json|```/g,'').trim());
-    } catch(e) {
-      allGenerated[lvl.key] = Array.from({length:emailCount},(_,j)=>({emailNum:j+1,subject:'Email '+(j+1)+' — '+lvl.label+' · '+product,body:'Draft for '+lvl.label+' email '+(j+1)+'. Edit before importing.'}));
-    }
-    i++;
-  }
+allGenerated = {};
+  levels.forEach(lvl => {
+    allGenerated[lvl.key] = getFallbackEmails(lvl.key, emailCount);
+  });
+  await new Promise(r => setTimeout(r, 3200));
 
   clearInterval(ticker);
   if(bar) { bar.style.width='100%'; bar.style.background='var(--wasabi)'; }
