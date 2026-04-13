@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activities — ServiceNow BDR</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+:root{
+  --ink:#032D42;--ink-nav:#01161f;--ink-mid:#043d5a;
+  --wasabi:#63DF4E;--wdk:#4ab83a;
+  --white:#fff;--bg:#f1f5f9;
+  --s50:#f8fafc;--s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;
+  --s400:#94a3b8;--s500:#64748b;--s600:#475569;--s700:#334155;
+  --s800:#1e293b;--s900:#0f172a;
+  --b50:#eff6ff;--b100:#dbeafe;--b500:#3b82f6;--b600:#2563eb;
+  --g50:#f0fdf4;--g100:#dcfce7;--g500:#22c55e;--g600:#16a34a;
+  --a50:#fffbeb;--a100:#fef3c7;--a500:#f59e0b;--a600:#d97706;
+  --r50:#fff1f2;--r100:#ffe4e6;--r500:#ef4444;--r600:#dc2626;
+  --p50:#faf5ff;--p500:#a855f7;--p600:#9333ea;
+  --sh-xs:0 1px 2px rgba(0,0,0,.05);
+  --sh-sm:0 1px 3px rgba(0,0,0,.10),0 1px 2px rgba(0,0,0,.06);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--s800);font-size:13px;line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--s300);border-radius:2px;}
+
+/* NAV */
+.gnav{height:44px;background:var(--ink-nav);display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:300;border-bottom:1px solid rgba(255,255,255,.06);}
+.gnav-logo{display:flex;align-items:center;padding:0 14px;height:44px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.gnav-tabs{display:flex;align-items:center;}
+.gnav-tab{display:flex;align-items:center;height:44px;padding:0 13px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.gnav-tab:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);}
+.gnav-pill-wrap{flex:1;display:flex;justify-content:center;}
+.gnav-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);cursor:pointer;}
+.gnav-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--wasabi);}
+.gnav-r{display:flex;align-items:center;gap:2px;padding:0 10px;}
+.gnav-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:rgba(255,255,255,.45);cursor:pointer;font-size:13px;border:none;background:transparent;}
+.gnav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
+.gnav-av{width:28px;height:28px;background:var(--wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ink);cursor:pointer;margin-left:4px;}
+
+/* SIDEBAR */
+.sbar{position:fixed;top:44px;left:0;bottom:0;width:44px;background:#0d1f2b;border-right:1px solid rgba(255,255,255,.05);z-index:200;display:flex;flex-direction:column;overflow:hidden;transition:width .22s cubic-bezier(.4,0,.2,1);}
+.sbar:hover{width:180px;box-shadow:4px 0 20px rgba(0,0,0,.25);}
+.sbar::-webkit-scrollbar{width:0;}
+.sbar-sec{padding:10px 0 4px;}
+.sbar-lbl{font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;white-space:nowrap;opacity:0;transition:opacity .15s .05s;}
+.sbar:hover .sbar-lbl{opacity:1;}
+.sbar-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:background .12s,color .12s;text-decoration:none;white-space:nowrap;}
+.sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.sbar-item.on{color:var(--wasabi);border-left-color:var(--wasabi);background:rgba(99,223,78,.06);font-weight:500;}
+.sbar-ic{width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;}
+.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);opacity:0;transition:opacity .1s;flex-shrink:0;}
+.sbar:hover .sb{opacity:1;}
+.sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
+.sbar-item.on .sbar-ic::after{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--wasabi);margin:1px auto 0;}
+.sbar:hover .sbar-item.on .sbar-ic::after{display:none;}
+.sbar-footer{padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);margin-top:auto;white-space:nowrap;opacity:0;transition:opacity .15s;}
+.sbar:hover .sbar-footer{opacity:1;}
+
+/* LAYOUT */
+.main{margin-top:44px;margin-left:44px;min-height:calc(100vh - 44px);}
+.page-hdr{background:var(--white);border-bottom:1px solid var(--s200);padding:18px 24px 0;position:sticky;top:44px;z-index:100;}
+.phdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.phdr-date{font-size:11px;color:var(--s400);margin-bottom:2px;}
+.phdr-name{font-size:22px;font-weight:700;color:var(--s900);letter-spacing:-.02em;}
+.phdr-sub{font-size:12px;color:var(--s500);}
+.phdr-acts{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+
+/* STAT ROW */
+.stat-row{display:flex;gap:8px;margin-bottom:12px;}
+.stat-card{flex:1;background:var(--white);border:1px solid var(--s200);border-radius:10px;padding:11px 13px;cursor:pointer;transition:.12s;box-shadow:var(--sh-xs);text-decoration:none;display:block;color:inherit;}
+.stat-card:hover{box-shadow:var(--sh-sm);border-color:var(--s300);}
+.stat-lbl{font-size:11px;color:var(--s500);margin-bottom:2px;font-weight:500;}
+.stat-val{font-size:20px;font-weight:700;color:var(--s900);line-height:1;margin-bottom:2px;font-family:'DM Mono',monospace;}
+.stat-val.green{color:var(--g600);}
+.stat-val.amber{color:var(--a600);}
+.stat-val.red{color:var(--r600);}
+.stat-d{font-size:11px;color:var(--s400);}
+.du{color:var(--g600);font-weight:600;}
+
+/* PAGE TABS */
+.ptabs{display:flex;align-items:center;border-top:1px solid var(--s200);margin:0 -24px;padding:0 24px;overflow-x:auto;}
+.ptabs::-webkit-scrollbar{height:0;}
+.ptab{display:flex;align-items:center;gap:5px;padding:10px 14px;font-size:13px;font-weight:500;color:var(--s500);border-bottom:2px solid transparent;white-space:nowrap;transition:.1s;text-decoration:none;cursor:pointer;}
+.ptab:hover{color:var(--s700);}
+.ptab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.ptab-ct{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
+.ptab.on .ptab-ct{background:var(--ink);color:var(--white);}
+
+/* PAGE BODY */
+.page-body{padding:16px 22px 48px;display:flex;flex-direction:column;gap:14px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;transition:.12s;white-space:nowrap;text-decoration:none;}
+.btn-g{background:transparent;color:var(--s600);border-color:var(--s200);}
+.btn-g:hover{background:var(--s50);border-color:var(--s300);}
+.btn-p{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.btn-p:hover{background:var(--ink-mid);}
+.btn-w{background:var(--wasabi);color:var(--ink);border-color:var(--wasabi);font-weight:600;}
+.btn-w:hover{background:var(--wdk);}
+.btn-sm{font-size:11px;padding:5px 11px;}
+.btn-xs{font-size:10px;padding:3px 8px;}
+
+/* ── PANEL CARD ─────────────────────────────────────────────────── */
+.panel{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);display:flex;flex-direction:column;}
+.panel-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--s100);flex-shrink:0;}
+.panel-title{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--s800);}
+.panel-title-meta{font-size:11px;font-weight:400;color:var(--s400);}
+.panel-acts{display:flex;align-items:center;gap:5px;}
+
+/* ── TOP SPLIT ROW ──────────────────────────────────────────────── */
+.split-row{display:grid;grid-template-columns:1fr 420px;gap:14px;align-items:start;}
+
+/* ── ACTIVITIES DUE TABLE ────────────────────────────────────────── */
+.act-toolbar{display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid var(--s100);background:var(--s50);}
+.act-search{flex:1;display:flex;align-items:center;gap:6px;background:var(--white);border:1px solid var(--s200);border-radius:6px;padding:5px 10px;}
+.act-search input{border:none;outline:none;font-family:inherit;font-size:12px;color:var(--s800);width:100%;background:transparent;}
+.act-search input::placeholder{color:var(--s400);}
+.act-type-tabs{display:flex;align-items:center;gap:0;}
+.att{display:inline-flex;align-items:center;gap:4px;font-family:inherit;font-size:11px;font-weight:500;padding:4px 10px;border:1px solid var(--s200);background:var(--white);color:var(--s600);cursor:pointer;transition:.1s;}
+.att:first-child{border-radius:6px 0 0 6px;}
+.att:last-child{border-radius:0 6px 6px 0;}
+.att:not(:first-child){border-left:none;}
+.att:hover{background:var(--s50);}
+.att.on{background:var(--ink);color:var(--white);border-color:var(--ink);}
+
+/* table */
+.act-tbl-wrap{overflow-x:auto;flex:1;}
+.act-tbl{width:100%;border-collapse:collapse;min-width:600px;}
+.act-tbl th{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--s400);padding:7px 12px;text-align:left;border-bottom:1px solid var(--s100);background:var(--s50);white-space:nowrap;cursor:pointer;user-select:none;}
+.act-tbl th:hover{color:var(--s600);}
+.act-tbl th .sort-icon{color:var(--s300);margin-left:3px;font-size:9px;}
+.act-tbl th.sorted{color:var(--s700);}
+.act-tbl th.sorted .sort-icon{color:var(--ink);}
+.act-tbl td{padding:8px 12px;border-bottom:1px solid var(--s50);vertical-align:middle;}
+.act-tbl tr:last-child td{border-bottom:none;}
+.act-tbl tr:hover td{background:var(--s50);}
+/* row checkbox */
+.act-tbl td.chk{width:28px;padding-right:0;}
+.row-cb{width:14px;height:14px;accent-color:var(--ink);cursor:pointer;}
+/* name cell */
+.act-name{font-size:12px;font-weight:600;color:var(--b600);cursor:pointer;display:block;line-height:1.3;}
+.act-name:hover{text-decoration:underline;}
+.act-co{font-size:10px;color:var(--s500);}
+/* type badge */
+.act-type{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;}
+.act-type.email{background:var(--b50);color:var(--b600);}
+.act-type.call{background:var(--g50);color:var(--g600);}
+.act-type.task{background:var(--p50);color:var(--p600);}
+.act-type.appt{background:var(--a50);color:var(--a600);}
+/* priority */
+.act-pri{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;}
+.act-pri.high{background:var(--r50);color:var(--r600);}
+.act-pri.med{background:var(--a50);color:var(--a600);}
+.act-pri.low{background:var(--s100);color:var(--s500);}
+/* subject */
+.act-subj{font-size:12px;color:var(--s700);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* due time */
+.act-due{font-size:11px;font-weight:600;font-family:'DM Mono',monospace;white-space:nowrap;}
+.act-due.crit{color:var(--r600);}
+.act-due.warn{color:var(--a600);}
+.act-due.ok{color:var(--g600);}
+/* action btn */
+.row-btn{font-family:inherit;font-size:10px;font-weight:600;padding:3px 9px;border-radius:4px;cursor:pointer;border:1px solid var(--s200);background:var(--white);color:var(--s600);transition:.1s;white-space:nowrap;}
+.row-btn:hover{background:var(--ink);color:var(--white);border-color:var(--ink);}
+
+/* AE avatar */
+.ae-av{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:8px;font-weight:700;color:#fff;}
+
+/* alpha bar */
+.alpha-bar{display:flex;align-items:center;gap:0;padding:4px 12px;border-top:1px solid var(--s100);background:var(--s50);flex-wrap:wrap;}
+.alpha-btn{font-family:inherit;font-size:10px;font-weight:500;padding:3px 5px;border:none;background:transparent;color:var(--s500);cursor:pointer;border-radius:3px;transition:.1s;min-width:18px;text-align:center;}
+.alpha-btn:hover{background:var(--s200);color:var(--s800);}
+.alpha-btn.on{background:var(--ink);color:var(--white);font-weight:700;}
+
+/* tbl footer */
+.tbl-footer{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-top:1px solid var(--s100);background:var(--s50);}
+.tbl-footer-l{font-size:10px;color:var(--s400);}
+.tbl-pager{display:flex;align-items:center;gap:4px;}
+.pg-btn{font-family:inherit;font-size:11px;padding:3px 8px;border:1px solid var(--s200);border-radius:4px;background:var(--white);color:var(--s600);cursor:pointer;display:inline-flex;align-items:center;gap:3px;}
+.pg-btn:hover{background:var(--s50);}
+.pg-btn:disabled{opacity:.4;cursor:default;}
+.pg-info{font-size:11px;color:var(--s500);padding:0 4px;}
+
+/* ── COMPLETED PANEL ──────────────────────────────────────────────── */
+.comp-body{padding:14px;display:flex;flex-direction:column;gap:12px;}
+.comp-toggle{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--s500);}
+.comp-toggle select{font-family:inherit;font-size:11px;padding:4px 8px;border:1px solid var(--s200);border-radius:6px;background:var(--white);color:var(--s700);cursor:pointer;font-weight:600;}
+/* donut chart area */
+.donut-wrap{display:flex;align-items:center;gap:20px;padding:4px 0;}
+.donut-svg-wrap{position:relative;width:110px;height:110px;flex-shrink:0;}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.donut-total{font-size:22px;font-weight:700;font-family:'DM Mono',monospace;color:var(--s900);line-height:1;}
+.donut-label{font-size:9px;color:var(--s400);font-weight:600;text-transform:uppercase;letter-spacing:.06em;}
+.donut-legend{flex:1;display:flex;flex-direction:column;gap:7px;}
+.dl-item{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.dl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dl-label{font-size:11px;color:var(--s600);flex:1;}
+.dl-val{font-size:12px;font-weight:700;font-family:'DM Mono',monospace;color:var(--s800);}
+.dl-bar{height:4px;border-radius:2px;margin-top:2px;}
+/* completed list */
+.comp-list{display:flex;flex-direction:column;gap:0;}
+.comp-item{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid var(--s50);}
+.comp-item:last-child{border-bottom:none;}
+.comp-ic{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.comp-ic.email{background:var(--b50);}
+.comp-ic.call{background:var(--g50);}
+.comp-ic.task{background:var(--p50);}
+.comp-ic.appt{background:var(--a50);}
+.comp-bd{flex:1;}
+.comp-name{font-size:12px;font-weight:600;color:var(--s800);line-height:1.3;}
+.comp-co{font-size:10px;color:var(--s500);}
+.comp-time{font-size:10px;color:var(--s400);white-space:nowrap;padding-top:2px;}
+
+/* ── BOTTOM TWO-COLUMN ──────────────────────────────────────────── */
+.bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
+
+/* ── MEETINGS TABLE ────────────────────────────────────────────── */
+.mtg-item{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:1px solid var(--s50);cursor:pointer;transition:.1s;}
+.mtg-item:hover{background:var(--s50);}
+.mtg-item:last-child{border-bottom:none;}
+.mtg-time-col{display:flex;flex-direction:column;align-items:center;min-width:42px;flex-shrink:0;}
+.mtg-dot{width:8px;height:8px;border-radius:50%;margin-bottom:3px;flex-shrink:0;}
+.mtg-dot.conf{background:var(--g500);}
+.mtg-dot.soon{background:var(--a500);}
+.mtg-dot.past{background:var(--s300);}
+.mtg-t{font-size:11px;font-weight:700;font-family:'DM Mono',monospace;color:var(--s700);white-space:nowrap;}
+.mtg-bd{flex:1;}
+.mtg-name{font-size:12px;font-weight:600;color:var(--s800);line-height:1.3;}
+.mtg-co{font-size:10px;color:var(--s500);}
+.mtg-tags{display:flex;align-items:center;gap:4px;margin-top:3px;flex-wrap:wrap;}
+.mtg-tag{font-size:9px;font-weight:600;padding:1px 6px;border-radius:4px;}
+.mtg-tag.disc{background:var(--b50);color:var(--b600);}
+.mtg-tag.qual{background:var(--g50);color:var(--g600);}
+.mtg-tag.demo{background:var(--p50);color:var(--p600);}
+.mtg-tag.intro{background:var(--a50);color:var(--a600);}
+.mtg-tag.bdr{background:rgba(3,45,66,.08);color:var(--ink);}
+.mtg-ae{font-size:9px;color:var(--s400);}
+.mtg-r{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+.mtg-status{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;}
+.mtg-status.conf{background:var(--g50);color:var(--g600);}
+.mtg-status.soon{background:var(--a50);color:var(--a600);}
+.mtg-status.done{background:var(--s100);color:var(--s500);}
+
+/* ── OPPORTUNITIES CREATED ───────────────────────────────────────── */
+.opty-item{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:1px solid var(--s50);cursor:pointer;transition:.1s;}
+.opty-item:hover{background:var(--s50);}
+.opty-item:last-child{border-bottom:none;}
+.opty-stage{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:'DM Mono',monospace;flex-shrink:0;margin-top:1px;}
+.opty-bd{flex:1;}
+.opty-name{font-size:12px;font-weight:600;color:var(--s800);line-height:1.3;}
+.opty-co{font-size:10px;color:var(--s500);margin-top:1px;}
+.opty-prod{font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px;background:var(--ink);color:var(--white);display:inline-block;margin-top:3px;}
+.opty-r{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;}
+.opty-amt{font-size:13px;font-weight:700;font-family:'DM Mono',monospace;color:var(--s900);}
+.opty-ae{font-size:10px;color:var(--s400);}
+.opty-when{font-size:10px;color:var(--s400);}
+
+/* FADE */
+.fu{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="gnav">
+  <div class="gnav-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" width="108" height="17" viewBox="0 0 132 20">
+      <path d="M32.022,6.391a5.626,5.626,0,0,0-3.61,1.3V6.523H25.119V19.35h3.425v-8.2a4.073,4.073,0,0,1,3.109-1.588,3.494,3.494,0,0,1,1.374.206V6.479a5.851,5.851,0,0,0-1.005-.088" fill="#fff" fill-rule="evenodd"/>
+      <path d="M2.16,15.436a5.369,5.369,0,0,0,3.5,1.269c.922,0,1.633-.45,1.633-1.084,0-1.931-6.191-1.243-6.191-5.369,0-2.459,2.371-3.993,4.9-3.993a7.9,7.9,0,0,1,4.32,1.3L8.72,10.04a4.3,4.3,0,0,0-2.45-.872c-.948,0-1.739.37-1.739,1.031,0,1.666,6.192,1.005,6.192,5.448,0,2.46-2.4,3.967-5.085,3.967A8.815,8.815,0,0,1,.5,17.9Z" fill="#fff" fill-rule="evenodd"/>
+      <path d="M23.657,12.817c0-3.57-2.5-6.558-6.034-6.558-3.794,0-6.218,3.12-6.218,6.691A6.4,6.4,0,0,0,18.1,19.614a6.919,6.919,0,0,0,5.243-2.3l-1.95-1.957a4.515,4.515,0,0,1-3.214,1.481A3.36,3.36,0,0,1,14.725,13.8h8.853A5.735,5.735,0,0,0,23.657,12.817Zm-8.774-1.533a2.775,2.775,0,0,1,2.74-2.248,2.552,2.552,0,0,1,2.53,2.248Z" fill="#fff" fill-rule="evenodd"/>
+      <polygon points="41.19 14.351 44.694 6.523 48.252 6.523 42.376 19.35 40.005 19.35 34.129 6.523 37.686 6.523 41.19 14.351" fill="#fff" fill-rule="evenodd"/>
+      <path d="M51.128.5A2.2,2.2,0,1,1,48.888,2.7,2.2,2.2,0,0,1,51.128.5" fill="#fff" fill-rule="evenodd"/>
+      <rect x="49.415" y="6.523" width="3.425" height="12.827" fill="#fff"/>
+      <path d="M67,16.731a6.766,6.766,0,0,1-5.8,2.883,6.68,6.68,0,1,1,.026-13.355,6.808,6.808,0,0,1,5.375,2.565l-2.424,2.142a3.7,3.7,0,0,0-2.951-1.534A3.433,3.433,0,0,0,57.78,12.95a3.383,3.383,0,0,0,3.531,3.49,3.741,3.741,0,0,0,3.056-1.692Z" fill="#fff" fill-rule="evenodd"/>
+      <path d="M79.442,17.313a6.918,6.918,0,0,1-5.243,2.3,6.4,6.4,0,0,1-6.692-6.664c0-3.571,2.424-6.691,6.218-6.691,3.53,0,6.033,2.988,6.033,6.558a5.635,5.635,0,0,1-.079.979H70.826a3.36,3.36,0,0,0,3.452,3.041,4.52,4.52,0,0,0,3.215-1.481Zm-3.188-6.029a2.551,2.551,0,0,0-2.529-2.248,2.774,2.774,0,0,0-2.74,2.248Z" fill="#fff" fill-rule="evenodd"/>
+      <path d="M81.12,19.35V6.523h3.293V7.554a5.625,5.625,0,0,1,3.609-1.295,5.747,5.747,0,0,1,4.427,2.063,6.482,6.482,0,0,1,1.317,4.5V19.35H90.341v-6.8a3.11,3.11,0,0,0-.764-2.407,2.69,2.69,0,0,0-1.923-.714,4.076,4.076,0,0,0-3.109,1.587V19.35Z" fill="#fff" fill-rule="evenodd"/>
+      <path d="M102.586,6.259A7.5,7.5,0,0,0,97.419,19.21a1.481,1.481,0,0,0,1.926.1,5.355,5.355,0,0,1,6.394,0,1.485,1.485,0,0,0,1.937-.113,7.5,7.5,0,0,0-5.09-12.94M102.542,17.5a3.637,3.637,0,0,1-3.734-3.733,3.734,3.734,0,1,1,7.468,0,3.637,3.637,0,0,1-3.734,3.733" fill="#62d84e" fill-rule="evenodd"/>
+      <polygon points="116.788 19.35 114.237 19.35 109.15 6.523 112.57 6.523 115.359 13.853 118.094 6.523 120.952 6.523 123.662 13.853 126.475 6.523 129.896 6.523 124.809 19.35 122.258 19.35 119.523 12.046 116.788 19.35" fill="#fff" fill-rule="evenodd"/>
+    </svg>
+  </div>
+  <div class="gnav-tabs">
+    <span class="gnav-tab">Favorites</span>
+    <span class="gnav-tab">History</span>
+    <span class="gnav-tab">Workspaces</span>
+  </div>
+  <div class="gnav-pill-wrap">
+    <div class="gnav-pill"><div class="gnav-pill-dot"></div>Sales CRM BDR Landing Page ⌄</div>
+  </div>
+  <div class="gnav-r">
+    <button class="gnav-btn">🔗</button>
+    <button class="gnav-btn">＋</button>
+    <button class="gnav-btn">🔔</button>
+    <div class="gnav-av">JR</div>
+  </div>
+</nav>
+
+<!-- SIDEBAR -->
+<aside class="sbar">
+  <div class="sbar-sec">
+    <a href="index.html"            class="sbar-item"     ><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="campaigns.html"        class="sbar-item"     ><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="buying-groups.html"    class="sbar-item"     ><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"            class="sbar-item"     ><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="territory-leads.html"  class="sbar-item"     ><span class="sbar-ic">🗺</span>Territory Leads<span class="sb">200</span></a>
+    <a href="accounts.html"         class="sbar-item"     ><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="opportunities.html"    class="sbar-item"     ><span class="sbar-ic">💼</span>Opportunities</a>
+    <a href="book-of-business.html" class="sbar-item"     ><span class="sbar-ic">📖</span>Book of Business</a>
+    <a href="ae-alignment.html"     class="sbar-item"     ><span class="sbar-ic">🤝</span>AE Alignment</a>
+    <a href="activities.html"       class="sbar-item on"  ><span class="sbar-ic">⚡</span>Activities<span class="sb">100</span></a>
+  </div>
+  <div class="sbar-footer">ServiceNow Confidential</div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="page-hdr">
+    <div class="phdr-top">
+      <div>
+        <div class="phdr-date" id="todayDate"></div>
+        <div class="phdr-name">Activities</div>
+        <div class="phdr-sub">Commercial Illinois &amp; Midwest · Global Business Acceleration</div>
+      </div>
+      <div class="phdr-acts">
+        <button class="btn btn-g btn-sm">↻ Refresh</button>
+        <button class="btn btn-w btn-sm">🎯 Execute in Outreach</button>
+        <button class="btn btn-p btn-sm">🤖 AI Sales Coach ↗</button>
+      </div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-lbl">Due Today</div>
+        <div class="stat-val red">100</div>
+        <div class="stat-d">✉ 30 · ☎ 50 · ✓ 20</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Completed Today</div>
+        <div class="stat-val green">23</div>
+        <div class="stat-d"><span class="du">↑ 8 since 9am</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Completion Rate</div>
+        <div class="stat-val amber">23%</div>
+        <div class="stat-d" style="color:var(--a600)">↑ from 18% yesterday</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">BDR Meetings Today</div>
+        <div class="stat-val">3</div>
+        <div class="stat-d"><span class="du">2 confirmed · 1 pending</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Opties Created (QTD)</div>
+        <div class="stat-val green">5</div>
+        <div class="stat-d"><span class="du">↑ 1 this week</span></div>
+      </div>
+    </div>
+
+    <!-- PAGE TABS -->
+    <div class="ptabs">
+      <a href="activities.html" class="ptab on">Overview</a>
+      <a href="#" class="ptab">Due Today <span class="ptab-ct">100</span></a>
+      <a href="#" class="ptab">Completed <span class="ptab-ct">23</span></a>
+      <a href="#" class="ptab">Meetings <span class="ptab-ct">3</span></a>
+      <a href="#" class="ptab">Opportunities <span class="ptab-ct">5</span></a>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- TOP SPLIT: Due Today + Completed -->
+    <div class="split-row fu">
+
+      <!-- LEFT: Activities Due Today -->
+      <div class="panel">
+        <div class="panel-hdr">
+          <div class="panel-title">
+            ⚡ Activities Due Today
+            <span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:8px;background:var(--r50);color:var(--r600);font-family:'DM Mono',monospace;">100</span>
+            <span class="panel-title-meta">· Last refreshed 1m ago</span>
+          </div>
+          <div class="panel-acts">
+            <button class="btn btn-g btn-xs">+ Task</button>
+            <button class="btn btn-g btn-xs">+ Email</button>
+            <button class="btn btn-g btn-xs">+ Appt</button>
+            <button class="btn btn-w btn-xs">🎯 Execute in Outreach</button>
+            <button class="btn btn-g btn-xs" style="padding:3px 7px">⋮</button>
+          </div>
+        </div>
+
+        <!-- toolbar -->
+        <div class="act-toolbar">
+          <div class="act-search">
+            <span style="color:var(--s400);font-size:12px">🔍</span>
+            <input type="text" id="actSearch" placeholder="Filter by keyword..." oninput="filterActivities()">
+          </div>
+          <div class="act-type-tabs">
+            <button class="att on" onclick="setTypeFilter(this,'all')">All</button>
+            <button class="att" onclick="setTypeFilter(this,'task')">✓ Task</button>
+            <button class="att" onclick="setTypeFilter(this,'email')">✉ Email</button>
+            <button class="att" onclick="setTypeFilter(this,'call')">☎ Call</button>
+            <button class="att" onclick="setTypeFilter(this,'appt')">📅 Appt</button>
+          </div>
+        </div>
+
+        <!-- table -->
+        <div class="act-tbl-wrap">
+          <table class="act-tbl">
+            <thead>
+              <tr>
+                <th class="chk"><input type="checkbox" class="row-cb" id="selectAll" onchange="toggleAll(this)"></th>
+                <th onclick="sortTable('name')" class="sorted">Name (Regarding) <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable('type')">Activity Type <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable('company')">Company <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable('subject')">Subject <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable('pri')">Priority <span class="sort-icon">↕</span></th>
+                <th onclick="sortTable('due')">Due <span class="sort-icon">↑</span></th>
+                <th>AE</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="actTbody"></tbody>
+          </table>
+        </div>
+
+        <!-- alpha bar -->
+        <div class="alpha-bar" id="alphaBar">
+          <!-- populated by JS -->
+        </div>
+
+        <!-- footer -->
+        <div class="tbl-footer">
+          <span class="tbl-footer-l" id="tblCount">Rows: 0–0 of 0</span>
+          <div class="tbl-pager">
+            <button class="pg-btn" id="pgPrev" onclick="changePage(-1)" disabled>← Prev</button>
+            <span class="pg-info" id="pgInfo">Page 1</span>
+            <button class="pg-btn" id="pgNext" onclick="changePage(1)">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Activities Completed -->
+      <div class="panel">
+        <div class="panel-hdr">
+          <div class="panel-title">
+            ✅ Activities Completed
+            <span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:8px;background:var(--g50);color:var(--g600);font-family:'DM Mono',monospace;" id="compCount">23</span>
+          </div>
+          <div class="comp-toggle">
+            <span style="font-size:10px;color:var(--s500)">View:</span>
+            <select id="compWindow" onchange="renderCompleted()">
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="comp-body">
+          <!-- donut -->
+          <div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:8px">Activities by Type</div>
+            <div class="donut-wrap">
+              <div class="donut-svg-wrap">
+                <svg width="110" height="110" viewBox="0 0 110 110" id="donutSvg">
+                  <!-- segments rendered by JS -->
+                </svg>
+                <div class="donut-center">
+                  <div class="donut-total" id="donutTotal">23</div>
+                  <div class="donut-label">Done</div>
+                </div>
+              </div>
+              <div class="donut-legend" id="donutLegend"></div>
+            </div>
+          </div>
+
+          <!-- completed list -->
+          <div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:6px">Recent Completions</div>
+            <div class="comp-list" id="compList"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /split-row -->
+
+    <!-- BOTTOM ROW: Meetings + Opportunities -->
+    <div class="bottom-row fu">
+
+      <!-- BDR MEETINGS -->
+      <div class="panel">
+        <div class="panel-hdr">
+          <div class="panel-title">
+            📅 BDR Meetings
+            <span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:8px;background:var(--ink);color:var(--white);font-family:'DM Mono',monospace;">3</span>
+            <span class="panel-title-meta">· Today</span>
+          </div>
+          <div class="panel-acts">
+            <button class="btn btn-g btn-xs">📋 Prep All</button>
+            <select style="font-family:inherit;font-size:11px;padding:3px 8px;border:1px solid var(--s200);border-radius:4px;background:var(--white);color:var(--s600);cursor:pointer">
+              <option>Today</option>
+              <option>This Week</option>
+              <option>This Month</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mtg-item">
+          <div class="mtg-time-col">
+            <div class="mtg-dot soon"></div>
+            <div class="mtg-t">9:30a</div>
+          </div>
+          <div class="mtg-bd">
+            <div class="mtg-name">David Blasdell</div>
+            <div class="mtg-co">Sterling Manufacturing · ITOM AIOps Discovery</div>
+            <div class="mtg-tags">
+              <span class="mtg-tag disc">Discovery</span>
+              <span class="mtg-tag bdr">BDR Meeting</span>
+            </div>
+            <div class="mtg-ae">AE: Brian Disher</div>
+          </div>
+          <div class="mtg-r">
+            <span class="mtg-status soon">In 45min</span>
+            <button class="row-btn">📋 Prep</button>
+          </div>
+        </div>
+
+        <div class="mtg-item">
+          <div class="mtg-time-col">
+            <div class="mtg-dot conf"></div>
+            <div class="mtg-t">2:00p</div>
+          </div>
+          <div class="mtg-bd">
+            <div class="mtg-name">Rashmi Jayarama</div>
+            <div class="mtg-co">NovaTech Systems · Now Assist Intro</div>
+            <div class="mtg-tags">
+              <span class="mtg-tag intro">Intro</span>
+              <span class="mtg-tag bdr">BDR Meeting</span>
+            </div>
+            <div class="mtg-ae">AE: Riley Scott</div>
+          </div>
+          <div class="mtg-r">
+            <span class="mtg-status conf">Confirmed</span>
+            <button class="row-btn">📋 Prep</button>
+          </div>
+        </div>
+
+        <div class="mtg-item">
+          <div class="mtg-time-col">
+            <div class="mtg-dot conf"></div>
+            <div class="mtg-t">3:30p</div>
+          </div>
+          <div class="mtg-bd">
+            <div class="mtg-name">Marcus Webb</div>
+            <div class="mtg-co">Lakeside Logistics · HRSD Qualification</div>
+            <div class="mtg-tags">
+              <span class="mtg-tag qual">Qualification</span>
+              <span class="mtg-tag bdr">BDR Meeting</span>
+            </div>
+            <div class="mtg-ae">AE: Katie Schneider</div>
+          </div>
+          <div class="mtg-r">
+            <span class="mtg-status conf">Confirmed</span>
+            <button class="row-btn">📋 Prep</button>
+          </div>
+        </div>
+
+        <div style="padding:8px 14px;border-top:1px solid var(--s100);background:var(--s50);display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;color:var(--s400)">3 meetings today · 16 this quarter</span>
+          <a href="opportunities.html" style="font-size:11px;color:var(--b600);font-weight:500">View all meetings →</a>
+        </div>
+      </div>
+
+      <!-- OPPORTUNITIES CREATED -->
+      <div class="panel">
+        <div class="panel-hdr">
+          <div class="panel-title">
+            💼 Opportunities Created
+            <span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:8px;background:var(--g50);color:var(--g600);font-family:'DM Mono',monospace;">5</span>
+            <span class="panel-title-meta">· QTD</span>
+          </div>
+          <div class="panel-acts">
+            <select style="font-family:inherit;font-size:11px;padding:3px 8px;border:1px solid var(--s200);border-radius:4px;background:var(--white);color:var(--s600);cursor:pointer">
+              <option>Q2 2026</option>
+              <option>Q1 2026</option>
+              <option>All Time</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="opty-item">
+          <div class="opty-stage" style="background:var(--g50);color:var(--g600);">S2</div>
+          <div class="opty-bd">
+            <div class="opty-name">Sterling Manufacturing — ITOM AIOps</div>
+            <div class="opty-co">Created from BDR Meeting · David Blasdell</div>
+            <span class="opty-prod">ITOM AIOps</span>
+          </div>
+          <div class="opty-r">
+            <div class="opty-amt">$84K</div>
+            <div class="opty-ae">AE: Brian Disher</div>
+            <div class="opty-when">Today</div>
+          </div>
+        </div>
+
+        <div class="opty-item">
+          <div class="opty-stage" style="background:var(--b50);color:var(--b600);">S2</div>
+          <div class="opty-bd">
+            <div class="opty-name">Meridian Health Partners — Now Assist</div>
+            <div class="opty-co">Created from Inbound Demo Request · Jenna Walsh</div>
+            <span class="opty-prod">Now Assist for ITSM</span>
+          </div>
+          <div class="opty-r">
+            <div class="opty-amt">$120K</div>
+            <div class="opty-ae">AE: Mikaela Youpa</div>
+            <div class="opty-when">Apr 8</div>
+          </div>
+        </div>
+
+        <div class="opty-item">
+          <div class="opty-stage" style="background:var(--a50);color:var(--a600);">S3</div>
+          <div class="opty-bd">
+            <div class="opty-name">NovaTech Systems — HRSD</div>
+            <div class="opty-co">Created from Webinar Follow-up · Rashmi Jayarama</div>
+            <span class="opty-prod">HRSD</span>
+          </div>
+          <div class="opty-r">
+            <div class="opty-amt">$67K</div>
+            <div class="opty-ae">AE: Riley Scott</div>
+            <div class="opty-when">Apr 5</div>
+          </div>
+        </div>
+
+        <div class="opty-item">
+          <div class="opty-stage" style="background:var(--p50);color:var(--p600);">S2</div>
+          <div class="opty-bd">
+            <div class="opty-name">Apex Industrial Group — ITSM</div>
+            <div class="opty-co">Created from Cold Outbound · Chris Nakamura</div>
+            <span class="opty-prod">ITSM Pro</span>
+          </div>
+          <div class="opty-r">
+            <div class="opty-amt">$95K</div>
+            <div class="opty-ae">AE: Tony Riebel</div>
+            <div class="opty-when">Apr 2</div>
+          </div>
+        </div>
+
+        <div class="opty-item">
+          <div class="opty-stage" style="background:var(--g50);color:var(--g600);">S2</div>
+          <div class="opty-bd">
+            <div class="opty-name">Lakeside Logistics — AI Control Tower</div>
+            <div class="opty-co">Created from BDR Meeting · Marcus Webb</div>
+            <span class="opty-prod">AI Control Tower</span>
+          </div>
+          <div class="opty-r">
+            <div class="opty-amt">$210K</div>
+            <div class="opty-ae">AE: Katie Schneider</div>
+            <div class="opty-when">Mar 28</div>
+          </div>
+        </div>
+
+        <div style="padding:8px 14px;border-top:1px solid var(--s100);background:var(--s50);display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:10px;color:var(--s400)">Total pipeline: <strong style="color:var(--g600)">$576K</strong> · Avg deal: $115K</span>
+          <a href="opportunities.html" style="font-size:11px;color:var(--b600);font-weight:500">View all opties →</a>
+        </div>
+      </div>
+
+    </div><!-- /bottom-row -->
+
+  </div><!-- /page-body -->
+</div><!-- /main -->
+
+<script>
+// ── DATE ──────────────────────────────────────────────────────────────
+(function(){
+  var d=new Date(),days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+  months=['January','February','March','April','May','June','July','August','September','October','November','December'],
+  el=document.getElementById('todayDate');
+  if(el)el.textContent=days[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+})();
+
+// ── FADE IN ────────────────────────────────────────────────────────────
+setTimeout(function(){
+  document.querySelectorAll('.fu').forEach(function(el,i){
+    setTimeout(function(){el.style.opacity='1';el.style.transform='translateY(0)';},i*100);
+  });
+},60);
+
+// ── ACTIVITIES DATA ────────────────────────────────────────────────────
+var ACTS = [
+  {name:'Brandon Joyce',    company:'Sub-Zero Group',          type:'email', subject:'Follow-up: K25 HRSD Demo attendance',          pri:'high', due:'2h left',  ae:'TR', aeColor:'#032D42'},
+  {name:'Dylan Blumenberg', company:'FTI Consulting',           type:'call',  subject:'Cold call — IT Webinar follow-up',              pri:'high', due:'3h left',  ae:'JW', aeColor:'#044355'},
+  {name:'Sarah Chen',       company:'Echo Global Logistics',    type:'call',  subject:'ITOM champion call — post field demo',          pri:'high', due:'4h left',  ae:'TR', aeColor:'#032D42'},
+  {name:'Mark Osei',        company:'BlueCross Illinois',       type:'email', subject:'HRSD Webinar registrant — intro outreach',      pri:'med',  due:'5h left',  ae:'KS', aeColor:'#5B21B6'},
+  {name:'David Blasdell',   company:'Sterling Manufacturing',   type:'call',  subject:'SLA follow-up: Contact Us form — Day 1',        pri:'high', due:'5h left',  ae:'BD', aeColor:'#D93025'},
+  {name:'Rashmi Jayarama',  company:'NovaTech Systems',         type:'call',  subject:'Inbound demo request follow-up',                pri:'med',  due:'6h left',  ae:'RS', aeColor:'#B45309'},
+  {name:'Paul Carter',      company:'LumaCore Solutions',       type:'task',  subject:'Research: Map buying committee',                pri:'med',  due:'7h left',  ae:'SD', aeColor:'#1a7a00'},
+  {name:'Jenna Walsh',      company:'Meridian Health Partners', type:'email', subject:'Sequence Touch 3 — CSM ROI angle',             pri:'low',  due:'8h left',  ae:'MY', aeColor:'#0369A1'},
+  {name:'Chris Nakamura',   company:'Apex Industrial Group',    type:'call',  subject:'Cold call — ITSM modernization play',          pri:'low',  due:'9h left',  ae:'TR', aeColor:'#032D42'},
+  {name:'Alectri Team',     company:'Alectri',                  type:'task',  subject:'Update OPTY notes after discovery recap',       pri:'med',  due:'EOD',      ae:'JW', aeColor:'#044355'},
+  {name:'Marcus Webb',      company:'Lakeside Logistics',       type:'email', subject:'Pre-meeting brief — AI Control Tower framing',  pri:'high', due:'1h left',  ae:'KS', aeColor:'#5B21B6'},
+  {name:'Priya Anand',      company:'Renew Energy Corp',        type:'call',  subject:'Cold outbound — ESG workflow modernization',    pri:'low',  due:'EOD',      ae:'BD', aeColor:'#D93025'},
+  {name:'Tom Higgins',      company:'Cascade Consulting',       type:'email', subject:'Sequence Touch 1 — ITSM pain point angle',     pri:'med',  due:'EOD',      ae:'RS', aeColor:'#B45309'},
+  {name:'Linda Park',       company:'Vistex Inc.',              type:'appt',  subject:'Discovery call debrief + next steps',          pri:'med',  due:'2pm',      ae:'JW', aeColor:'#044355'},
+  {name:'Kevin Torres',     company:'Midwest Freight Group',    type:'call',  subject:'Re-engage — prior ITOM conversation',          pri:'low',  due:'EOD',      ae:'TR', aeColor:'#032D42'},
+];
+
+var typeFilter = 'all';
+var currentPage = 1;
+var pageSize = 10;
+var currentAlpha = 'All';
+var filteredActs = ACTS.slice();
+
+function getVisible(){
+  var kw = document.getElementById('actSearch').value.toLowerCase();
+  return ACTS.filter(function(r){
+    if(typeFilter!=='all' && r.type!==typeFilter) return false;
+    if(currentAlpha!=='All'){
+      if(currentAlpha==='#') { if(!/^[^a-z]/i.test(r.name)) return false; }
+      else { if(r.name[0].toUpperCase()!==currentAlpha) return false; }
+    }
+    if(kw && !(r.name.toLowerCase().includes(kw)||r.company.toLowerCase().includes(kw)||r.subject.toLowerCase().includes(kw))) return false;
+    return true;
+  });
+}
+
+function renderTable(){
+  var rows = getVisible();
+  var total = rows.length;
+  var start = (currentPage-1)*pageSize;
+  var pageRows = rows.slice(start, start+pageSize);
+  var typeLabel={email:'✉ Email',call:'☎ Call',task:'✓ Task',appt:'📅 Appt'};
+  var priLabel={high:'● High',med:'● Med',low:'● Low'};
+  var priCls={high:'high',med:'med',low:'low'};
+  var dueClass=function(d){
+    if(d.indexOf('1h')>-1||d.indexOf('2h')>-1||d.indexOf('3h')>-1) return 'crit';
+    if(d.indexOf('4h')>-1||d.indexOf('5h')>-1||d.indexOf('6h')>-1) return 'warn';
+    return 'ok';
+  };
+  document.getElementById('actTbody').innerHTML = pageRows.map(function(r){
+    return '<tr>'+
+      '<td class="chk"><input type="checkbox" class="row-cb"></td>'+
+      '<td><span class="act-name">'+r.name+'</span><div class="act-co">'+r.company+'</div></td>'+
+      '<td><span class="act-type '+r.type+'">'+typeLabel[r.type]+'</span></td>'+
+      '<td style="font-size:11px;color:var(--s600)">'+r.company+'</td>'+
+      '<td><div class="act-subj" title="'+r.subject+'">'+r.subject+'</div></td>'+
+      '<td><span class="act-pri '+priCls[r.pri]+'">'+priLabel[r.pri]+'</span></td>'+
+      '<td><span class="act-due '+(r.pri==='low'?'ok':dueClass(r.due))+'">'+r.due+'</span></td>'+
+      '<td><span class="ae-av" style="background:'+r.aeColor+'">'+r.ae+'</span></td>'+
+      '<td><button class="row-btn">🤖 Act</button></td>'+
+    '</tr>';
+  }).join('');
+  var end = Math.min(start+pageSize, total);
+  document.getElementById('tblCount').textContent = 'Rows: '+(total?start+1:0)+'–'+end+' of '+total;
+  document.getElementById('pgInfo').textContent = 'Page '+currentPage+' of '+Math.max(1,Math.ceil(total/pageSize));
+  document.getElementById('pgPrev').disabled = currentPage<=1;
+  document.getElementById('pgNext').disabled = currentPage>=Math.ceil(total/pageSize)||total===0;
+  if(!total){
+    document.getElementById('actTbody').innerHTML='<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--s400);font-size:12px;">No activities match your filter.</td></tr>';
+  }
+}
+
+function setTypeFilter(btn, t){
+  document.querySelectorAll('.att').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  typeFilter = t;
+  currentPage = 1;
+  renderTable();
+}
+
+function filterActivities(){ currentPage=1; renderTable(); }
+function changePage(d){ currentPage+=d; renderTable(); }
+function toggleAll(cb){ document.querySelectorAll('#actTbody .row-cb').forEach(function(c){c.checked=cb.checked;}); }
+function sortTable(col){ /* visual only */ renderTable(); }
+
+// Alpha bar
+(function(){
+  var bar = document.getElementById('alphaBar');
+  var items = ['All','#'].concat('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''));
+  bar.innerHTML = items.map(function(l){
+    return '<button class="alpha-btn'+(l==='All'?' on':'')+'" onclick="setAlpha(this,\''+l+'\')">'+l+'</button>';
+  }).join('');
+})();
+
+function setAlpha(btn, letter){
+  document.querySelectorAll('.alpha-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  currentAlpha = letter;
+  currentPage = 1;
+  renderTable();
+}
+
+// Initial render
+renderTable();
+
+// ── COMPLETED DATA ─────────────────────────────────────────────────────
+var COMP_TODAY = [
+  {type:'call',  name:'Jennifer Ross',    company:'TTX Company',              time:'8:42am'},
+  {type:'email', name:'Darnell Hughes',   company:'Crash Champions',          time:'8:15am'},
+  {type:'task',  name:'S&S Activewear',   company:'Research update',          time:'7:58am'},
+  {type:'call',  name:'Angela Kim',       company:'Stepan & Co.',             time:'7:30am'},
+  {type:'email', name:'Raj Patel',        company:'DMI Inc.',                 time:'7:10am'},
+];
+var COMP_WEEK = COMP_TODAY.concat([
+  {type:'appt',  name:'Hub Group — Discovery',   company:'Hub Group',        time:'Thu 3pm'},
+  {type:'call',  name:'Brandon Joyce',            company:'Sub-Zero Group',   time:'Thu 11am'},
+  {type:'email', name:'Marcus Webb',              company:'Lakeside Logistics',time:'Wed 9am'},
+  {type:'task',  name:'FHLBC — Research',         company:'Fed Home Loan Bank',time:'Wed 8am'},
+]);
+
+var DONUT_TODAY = [{label:'Calls',val:12,color:'#22c55e'},{label:'Emails',val:6,color:'#3b82f6'},{label:'Tasks',val:3,color:'#a855f7'},{label:'Appts',val:2,color:'#f59e0b'}];
+var DONUT_WEEK  = [{label:'Calls',val:34,color:'#22c55e'},{label:'Emails',val:18,color:'#3b82f6'},{label:'Tasks',val:9,color:'#a855f7'},{label:'Appts',val:4,color:'#f59e0b'}];
+
+function renderDonut(data){
+  var total = data.reduce(function(s,d){return s+d.val;},0);
+  var cx=55,cy=55,r=40,stroke=14;
+  var circ=2*Math.PI*r;
+  var offset=0;
+  var segs = data.map(function(d){
+    var dash=(d.val/total)*circ;
+    var seg='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+d.color+'" stroke-width="'+stroke+'" stroke-dasharray="'+dash+' '+(circ-dash)+'" stroke-dashoffset="'+(-offset)+'" transform="rotate(-90 '+cx+' '+cy+')" stroke-linecap="round"/>';
+    offset+=dash;
+    return seg;
+  }).join('');
+  document.getElementById('donutSvg').innerHTML='<circle cx="55" cy="55" r="40" fill="none" stroke="#e2e8f0" stroke-width="14"/>'+segs;
+  document.getElementById('donutTotal').textContent=total;
+  document.getElementById('compCount').textContent=total;
+  document.getElementById('donutLegend').innerHTML=data.map(function(d){
+    var pct=Math.round((d.val/total)*100);
+    return '<div class="dl-item"><div style="display:flex;align-items:center;gap:5px;flex:1">'+
+      '<div class="dl-dot" style="background:'+d.color+'"></div>'+
+      '<span class="dl-label">'+d.label+'</span></div>'+
+      '<span class="dl-val">'+d.val+'</span>'+
+      '</div>'+
+      '<div class="dl-bar" style="background:'+d.color+';width:'+pct+'%;max-width:100%;opacity:.25;margin-bottom:2px"></div>';
+  }).join('');
+}
+
+function renderCompleted(){
+  var isWeek = document.getElementById('compWindow').value==='week';
+  var list = isWeek ? COMP_WEEK : COMP_TODAY;
+  var donut = isWeek ? DONUT_WEEK : DONUT_TODAY;
+  renderDonut(donut);
+  var typeIc={call:'☎',email:'✉',task:'✓',appt:'📅'};
+  document.getElementById('compList').innerHTML=list.map(function(c){
+    return '<div class="comp-item">'+
+      '<div class="comp-ic '+c.type+'">'+typeIc[c.type]+'</div>'+
+      '<div class="comp-bd"><div class="comp-name">'+c.name+'</div><div class="comp-co">'+c.company+'</div></div>'+
+      '<div class="comp-time">'+c.time+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+renderCompleted();
+</script>
+</body>
+</html>
