@@ -29,6 +29,62 @@ button{font-family:inherit;}
 ::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-thumb{background:var(--s300);border-radius:2px;}
 
+/* ── SPLASH SCREEN ───────────────────────────────────────────────── */
+#splash{
+  position:fixed;inset:0;z-index:9999;
+  background:rgba(1,22,31,.92);
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);
+  transition:opacity .4s ease;
+}
+#splash.out{opacity:0;pointer-events:none;}
+.splash-card{
+  background:linear-gradient(145deg,#f0fdf4,#dcfce7);
+  border:2px solid rgba(99,223,78,.45);
+  border-radius:16px;
+  padding:36px 44px;
+  max-width:480px;
+  width:90vw;
+  text-align:center;
+  box-shadow:0 24px 64px rgba(0,0,0,.35),0 0 0 1px rgba(99,223,78,.15);
+  animation:splashIn .45s cubic-bezier(.22,.68,0,1.2) both;
+}
+@keyframes splashIn{from{transform:scale(.88) translateY(10px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+.splash-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(3,45,66,.08);border:1px solid rgba(3,45,66,.12);
+  border-radius:20px;padding:4px 12px;
+  font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:#032D42;margin-bottom:18px;
+}
+.splash-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--wdk);}
+.splash-title{
+  font-size:20px;font-weight:700;color:#032D42;
+  line-height:1.25;margin-bottom:6px;
+}
+.splash-author{
+  font-size:13px;font-weight:600;color:#16a34a;margin-bottom:20px;
+}
+.splash-divider{
+  height:1px;background:rgba(3,45,66,.1);margin:0 -8px 20px;
+}
+.splash-disclaimer{
+  font-size:12px;color:#334155;line-height:1.65;margin-bottom:24px;
+  background:rgba(255,255,255,.55);border-radius:8px;padding:12px 14px;
+  border:1px solid rgba(3,45,66,.08);text-align:left;
+}
+.splash-disclaimer strong{color:#032D42;}
+.splash-cta{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  font-size:12px;font-weight:600;color:#475569;
+}
+.splash-cta-pulse{
+  width:8px;height:8px;border-radius:50%;background:#4ab83a;
+  animation:splashPulse 1.2s infinite;
+}
+@keyframes splashPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(.7);}}
+.splash-hint{font-size:10px;color:#94a3b8;margin-top:10px;}
+
 /* NAV */
 .gnav{height:44px;background:var(--ink-nav);display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:300;border-bottom:1px solid rgba(255,255,255,.06);}
 .gnav-logo{display:flex;align-items:center;padding:0 14px;height:44px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;}
@@ -43,75 +99,37 @@ button{font-family:inherit;}
 .gnav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
 .gnav-av{width:28px;height:28px;background:var(--wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--ink);cursor:pointer;margin-left:4px;}
 
-/* SIDEBAR — collapsed to icon rail, expands on hover */
+/* SIDEBAR */
 .sbar{
   position:fixed;top:44px;left:0;bottom:0;
-  width:44px;           /* collapsed default */
+  width:44px;
   background:#0d1f2b;
   border-right:1px solid rgba(255,255,255,.05);
   z-index:200;
   display:flex;flex-direction:column;
-  overflow:hidden;       /* clips text during collapse */
+  overflow:hidden;
   transition:width .22s cubic-bezier(.4,0,.2,1);
 }
-.sbar:hover{
-  width:180px;
-  box-shadow:4px 0 20px rgba(0,0,0,.25);
-}
+.sbar:hover{width:180px;box-shadow:4px 0 20px rgba(0,0,0,.25);}
 .sbar::-webkit-scrollbar{width:0;}
 .sbar-sec{padding:10px 0 4px;}
-/* Section labels fade in on expand */
-.sbar-lbl{
-  font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;
-  color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;
-  white-space:nowrap;opacity:0;transition:opacity .15s .05s;
-}
+.sbar-lbl{font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.20);padding:0 14px;margin-bottom:2px;display:block;white-space:nowrap;opacity:0;transition:opacity .15s .05s;}
 .sbar:hover .sbar-lbl{opacity:1;}
-/* Nav items — icon centered in 44px, text hidden until expanded */
-.sbar-item{
-  display:flex;align-items:center;gap:10px;
-  padding:8px 14px;
-  font-size:12px;color:rgba(255,255,255,.50);
-  border-left:2px solid transparent;
-  transition:background .12s,color .12s;
-  text-decoration:none;white-space:nowrap;
-}
+.sbar-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:background .12s,color .12s;text-decoration:none;white-space:nowrap;}
 .sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
 .sbar-item.on{color:var(--wasabi);border-left-color:var(--wasabi);background:rgba(99,223,78,.06);font-weight:500;}
-.sbar-ic{
-  width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;
-}
-/* Badge — hidden when collapsed, fades in on expand */
-.sb{
-  margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;
-  background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);
-  opacity:0;transition:opacity .1s;flex-shrink:0;
-}
+.sbar-ic{width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;}
+.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);opacity:0;transition:opacity .1s;flex-shrink:0;}
 .sbar:hover .sb{opacity:1;}
 .sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
-/* Active item indicator dot when collapsed */
-.sbar-item.on .sbar-ic::after{
-  content:'';display:block;width:4px;height:4px;border-radius:50%;
-  background:var(--wasabi);margin:1px auto 0;
-  /* only visible when collapsed */
-}
+.sbar-item.on .sbar-ic::after{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--wasabi);margin:1px auto 0;}
 .sbar:hover .sbar-item.on .sbar-ic::after{display:none;}
 .sdiv{height:1px;background:rgba(255,255,255,.06);margin:5px 10px;}
-.sbar-footer{
-  padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);
-  margin-top:auto;white-space:nowrap;opacity:0;transition:opacity .15s;
-}
+.sbar-footer{padding:8px 14px 10px;font-size:9px;color:rgba(255,255,255,.14);margin-top:auto;white-space:nowrap;opacity:0;transition:opacity .15s;}
 .sbar:hover .sbar-footer{opacity:1;}
 
-/* LAYOUT — sidebar overlay model, fills viewport */
-.main{
-  margin-top:44px;
-  margin-left:44px;
-  min-height:calc(100vh - 44px);
-  display:flex;
-  flex-direction:column;
-  /* No max-width here — content fills available viewport */
-}
+/* LAYOUT */
+.main{margin-top:44px;margin-left:44px;min-height:calc(100vh - 44px);display:flex;flex-direction:column;}
 .page-hdr{background:var(--white);border-bottom:1px solid var(--s200);padding:18px 24px 0;position:sticky;top:44px;z-index:100;}
 .phdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
 .phdr-date{font-size:11px;color:var(--s400);margin-bottom:2px;}
@@ -119,27 +137,10 @@ button{font-family:inherit;}
 .phdr-sub{font-size:12px;color:var(--s500);}
 .phdr-acts{display:flex;align-items:center;gap:7px;flex-shrink:0;}
 
-/* BODY — flex row, right panel fixed, main column fills */
+/* BODY */
 .page-body{display:flex;flex:1;min-height:0;}
-.body-main{
-  flex:1;
-  padding:16px 22px 48px;
-  display:flex;flex-direction:column;gap:14px;
-  min-width:0;
-  /* no max-width — fills available viewport */
-}
-.body-side{
-  width:450px;flex-shrink:0;
-  border-left:1px solid var(--s200);
-  background:var(--white);
-  padding:14px 15px;
-  display:flex;flex-direction:column;gap:11px;
-  overflow-y:auto;
-  /* Sticky so panel scrolls independently */
-  position:sticky;top:calc(44px + 200px);
-  max-height:calc(100vh - 44px - 200px);
-  align-self:flex-start;
-}
+.body-main{flex:1;padding:16px 22px 48px;display:flex;flex-direction:column;gap:14px;min-width:0;}
+.body-side{width:450px;flex-shrink:0;border-left:1px solid var(--s200);background:var(--white);padding:14px 15px;display:flex;flex-direction:column;gap:11px;overflow-y:auto;position:sticky;top:calc(44px + 200px);max-height:calc(100vh - 44px - 200px);align-self:flex-start;}
 
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:500;padding:6px 13px;border-radius:6px;cursor:pointer;border:1px solid;transition:.12s;white-space:nowrap;text-decoration:none;}
@@ -268,6 +269,55 @@ button{font-family:inherit;}
 .gauge-cta{font-family:inherit;font-size:10px;font-weight:600;padding:4px 10px;border-radius:4px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:4px;transition:.1s;}
 .gauge-cta:hover{background:var(--ink);color:var(--white);}
 
+/* ── ACTIVITIES SECTION ───────────────────────────────────────────── */
+.act-section{background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;box-shadow:var(--sh-xs);}
+.act-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--s100);}
+.act-hdr-l{display:flex;align-items:center;gap:7px;}
+.act-title{font-size:12px;font-weight:700;color:var(--s700);}
+.act-meta{font-size:10px;color:var(--s400);}
+.act-tabs{display:flex;align-items:center;border-bottom:1px solid var(--s200);padding:0 14px;gap:0;overflow-x:auto;}
+.act-tabs::-webkit-scrollbar{height:0;}
+.act-tab{display:flex;align-items:center;gap:5px;padding:8px 12px;font-size:12px;font-weight:500;color:var(--s500);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:.1s;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit;}
+.act-tab:hover{color:var(--s700);}
+.act-tab.on{color:var(--s900);border-bottom-color:var(--ink);font-weight:600;}
+.act-tab-ct{font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--s100);color:var(--s500);}
+.act-tab.on .act-tab-ct{background:var(--ink);color:var(--white);}
+/* activity list table */
+.act-list{overflow-x:auto;}
+.act-table{width:100%;border-collapse:collapse;min-width:520px;}
+.act-table th{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--s400);padding:7px 14px;text-align:left;border-bottom:1px solid var(--s100);background:var(--s50);white-space:nowrap;}
+.act-table td{padding:8px 14px;border-bottom:1px solid var(--s50);vertical-align:middle;}
+.act-table tr:last-child td{border-bottom:none;}
+.act-table tr:hover td{background:var(--s50);}
+/* type pill */
+.act-type{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.act-type.email{background:var(--b50);color:var(--b600);}
+.act-type.call{background:var(--g50);color:var(--g600);}
+.act-type.task{background:var(--p50);color:var(--p600);}
+/* priority */
+.act-pri{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;}
+.act-pri.high{background:var(--r50);color:var(--r600);}
+.act-pri.med{background:var(--a50);color:var(--a600);}
+.act-pri.low{background:var(--s100);color:var(--s500);}
+/* contact cell */
+.act-contact{font-size:12px;font-weight:600;color:var(--b600);cursor:pointer;}
+.act-contact:hover{text-decoration:underline;}
+.act-company{font-size:10px;color:var(--s500);margin-top:1px;}
+/* subject cell */
+.act-subj{font-size:12px;color:var(--s700);max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* time cell */
+.act-time{font-size:11px;font-weight:600;color:var(--r600);white-space:nowrap;font-family:'DM Mono',monospace;}
+.act-time.ok{color:var(--g600);}
+.act-time.warn{color:var(--a600);}
+/* action btn */
+.act-btn{font-family:inherit;font-size:10px;font-weight:600;padding:4px 10px;border-radius:5px;cursor:pointer;border:1px solid var(--s200);background:var(--white);color:var(--s600);transition:.1s;white-space:nowrap;}
+.act-btn:hover{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.act-btn.ai{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.act-btn.ai:hover{background:var(--ink-mid);}
+/* act footer */
+.act-footer{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-top:1px solid var(--s100);background:var(--s50);}
+.act-footer-m{font-size:10px;color:var(--s400);}
+
 /* RIGHT SIDEBAR */
 .side-lbl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--s400);margin-bottom:6px;display:block;}
 .side-card{background:var(--s50);border:1px solid var(--s200);border-radius:8px;padding:10px 11px;}
@@ -284,14 +334,12 @@ button{font-family:inherit;}
 .si-a{font-size:10px;font-weight:700;color:var(--a600);white-space:nowrap;padding-top:2px;}
 .si-g{font-size:10px;font-weight:700;color:var(--g600);white-space:nowrap;padding-top:2px;}
 .si-s{font-size:10px;font-weight:700;color:var(--s500);white-space:nowrap;padding-top:2px;}
-/* side tabs */
 .stabs{display:flex;border-bottom:1px solid var(--s200);margin-bottom:7px;}
 .stab{font-size:11px;font-weight:500;padding:4px 8px;color:var(--s400);cursor:pointer;border-bottom:2px solid transparent;transition:.1s;}
 .stab.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:600;}
 .sact{font-size:11px;color:var(--s600);padding:4px 0;border-bottom:1px solid var(--s100);line-height:1.45;}
 .sact:last-child{border-bottom:none;}
 .sact strong{color:var(--s800);}
-/* news */
 .nfeed{background:var(--white);border:1px solid var(--s200);border-radius:8px;overflow:hidden;}
 .ni{padding:9px 11px;border-bottom:1px solid var(--s100);cursor:pointer;transition:.1s;}
 .ni:hover{background:var(--s50);}
@@ -311,6 +359,29 @@ button{font-family:inherit;}
 </style>
 </head>
 <body>
+
+<!-- ── SPLASH SCREEN ──────────────────────────────────────────────── -->
+<div id="splash">
+  <div class="splash-card">
+    <div class="splash-badge">
+      <div class="splash-badge-dot"></div>
+      Visual Mock Up · Not for Distribution
+    </div>
+    <div class="splash-title">ServiceNow BDR Command Center</div>
+    <div class="splash-author">Created by Jacob Rubis</div>
+    <div class="splash-divider"></div>
+    <div class="splash-disclaimer">
+      <strong>⚠ Disclaimer:</strong> This is a UI/UX prototype built for conceptual and internal demonstration purposes only. All data represented in this CRM — including account names, contact names, pipeline figures, activity counts, buying group details, and opportunity information — is entirely <strong>fictional</strong> and does not represent any real ServiceNow customers, employees, or business data.
+      <br><br>
+      This mock up does not reflect official ServiceNow product roadmaps, features, or capabilities. It is intended solely as a personal portfolio and workflow design artifact.
+    </div>
+    <div class="splash-cta">
+      <div class="splash-cta-pulse"></div>
+      Press any key or click anywhere to continue
+    </div>
+    <div class="splash-hint">Jacob Rubis · Commercial Illinois &amp; Midwest · GBA</div>
+  </div>
+</div>
 
 <!-- TOP NAV -->
 <nav class="gnav">
@@ -339,7 +410,7 @@ button{font-family:inherit;}
     <div class="gnav-pill"><div class="gnav-pill-dot"></div>Sales CRM BDR Landing Page ⌄</div>
   </div>
   <div class="gnav-r">
-    <button class="gnav-btn" onclick="window.location='outreach-center.html'" title="Outreach Center">🔗</button>
+    <button class="gnav-btn" title="Outreach Center">🔗</button>
     <button class="gnav-btn">＋</button>
     <button class="gnav-btn">🔔</button>
     <div class="gnav-av">JR</div>
@@ -349,15 +420,16 @@ button{font-family:inherit;}
 <!-- SIDEBAR -->
 <aside class="sbar">
   <div class="sbar-sec">
-    <a href="index.html"            class="sbar-item on"     ><span class="sbar-ic">⌂</span>Command Center</a>
-    <a href="campaigns.html"        class="sbar-item "   ><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
-    <a href="buying-groups.html"    class="sbar-item "     ><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
-    <a href="leads.html"            class="sbar-item "  ><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
-    <a href="territory-leads.html"    class="sbar-item"    ><span class="sbar-ic">🗺</span>Territory Leads<span class="sb">200</span></a>
-    <a href="accounts.html"         class="sbar-item "  ><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
-    <a href="opportunities.html"    class="sbar-item "   ><span class="sbar-ic">💼</span>Opportunities</a>
-    <a href="book-of-business.html" class="sbar-item "    ><span class="sbar-ic">📖</span>Book of Business</a>
-    <a href="ae-alignment.html"     class="sbar-item "     ><span class="sbar-ic">🤝</span>AE Alignment</a>
+    <a href="index.html"            class="sbar-item on"  ><span class="sbar-ic">⌂</span>Command Center</a>
+    <a href="campaigns.html"        class="sbar-item"     ><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="buying-groups.html"    class="sbar-item"     ><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
+    <a href="leads.html"            class="sbar-item"     ><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
+    <a href="territory-leads.html"  class="sbar-item"     ><span class="sbar-ic">🗺</span>Territory Leads<span class="sb">200</span></a>
+    <a href="accounts.html"         class="sbar-item"     ><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
+    <a href="opportunities.html"    class="sbar-item"     ><span class="sbar-ic">💼</span>Opportunities</a>
+    <a href="book-of-business.html" class="sbar-item"     ><span class="sbar-ic">📖</span>Book of Business</a>
+    <a href="ae-alignment.html"     class="sbar-item"     ><span class="sbar-ic">🤝</span>AE Alignment</a>
+    <a href="activities.html"       class="sbar-item"     ><span class="sbar-ic">⚡</span>Activities<span class="sb">100</span></a>
   </div>
   <div class="sbar-footer">ServiceNow Confidential</div>
 </aside>
@@ -401,7 +473,7 @@ button{font-family:inherit;}
         <div class="stat-val">12</div>
         <div class="stat-d"><span class="du">↑ 3 New signals</span></div>
       </a>
-      <div class="stat-card">
+      <div class="stat-card" onclick="document.getElementById('activitiesSection').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
         <div class="stat-lbl">Tasks Due Today</div>
         <div class="stat-val">100</div>
         <div class="stat-d" style="color:var(--s400)">✉ 30 · ☎ 50 · 20 Other</div>
@@ -501,7 +573,6 @@ button{font-family:inherit;}
           <button class="tom-tb">↩</button><button class="tom-tb">↪</button><button class="tom-tb">—</button>
         </div>
         <div id="tomList">
-
           <div class="tom-note" id="tom-1">
             <div class="tom-av" style="background:#B45309">RS</div>
             <div class="tom-bd">
@@ -514,7 +585,6 @@ button{font-family:inherit;}
               <button class="tom-x" onclick="removeTOMNote('tom-1')" title="Delete">✕</button>
             </div>
           </div>
-
           <div class="tom-note" id="tom-2">
             <div class="tom-av" style="background:#032D42">TR</div>
             <div class="tom-bd">
@@ -527,7 +597,6 @@ button{font-family:inherit;}
               <button class="tom-x" onclick="removeTOMNote('tom-2')" title="Delete">✕</button>
             </div>
           </div>
-
           <div class="tom-note" id="tom-3">
             <div class="tom-av" style="background:#D93025">BD</div>
             <div class="tom-bd">
@@ -540,7 +609,6 @@ button{font-family:inherit;}
               <button class="tom-x" onclick="removeTOMNote('tom-3')" title="Delete">✕</button>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -558,7 +626,6 @@ button{font-family:inherit;}
           <button class="fchip">Recently Viewed ▼</button>
         </div>
         <div class="rec-grid">
-
           <div class="rec-card">
             <div class="rc-title">Follow-up with Leads</div>
             <div class="rc-sub">SLA nearing expiry for 2 contact us form interactions. 6 hours remain to be compliant.</div>
@@ -569,7 +636,6 @@ button{font-family:inherit;}
             <div class="rc-opty">OPTY-0000456 · Alectri</div>
             <button class="rc-cta pri">🤖 Take action</button>
           </div>
-
           <div class="rec-card">
             <div class="rc-title">BDR Meeting for Intuit</div>
             <div class="rc-sub">Your BDR meeting with Intuit's IT buying group is coming soon.</div>
@@ -580,7 +646,6 @@ button{font-family:inherit;}
             <div class="rc-opty">OPTY-0005521 · Intuit</div>
             <button class="rc-cta pri">🤖 Take action</button>
           </div>
-
           <div class="rec-card">
             <div class="rc-title">10X Genomics — Engagement Surge</div>
             <div class="rc-sub">Surge in digital signals and uptick of 10 points in Engagement Score.</div>
@@ -591,7 +656,6 @@ button{font-family:inherit;}
             <div class="rc-opty">OPTY-0005521 · Intuit</div>
             <button class="rc-cta" style="border-color:var(--b100);color:var(--b600)">View Buying Group</button>
           </div>
-
           <div class="rec-card">
             <div class="rc-title">BDR Meeting Prep Required</div>
             <div class="rc-sub">Your BDR meeting is coming soon and requires preparation.</div>
@@ -602,12 +666,68 @@ button{font-family:inherit;}
             <div class="rc-opty">OPTY-0005521 · Intuit</div>
             <button class="rc-cta pri">🤖 Take action</button>
           </div>
-
         </div>
         <div class="rec-dots">
           <div class="rdot on"></div>
           <div class="rdot"></div>
           <div class="rdot"></div>
+        </div>
+      </div>
+
+      <!-- ── ACTIVITIES SECTION ─────────────────────────────────────── -->
+      <div class="act-section fu" id="activitiesSection">
+        <div class="act-hdr">
+          <div class="act-hdr-l">
+            <span style="font-size:15px">⚡</span>
+            <span class="act-title">Today's Activities</span>
+            <span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:8px;background:var(--ink);color:var(--white);font-family:'DM Mono',monospace;">100</span>
+            <span class="act-meta">Last refreshed 1m ago</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <button class="btn btn-g btn-xs">↻ Refresh</button>
+            <button class="btn btn-w btn-xs">🎯 Execute in Outreach</button>
+          </div>
+        </div>
+
+        <!-- Activity tabs -->
+        <div class="act-tabs" id="activityTabs">
+          <button class="act-tab on" onclick="switchActTab(this,'all')">
+            All <span class="act-tab-ct">100</span>
+          </button>
+          <button class="act-tab" onclick="switchActTab(this,'email')">
+            ✉ Emails <span class="act-tab-ct">30</span>
+          </button>
+          <button class="act-tab" onclick="switchActTab(this,'call')">
+            ☎ Calls <span class="act-tab-ct">50</span>
+          </button>
+          <button class="act-tab" onclick="switchActTab(this,'task')">
+            ✓ Other Tasks <span class="act-tab-ct">20</span>
+          </button>
+        </div>
+
+        <!-- Activity table -->
+        <div class="act-list">
+          <table class="act-table" id="actTable">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Contact</th>
+                <th>Subject / Task</th>
+                <th>Priority</th>
+                <th>Due</th>
+                <th>AE</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="actTableBody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="act-footer">
+          <span class="act-footer-m">Showing 10 of 100 activities · Sorted by priority &amp; due time</span>
+          <a href="#" style="font-size:11px;color:var(--b600);font-weight:500">View all activities →</a>
         </div>
       </div>
 
@@ -626,7 +746,6 @@ button{font-family:inherit;}
           </div>
         </div>
         <div class="gauges-row">
-
           <div class="gauge-item">
             <div class="gauge-title">BG Member Added <span style="color:var(--s400);cursor:help" title="% of GBA prioritized buying groups with 1 net new buying group member role added">ⓘ</span></div>
             <div class="gauge-wrap">
@@ -639,7 +758,6 @@ button{font-family:inherit;}
             <div class="gauge-target">Target 80%</div>
             <button class="gauge-cta">🤖 Take action</button>
           </div>
-
           <div class="gauge-item">
             <div class="gauge-title">Qualified to Stage 2 Conv. <span style="color:var(--s400);cursor:help">ⓘ</span></div>
             <div class="gauge-wrap">
@@ -651,7 +769,6 @@ button{font-family:inherit;}
             </div>
             <div class="gauge-target">Target 50%</div>
           </div>
-
           <div class="gauge-item">
             <div class="gauge-title">Progressed to Mature <span style="color:var(--s400);cursor:help">ⓘ</span></div>
             <div class="gauge-wrap">
@@ -663,7 +780,6 @@ button{font-family:inherit;}
             </div>
             <div class="gauge-target">Target 25%</div>
           </div>
-
           <div class="gauge-item">
             <div class="gauge-title">Prioritized SLA Attainment <span style="color:var(--s400);cursor:help">ⓘ</span></div>
             <div class="gauge-wrap">
@@ -676,7 +792,6 @@ button{font-family:inherit;}
             <div class="gauge-target">Target 100%</div>
             <button class="gauge-cta">🤖 Take action</button>
           </div>
-
         </div>
       </div>
 
@@ -684,7 +799,6 @@ button{font-family:inherit;}
 
     <!-- RIGHT PANEL -->
     <div class="body-side">
-
       <span class="side-lbl">SLA Due Today (6)</span>
       <div class="side-card">
         <div class="sc-hdr">
@@ -740,229 +854,30 @@ button{font-family:inherit;}
 
       <span class="side-lbl" style="margin-top:4px">Latest Updates</span>
       <div class="nfeed">
-
         <div class="ni">
           <div class="ni-top"><span class="ntag promo">Promotion</span><span class="nmeta">4hrs ago</span></div>
           <div class="ntitle">John Smith → CTO at Alectri</div>
           <div class="ndesc">New decision maker identified. Consider technical outreach.</div>
           <button class="nai">🤖 Ask AI</button>
         </div>
-
         <div class="ni">
           <div class="ni-top"><span class="ntag promo">Promotion</span><span class="nmeta">4hrs ago</span></div>
           <div class="ntitle">Sarah Chen promoted at Echo Global</div>
           <div class="ndesc">VP IT promotion. Key ITOM champion — re-engage now.</div>
           <button class="nai">🤖 Ask AI</button>
         </div>
-
         <div class="ni">
           <div class="ni-top"><span class="ntag breach">Data Breach</span><span class="nmeta">2hrs ago</span></div>
           <div class="ntitle">Pitch Risk based on Data Breach news</div>
           <div class="ndesc">Automated Threat Detection. Reduce response times with automated workflows...</div>
           <button class="nai">🤖 Ask AI</button>
         </div>
-
       </div>
-
     </div><!-- /body-side -->
 
   </div><!-- /page-body -->
 </div><!-- /main -->
 
-<script>
-// Date
-(function(){
-  var d=new Date(),days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-  months=['January','February','March','April','May','June','July','August','September','October','November','December'],
-  el=document.getElementById('todayDate');
-  if(el)el.textContent=days[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
-})();
-
-// Fade in
-setTimeout(function(){
-  document.querySelectorAll('.fu').forEach(function(el,i){
-    setTimeout(function(){el.style.opacity='1';el.style.transform='translateY(0)';},i*80);
-  });
-},60);
-
-// AI brief toggle
-function toggleBrief(){
-  var b=document.getElementById('briefBody'),c=document.getElementById('briefChev');
-  if(!b)return;
-  var open=b.style.maxHeight&&b.style.maxHeight!=='0px';
-  b.style.maxHeight=open?'0px':'2000px';
-  if(c)c.textContent=open?'▼':'▲';
-}
-
-// Dismiss TOM note
-function dismissTOM(id){
-  var el=document.getElementById(id);
-  if(!el)return;
-  el.style.transition='opacity .25s,max-height .3s,padding .3s';
-  el.style.opacity='0';
-  el.style.maxHeight=el.offsetHeight+'px';
-  setTimeout(function(){el.style.maxHeight='0';el.style.overflow='hidden';el.style.padding='0';},30);
-  setTimeout(function(){el.remove();},380);
-}
-
-
-// Side tab switching
-function switchTab(tab,containerId){
-  var c=document.getElementById(containerId);
-  if(!c)return;
-  c.querySelectorAll('.stab').forEach(function(t){t.classList.remove('on');});
-  tab.classList.add('on');
-}
-</script>
-
-<script>
-// ── TOP OF MIND CRUD ──────────────────────────────────────────────────────
-var TOM_EDITING_ID = null;
-var TAG_LABELS_TOM = {'do-not-contact':'Do not contact','coordinate':'Coordinate first','in-progress':'In progress','stage-5':'Stage 5','follow-up':'Follow up'};
-var TAG_CLS_TOM = {'do-not-contact':'tg-r','coordinate':'tg-a','in-progress':'tg-a','stage-5':'tg-g','follow-up':'tg-g'};
-function escH(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function removeTOMNote(id){var el=document.getElementById(id);if(!el)return;el.style.transition='opacity .2s,max-height .25s,padding .25s';el.style.opacity='0';el.style.maxHeight=el.offsetHeight+'px';setTimeout(function(){el.style.maxHeight='0';el.style.overflow='hidden';el.style.padding='0';},20);setTimeout(function(){el.remove();},280);}
-function dismissTOM(id){removeTOMNote(id);}
-function openTOMModal(editId){TOM_EDITING_ID=editId||null;var bg=document.getElementById('tomModalBg');var titleEl=document.getElementById('tomModalTitle');var deleteBtn=document.getElementById('tomDeleteBtn');['tomTitle','tomNote','tomSub','tomCustomTag'].forEach(function(f){var e=document.getElementById(f);if(e)e.value='';});var ae=document.getElementById('tomAE');var tg=document.getElementById('tomTag');var cw=document.getElementById('tomCustomTagWrap');if(ae)ae.value='';if(tg)tg.value='';if(cw)cw.style.display='none';if(editId){var ne=document.getElementById(editId);if(ne){var nm=ne.querySelector('.tom-name');var tx=ne.querySelector('.tom-txt');var sb=ne.querySelector('.tom-sub');if(nm){var cl=nm.cloneNode(true);cl.querySelectorAll('span').forEach(function(s){s.remove();});document.getElementById('tomTitle').value=cl.textContent.trim();}if(tx)document.getElementById('tomNote').value=tx.textContent.replace(/^"|"$/g,'').trim();if(sb)document.getElementById('tomSub').value=sb.textContent.trim();}if(titleEl)titleEl.textContent='✏️ Edit Note';if(deleteBtn)deleteBtn.style.display='inline-flex';}else{if(titleEl)titleEl.textContent='📌 Add Note';if(deleteBtn)deleteBtn.style.display='none';}if(bg)bg.style.display='flex';setTimeout(function(){var t=document.getElementById('tomTitle');if(t)t.focus();},80);}
-function addTOM(){openTOMModal(null);}
-function editTOMNote(id){openTOMModal(id);}
-function closeTOMModal(){var bg=document.getElementById('tomModalBg');if(bg)bg.style.display='none';}
-function saveTOM(){var title=document.getElementById('tomTitle').value.trim();var note=document.getElementById('tomNote').value.trim();if(!title&&!note){document.getElementById('tomTitle').focus();return;}var aeVal=document.getElementById('tomAE').value;var aeName='',aeColor='var(--s500)',aeInit='📌';if(aeVal){var p=aeVal.split('|');aeName=p[0];aeColor=p[1]||aeColor;aeInit=p[0].split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();}var tagVal=document.getElementById('tomTag').value;var tag=tagVal==='custom'?(document.getElementById('tomCustomTag').value.trim()||''):tagVal;var sub=document.getElementById('tomSub').value.trim();var now=new Date();var dateStr=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate();var tagHtml=tag?'<span class="tom-tg '+(TAG_CLS_TOM[tag]||'tg-a')+'">'+(TAG_LABELS_TOM[tag]||tag)+'</span>':'';var aeDate=[aeName,dateStr].filter(Boolean).join(' · ');if(TOM_EDITING_ID){var ex=document.getElementById(TOM_EDITING_ID);if(ex){var av=ex.querySelector('.tom-av');var nm=ex.querySelector('.tom-name');var tx=ex.querySelector('.tom-txt');var sb=ex.querySelector('.tom-sub');if(av){av.style.background=aeColor;av.textContent=aeInit;}if(nm)nm.innerHTML=escH(title)+' '+tagHtml+'<span class="tom-ts">'+escH(aeDate)+'</span>';if(tx)tx.textContent=note;if(sb)sb.textContent=sub;}}else{var list=document.getElementById('tomList');var id='tom-'+Date.now();var div=document.createElement('div');div.className='tom-note';div.id=id;div.style.opacity='0';div.innerHTML='<div class="tom-av" style="background:'+aeColor+'">'+aeInit+'</div><div class="tom-bd"><div class="tom-name">'+escH(title)+' '+tagHtml+'<span class="tom-ts">'+escH(aeDate)+'</span></div><div class="tom-txt">'+escH(note)+'</div>'+(sub?'<div class="tom-sub">'+escH(sub)+'</div>':'')+'</div><div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0"><button class="tom-x" onclick="editTOMNote(''+id+'')" title="Edit" style="color:var(--s400)">✎</button><button class="tom-x" onclick="removeTOMNote(''+id+'')" title="Delete">✕</button></div>';list.insertBefore(div,list.firstChild);setTimeout(function(){div.style.transition='opacity .3s';div.style.opacity='1';},10);}closeTOMModal();}
-function deleteTOMFromModal(){var id=TOM_EDITING_ID;if(id){closeTOMModal();setTimeout(function(){removeTOMNote(id);},50);}}
-document.addEventListener('DOMContentLoaded',function(){var s=document.getElementById('tomTag');if(s)s.addEventListener('change',function(){var cw=document.getElementById('tomCustomTagWrap');if(cw)cw.style.display=this.value==='custom'?'block':'none';});});
-</script>
-<script>
-var TOM_EDITING_ID = null;
-var TAG_LABELS_TOM = {'do-not-contact':'Do not contact','coordinate':'Coordinate first','in-progress':'In progress','stage-5':'Stage 5','follow-up':'Follow up'};
-var TAG_CLS_TOM = {'do-not-contact':'tg-r','coordinate':'tg-a','in-progress':'tg-a','stage-5':'tg-g','follow-up':'tg-g'};
-
-function escH(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function removeTOMNote(id){
-  var el=document.getElementById(id);
-  if(!el)return;
-  el.style.transition='opacity .2s,max-height .25s,padding .25s';
-  el.style.opacity='0';
-  el.style.maxHeight=el.offsetHeight+'px';
-  setTimeout(function(){el.style.maxHeight='0';el.style.overflow='hidden';el.style.padding='0';},20);
-  setTimeout(function(){el.remove();},280);
-}
-
-function dismissTOM(id){removeTOMNote(id);}
-
-function openTOMModal(editId){
-  TOM_EDITING_ID=editId||null;
-  var bg=document.getElementById('tomModalBg');
-  var titleEl=document.getElementById('tomModalTitle');
-  var deleteBtn=document.getElementById('tomDeleteBtn');
-  ['tomTitle','tomNote','tomSub','tomCustomTag'].forEach(function(f){
-    var e=document.getElementById(f);if(e)e.value='';
-  });
-  var ae=document.getElementById('tomAE');
-  var tg=document.getElementById('tomTag');
-  var cw=document.getElementById('tomCustomTagWrap');
-  if(ae)ae.value='';
-  if(tg)tg.value='';
-  if(cw)cw.style.display='none';
-  if(editId){
-    var ne=document.getElementById(editId);
-    if(ne){
-      var nm=ne.querySelector('.tom-name');
-      var tx=ne.querySelector('.tom-txt');
-      var sb=ne.querySelector('.tom-sub');
-      if(nm){var cl=nm.cloneNode(true);cl.querySelectorAll('span').forEach(function(s){s.remove();});document.getElementById('tomTitle').value=cl.textContent.trim();}
-      if(tx)document.getElementById('tomNote').value=tx.textContent.replace(/^"|"$/g,'').trim();
-      if(sb)document.getElementById('tomSub').value=sb.textContent.trim();
-    }
-    if(titleEl)titleEl.textContent='\u270f\ufe0f Edit Note';
-    if(deleteBtn)deleteBtn.style.display='inline-flex';
-  } else {
-    if(titleEl)titleEl.textContent='\ud83d\udccc Add Note';
-    if(deleteBtn)deleteBtn.style.display='none';
-  }
-  if(bg)bg.style.display='flex';
-  setTimeout(function(){var t=document.getElementById('tomTitle');if(t)t.focus();},80);
-}
-
-function addTOM(){openTOMModal(null);}
-function editTOMNote(id){openTOMModal(id);}
-
-function closeTOMModal(){
-  var bg=document.getElementById('tomModalBg');
-  if(bg)bg.style.display='none';
-}
-
-function saveTOM(){
-  var title=document.getElementById('tomTitle').value.trim();
-  var note=document.getElementById('tomNote').value.trim();
-  if(!title&&!note){document.getElementById('tomTitle').focus();return;}
-  var aeVal=document.getElementById('tomAE').value;
-  var aeName='',aeColor='var(--s500)',aeInit='\ud83d\udccc';
-  if(aeVal){
-    var p=aeVal.split('|');
-    aeName=p[0];aeColor=p[1]||aeColor;
-    aeInit=p[0].split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
-  }
-  var tagVal=document.getElementById('tomTag').value;
-  var tag=tagVal==='custom'?(document.getElementById('tomCustomTag').value.trim()||''):tagVal;
-  var sub=document.getElementById('tomSub').value.trim();
-  var now=new Date();
-  var dateStr=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate();
-  var tagHtml=tag?'<span class="tom-tg '+(TAG_CLS_TOM[tag]||'tg-a')+'">'+(TAG_LABELS_TOM[tag]||tag)+'</span>':'';
-  var aeDate=[aeName,dateStr].filter(Boolean).join(' \u00b7 ');
-
-  if(TOM_EDITING_ID){
-    var ex=document.getElementById(TOM_EDITING_ID);
-    if(ex){
-      var av=ex.querySelector('.tom-av');
-      var nm=ex.querySelector('.tom-name');
-      var tx=ex.querySelector('.tom-txt');
-      var sb=ex.querySelector('.tom-sub');
-      if(av){av.style.background=aeColor;av.textContent=aeInit;}
-      if(nm)nm.innerHTML=escH(title)+' '+tagHtml+'<span class="tom-ts">'+escH(aeDate)+'</span>';
-      if(tx)tx.textContent=note;
-      if(sb)sb.textContent=sub;
-    }
-  } else {
-    var list=document.getElementById('tomList');
-    var id='tom-'+Date.now();
-    var div=document.createElement('div');
-    div.className='tom-note';div.id=id;div.style.opacity='0';
-    var actDiv=document.createElement('div');
-    actDiv.style.cssText='display:flex;flex-direction:column;gap:4px;flex-shrink:0';
-    var editBtn=document.createElement('button');
-    editBtn.className='tom-x';editBtn.title='Edit';editBtn.style.color='var(--s400)';editBtn.textContent='\u270e';
-    editBtn.addEventListener('click',function(){editTOMNote(id);});
-    var delBtn=document.createElement('button');
-    delBtn.className='tom-x';delBtn.title='Delete';delBtn.textContent='\u2715';
-    delBtn.addEventListener('click',function(){removeTOMNote(id);});
-    actDiv.appendChild(editBtn);actDiv.appendChild(delBtn);
-    div.innerHTML='<div class="tom-av" style="background:'+aeColor+'">'+aeInit+'</div>'+
-      '<div class="tom-bd">'+
-        '<div class="tom-name">'+escH(title)+' '+tagHtml+'<span class="tom-ts">'+escH(aeDate)+'</span></div>'+
-        '<div class="tom-txt">'+escH(note)+'</div>'+
-        (sub?'<div class="tom-sub">'+escH(sub)+'</div>':'')+
-      '</div>';
-    div.appendChild(actDiv);
-    list.insertBefore(div,list.firstChild);
-    setTimeout(function(){div.style.transition='opacity .3s';div.style.opacity='1';},10);
-  }
-  closeTOMModal();
-}
-
-function deleteTOMFromModal(){
-  var id=TOM_EDITING_ID;
-  if(id){closeTOMModal();setTimeout(function(){removeTOMNote(id);},50);}
-}
-
-document.addEventListener('DOMContentLoaded',function(){
-  var s=document.getElementById('tomTag');
-  if(s)s.addEventListener('change',function(){
-    var cw=document.getElementById('tomCustomTagWrap');
-    if(cw)cw.style.display=this.value==='custom'?'block':'none';
-  });
-});
-</script>
 <!-- TOM MODAL -->
 <div id="tomModalBg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(3px)">
   <div style="background:#fff;border-radius:12px;width:min(520px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)">
@@ -1025,5 +940,192 @@ document.addEventListener('DOMContentLoaded',function(){
     </div>
   </div>
 </div>
+
+<script>
+// ── SPLASH ──────────────────────────────────────────────────────────
+(function(){
+  var sp=document.getElementById('splash');
+  function dismiss(){
+    sp.classList.add('out');
+    setTimeout(function(){sp.style.display='none';},420);
+  }
+  document.addEventListener('keydown',function(e){dismiss();},{once:true});
+  sp.addEventListener('click',function(){dismiss();});
+})();
+
+// ── DATE ─────────────────────────────────────────────────────────────
+(function(){
+  var d=new Date(),days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+  months=['January','February','March','April','May','June','July','August','September','October','November','December'],
+  el=document.getElementById('todayDate');
+  if(el)el.textContent=days[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+})();
+
+// ── FADE IN ───────────────────────────────────────────────────────────
+setTimeout(function(){
+  document.querySelectorAll('.fu').forEach(function(el,i){
+    setTimeout(function(){el.style.opacity='1';el.style.transform='translateY(0)';},i*80);
+  });
+},60);
+
+// ── AI BRIEF TOGGLE ───────────────────────────────────────────────────
+function toggleBrief(){
+  var b=document.getElementById('briefBody'),c=document.getElementById('briefChev');
+  if(!b)return;
+  var open=b.style.maxHeight&&b.style.maxHeight!=='0px';
+  b.style.maxHeight=open?'0px':'2000px';
+  if(c)c.textContent=open?'▼':'▲';
+}
+
+// ── SIDE TAB SWITCHING ────────────────────────────────────────────────
+function switchTab(tab,containerId){
+  var c=document.getElementById(containerId);
+  if(!c)return;
+  c.querySelectorAll('.stab').forEach(function(t){t.classList.remove('on');});
+  tab.classList.add('on');
+}
+
+// ── ACTIVITIES DATA ───────────────────────────────────────────────────
+var ACT_DATA = [
+  {type:'email', contact:'Brandon Joyce',    company:'Sub-Zero Group',          subject:'Follow-up: K25 HRSD Demo attendance',         pri:'high', due:'2h left',  ae:'TR',  aeColor:'#032D42'},
+  {type:'call',  contact:'Dylan Blumenberg', company:'FTI Consulting',           subject:'Cold call — IT Webinar follow-up',             pri:'high', due:'3h left',  ae:'JW',  aeColor:'#044355'},
+  {type:'call',  contact:'Sarah Chen',       company:'Echo Global Logistics',    subject:'ITOM AIOps champion call — post field demo',   pri:'high', due:'4h left',  ae:'TR',  aeColor:'#032D42'},
+  {type:'email', contact:'Mark Osei',        company:'BlueCross Illinois',       subject:'HRSD Webinar registrant — intro outreach',     pri:'med',  due:'5h left',  ae:'KS',  aeColor:'#5B21B6'},
+  {type:'call',  contact:'David Blasdell',   company:'Sterling Manufacturing',   subject:'SLA follow-up: Contact Us form — Day 1',       pri:'high', due:'5h left',  ae:'BD',  aeColor:'#D93025'},
+  {type:'call',  contact:'Rashmi Jayarama',  company:'NovaTech Systems',         subject:'Inbound demo request follow-up',               pri:'med',  due:'6h left',  ae:'RS',  aeColor:'#B45309'},
+  {type:'task',  contact:'Paul Carter',      company:'LumaCore Solutions',       subject:'Research: Map buying committee ahead of call', pri:'med',  due:'7h left',  ae:'SD',  aeColor:'#1a7a00'},
+  {type:'email', contact:'Jenna Walsh',      company:'Meridian Health Partners', subject:'Sequence Touch 3 — CSM ROI angle',            pri:'low',  due:'8h left',  ae:'MY',  aeColor:'#0369A1'},
+  {type:'call',  contact:'Chris Nakamura',   company:'Apex Industrial Group',    subject:'Cold call — ITSM modernization play',         pri:'low',  due:'9h left',  ae:'TR',  aeColor:'#032D42'},
+  {type:'task',  contact:'Alectri — Team',   company:'Alectri',                  subject:'Update OPTY notes after discovery call recap', pri:'med',  due:'EOD',      ae:'JW',  aeColor:'#044355'},
+];
+
+var currentActFilter = 'all';
+
+function renderActivities(filter){
+  var rows = filter==='all' ? ACT_DATA : ACT_DATA.filter(function(r){return r.type===filter;});
+  var tbody = document.getElementById('actTableBody');
+  if(!tbody)return;
+  var priLabel={high:'● High',med:'● Med',low:'● Low'};
+  var priCls={high:'high',med:'med',low:'low'};
+  var typeLabel={email:'✉ Email',call:'☎ Call',task:'✓ Task'};
+  var dueClass = function(d){
+    if(d.indexOf('2h')>-1||d.indexOf('3h')>-1||d.indexOf('4h')>-1) return '';
+    if(d.indexOf('5h')>-1||d.indexOf('6h')>-1) return 'warn';
+    return 'ok';
+  };
+  tbody.innerHTML = rows.map(function(r){
+    return '<tr>'+
+      '<td><span class="act-type '+r.type+'">'+typeLabel[r.type]+'</span></td>'+
+      '<td><div class="act-contact">'+r.contact+'</div><div class="act-company">'+r.company+'</div></td>'+
+      '<td><div class="act-subj" title="'+r.subject+'">'+r.subject+'</div></td>'+
+      '<td><span class="act-pri '+priCls[r.pri]+'">'+priLabel[r.pri]+'</span></td>'+
+      '<td><span class="act-time '+(r.pri==='high'?'':dueClass(r.due))+'">'+r.due+'</span></td>'+
+      '<td><span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:'+r.aeColor+';font-size:8px;font-weight:700;color:#fff;">'+r.ae+'</span></td>'+
+      '<td><button class="act-btn ai">🤖 Take Action</button></td>'+
+    '</tr>';
+  }).join('');
+}
+
+function switchActTab(tab, filter){
+  document.getElementById('activityTabs').querySelectorAll('.act-tab').forEach(function(t){t.classList.remove('on');});
+  tab.classList.add('on');
+  currentActFilter = filter;
+  renderActivities(filter);
+  // Update footer count
+  var shown = filter==='all'?ACT_DATA.length:ACT_DATA.filter(function(r){return r.type===filter;}).length;
+  var total = filter==='all'?100:(filter==='email'?30:filter==='call'?50:20);
+  var fm = document.querySelector('.act-footer-m');
+  if(fm)fm.textContent='Showing '+shown+' of '+total+' activities · Sorted by priority & due time';
+}
+
+// initial render
+document.addEventListener('DOMContentLoaded',function(){
+  renderActivities('all');
+});
+
+// ── TOP OF MIND CRUD ───────────────────────────────────────────────────
+var TOM_EDITING_ID = null;
+var TAG_LABELS_TOM = {'do-not-contact':'Do not contact','coordinate':'Coordinate first','in-progress':'In progress','stage-5':'Stage 5','follow-up':'Follow up'};
+var TAG_CLS_TOM = {'do-not-contact':'tg-r','coordinate':'tg-a','in-progress':'tg-a','stage-5':'tg-g','follow-up':'tg-g'};
+function escH(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function removeTOMNote(id){var el=document.getElementById(id);if(!el)return;el.style.transition='opacity .2s,max-height .25s,padding .25s';el.style.opacity='0';el.style.maxHeight=el.offsetHeight+'px';setTimeout(function(){el.style.maxHeight='0';el.style.overflow='hidden';el.style.padding='0';},20);setTimeout(function(){el.remove();},280);}
+function dismissTOM(id){removeTOMNote(id);}
+function openTOMModal(editId){
+  TOM_EDITING_ID=editId||null;
+  var bg=document.getElementById('tomModalBg');
+  var titleEl=document.getElementById('tomModalTitle');
+  var deleteBtn=document.getElementById('tomDeleteBtn');
+  ['tomTitle','tomNote','tomSub','tomCustomTag'].forEach(function(f){var e=document.getElementById(f);if(e)e.value='';});
+  var ae=document.getElementById('tomAE');var tg=document.getElementById('tomTag');var cw=document.getElementById('tomCustomTagWrap');
+  if(ae)ae.value='';if(tg)tg.value='';if(cw)cw.style.display='none';
+  if(editId){
+    var ne=document.getElementById(editId);
+    if(ne){
+      var nm=ne.querySelector('.tom-name');var tx=ne.querySelector('.tom-txt');var sb=ne.querySelector('.tom-sub');
+      if(nm){var cl=nm.cloneNode(true);cl.querySelectorAll('span').forEach(function(s){s.remove();});document.getElementById('tomTitle').value=cl.textContent.trim();}
+      if(tx)document.getElementById('tomNote').value=tx.textContent.replace(/^"|"$/g,'').trim();
+      if(sb)document.getElementById('tomSub').value=sb.textContent.trim();
+    }
+    if(titleEl)titleEl.textContent='✏️ Edit Note';
+    if(deleteBtn)deleteBtn.style.display='inline-flex';
+  } else {
+    if(titleEl)titleEl.textContent='📌 Add Note';
+    if(deleteBtn)deleteBtn.style.display='none';
+  }
+  if(bg)bg.style.display='flex';
+  setTimeout(function(){var t=document.getElementById('tomTitle');if(t)t.focus();},80);
+}
+function addTOM(){openTOMModal(null);}
+function editTOMNote(id){openTOMModal(id);}
+function closeTOMModal(){var bg=document.getElementById('tomModalBg');if(bg)bg.style.display='none';}
+function saveTOM(){
+  var title=document.getElementById('tomTitle').value.trim();
+  var note=document.getElementById('tomNote').value.trim();
+  if(!title&&!note){document.getElementById('tomTitle').focus();return;}
+  var aeVal=document.getElementById('tomAE').value;
+  var aeName='',aeColor='var(--s500)',aeInit='📌';
+  if(aeVal){var p=aeVal.split('|');aeName=p[0];aeColor=p[1]||aeColor;aeInit=p[0].split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();}
+  var tagVal=document.getElementById('tomTag').value;
+  var tag=tagVal==='custom'?(document.getElementById('tomCustomTag').value.trim()||''):tagVal;
+  var sub=document.getElementById('tomSub').value.trim();
+  var now=new Date();
+  var dateStr=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate();
+  var tagHtml=tag?'<span class="tom-tg '+(TAG_CLS_TOM[tag]||'tg-a')+'">'+(TAG_LABELS_TOM[tag]||tag)+'</span>':'';
+  var aeDate=[aeName,dateStr].filter(Boolean).join(' · ');
+  if(TOM_EDITING_ID){
+    var ex=document.getElementById(TOM_EDITING_ID);
+    if(ex){
+      var av=ex.querySelector('.tom-av');var nm=ex.querySelector('.tom-name');var tx=ex.querySelector('.tom-txt');var sb=ex.querySelector('.tom-sub');
+      if(av){av.style.background=aeColor;av.textContent=aeInit;}
+      if(nm)nm.innerHTML=escH(title)+' '+tagHtml+'<span class="tom-ts">'+escH(aeDate)+'</span>';
+      if(tx)tx.textContent=note;if(sb)sb.textContent=sub;
+    }
+  } else {
+    var list=document.getElementById('tomList');
+    var id='tom-'+Date.now();
+    var div=document.createElement('div');
+    div.className='tom-note';div.id=id;div.style.opacity='0';
+    var actDiv=document.createElement('div');actDiv.style.cssText='display:flex;flex-direction:column;gap:4px;flex-shrink:0';
+    var editBtn=document.createElement('button');editBtn.className='tom-x';editBtn.title='Edit';editBtn.style.color='var(--s400)';editBtn.textContent='✎';
+    editBtn.addEventListener('click',function(){editTOMNote(id);});
+    var delBtn=document.createElement('button');delBtn.className='tom-x';delBtn.title='Delete';delBtn.textContent='✕';
+    delBtn.addEventListener('click',function(){removeTOMNote(id);});
+    actDiv.appendChild(editBtn);actDiv.appendChild(delBtn);
+    div.innerHTML='<div class="tom-av" style="background:'+aeColor+'">'+aeInit+'</div>'+
+      '<div class="tom-bd"><div class="tom-name">'+escH(title)+' '+tagHtml+'<span class="tom-ts">'+escH(aeDate)+'</span></div>'+
+      '<div class="tom-txt">'+escH(note)+'</div>'+(sub?'<div class="tom-sub">'+escH(sub)+'</div>':'')+
+      '</div>';
+    div.appendChild(actDiv);
+    list.insertBefore(div,list.firstChild);
+    setTimeout(function(){div.style.transition='opacity .3s';div.style.opacity='1';},10);
+  }
+  closeTOMModal();
+}
+function deleteTOMFromModal(){var id=TOM_EDITING_ID;if(id){closeTOMModal();setTimeout(function(){removeTOMNote(id);},50);}}
+document.addEventListener('DOMContentLoaded',function(){
+  var s=document.getElementById('tomTag');
+  if(s)s.addEventListener('change',function(){var cw=document.getElementById('tomCustomTagWrap');if(cw)cw.style.display=this.value==='custom'?'block':'none';});
+});
+</script>
 </body>
 </html>
