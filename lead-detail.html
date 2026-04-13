@@ -118,7 +118,7 @@ button{font-family:inherit;}
 .tab-it.on .tab-ct{background:var(--ink);color:var(--white);}
 
 /* PAGE BODY */
-.page-body{display:grid;grid-template-columns:250px 1fr 340px;gap:14px;padding:14px 24px 48px;align-items:start;}
+.page-body{display:grid;grid-template-columns:300px 1fr 490px;gap:14px;padding:14px 24px 48px;align-items:start;}
 
 /* PANELS */
 .panel{background:var(--white);border:1px solid var(--s200);border-radius:var(--rlg);overflow:hidden;box-shadow:var(--sh-xs);margin-bottom:12px;}
@@ -532,48 +532,48 @@ const LEADS = [
 
 const PRODUCT_PORTFOLIO = {
   'Sub-Zero Group Inc.': [
-    {bu:'ITSM',                   cacv:285,  nnacv:0},
-    {bu:'ITOM',                   cacv:0,    nnacv:0},
-    {bu:'Asset Management',        cacv:0,    nnacv:0},
-    {bu:'Security',               cacv:0,    nnacv:0},
-    {bu:'HR Service Delivery',    cacv:0,    nnacv:180},
-    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:95},
-    {bu:'Creator App Engine',      cacv:0,    nnacv:0},
+    {bu:'ITSM',                   cacv:285,  nnacv:0,   util:121, pkg:'Pro', renewal:'14-Mar-27', renewalAlert:false},
+    {bu:'ITOM',                   cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Asset Management',        cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Security',               cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
+    {bu:'HR Service Delivery',    cacv:0,    nnacv:180, util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:95,  util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Creator App Engine',      cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
   ],
   'Paylocity Corporation': [
-    {bu:'ITSM',                   cacv:410,  nnacv:-50},
-    {bu:'ITOM',                   cacv:120,  nnacv:0},
-    {bu:'Asset Management',        cacv:0,    nnacv:0},
-    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:220},
-    {bu:'AI Platform Foundations', cacv:0,    nnacv:0},
+    {bu:'ITSM',                   cacv:410,  nnacv:-50, util:87,  pkg:'Pro', renewal:'14-Jun-26', renewalAlert:false},
+    {bu:'ITOM',                   cacv:120,  nnacv:0,   util:63,  pkg:'Std', renewal:'14-Jun-26', renewalAlert:false},
+    {bu:'Asset Management',        cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:220, util:0,   pkg:'—',   renewal:'—'},
+    {bu:'AI Platform Foundations', cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
   ],
   'GATX Corporation': [
-    {bu:'ITSM',                   cacv:1240, nnacv:180},
-    {bu:'ITOM',                   cacv:380,  nnacv:350},
-    {bu:'Asset Management',        cacv:210,  nnacv:0},
-    {bu:'Security',               cacv:0,    nnacv:0},
-    {bu:'Creator App Engine',      cacv:0,    nnacv:0},
-    {bu:'AI Platform Foundations', cacv:0,    nnacv:0},
+    {bu:'ITSM',                   cacv:1240, nnacv:180, util:133, pkg:'Pro', renewal:'14-Mar-27', renewalAlert:false},
+    {bu:'ITOM',                   cacv:380,  nnacv:350, util:91,  pkg:'Pro', renewal:'14-Mar-27', renewalAlert:false},
+    {bu:'Asset Management',        cacv:210,  nnacv:0,   util:0,   pkg:'Std', renewal:'14-Dec-25', renewalAlert:true},
+    {bu:'Security',               cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Creator App Engine',      cacv:8,    nnacv:6,   util:0,   pkg:'Std', renewal:'14-Mar-27', renewalAlert:false},
+    {bu:'AI Platform Foundations', cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
   ],
   'Crash Champions': [
-    {bu:'ITSM',                   cacv:95,   nnacv:0},
-    {bu:'HR Service Delivery',    cacv:0,    nnacv:140},
-    {bu:'Now Assist for HR',       cacv:0,    nnacv:85},
+    {bu:'ITSM',                   cacv:95,   nnacv:0,   util:87,  pkg:'Std', renewal:'14-Jan-27', renewalAlert:false},
+    {bu:'HR Service Delivery',    cacv:0,    nnacv:140, util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Now Assist for HR',       cacv:0,    nnacv:85,  util:0,   pkg:'—',   renewal:'—'},
   ],
   'Eversana': [
-    {bu:'ITSM',                   cacv:320,  nnacv:0},
-    {bu:'Security',               cacv:0,    nnacv:190},
-    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:0},
+    {bu:'ITSM',                   cacv:320,  nnacv:0,   util:104, pkg:'Pro', renewal:'14-Sep-26', renewalAlert:false},
+    {bu:'Security',               cacv:0,    nnacv:190, util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
   ],
   'Kirkland & Ellis LLP': [
-    {bu:'ITSM',                   cacv:480,  nnacv:0},
-    {bu:'Legal and Contract Ops', cacv:0,    nnacv:210},
-    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:120},
+    {bu:'ITSM',                   cacv:480,  nnacv:0,   util:96,  pkg:'Pro', renewal:'14-May-27', renewalAlert:false},
+    {bu:'Legal and Contract Ops', cacv:0,    nnacv:210, util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:120, util:0,   pkg:'—',   renewal:'—'},
   ],
   'Sargento Foods Inc.': [
-    {bu:'ITSM',                   cacv:175,  nnacv:0},
-    {bu:'Asset Management',        cacv:80,   nnacv:160},
-    {bu:'ITOM',                   cacv:0,    nnacv:0},
+    {bu:'ITSM',                   cacv:175,  nnacv:0,   util:78,  pkg:'Std', renewal:'14-Aug-26', renewalAlert:false},
+    {bu:'Asset Management',        cacv:80,   nnacv:160, util:0,   pkg:'Std', renewal:'14-Aug-26', renewalAlert:false},
+    {bu:'ITOM',                   cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
   ],
 };
 
@@ -1386,7 +1386,8 @@ function renderPage() {
 
       <div class="panel" style="margin-bottom:12px;overflow:hidden">
         <div class="panel-hd" style="background:var(--s50)">
-          <span class="panel-title">Product Usage</span>
+          <span class="panel-title">Product Usage &amp; Health</span>
+          ${portfolio.length > 0 ? (() => { const tc=portfolio.reduce((s,r)=>s+r.cacv,0); const tn=portfolio.reduce((s,r)=>s+r.nnacv,0); return `<div style="display:flex;gap:6px"><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(3,45,66,.07);color:var(--ink)">$${tc}K CACV</span>${tn>0?`<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--g50);color:var(--g600)">$${tn}K NNACV</span>`:''}` + `</div>`; })() : ''}
           <span class="panel-act">View Full Account</span>
         </div>
         ${portfolio.length === 0 ? `
@@ -1395,36 +1396,87 @@ function renderPage() {
             <div style="font-size:12px;font-weight:600;color:var(--s700);margin-bottom:3px">No existing ServiceNow footprint</div>
             <div style="font-size:11px;color:var(--s400)">New logo — all products available.</div>
           </div>
-        ` : `
-          <div style="overflow-y:auto;max-height:340px">
+        ` : (() => {
+          const tc = portfolio.reduce((s,r)=>s+r.cacv,0);
+          const tn = portfolio.reduce((s,r)=>s+r.nnacv,0);
+          const avgUtil = portfolio.filter(r=>r.cacv>0).length ? Math.round(portfolio.filter(r=>r.cacv>0).reduce((s,r)=>s+(r.util||0),0)/portfolio.filter(r=>r.cacv>0).length) : 0;
+          const renewalWarning = portfolio.find(r=>r.renewalAlert);
+          const zeroUtil = portfolio.filter(r=>r.cacv>0&&(r.util||0)===0);
+          return `
+          <!-- Summary stat row -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--s200)">
+            <div style="padding:12px 14px;border-right:1px solid var(--s100)">
+              <div style="font-size:16px;font-weight:700;color:var(--s900);font-family:'DM Mono',monospace">$${tc}K</div>
+              <div style="font-size:10px;color:var(--s400);margin-top:2px">Total CACV</div>
+            </div>
+            <div style="padding:12px 14px;border-right:1px solid var(--s100)">
+              <div style="font-size:16px;font-weight:700;color:var(--g600);font-family:'DM Mono',monospace">$${tn > 0 ? tn : 0}K</div>
+              <div style="font-size:10px;color:var(--s400);margin-top:2px">Pipeline NNACV</div>
+            </div>
+            <div style="padding:12px 14px">
+              <div style="font-size:16px;font-weight:700;color:${avgUtil>=100?'var(--g600)':avgUtil>=70?'var(--a600)':'var(--r500)'};font-family:'DM Mono',monospace">${avgUtil}%</div>
+              <div style="font-size:10px;color:var(--s400);margin-top:2px">Avg Utilization</div>
+            </div>
+          </div>
+          <!-- Table -->
+          <div style="overflow-y:auto;max-height:360px">
             <table style="width:100%;border-collapse:collapse;font-size:11px">
               <thead style="position:sticky;top:0;z-index:1">
                 <tr style="background:var(--s50);border-bottom:1px solid var(--s200)">
                   <th style="padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:left">BU / Product</th>
-                  <th style="padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:right;white-space:nowrap">CACV</th>
-                  <th style="padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:right;white-space:nowrap">NNACV (4RQ)</th>
+                  <th style="padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:right">CACV</th>
+                  <th style="padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:right">NNACV</th>
+                  <th style="padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:center">Renewal</th>
+                  <th style="padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:left;min-width:80px">Utilization</th>
+                  <th style="padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--s500);text-align:center">PKG</th>
                 </tr>
               </thead>
               <tbody>
-                ${portfolio.map(row=>`<tr style="border-bottom:1px solid var(--s100);${row.nnacv>0?'background:rgba(245,158,11,.03);':''}">
-                  <td style="padding:8px 10px;font-size:12px;color:var(--s800);font-weight:500"><span style="display:inline-flex;align-items:center;gap:6px">${row.nnacv>0?'<span style="width:6px;height:6px;border-radius:50%;background:#f59e0b;display:inline-block;flex-shrink:0"></span>':'<span style="width:6px;height:6px;display:inline-block;flex-shrink:0"></span>'}${row.bu}</span></td>
-                  <td style="padding:8px 10px;font-size:12px;text-align:right;font-family:'DM Mono',monospace;font-weight:${row.cacv>0?'600':'400'};color:${row.cacv>0?'var(--s800)':'var(--s300)'}">${row.cacv>0?'$'+row.cacv+'K':'—'}</td>
-                  <td style="padding:8px 10px;font-size:12px;text-align:right;font-family:'DM Mono',monospace;font-weight:${row.nnacv!==0?'600':'400'};color:${row.nnacv>0?'var(--a600)':row.nnacv<0?'var(--r600)':'var(--s300)'}">${row.nnacv>0?'$'+row.nnacv+'K ⚡':row.nnacv<0?'-$'+Math.abs(row.nnacv)+'K':'—'}</td>
-                </tr>`).join('')}
-                ${(()=>{const tc=portfolio.reduce((s,r)=>s+r.cacv,0);const tn=portfolio.reduce((s,r)=>s+r.nnacv,0);return `<tr style="background:var(--s50);border-top:2px solid var(--s200)"><td style="padding:8px 10px;font-size:11px;font-weight:700;color:var(--s600)">Total</td><td style="padding:8px 10px;font-size:12px;font-weight:700;text-align:right;font-family:'DM Mono',monospace;color:var(--s800)">$${tc}K</td><td style="padding:8px 10px;font-size:12px;font-weight:700;text-align:right;font-family:'DM Mono',monospace;color:${tn>0?'var(--a600)':tn<0?'var(--r600)':'var(--s400)'}">$${tn>0?tn+'K':tn<0?'-$'+Math.abs(tn)+'K':'—'}</td></tr>`;})()}
+                ${portfolio.map(row => {
+                  const util = row.util !== undefined ? row.util : (row.cacv > 0 ? Math.floor(Math.random()*60+40) : 0);
+                  const utilColor = util >= 100 ? 'var(--g600)' : util >= 70 ? 'var(--a600)' : util > 0 ? 'var(--r500)' : 'var(--s300)';
+                  const utilBarColor = util >= 100 ? 'var(--g500)' : util >= 70 ? 'var(--a500)' : util > 0 ? 'var(--r500)' : 'var(--s200)';
+                  const renewalStr = row.renewal || (row.cacv > 0 ? '14-Mar-27' : '—');
+                  const isRenewAlert = row.renewalAlert || false;
+                  const pkg = row.pkg || (row.cacv > 0 ? 'Pro' : '—');
+                  const dot = row.nnacv > 0 ? `<span style="width:7px;height:7px;border-radius:50%;background:var(--a500);display:inline-block;flex-shrink:0;margin-right:4px"></span>` : `<span style="width:7px;height:7px;display:inline-block;flex-shrink:0;margin-right:4px"></span>`;
+                  return `<tr style="border-bottom:1px solid var(--s100)">
+                    <td style="padding:8px 10px;font-size:12px;color:${row.cacv>0?'var(--s800)':'var(--s500)'};font-weight:${row.cacv>0?'500':'400'}">${dot}${row.bu}</td>
+                    <td style="padding:8px 10px;text-align:right;font-family:'DM Mono',monospace;font-weight:${row.cacv>0?'600':'400'};color:${row.cacv>0?'var(--s800)':'var(--s300)'}">${row.cacv>0?'$'+row.cacv+'K':'—'}</td>
+                    <td style="padding:8px 10px;text-align:right;font-family:'DM Mono',monospace;font-weight:${row.nnacv>0?'600':'400'};color:${row.nnacv>0?'var(--g600)':row.nnacv<0?'var(--r600)':'var(--s300)'}">${row.nnacv>0?'$'+row.nnacv+'K':row.nnacv<0?'-$'+Math.abs(row.nnacv)+'K':'—'}</td>
+                    <td style="padding:8px 10px;text-align:center;font-size:11px;font-weight:${isRenewAlert?'700':'400'};color:${isRenewAlert?'var(--r600)':'var(--s500)'};white-space:nowrap">${renewalStr}</td>
+                    <td style="padding:8px 10px">
+                      ${row.cacv > 0 ? `<div style="display:flex;align-items:center;gap:5px">
+                        <div style="flex:1;height:4px;background:var(--s100);border-radius:2px;overflow:hidden;min-width:40px">
+                          <div style="height:100%;border-radius:2px;background:${utilBarColor};width:${Math.min(util,100)}%"></div>
+                        </div>
+                        <span style="font-size:10px;font-weight:600;color:${utilColor};white-space:nowrap;min-width:28px;text-align:right">${util}%${util>100?' ▲':''}</span>
+                      </div>` : `<span style="color:var(--s300);font-size:11px">—</span>`}
+                    </td>
+                    <td style="padding:8px 10px;text-align:center"><span style="font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:${row.cacv>0?'var(--s100)':'transparent'};color:${row.cacv>0?'var(--s600)':'var(--s300)'}">${pkg}</span></td>
+                  </tr>`;
+                }).join('')}
+                <tr style="background:var(--s50);border-top:2px solid var(--s200)">
+                  <td style="padding:8px 10px;font-size:11px;font-weight:700;color:var(--s600)">Total</td>
+                  <td style="padding:8px 10px;font-size:12px;font-weight:700;text-align:right;font-family:'DM Mono',monospace;color:var(--s800)">$${tc}K</td>
+                  <td style="padding:8px 10px;font-size:12px;font-weight:700;text-align:right;font-family:'DM Mono',monospace;color:${tn>0?'var(--g600)':tn<0?'var(--r600)':'var(--s400)'}">$${tn>0?tn+'K':tn<0?'-$'+Math.abs(tn)+'K':'—'}</td>
+                  <td style="padding:8px 10px;text-align:center">—</td>
+                  <td style="padding:8px 10px"><span style="font-size:10px;font-weight:700;color:${avgUtil>=70?'var(--g600)':'var(--a600)'}">${avgUtil}% ${avgUtil>=100?'▲':''}</span></td>
+                  <td></td>
+                </tr>
               </tbody>
             </table>
           </div>
-          ${(()=>{
-            const activeRows = portfolio.filter(r=>r.nnacv>0);
-            if(!activeRows.length) return '';
-            const BU_DOT_COLORS = {'ITSM':'#3b82f6','ITOM':'#0e7490','HR Service Delivery':'#7e22ce','Now Assist for ITSM':'#6d28d9','Now Assist for HR':'#7e22ce','Security':'#dc2626','Asset Management':'#0369a1','Legal and Contract Ops':'#92400e','AI Platform Foundations':'#6d28d9'};
-            return `<div style="padding:8px 12px;border-top:1px solid rgba(245,158,11,.2);background:rgba(245,158,11,.04);display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-              <span style="font-size:10px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.06em">⚡ Active Pipeline:</span>
-              ${activeRows.map(r=>`<span style="font-size:11px;font-weight:600;color:#78350f;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);padding:2px 8px;border-radius:4px">${r.bu} · $${r.nnacv}K</span>`).join('')}
-            </div>`;
-          })()}
-        `}
+          ${renewalWarning || zeroUtil.length ? `
+          <div style="padding:7px 12px;border-top:1px solid var(--s200);background:var(--s50);font-size:11px;display:flex;align-items:center;justify-content:space-between">
+            <span style="color:var(--s500)">
+              ${renewalWarning ? `<span style="color:var(--r600);font-weight:600">Renewal: </span><span style="color:var(--r600)">${renewalWarning.bu} up ${renewalWarning.renewal}</span>${zeroUtil.length?' · ':''}`:''}
+              ${zeroUtil.length ? `<span style="color:var(--s500)">${zeroUtil.length} product${zeroUtil.length>1?'s':''} at 0% utilization</span>`:''}
+            </span>
+            <span style="color:var(--b600);font-weight:600;cursor:pointer">Full BU View →</span>
+          </div>` : `<div style="padding:7px 12px;border-top:1px solid var(--s200);background:var(--s50);display:flex;justify-content:flex-end"><span style="font-size:11px;color:var(--b600);font-weight:600;cursor:pointer">Full BU View →</span></div>`}
+          `;
+        })()}
       </div>
 
       <div class="panel">
