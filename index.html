@@ -407,11 +407,21 @@ button{font-family:inherit;}
       <br><br>
       This mock up does not reflect official ServiceNow product roadmaps, features, or capabilities. It is intended solely as a personal portfolio and workflow design artifact.
     </div>
-    <div class="splash-cta">
-      <div class="splash-cta-pulse"></div>
-      Press any key or click anywhere to continue
+    <div id="pwWrap">
+      <div style="position:relative;margin-bottom:8px;">
+        <input id="pwInput" type="password" placeholder="Enter access code" autocomplete="off"
+          style="width:100%;padding:9px 38px 9px 13px;border-radius:8px;border:1.5px solid rgba(3,45,66,.18);font-family:inherit;font-size:13px;color:#032D42;background:rgba(255,255,255,.8);outline:none;box-sizing:border-box;letter-spacing:.12em;"
+          onkeydown="if(event.key==='Enter')checkPW()">
+        <button onclick="togglePWVis()" id="pwEye"
+          style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:#64748b;padding:0;">👁</button>
+      </div>
+      <div id="pwErr" style="font-size:11px;color:#dc2626;min-height:16px;margin-bottom:6px;"></div>
+      <button onclick="checkPW()"
+        style="width:100%;padding:9px;border-radius:8px;border:none;background:#032D42;color:#fff;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;">
+        Enter →
+      </button>
     </div>
-    <div class="splash-hint">Jacob Rubis · Commercial Illinois &amp; Midwest · GBA</div>
+    <div class="splash-hint" style="margin-top:14px;">Jacob Rubis · Commercial Illinois &amp; Midwest · GBA</div>
   </div>
 </div>
 
@@ -1020,15 +1030,41 @@ button{font-family:inherit;}
 </div>
 
 <script>
-// ── SPLASH ──────────────────────────────────────────────────────────
+// ── SPLASH + PASSWORD ────────────────────────────────────────────────
 (function(){
-  var sp=document.getElementById('splash');
+  var sp = document.getElementById('splash');
   function dismiss(){
     sp.classList.add('out');
-    setTimeout(function(){sp.style.display='none';},420);
+    setTimeout(function(){ sp.style.display='none'; }, 420);
   }
-  document.addEventListener('keydown',function(e){dismiss();},{once:true});
-  sp.addEventListener('click',function(){dismiss();});
+  // Already authenticated this session — skip straight past
+  if(sessionStorage.getItem('bdr_auth')==='1'){
+    sp.style.display='none';
+    return;
+  }
+  // Focus the input
+  setTimeout(function(){
+    var inp = document.getElementById('pwInput');
+    if(inp) inp.focus();
+  }, 120);
+  // Expose globals needed by inline handlers
+  window.checkPW = function(){
+    var val = (document.getElementById('pwInput').value||'').trim().toLowerCase();
+    if(val === 'now'){
+      sessionStorage.setItem('bdr_auth','1');
+      dismiss();
+    } else {
+      var err = document.getElementById('pwErr');
+      var inp = document.getElementById('pwInput');
+      if(err) err.textContent = 'Incorrect access code. Try again.';
+      if(inp){ inp.value=''; inp.style.borderColor='#dc2626'; inp.focus(); setTimeout(function(){ inp.style.borderColor=''; }, 1600); }
+    }
+  };
+  window.togglePWVis = function(){
+    var inp = document.getElementById('pwInput');
+    if(!inp) return;
+    inp.type = inp.type==='password' ? 'text' : 'password';
+  };
 })();
 
 // ── DATE ─────────────────────────────────────────────────────────────
