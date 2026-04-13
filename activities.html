@@ -114,7 +114,9 @@ button{font-family:inherit;}
 .panel-acts{display:flex;align-items:center;gap:5px;}
 
 /* ── TOP SPLIT ROW ──────────────────────────────────────────────── */
-.split-row{display:grid;grid-template-columns:1fr 420px;gap:14px;align-items:start;}
+.split-row{display:grid;grid-template-columns:1fr 420px;gap:14px;align-items:stretch;}
+.split-row .panel{height:100%;display:flex;flex-direction:column;}
+.split-row .panel .comp-body{flex:1;overflow-y:auto;}
 
 /* ── ACTIVITIES DUE TABLE ────────────────────────────────────────── */
 .act-toolbar{display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid var(--s100);background:var(--s50);}
@@ -261,6 +263,42 @@ button{font-family:inherit;}
 .opty-ae{font-size:10px;color:var(--s400);}
 .opty-when{font-size:10px;color:var(--s400);}
 
+/* ── AI PREP MODAL ───────────────────────────────────────────────── */
+#prepModalBg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.prep-modal{background:var(--white);border-radius:14px;width:min(680px,95vw);height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.3);}
+.prep-modal-hdr{padding:16px 20px;border-bottom:1px solid var(--s200);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;background:var(--ink);border-radius:14px 14px 0 0;}
+.prep-modal-hdr-l{display:flex;flex-direction:column;gap:3px;}
+.prep-badge{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:10px;background:rgba(99,223,78,.18);color:var(--wasabi);margin-bottom:4px;}
+.prep-modal-name{font-size:18px;font-weight:700;color:var(--white);line-height:1.2;}
+.prep-modal-sub{font-size:11px;color:rgba(255,255,255,.55);}
+.prep-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.1s;}
+.prep-close:hover{background:rgba(255,255,255,.2);color:var(--white);}
+.prep-modal-body{flex:1;overflow-y:auto;min-height:0;padding:18px 20px;}
+/* section blocks */
+.prep-sec{background:var(--s50);border:1px solid var(--s200);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.prep-sec-hdr{display:flex;align-items:center;gap:7px;padding:9px 13px;border-bottom:1px solid var(--s200);background:var(--white);}
+.prep-sec-icon{font-size:14px;}
+.prep-sec-title{font-size:11px;font-weight:700;color:var(--s700);text-transform:uppercase;letter-spacing:.06em;}
+.prep-sec-body{padding:12px 13px;font-size:12px;color:var(--s700);line-height:1.7;}
+.prep-sec-body strong{color:var(--s900);}
+.prep-sec-body ul{padding-left:16px;display:flex;flex-direction:column;gap:5px;}
+.prep-sec-body li{color:var(--s600);line-height:1.55;}
+/* SPICED table */
+.spiced-row{display:grid;grid-template-columns:90px 1fr;gap:0;border-bottom:1px solid var(--s200);}
+.spiced-row:last-child{border-bottom:none;}
+.spiced-label{padding:9px 12px;font-size:10px;font-weight:700;color:var(--white);display:flex;align-items:flex-start;background:var(--ink);}
+.spiced-val{padding:9px 12px;font-size:12px;color:var(--s700);line-height:1.55;}
+/* loading */
+.prep-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:48px 20px;}
+.prep-spinner{width:32px;height:32px;border:3px solid var(--s200);border-top-color:var(--ink);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.prep-loading-txt{font-size:12px;color:var(--s500);font-weight:500;}
+.prep-loading-sub{font-size:11px;color:var(--s400);text-align:center;}
+/* modal footer */
+.prep-modal-ftr{padding:12px 20px;border-top:1px solid var(--s200);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--s50);border-radius:0 0 14px 14px;}
+.prep-ftr-note{font-size:10px;color:var(--s400);display:flex;align-items:center;gap:4px;}
+.prep-pulse{width:6px;height:6px;background:var(--wasabi);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
 /* FADE */
 .fu{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;}
 </style>
@@ -526,7 +564,7 @@ button{font-family:inherit;}
           </div>
           <div class="mtg-r">
             <span class="mtg-status soon">In 45min</span>
-            <button class="row-btn">📋 Prep</button>
+            <button class="row-btn" onclick="openPrepModal()">📋 Prep</button>
           </div>
         </div>
 
@@ -674,6 +712,34 @@ button{font-family:inherit;}
   </div><!-- /page-body -->
 </div><!-- /main -->
 
+<!-- ── AI PREP MODAL ─────────────────────────────────────────────── -->
+<div id="prepModalBg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div class="prep-modal">
+    <div class="prep-modal-hdr">
+      <div class="prep-modal-hdr-l">
+        <div class="prep-badge"><div class="prep-pulse"></div>✦ AI Generated · Now Assist</div>
+        <div class="prep-modal-name">David Blasdell</div>
+        <div class="prep-modal-sub">Sterling Manufacturing · ITOM AIOps Discovery · 9:30am · AE: Brian Disher</div>
+      </div>
+      <button class="prep-close" onclick="closePrepModal()">×</button>
+    </div>
+    <div class="prep-modal-body" id="prepModalBody">
+      <div class="prep-loading">
+        <div class="prep-spinner"></div>
+        <div class="prep-loading-txt">Generating prep brief…</div>
+        <div class="prep-loading-sub">Pulling account intel, CRM history, and SPICED discovery questions</div>
+      </div>
+    </div>
+    <div class="prep-modal-ftr">
+      <div class="prep-ftr-note"><div class="prep-pulse"></div>Generated by Now Assist · Always verify before the call</div>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-g btn-xs" onclick="openPrepModal()">↻ Regenerate</button>
+        <button class="btn btn-p btn-xs" onclick="copyBrief()">📋 Copy Brief</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── DATE ──────────────────────────────────────────────────────────────
 (function(){
@@ -689,6 +755,157 @@ setTimeout(function(){
     setTimeout(function(){el.style.opacity='1';el.style.transform='translateY(0)';},i*100);
   });
 },60);
+
+// ── AI PREP MODAL ──────────────────────────────────────────────────────
+function openPrepModal(){
+  var bg = document.getElementById('prepModalBg');
+  var body = document.getElementById('prepModalBody');
+  bg.style.display = 'flex';
+  body.innerHTML = '<div class="prep-loading"><div class="prep-spinner"></div><div class="prep-loading-txt">Generating prep brief…</div><div class="prep-loading-sub">Pulling account intel, CRM history, and SPICED discovery questions</div></div>';
+  setTimeout(function(){ renderPrepFallback(); }, 2200);
+}
+function closePrepModal(){
+  document.getElementById('prepModalBg').style.display = 'none';
+}
+document.getElementById('prepModalBg').addEventListener('click', function(e){ if(e.target===this) closePrepModal(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closePrepModal(); });
+
+async function callPrepAI(){
+  const prompt = `You are an AI sales assistant for a ServiceNow BDR. Generate a structured pre-call prep brief for the following meeting. Return ONLY valid JSON, no markdown, no code fences.
+
+Meeting details:
+- Lead Name: David Blasdell
+- Title: Director of IT Operations
+- Company: Sterling Manufacturing
+- Industry: Manufacturing / Industrial
+- Meeting Type: ITOM AIOps Discovery Call
+- AE: Brian Disher
+- BDR: Jacob Rubis (supporting)
+- Meeting time: 9:30am today
+
+Return this exact JSON structure:
+{
+  "focus": "one sentence discovery call focus",
+  "about_company": "2-3 sentences about Sterling Manufacturing as a mid-market manufacturing company, their IT environment, and operational challenges relevant to ITOM AIOps",
+  "servicenow_relationship": "Customer since [year]. Currently owns [products]. Expansion opportunity: ITOM AIOps.",
+  "opty_history": "Brief fictional but realistic CRM history — 1-2 prior touchpoints or a prior opty that stalled, what happened, and why now is different",
+  "what_he_cares_about": "3-4 bullet points as an array of strings — what a Director of IT Ops in manufacturing cares about: uptime, incident reduction, tool consolidation, cost, compliance. Use industry-appropriate language.",
+  "spiced": {
+    "situation": "2 discovery questions to understand current state — how they manage IT ops today, tool stack, team size, incident volume",
+    "problem": "2 questions to surface the core pain — alert noise, manual triage, lack of correlation, visibility gaps",
+    "implication": "2 questions that quantify impact — downtime costs, engineer hours lost, risk to manufacturing output",
+    "critical_event": "2 questions to find urgency — upcoming audits, recent outages, leadership mandates, headcount pressure",
+    "decision": "2 questions about process — who else is involved, how they evaluate tools, what a timeline looks like"
+  }
+}`;
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await response.json();
+  const text = data.content.map(function(b){ return b.text||''; }).join('');
+  const clean = text.replace(/```json|```/g,'').trim();
+  return JSON.parse(clean);
+}
+
+function spicedQ(text){
+  // Split on double newline or numbered questions, wrap each in a styled question block
+  var qs = text.split(/\n\n|\r\n\r\n/).map(function(q){ return q.trim(); }).filter(Boolean);
+  if(qs.length <= 1) return '<div style="line-height:1.65">'+text+'</div>';
+  return qs.map(function(q,i){
+    return '<div style="display:flex;gap:8px;margin-bottom:'+(i<qs.length-1?'10px':'0')+'">'
+      +'<span style="flex-shrink:0;width:18px;height:18px;border-radius:50%;background:rgba(99,223,78,.15);color:var(--wdk);font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-top:1px">'+(i+1)+'</span>'
+      +'<span style="line-height:1.6;color:var(--s700)">'+q+'</span>'
+      +'</div>';
+  }).join('');
+}
+
+function renderPrepContent(d){
+  var body = document.getElementById('prepModalBody');
+  var cares = Array.isArray(d.what_he_cares_about) ? d.what_he_cares_about.map(function(b){ return '<li>'+b+'</li>'; }).join('') : '<li>'+d.what_he_cares_about+'</li>';
+  body.innerHTML = `
+    <div class="prep-sec">
+      <div class="prep-sec-hdr"><span class="prep-sec-icon">🎯</span><span class="prep-sec-title">Discovery Call Focus</span></div>
+      <div class="prep-sec-body">${d.focus}</div>
+    </div>
+
+    <div class="prep-sec">
+      <div class="prep-sec-hdr"><span class="prep-sec-icon">🏢</span><span class="prep-sec-title">About the Company</span></div>
+      <div class="prep-sec-body">${d.about_company}</div>
+    </div>
+
+    <div class="prep-sec">
+      <div class="prep-sec-hdr"><span class="prep-sec-icon">🔗</span><span class="prep-sec-title">ServiceNow Relationship</span></div>
+      <div class="prep-sec-body">${d.servicenow_relationship}</div>
+    </div>
+
+    <div class="prep-sec">
+      <div class="prep-sec-hdr"><span class="prep-sec-icon">📂</span><span class="prep-sec-title">CRM / Opportunity History</span></div>
+      <div class="prep-sec-body">${d.opty_history}</div>
+    </div>
+
+    <div class="prep-sec">
+      <div class="prep-sec-hdr"><span class="prep-sec-icon">🧠</span><span class="prep-sec-title">What David Cares About</span></div>
+      <div class="prep-sec-body"><ul>${cares}</ul></div>
+    </div>
+
+    <div class="prep-sec" style="margin-bottom:0;">
+      <div class="prep-sec-hdr"><span class="prep-sec-icon">❓</span><span class="prep-sec-title">SPICED Discovery Questions</span></div>
+      <div style="overflow:hidden;border-radius:0 0 10px 10px;">
+        <div class="spiced-row">
+          <div class="spiced-label">Situation</div>
+          <div class="spiced-val">${spicedQ(d.spiced.situation)}</div>
+        </div>
+        <div class="spiced-row">
+          <div class="spiced-label">Problem</div>
+          <div class="spiced-val">${spicedQ(d.spiced.problem)}</div>
+        </div>
+        <div class="spiced-row">
+          <div class="spiced-label">Implication</div>
+          <div class="spiced-val">${spicedQ(d.spiced.implication)}</div>
+        </div>
+        <div class="spiced-row">
+          <div class="spiced-label">Critical Event</div>
+          <div class="spiced-val">${spicedQ(d.spiced.critical_event)}</div>
+        </div>
+        <div class="spiced-row">
+          <div class="spiced-label">Decision</div>
+          <div class="spiced-val">${spicedQ(d.spiced.decision)}</div>
+        </div>
+      </div>
+    </div>
+    <div style="height:4px"></div>
+  `;
+}
+
+function renderPrepFallback(){
+  renderPrepContent({
+    focus: "Uncover the current state of IT operations at Sterling Manufacturing — specifically alert noise, incident triage, and visibility across distributed plant systems — and establish whether the pain is acute enough to drive a near-term evaluation of ITOM AIOps.",
+    about_company: "Sterling Manufacturing is a mid-market industrial manufacturer with 2,000+ employees across multiple production facilities in the Midwest. Their IT team manages a complex, distributed environment spanning plant floor OT systems, ERP infrastructure, and corporate IT — all with a lean operations team. They've grown through acquisition, leaving them with fragmented monitoring tools and inconsistent visibility across sites.",
+    servicenow_relationship: "Customer since 2021. Currently owns ITSM Pro and CSM. Expansion opportunity: ITOM AIOps — no current ServiceNow footprint in IT operations monitoring.",
+    opty_history: "Prior ITOM conversation in Q3 2024 with a previous IT contact (now departed). Opportunity stalled at discovery — budget freeze due to ERP migration. That migration is now complete as of Q1 2026, making this a re-engagement with improved timing. Brian Disher flagged this account as a priority reopen.",
+    what_he_cares_about: [
+      "Reducing mean time to detect and resolve (MTTR/MTTD) across plant and corporate IT systems",
+      "Consolidating 4–5 monitoring tools into a single pane of glass without adding headcount",
+      "Eliminating alert fatigue — his team is triaging 200+ alerts/day manually with no correlation engine",
+      "Protecting manufacturing uptime — every hour of unplanned downtime costs $50K+ in lost output",
+      "Proving IT value to the business — the CIO wants a board-ready metric on operational reliability"
+    ],
+    spiced: {
+      situation: "How is your team currently managing incident detection and response across your facilities — what tools are you running, and how centralized is visibility today?\n\nHow many people are actively involved in IT ops monitoring, and roughly how many alerts or incidents are you triaging per day?",
+      problem: "When something goes wrong in the environment, what does the process look like to identify root cause — and how long does that typically take?\n\nHow much of your team's time would you say goes toward manually correlating alerts versus actually resolving issues?",
+      implication: "When a network or infrastructure issue hits during production, what's the downstream impact — are we talking hours of exposure, and what does that cost the business?\n\nIf this stays the way it is for another 12 months, what does that mean for your team's capacity and the reliability commitments you've made to the business?",
+      critical_event: "Has there been a specific incident recently that made leadership start asking harder questions about visibility and response time?\n\nIs there a deadline — a new fiscal year budget cycle, an audit, or a production peak window — where having better observability would really matter?",
+      decision: "Beyond yourself, who else would be involved in evaluating and signing off on something like this — is this primarily an IT decision or does it need to go broader?\n\nIf this looks like the right fit after today, what would a realistic evaluation and decision timeline look like on your end?"
+    }
+  });
+}
 
 // ── ACTIVITIES DATA ────────────────────────────────────────────────────
 var ACTS = [
@@ -713,7 +930,6 @@ var typeFilter = 'all';
 var currentPage = 1;
 var pageSize = 10;
 var currentAlpha = 'All';
-var filteredActs = ACTS.slice();
 
 function getVisible(){
   var kw = document.getElementById('actSearch').value.toLowerCase();
@@ -775,7 +991,7 @@ function setTypeFilter(btn, t){
 function filterActivities(){ currentPage=1; renderTable(); }
 function changePage(d){ currentPage+=d; renderTable(); }
 function toggleAll(cb){ document.querySelectorAll('#actTbody .row-cb').forEach(function(c){c.checked=cb.checked;}); }
-function sortTable(col){ /* visual only */ renderTable(); }
+function sortTable(col){ renderTable(); }
 
 // Alpha bar
 (function(){
@@ -794,7 +1010,6 @@ function setAlpha(btn, letter){
   renderTable();
 }
 
-// Initial render
 renderTable();
 
 // ── COMPLETED DATA ─────────────────────────────────────────────────────
@@ -855,7 +1070,84 @@ function renderCompleted(){
   }).join('');
 }
 
+function copyBrief(){
+  var body = document.getElementById('prepModalBody');
+  if(!body) return;
+
+  // Walk the DOM and build clean plain text
+  var lines = [];
+
+  // Header info
+  lines.push('CALL PREP BRIEF — DAVID BLASDELL');
+  lines.push('Sterling Manufacturing · ITOM AIOps Discovery · 9:30am · AE: Brian Disher');
+  lines.push('Generated by Now Assist · Always verify before the call');
+  lines.push('');
+
+  // Each section
+  body.querySelectorAll('.prep-sec').forEach(function(sec){
+    var titleEl = sec.querySelector('.prep-sec-title');
+    var title = titleEl ? titleEl.textContent.trim() : '';
+    if(title) { lines.push('── ' + title + ' ──'); lines.push(''); }
+
+    // SPICED table rows
+    var spicedRows = sec.querySelectorAll('.spiced-row');
+    if(spicedRows.length){
+      spicedRows.forEach(function(row){
+        var label = row.querySelector('.spiced-label');
+        var val   = row.querySelector('.spiced-val');
+        if(label && val){
+          lines.push('[' + label.textContent.trim().toUpperCase() + ']');
+          // Each numbered question
+          var qSpans = val.querySelectorAll('span:last-child');
+          if(qSpans.length){
+            var num = 1;
+            val.querySelectorAll('div[style]').forEach(function(qDiv){
+              var txt = qDiv.querySelector('span:last-child');
+              if(txt) lines.push('  ' + num++ + '. ' + txt.textContent.trim());
+            });
+          } else {
+            lines.push('  ' + val.textContent.trim());
+          }
+          lines.push('');
+        }
+      });
+      return;
+    }
+
+    // Regular body text / list
+    var bodyEl = sec.querySelector('.prep-sec-body');
+    if(bodyEl){
+      var items = bodyEl.querySelectorAll('li');
+      if(items.length){
+        items.forEach(function(li){ lines.push('  • ' + li.textContent.trim()); });
+      } else {
+        lines.push(bodyEl.textContent.trim());
+      }
+      lines.push('');
+    }
+  });
+
+  var text = lines.join('\n');
+
+  navigator.clipboard.writeText(text).then(function(){
+    var btn = document.querySelector('.prep-modal-ftr .btn-p');
+    if(btn){ btn.textContent = '✓ Copied!'; btn.style.background='var(--g600)'; btn.style.borderColor='var(--g600)'; setTimeout(function(){ btn.textContent = '📋 Copy Brief'; btn.style.background=''; btn.style.borderColor=''; },2200); }
+  }).catch(function(){
+    // Fallback for non-HTTPS
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.querySelector('.prep-modal-ftr .btn-p');
+    if(btn){ btn.textContent = '✓ Copied!'; setTimeout(function(){ btn.textContent = '📋 Copy Brief'; },2200); }
+  });
+}
+
 renderCompleted();
 </script>
+
 </body>
 </html>
