@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Campaigns — BDR Command Center</title>
+<title>Prospectings — BDR Command Center</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
@@ -81,7 +81,7 @@ button{font-family:inherit;}
 .camp-list{border-right:1px solid var(--s200);background:var(--white);overflow-y:auto;max-height:calc(100vh - 44px - 180px);}
 .camp-detail{overflow-y:auto;max-height:calc(100vh - 44px - 180px);padding:20px 24px 48px;background:var(--bg);}
 
-/* CAMPAIGN LIST ITEMS */
+/* Prospecting LIST ITEMS */
 .camp-item{padding:13px 16px;border-bottom:1px solid var(--s100);cursor:pointer;transition:.1s;}
 .camp-item:hover{background:var(--s50);}
 .camp-item.on{background:rgba(3,45,66,.04);border-left:3px solid var(--ink);padding-left:13px;}
@@ -102,7 +102,7 @@ button{font-family:inherit;}
 .ae-dots{display:flex;gap:3px;flex-wrap:wrap;}
 .ae-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:var(--white);}
 
-/* CAMPAIGN DETAIL */
+/* Prospecting DETAIL */
 .cd-header{background:var(--white);border:1px solid var(--s200);border-radius:12px;padding:18px 20px;margin-bottom:16px;box-shadow:var(--sh-xs);}
 .cd-title{font-size:18px;font-weight:700;color:var(--s900);margin-bottom:4px;}
 .cd-product{font-size:13px;color:var(--s500);margin-bottom:12px;}
@@ -145,7 +145,7 @@ button{font-family:inherit;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(3px);}to{opacity:1;transform:none;}}
 .fade-in{animation:fadeIn .14s ease;}
 
-/* NEW CAMPAIGN MODAL */
+/* NEW Prospecting MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(3px);}
 .modal-box{background:var(--white);border-radius:14px;width:min(900px,96vw);max-height:94vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.25);display:flex;flex-direction:column;}
 .modal-hd{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--s200);position:sticky;top:0;background:var(--white);z-index:1;}
@@ -189,7 +189,7 @@ button{font-family:inherit;}
 .ae-check-item{display:flex;align-items:center;gap:7px;padding:6px 0;font-size:12px;color:var(--s700);cursor:pointer;}
 .ae-check-item input{cursor:pointer;accent-color:var(--ink);}
 
-/* EXPANDED CAMPAIGN MODAL */
+/* EXPANDED Prospecting MODAL */
 .camp-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .camp-modal-full{grid-column:1/-1;}
 .step-indicator{display:flex;align-items:center;gap:0;margin-bottom:20px;}
@@ -271,7 +271,7 @@ button{font-family:inherit;}
 <aside class="sbar">
   <div class="sbar-sec">
     <a href="index.html"            class="sbar-item "     ><span class="sbar-ic">⌂</span>Command Center</a>
-    <a href="campaigns.html"        class="sbar-item on"   ><span class="sbar-ic">📣</span>Campaigns<span class="sb">5</span></a>
+    <a href="Prospectings.html"        class="sbar-item on"   ><span class="sbar-ic">📣</span>Prospectings<span class="sb">5</span></a>
     <a href="buying-groups.html"    class="sbar-item "     ><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
     <a href="leads.html"            class="sbar-item "  ><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
     <a href="territory-leads.html"    class="sbar-item"    ><span class="sbar-ic">🗺</span>Territory Leads<span class="sb">100</span></a>
@@ -288,17 +288,17 @@ button{font-family:inherit;}
     <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
       <div>
         <div style="font-size:11px;color:var(--s400);margin-bottom:2px">Friday, April 10, 2026</div>
-        <div style="font-size:22px;font-weight:700;color:var(--s900);letter-spacing:-.02em">Campaigns</div>
+        <div style="font-size:22px;font-weight:700;color:var(--s900);letter-spacing:-.02em">Prospectings</div>
         <div style="font-size:12px;color:var(--s500)">5 active · 660 total contacts · Q2 FY26</div>
       </div>
       <div style="display:flex;align-items:center;gap:7px;padding-top:18px">
         <button class="btn btn-g btn-sm">⬇ Export</button>
-        <button class="btn btn-p btn-sm" onclick="openNewCampaign()">+ New Campaign</button>
+        <button class="btn btn-p btn-sm" onclick="openNewProspecting()">+ New Prospecting</button>
       </div>
     </div>
     <div class="ptabs">
       <a href="index.html" class="ptab">Today</a>
-      <a href="campaigns.html" class="ptab on">Campaigns <span class="ptab-ct">5</span></a>
+      <a href="Prospectings.html" class="ptab on">Prospectings <span class="ptab-ct">5</span></a>
       <a href="buying-groups.html" class="ptab">Buying Groups <span class="ptab-ct">12</span></a>
       <a href="leads.html" class="ptab">Leads <span class="ptab-ct">39</span></a>
       <a href="territory-leads.html"  class="ptab">Territory Leads <span class="ptab-ct">200</span></a>
@@ -310,7 +310,7 @@ button{font-family:inherit;}
   </div>
 
   <div class="page-body">
-    <!-- LEFT: CAMPAIGN LIST -->
+    <!-- LEFT: Prospecting LIST -->
     <div class="camp-list" id="campList"></div>
     <!-- RIGHT: DETAIL -->
     <div class="camp-detail" id="campDetail"></div>
@@ -340,7 +340,7 @@ const ACCOUNT_NAMES = {
   'j8apzfsc':"Portillo's Restaurant Group",
 };
 
-const CAMPAIGNS = [
+const ProspectingS = [
   {
     id:'mpa2f2hg',
     name:'Mikaela - Veza News - Installs',
@@ -350,7 +350,7 @@ const CAMPAIGNS = [
     acctIds:['2nxw6tzx','5x5bnced','cd0955ng','fgcg5hg2','eja0v7os'],
     contactCount:30,
     createdAt:'2026-04-06',
-    campaignTag:'Veza · Customer · Mikaela',
+    ProspectingTag:'Veza · Customer · Mikaela',
     steps:[
       {type:'email', emailNum:1, sendDate:'2026-03-31', sent:'2026-04-06'},
       {type:'call',  notes:'Follow up on email 1 — reference identity security angle', sendDate:'2026-04-07', sent:null},
@@ -373,7 +373,7 @@ const CAMPAIGNS = [
     acctIds:['6bfny2y1','wnxsv4in','9d7qbdvr'],
     contactCount:81,
     createdAt:'2026-04-06',
-    campaignTag:'ITAM · Customer · Seamus',
+    ProspectingTag:'ITAM · Customer · Seamus',
     steps:[
       {type:'email', emailNum:1, sendDate:'2026-03-25', sent:'2026-04-06'},
       {type:'email', emailNum:2, sendDate:'2026-03-31', sent:'2026-04-06'},
@@ -461,7 +461,7 @@ const CAMPAIGNS = [
   },
 ];
 
-let activeCamp = CAMPAIGNS[0].id;
+let activeCamp = ProspectingS[0].id;
 
 function sentCount(c) {
   return c.steps.filter(s => s.sent).length;
@@ -489,7 +489,7 @@ function aeDots(aes) {
 }
 
 function renderList() {
-  document.getElementById('campList').innerHTML = CAMPAIGNS.map(c => {
+  document.getElementById('campList').innerHTML = ProspectingS.map(c => {
     const pct = progressPct(c);
     const ns = nextStep(c);
     const isOn = c.id === activeCamp;
@@ -499,7 +499,7 @@ function renderList() {
         '<span class="ci-status cs-active">'+c.status+'</span>'+
       '</div>'+
       '<div class="ci-product">'+c.product+'</div>'+
-      (c.campaignTag ? '<div style="margin-bottom:5px"><span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(3,45,66,.07);color:var(--ink);font-family:monospace">🏷 '+c.campaignTag+'</span></div>' : '')+
+      (c.ProspectingTag ? '<div style="margin-bottom:5px"><span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(3,45,66,.07);color:var(--ink);font-family:monospace">🏷 '+c.ProspectingTag+'</span></div>' : '')+
       '<div class="ci-meta">'+
         '<span class="ci-chip">👥 '+c.contactCount+' contacts</span>'+
         '<span class="ci-chip">'+c.steps.length+' steps</span>'+
@@ -524,7 +524,7 @@ function selectCamp(id) {
 }
 
 function renderDetail() {
-  const c = CAMPAIGNS.find(x => x.id === activeCamp);
+  const c = ProspectingS.find(x => x.id === activeCamp);
   if(!c) return;
 
   const pct = progressPct(c);
@@ -621,7 +621,7 @@ function renderDetail() {
     '</div>';
   } else {
     html += '<div class="acct-section fade-in" style="padding:12px 16px">'+
-      '<div style="font-size:12px;color:var(--s500)">🌐 <strong>Full territory campaign</strong> — targeting all accounts across the pod, not account-specific.</div>'+
+      '<div style="font-size:12px;color:var(--s500)">🌐 <strong>Full territory Prospecting</strong> — targeting all accounts across the pod, not account-specific.</div>'+
     '</div>';
   }
 
@@ -641,7 +641,7 @@ function toggleSteps(hd) {
   body.style.display = open ? 'none' : 'block';
   if(arrow) { arrow.textContent = open ? '▶' : '▼'; arrow.style.transform = ''; }
   const hint = hd.querySelector('span:last-child');
-  if(hint) hint.textContent = open ? (sentCount(CAMPAIGNS.find(x=>x.id===activeCamp)) + ' sent · ' + (CAMPAIGNS.find(x=>x.id===activeCamp).steps.length - sentCount(CAMPAIGNS.find(x=>x.id===activeCamp))) + ' remaining · click to expand') : 'click to collapse';
+  if(hint) hint.textContent = open ? (sentCount(ProspectingS.find(x=>x.id===activeCamp)) + ' sent · ' + (ProspectingS.find(x=>x.id===activeCamp).steps.length - sentCount(ProspectingS.find(x=>x.id===activeCamp))) + ' remaining · click to expand') : 'click to collapse';
 }
 
 function toggleEmailPreview(id, hdr) {
@@ -654,7 +654,7 @@ function toggleEmailPreview(id, hdr) {
 }
 
 function executeInOutreach() {
-  const camp = CAMPAIGNS.find(x => x.id === activeCamp);
+  const camp = ProspectingS.find(x => x.id === activeCamp);
   const msg = camp ? 'Opening Outreach sequence for: ' + camp.name : 'Opening Outreach...';
   alert(msg + '\n\nIn production this would launch Outreach and load this sequence.');
 }
@@ -669,7 +669,7 @@ const MODAL_ACCOUNTS = [{"id":"fsry6xlk","name":"Milwaukee Electric Tool Corp","
 let acctFilter = 'all';
 let selectedAcctIds = new Set();
 
-function openNewCampaign() {
+function openNewProspecting() {
   selectedAcctIds = new Set();
   selectedPersonas = new Set();
   selectedProducts = new Set();
@@ -681,7 +681,7 @@ function openNewCampaign() {
   document.querySelectorAll('.persona-chip,.level-chip').forEach(el => el.classList.remove('on'));
   const pSection = document.getElementById('product-section'); if(pSection) pSection.innerHTML = '';
   goToPhase(1);
-  document.getElementById('mainCTA').textContent = 'Generate Campaign ✦';
+  document.getElementById('mainCTA').textContent = 'Generate Prospecting ✦';
   document.getElementById('mainCTA').style.display = 'inline-flex';
   document.getElementById('nc-name').value = '';
   document.getElementById('nc-calls').checked = false;
@@ -696,7 +696,7 @@ function openNewCampaign() {
   document.getElementById('newCampModal').style.display = 'flex';
 }
 
-function closeNewCampaign() {
+function closeNewProspecting() {
   document.getElementById('newCampModal').style.display = 'none';
 }
 
@@ -768,7 +768,7 @@ function selectAllAEs() {
   document.querySelectorAll('[name="nc-ae"]').forEach(cb => cb.checked = true);
 }
 
-function saveCampaign() {
+function saveProspecting() {
   const name = document.getElementById('nc-name').value.trim();
   if(!name) { document.getElementById('nc-name').focus(); return; }
 
@@ -808,9 +808,9 @@ function saveCampaign() {
     notes,
   };
 
-  CAMPAIGNS.unshift(newCamp);
+  ProspectingS.unshift(newCamp);
   activeCamp = newCamp.id;
-  closeNewCampaign();
+  closeNewProspecting();
   renderList();
   renderDetail();
 
@@ -821,8 +821,8 @@ function saveCampaign() {
 
 
 
-// ── CAMPAIGN TAGS (created from Territory Leads tagging workflow) ────────
-const CAMPAIGN_TAGS = [
+// ── Prospecting TAGS (created from Territory Leads tagging workflow) ────────
+const Prospecting_TAGS = [
   {
     id: 'tag-001',
     type: 'Cold Outbound — New Logo',
@@ -905,7 +905,7 @@ const CAMPAIGN_TAGS = [
     leadCount: 45,
     contactIds: ['ct001','ct002','ct005','ct009','ct013','ct017','c001','c002','c005','c010','c018','c024'],
     createdAt: '2026-04-04',
-    note: 'All leads registered or engaged with K26 pre-event content — event push, bypasses active campaign lock'
+    note: 'All leads registered or engaged with K26 pre-event content — event push, bypasses active Prospecting lock'
   },
 ];
 
@@ -967,7 +967,7 @@ const CRM_CONTACTS = [
   {id:'ct020', name:'Tom Keyes',        title:'Dir. of IT Operations',     level:'Director',  company:'Batteries Plus LLC',           aeId:'tony', source:'ITSM Buyers Guide',   status:'Open'},
 ];
 
-// ── ENHANCED CAMPAIGN MODAL ────────────────────────────────────────────────
+// ── ENHANCED Prospecting MODAL ────────────────────────────────────────────────
 let selectedPersonas = new Set();
 let selectedProducts = new Set();   // individual product keys
 let selectedFamilies = new Set();   // family keys (select-all)
@@ -1295,7 +1295,7 @@ function goToPhase(n) {
   if(n===4) switchPhase4Mode();
   if(n===5) renderModalContacts();
   if(n===6) renderReview();
-  if(n===2) { step2TagOpen = false; productSearchOpen = false; productSearchQuery = ''; setTimeout(() => { renderCampaignTagSelector(); renderProductSelector(); }, 0); }
+  if(n===2) { step2TagOpen = false; productSearchOpen = false; productSearchQuery = ''; setTimeout(() => { renderProspectingTagSelector(); renderProductSelector(); }, 0); }
 }
 
 function updateModalFooter() {
@@ -1311,8 +1311,8 @@ function updateModalFooter() {
   else if(currentPhase === 3) { next.textContent = 'Next: Account Research →'; next.onclick = () => goToPhase(4); }
   else if(currentPhase === 4) { next.textContent = 'Next: Select Contacts →'; next.onclick = () => { const isEv = selectedCampType.includes('Event')||selectedCampType.includes('Webinar'); if(isEv && !validateEventInfo()) return; goToPhase(5); }; }
   else if(currentPhase === 5) { next.textContent = 'Next: Review →'; next.onclick = () => goToPhase(6); }
-  else if(currentPhase === 6) { next.textContent = 'Generate Campaign ✦'; next.onclick = startGenerate; back.style.display = 'inline-flex'; }
-  else if(currentPhase === 7) { next.textContent = 'Done'; next.onclick = closeNewCampaign; }
+  else if(currentPhase === 6) { next.textContent = 'Generate Prospecting ✦'; next.onclick = startGenerate; back.style.display = 'inline-flex'; }
+  else if(currentPhase === 7) { next.textContent = 'Done'; next.onclick = closeNewProspecting; }
 }
 
 // ── PHASE 2: ACCOUNTS ────────────────────────────────────────────────────
@@ -1558,20 +1558,20 @@ function getLevelsForGeneration() {
   return ORDER.filter(l => levelCounts.has(l)).map(l => ({...LEVEL_MAP[l], count: levelCounts.get(l)}));
 }
 
-// ── STEP 2 CAMPAIGN TAG SELECTOR ──────────────────────────────────────────
+// ── STEP 2 Prospecting TAG SELECTOR ──────────────────────────────────────────
 let step2TagOpen = false;
 
-function renderCampaignTagSelector() {
+function renderProspectingTagSelector() {
   const container = document.getElementById('step2-tag-wrap');
   if(!container) return;
 
-  const sorted = [...CAMPAIGN_TAGS].sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
-  const selected = selectedTagId ? CAMPAIGN_TAGS.find(t => t.id === selectedTagId) : null;
+  const sorted = [...Prospecting_TAGS].sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+  const selected = selectedTagId ? Prospecting_TAGS.find(t => t.id === selectedTagId) : null;
 
   const AE_COLORS = {Tony:'#032D42',Jeff:'#044355',Riley:'#B45309',Katie:'#5B21B6',Brian:'#D93025',Seamus:'#1a7a00',Mikaela:'#0369A1'};
 
   let html = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-    <label class="form-label" style="margin:0">Campaign Tag <span style="font-size:10px;font-weight:400;color:var(--s400);text-transform:none;letter-spacing:0">— optional, pre-loads contacts</span></label>
+    <label class="form-label" style="margin:0">Prospecting Tag <span style="font-size:10px;font-weight:400;color:var(--s400);text-transform:none;letter-spacing:0">— optional, pre-loads contacts</span></label>
     ${selected ? `<button onclick="clearStep2Tag()" style="font-size:10px;font-weight:600;color:var(--r600);background:none;border:none;cursor:pointer;padding:0">✕ Clear</button>` : ''}
   </div>`;
 
@@ -1625,25 +1625,25 @@ function renderCampaignTagSelector() {
 
 function toggleStep2TagList() {
   step2TagOpen = !step2TagOpen;
-  renderCampaignTagSelector();
+  renderProspectingTagSelector();
 }
 
 function selectStep2Tag(tagId) {
   step2TagOpen = false;
   selectedTagId = tagId;
-  const tag = CAMPAIGN_TAGS.find(t => t.id === tagId);
+  const tag = Prospecting_TAGS.find(t => t.id === tagId);
   if(tag) {
     selectedContactIds = new Set(tag.contactIds);
     selectedAEsForCamp = new Set(tag.aes.map(a => a.toLowerCase()));
   }
-  renderCampaignTagSelector();
+  renderProspectingTagSelector();
 }
 
 function clearStep2Tag() {
   selectedTagId = null;
   selectedContactIds = new Set();
   step2TagOpen = false;
-  renderCampaignTagSelector();
+  renderProspectingTagSelector();
 }
 
 function buildJobLevelsHtml() {
@@ -1694,13 +1694,13 @@ function renderReview() {
 
       <!-- TITLE + TYPE -->
       <div style="background:var(--white);border:1px solid var(--s200);border-radius:10px;padding:16px 18px">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:12px">Campaign Identity</div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400);margin-bottom:12px">Prospecting Identity</div>
         <div>
-          <label style="font-size:10px;font-weight:700;color:var(--s500);display:block;margin-bottom:4px">CAMPAIGN TITLE</label>
+          <label style="font-size:10px;font-weight:700;color:var(--s500);display:block;margin-bottom:4px">Prospecting TITLE</label>
           <input id="rv-name" type="text" value="${name.replace(/"/g,'&quot;')}" oninput="document.getElementById('nc-name').value=this.value" style="width:100%;padding:8px 11px;border:1px solid var(--s200);border-radius:7px;font-size:13px;font-family:inherit;color:var(--s800)">
         </div>
         <div style="margin-top:10px">
-          <label style="font-size:10px;font-weight:700;color:var(--s500);display:block;margin-bottom:5px">CAMPAIGN TYPE</label>
+          <label style="font-size:10px;font-weight:700;color:var(--s500);display:block;margin-bottom:5px">Prospecting TYPE</label>
           <span style="font-size:12px;font-weight:600;padding:3px 10px;border-radius:8px;background:rgba(3,45,66,.07);color:var(--ink)">${selectedCampType || 'Not selected'}</span>
         </div>
       </div>
@@ -1780,7 +1780,7 @@ function renderReview() {
 
       <!-- SAVE CONFIRM -->
       <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(99,223,78,.06);border:1px solid rgba(99,223,78,.2);border-radius:8px">
-        <div style="font-size:12px;color:var(--s600)">Any changes above are saved automatically. Hit <strong>Generate Campaign ✦</strong> to continue.</div>
+        <div style="font-size:12px;color:var(--s600)">Any changes above are saved automatically. Hit <strong>Generate Prospecting ✦</strong> to continue.</div>
         <button onclick="showReviewSavedToast()" class="btn btn-g btn-sm" style="flex-shrink:0">✓ Save Changes</button>
       </div>
     </div>`;
@@ -1884,7 +1884,7 @@ function getFallbackEmails(levelKey, emailCount) {
 }
   
 async function startGenerate() {
-  const name = document.getElementById('nc-name')?.value.trim() || 'New Campaign';
+  const name = document.getElementById('nc-name')?.value.trim() || 'New Prospecting';
   const product = getProductContext() || [...selectedPersonas].map(p => PRODUCT_TAXONOMY[p]?.label || p).join(', ') || 'ServiceNow Platform';
   const emailCount = parseInt(document.querySelector('[name="nc-emails"]:checked')?.value || 3);
   const personas = [...selectedPersonas].join(', ') || 'IT Workflows';
@@ -1954,8 +1954,8 @@ allGenerated = {};
             '<div style="font-size:11px;color:var(--s500);margin-top:1px">' + lvl.desc + ' · ' + emails.length + ' emails · '+name+'</div>' +
           '</div>' +
           '<div style="display:flex;gap:7px;align-items:center">' +
-            '<button id="added-badge-'+lvl.key+'" style="display:none;font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;background:rgba(22,163,74,.12);color:var(--g600);border:1px solid rgba(22,163,74,.3)">✓ Added to Campaigns</button>' +
-            '<button class="btn btn-p btn-sm" id="add-lvl-btn-'+lvl.key+'" onclick="addLevelToCampaign(this,\''+lvl.key+'\');">+ Add to Campaigns</button>' +
+            '<button id="added-badge-'+lvl.key+'" style="display:none;font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;background:rgba(22,163,74,.12);color:var(--g600);border:1px solid rgba(22,163,74,.3)">✓ Added to Prospectings</button>' +
+            '<button class="btn btn-p btn-sm" id="add-lvl-btn-'+lvl.key+'" onclick="addLevelToProspecting(this,\''+lvl.key+'\');">+ Add to Prospectings</button>' +
             '<button class="btn btn-sm" style="background:var(--ink);color:#fff;border-color:var(--ink)" onclick="importLevelToOutreach(\''+lvl.key+'\');">⬆ Import to Outreach</button>' +
           '</div>' +
         '</div>' +
@@ -1974,7 +1974,7 @@ allGenerated = {};
   if(nextBtn) {
     nextBtn.style.display = 'inline-flex';
     nextBtn.textContent = 'Done';
-    nextBtn.onclick = closeNewCampaign;
+    nextBtn.onclick = closeNewProspecting;
   }
 }
 
@@ -1983,8 +1983,8 @@ function toggleGenEmail(id) {
   if(body) body.style.display = body.style.display==='none'?'block':'none';
 }
 
-function addLevelToCampaign(btnEl, levelKey) {
-  const baseName = document.getElementById('nc-name')?.value.trim() || 'New Campaign';
+function addLevelToProspecting(btnEl, levelKey) {
+  const baseName = document.getElementById('nc-name')?.value.trim() || 'New Prospecting';
   const product  = getProductContext() || [...selectedPersonas].map(p => PRODUCT_TAXONOMY[p]?.label || p).join(', ') || 'ServiceNow Platform';
   const levelLabel = levelKey==='csuite' ? 'C-Suite' : levelKey==='vp' ? 'VP' : 'Director';
   const emails = allGenerated[levelKey] || [];
@@ -2027,12 +2027,12 @@ function addLevelToCampaign(btnEl, levelKey) {
     contactCount: selectedContactIds.size || acctIds.length * 3 || 0,
     createdAt: '2026-04-10',
 
-    campaignTag: selectedTagId ? (CAMPAIGN_TAGS.find(t=>t.id===selectedTagId)||{}).name || '' : (baseName + ' · ' + (aes.length===1?aes[0].charAt(0).toUpperCase()+aes[0].slice(1):aes.map(a=>a.charAt(0).toUpperCase()+a.slice(1)).join(', '))),
+    ProspectingTag: selectedTagId ? (Prospecting_TAGS.find(t=>t.id===selectedTagId)||{}).name || '' : (baseName + ' · ' + (aes.length===1?aes[0].charAt(0).toUpperCase()+aes[0].slice(1):aes.map(a=>a.charAt(0).toUpperCase()+a.slice(1)).join(', '))),
     steps,
     emails: emailsMap,
   };
 
-  CAMPAIGNS.unshift(newCamp);
+  ProspectingS.unshift(newCamp);
 
   const btn = btnEl || document.getElementById('add-lvl-btn-'+levelKey);
   const badge = document.getElementById('added-badge-'+levelKey);
@@ -2043,7 +2043,7 @@ function addLevelToCampaign(btnEl, levelKey) {
 }
 
 function importLevelToOutreach(levelKey) {
-  const baseName = document.getElementById('nc-name')?.value.trim()||'New Campaign';
+  const baseName = document.getElementById('nc-name')?.value.trim()||'New Prospecting';
   const levelLabel = levelKey==='csuite'?'C-Suite':levelKey==='vp'?'VP':'Director';
   const contacts = selectedContactIds.size;
   // Collapse the panel
@@ -2073,7 +2073,7 @@ function toggleGenEmail(i) {
 
 
 
-function openNewCampaign() {
+function openNewProspecting() {
   selectedAcctIds = new Set();
   selectedPersonas = new Set();
   selectedProducts = new Set();
@@ -2103,7 +2103,7 @@ function openNewCampaign() {
   document.getElementById('newCampModal').style.display='flex';
 }
 
-function closeNewCampaign() {
+function closeNewProspecting() {
   document.getElementById('newCampModal').style.display='none';
 }
 function selectAllAEs(){document.querySelectorAll('[name="nc-ae"]').forEach(cb=>cb.checked=true);}
@@ -2171,7 +2171,7 @@ function renderTagList() {
   const container = document.getElementById('tag-list-container');
   if(!container) return;
 
-  const filtered = CAMPAIGN_TAGS.filter(t => {
+  const filtered = Prospecting_TAGS.filter(t => {
     if(!isEvent && t.locked) return false;
     if(q && !t.name.toLowerCase().includes(q) && !t.product.toLowerCase().includes(q) && !t.aes.join(' ').toLowerCase().includes(q)) return false;
     return true;
@@ -2179,13 +2179,13 @@ function renderTagList() {
 
   const descEl = document.getElementById('tag-mode-desc');
   if(descEl) descEl.textContent = isEvent
-    ? 'Event / Webinar campaign — all tags are available including ones locked to active campaigns.'
-    : 'Tags carry the campaign type they were built for. Locked tags can only be reached via Event / Webinar campaigns.';
+    ? 'Event / Webinar Prospecting — all tags are available including ones locked to active Prospectings.'
+    : 'Tags carry the Prospecting type they were built for. Locked tags can only be reached via Event / Webinar Prospectings.';
 
   if(!filtered.length) {
     container.innerHTML = isEvent
       ? '<div style="padding:24px;text-align:center;font-size:12px;color:var(--s400)">No tags match.</div>'
-      : '<div style="padding:24px;text-align:center;font-size:12px;color:var(--s500)">No available unlocked tags. Locked tags can only be used in Event / Webinar campaigns.</div>';
+      : '<div style="padding:24px;text-align:center;font-size:12px;color:var(--s500)">No available unlocked tags. Locked tags can only be used in Event / Webinar Prospectings.</div>';
     return;
   }
 
@@ -2228,7 +2228,7 @@ function renderTagList() {
 
 function selectTag(tagId) {
   selectedTagId = tagId;
-  const tag = CAMPAIGN_TAGS.find(t => t.id === tagId);
+  const tag = Prospecting_TAGS.find(t => t.id === tagId);
   if(!tag) return;
   // Load contacts from tag
   selectedContactIds = new Set(tag.contactIds);
@@ -2333,11 +2333,11 @@ renderList();
 renderDetail();
 </script>
 
-<div id="newCampModal" style="display:none" class="modal-overlay" onclick="if(event.target===this)closeNewCampaign()">
+<div id="newCampModal" style="display:none" class="modal-overlay" onclick="if(event.target===this)closeNewProspecting()">
   <div class="modal-box" style="width:min(920px,96vw);max-height:94vh">
     <div class="modal-hd" style="padding:16px 20px">
       <div>
-        <div class="modal-title">New Campaign</div>
+        <div class="modal-title">New Prospecting</div>
         <div style="font-size:11px;color:var(--s400);margin-top:2px" id="campPhaseLabel">Step 1 of 4 — Configure</div>
       </div>
       <div style="display:flex;align-items:center;gap:12px">
@@ -2356,13 +2356,13 @@ renderDetail();
           <div class="step-line" style="width:14px;margin:0 2px"></div>
           <div class="step-dot pending" id="s7dot">7</div><span class="step-lbl pending" style="font-size:10px">Generate</span>
         </div>
-        <button class="modal-close" onclick="closeNewCampaign()">×</button>
+        <button class="modal-close" onclick="closeNewProspecting()">×</button>
       </div>
     </div>
 
-    <!-- PHASE 1: CAMPAIGN TYPE -->
+    <!-- PHASE 1: Prospecting TYPE -->
     <div id="camp-phase-1" class="modal-body" style="display:flex;flex-direction:column;gap:16px">
-      <div style="font-size:13px;color:var(--s600);margin-bottom:4px">What kind of campaign is this?</div>
+      <div style="font-size:13px;color:var(--s600);margin-bottom:4px">What kind of Prospecting is this?</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div class="camp-type-card" data-type="Cold Outbound — New Logo" onclick="selectCampType(this)" style="border:2px solid var(--s200);border-radius:10px;padding:16px 18px;cursor:pointer;transition:.12s;display:flex;align-items:flex-start;gap:12px">
           <div style="font-size:22px;flex-shrink:0">🎯</div>
@@ -2395,7 +2395,7 @@ renderDetail();
     <div id="camp-phase-2" class="modal-body" style="display:flex;flex-direction:column;gap:14px">
       <div class="camp-modal-grid">
         <div>
-          <label class="form-label">Campaign Name *</label>
+          <label class="form-label">Prospecting Name *</label>
           <input type="text" class="form-input" id="nc-name" placeholder="Veza Awareness — Mikaela Installs Q2">
           <div id="step2-tag-wrap" style="margin-top:10px"></div>
         </div>
@@ -2478,7 +2478,7 @@ renderDetail();
     </div>
 
 
-    <!-- PHASE 4: RESEARCH or GATHER INFO (depends on campaign type) -->
+    <!-- PHASE 4: RESEARCH or GATHER INFO (depends on Prospecting type) -->
     <div id="camp-phase-4" class="modal-body" style="display:none;flex-direction:column;gap:16px">
 
       <!-- ACCOUNT RESEARCH MODE (non-event) -->
@@ -2592,8 +2592,8 @@ renderDetail();
       <!-- LIST / TAG MODE -->
       <div id="contact-mode-list" style="display:none;flex-direction:column;gap:10px">
         <div>
-          <div style="font-size:13px;font-weight:600;color:var(--s800);margin-bottom:2px">Select a Campaign Tag</div>
-          <div style="font-size:11px;color:var(--s500)" id="tag-mode-desc">Tags are created in Territory Leads and carry the campaign type they were built for. Locked tags can only be used in Event / Webinar campaigns.</div>
+          <div style="font-size:13px;font-weight:600;color:var(--s800);margin-bottom:2px">Select a Prospecting Tag</div>
+          <div style="font-size:11px;color:var(--s500)" id="tag-mode-desc">Tags are created in Territory Leads and carry the Prospecting type they were built for. Locked tags can only be used in Event / Webinar Prospectings.</div>
         </div>
         <!-- TAG SEARCH -->
         <div style="position:relative">
@@ -2606,7 +2606,7 @@ renderDetail();
 
     <!-- PHASE 6: REVIEW -->
     <div id="camp-phase-6" class="modal-body" style="display:none;flex-direction:column;gap:14px">
-      <div style="font-size:13px;color:var(--s600)">Review your campaign before generating. Edit any field and save before continuing.</div>
+      <div style="font-size:13px;color:var(--s600)">Review your Prospecting before generating. Edit any field and save before continuing.</div>
       <div id="camp-review-body"></div>
     </div>
 
@@ -2621,14 +2621,14 @@ renderDetail();
       </div>
       <div id="gen-review-area" style="display:none;flex-direction:column;gap:10px">
         <div style="background:rgba(99,223,78,.08);border:1px solid rgba(99,223,78,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--s700)">
-          ✦ Claude generated 3 persona-level sequences. Add each to your campaign list and import to Outreach separately.
+          ✦ Claude generated 3 persona-level sequences. Add each to your Prospecting list and import to Outreach separately.
         </div>
         <div id="gen-level-panels"></div>
       </div>
     </div>
 
     <div class="modal-footer" id="modalFooter">
-      <button class="btn btn-g" onclick="closeNewCampaign()">Cancel</button>
+      <button class="btn btn-g" onclick="closeNewProspecting()">Cancel</button>
       <button class="btn btn-g" id="campBackBtn" style="display:none" onclick="goToPhase(currentPhase-1)">← Back</button>
       <button class="btn btn-p" id="campNextBtn" onclick="goToPhase(2)">Next: Select Accounts →</button>
     </div>
