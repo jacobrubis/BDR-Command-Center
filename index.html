@@ -505,55 +505,38 @@ button{font-family:inherit;}
       </div>
     </div>
 
-    <!-- STAT CARDS -->
-    <div class="stat-row">
-      <div class="stat-card">
-        <div class="stat-lbl">Pipeline (QTD)</div>
-        <div class="stat-val">$2.4M</div>
-        <div class="stat-d"><span class="du">↑ $340K this week</span></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-lbl">Meetings</div>
-        <div class="stat-val">16</div>
-        <div class="stat-d"><span class="du">↑ 2 this week</span></div>
-      </div>
-      <a href="leads.html" class="stat-card">
-        <div class="stat-lbl">Open SLA Leads</div>
-        <div class="stat-val red">39</div>
-        <div class="stat-d"><span class="dw">⚠ 7 SLA Critical</span></div>
-      </a>
-      <a href="buying-groups.html" class="stat-card">
-        <div class="stat-lbl">Active Buying Groups</div>
-        <div class="stat-val">12</div>
-        <div class="stat-d"><span class="du">↑ 3 New signals</span></div>
-      </a>
-      <div class="stat-card" onclick="document.getElementById('activitiesSection').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
-        <div class="stat-lbl">Tasks Due Today</div>
-        <div class="stat-val">100</div>
-        <div class="stat-d" style="color:var(--s400)">✉ 30 · ☎ 50 · 20 Other</div>
-      </div>
-    </div>
-
-    <!-- START YOUR DAY -->
+    <!-- ACTION CARDS -->
     <div class="start-bar">
       <a href="leads.html" class="start-card urgent">
         <div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+            <span style="font-size:24px;font-weight:700;font-family:'DM Mono',monospace;color:var(--r600);line-height:1">39</span>
+            <span style="font-size:11px;font-weight:600;color:var(--r500)">Open SLA Leads</span>
+          </div>
           <div class="start-title" style="color:var(--r600)">Work SLA Leads First</div>
-          <div class="start-sub" style="color:var(--r500)">7 leads need action before SLA expires. 2 are Contact Us forms.</div>
+          <div class="start-sub" style="color:var(--r500)">7 critical. 2 are Contact Us forms. Oldest expires in 2 hours.</div>
         </div>
         <span class="start-arrow" style="color:var(--r400)">→</span>
       </a>
       <a href="#activitiesSection" class="start-card primary" onclick="event.preventDefault();document.getElementById('activitiesSection').scrollIntoView({behavior:'smooth'})">
         <div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+            <span style="font-size:24px;font-weight:700;font-family:'DM Mono',monospace;color:var(--white);line-height:1">100</span>
+            <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.55)">Tasks Due Today</span>
+          </div>
           <div class="start-title" style="color:var(--white)">Execute Today's Tasks</div>
-          <div class="start-sub" style="color:rgba(255,255,255,.6)">50 calls, 30 emails, 20 tasks queued. Start with high priority.</div>
+          <div class="start-sub" style="color:rgba(255,255,255,.6)">50 calls, 30 emails, 20 other. Start with high priority.</div>
         </div>
         <span class="start-arrow" style="color:rgba(255,255,255,.3)">→</span>
       </a>
       <a href="buying-groups.html" class="start-card active">
         <div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+            <span style="font-size:24px;font-weight:700;font-family:'DM Mono',monospace;color:var(--ink);line-height:1">12</span>
+            <span style="font-size:11px;font-weight:600;color:var(--s500)">Active Buying Groups</span>
+          </div>
           <div class="start-title" style="color:var(--ink)">Review BG Signals</div>
-          <div class="start-sub" style="color:var(--s500)">3 new buying group signals overnight. 14 members pending review.</div>
+          <div class="start-sub" style="color:var(--s500)">3 new signals overnight. 14 members pending review.</div>
         </div>
         <span class="start-arrow" style="color:var(--s400)">→</span>
       </a>
