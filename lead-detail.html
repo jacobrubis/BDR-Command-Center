@@ -2340,6 +2340,15 @@ function openBGModal(bgKey) {
   var companyBGs = BG_MEMBERSHIPS[l.company] || {};
   var bgData = companyBGs[bgKey];
   var members = (bgData && bgData.members) ? bgData.members : [];
+
+  // Map company to buying-groups.html BG ID
+  var BG_ID_MAP = {
+    'Echo Global Logistics, Inc.':'bg-001','Sub-Zero Group Inc.':'bg-002','Consilio LLC':'bg-003',
+    'Hollister Incorporated':'bg-004','BlueCross BlueShield Assoc.':'bg-005','AIT Worldwide Logistics':'bg-006',
+    'Madison Air':'bg-007','Stepan Co.':'bg-008','TTX Company':'bg-009',
+    'Quinnox Inc.':'bg-010','Batteries Plus LLC':'bg-011','GATX Corporation':'bg-012',
+  };
+  var bgPageId = BG_ID_MAP[l.company] || '';
   var memberRows = members.map(function(m) {
     var rs = ROLE_STYLES[m.role] || ROLE_STYLES['User'];
     var initials = m.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2);
@@ -2373,7 +2382,7 @@ function openBGModal(bgKey) {
         '</div>' +
       '</div>' +
       '<div style="padding:12px 16px;border-top:1px solid var(--s200);background:var(--s50);border-radius:0 0 var(--rlg) var(--rlg)">' +
-        '<a href="buying-groups.html" style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--ink);text-decoration:none" onmouseover="this.style.color=\'var(--b600)\'" onmouseout="this.style.color=\'var(--ink)\'"><span style="font-size:14px">\u2192</span> Open Full Buying Group Page<span style="margin-left:auto;font-size:10px;color:var(--s400)">\u2197</span></a>' +
+        '<a href="buying-groups.html' + (bgPageId ? '?openBG=' + bgPageId : '') + '" style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--ink);text-decoration:none" onmouseover="this.style.color=\'var(--b600)\'" onmouseout="this.style.color=\'var(--ink)\'"><span style="font-size:14px">\u2192</span> Open Full Buying Group Page<span style="margin-left:auto;font-size:10px;color:var(--s400)">\u2197</span></a>' +
       '</div>' +
     '</div></div>';
   document.getElementById('modal-root').innerHTML = html;
