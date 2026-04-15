@@ -163,8 +163,22 @@ button{font-family:inherit;}
 /* BU STRIP */
 .bu-strip{display:flex;flex-wrap:wrap;gap:5px;padding:11px 15px;border-bottom:1px solid var(--s100);}
 .bu-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:4px;cursor:pointer;transition:.1s;}
-.bu-active{background:rgba(3,45,66,.08);color:var(--ink);border:1px solid rgba(3,45,66,.15);}
-.bu-inactive{background:var(--s50);color:var(--s400);border:1px solid var(--s100);}
+.bu-active{background:rgba(3,45,66,.08);color:var(--ink);border:1px solid rgba(3,45,66,.15);}.bu-active:hover{box-shadow:0 2px 8px rgba(3,45,66,.18);transform:translateY(-1px);}
+.bu-inactive{background:var(--s50);color:var(--s400);border:1px solid var(--s100);}.bu-inactive:hover{background:var(--s100);color:var(--s600);transform:translateY(-1px);}
+.bg-assign-btn{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;border:1.5px dashed var(--s300);background:transparent;color:var(--s500);cursor:pointer;transition:.12s;font-family:inherit;}.bg-assign-btn:hover{border-color:var(--ink);color:var(--ink);background:rgba(3,45,66,.03);}
+.bg-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.52);display:flex;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(4px);}
+.bg-modal{background:var(--white);border-radius:var(--rlg);width:min(580px,96vw);max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.28);animation:fadeIn .18s ease;position:relative;}
+.bg-modal-hdr{background:linear-gradient(135deg,var(--ink) 0%,#054060 100%);padding:18px 20px 14px;border-radius:var(--rlg) var(--rlg) 0 0;position:relative;}
+.bg-modal-close{position:absolute;top:13px;right:14px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:.12s;line-height:1;}.bg-modal-close:hover{background:rgba(255,255,255,.22);color:var(--white);}
+.bg-modal-body{padding:18px 20px;}
+.bg-modal-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.bg-modal-stat{background:var(--s50);border:1px solid var(--s200);border-radius:var(--rmd);padding:11px 13px;}.bg-modal-stat-num{font-size:18px;font-weight:700;color:var(--s900);font-family:'DM Mono',monospace;line-height:1;}.bg-modal-stat-lbl{font-size:10px;color:var(--s400);margin-top:3px;}
+.bg-modal-section{margin-bottom:14px;}.bg-modal-section-title{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--s400);margin-bottom:8px;display:flex;align-items:center;gap:6px;}.bg-modal-section-title::after{content:'';flex:1;height:1px;background:var(--s100);}
+.bg-member-row{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--s50);border:1px solid var(--s100);border-radius:var(--rmd);margin-bottom:6px;}
+.bg-member-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--white);flex-shrink:0;}
+.bg-member-role{margin-left:auto;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;}
+.role-option{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;border-radius:var(--rmd);border:1.5px solid var(--s200);cursor:pointer;transition:.12s;background:var(--white);}.role-option:hover{border-color:var(--s400);background:var(--s50);}.role-option.selected{border-color:var(--ink);background:rgba(3,45,66,.03);}
+.role-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--s300);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:.12s;position:relative;}.role-option.selected .role-radio{border-color:var(--ink);}.role-option.selected .role-radio::after{content:'';width:9px;height:9px;border-radius:50%;background:var(--ink);position:absolute;}
 
 /* ENGAGEMENT GRID */
 .eng-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 15px;}
@@ -231,6 +245,17 @@ button{font-family:inherit;}
 .tl-compose{margin:11px 15px;display:flex;align-items:center;gap:8px;}
 .compose-in{flex:1;height:32px;background:var(--s50);border:1px solid var(--s200);border-radius:var(--rmd);padding:0 12px;font-family:inherit;font-size:12px;color:var(--s600);outline:none;}
 .compose-in:focus{border-color:var(--ink);background:var(--white);}
+.pin-toggle{width:32px;height:32px;border-radius:var(--rmd);border:1px solid var(--s200);background:var(--s50);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.12s;flex-shrink:0;}.pin-toggle:hover{background:var(--s100);border-color:var(--s300);}.pin-toggle.on{background:var(--a50);border-color:var(--a500);box-shadow:0 0 0 2px rgba(245,158,11,.15);}
+.pinned-notes{padding:0 15px;}
+.pinned-note{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;margin-bottom:8px;border-radius:var(--rmd);border:1px solid;animation:fadeIn .2s ease;}
+.pinned-note.warning{background:rgba(239,68,68,.04);border-color:rgba(239,68,68,.2);}
+.pinned-note.info{background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.25);}
+.pinned-note.general{background:rgba(3,45,66,.03);border-color:rgba(3,45,66,.12);}
+.pinned-note-pin{font-size:12px;flex-shrink:0;margin-top:1px;}
+.pinned-note-body{flex:1;min-width:0;}
+.pinned-note-text{font-size:12px;color:var(--s800);font-weight:500;line-height:1.5;}
+.pinned-note-meta{font-size:10px;color:var(--s400);margin-top:3px;display:flex;align-items:center;gap:6px;}
+.pinned-note-remove{margin-left:auto;font-size:11px;color:var(--s400);cursor:pointer;background:none;border:none;padding:2px 6px;border-radius:4px;font-family:inherit;flex-shrink:0;}.pinned-note-remove:hover{color:var(--r600);background:var(--r50);}
 .tl-items{max-height:440px;overflow-y:auto;padding:0 15px 12px;}
 .tl-date-lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s400);padding:8px 0 4px;display:flex;align-items:center;gap:8px;}
 .tl-date-lbl::after{content:'';flex:1;height:1px;background:var(--s100);}
@@ -575,6 +600,71 @@ const PRODUCT_PORTFOLIO = {
     {bu:'Asset Management',        cacv:80,   nnacv:160, util:0,   pkg:'Std', renewal:'14-Aug-26', renewalAlert:false},
     {bu:'ITOM',                   cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
   ],
+};
+
+// ── BUYING GROUP DATA ────────────────────────────────────────────────────
+const BG_CONFIG = {
+  IT:       { icon:'🖥️', label:'IT',       color:'#1d4ed8', bg:'#eff6ff',   product:'IT Service Management, ITOM, Asset Management' },
+  HR:       { icon:'👥', label:'HR',       color:'#7e22ce', bg:'#faf5ff',   product:'HR Service Delivery, Employee Workflows' },
+  CRM:      { icon:'💼', label:'CRM',      color:'#0369a1', bg:'#f0f9ff',   product:'Customer Service Management, Field Service' },
+  Security: { icon:'🔒', label:'Security', color:'#dc2626', bg:'#fff1f2',   product:'Security Operations, GRC, Veza' },
+  Finance:  { icon:'💰', label:'Finance',  color:'#15803d', bg:'#f0fdf4',   product:'Finance & Supply Chain, Strategic Portfolio Mgmt' },
+};
+const ROLE_STYLES = {
+  'Champion':       { cls:'background:rgba(99,223,78,.12);color:var(--wdk);border:1px solid rgba(99,223,78,.25)', label:'Champion' },
+  'Economic Buyer': { cls:'background:rgba(3,45,66,.08);color:var(--ink);border:1px solid rgba(3,45,66,.15)',     label:'Economic Buyer' },
+  'Influencer':     { cls:'background:var(--b50);color:var(--b600);border:1px solid rgba(59,130,246,.2)',         label:'Influencer' },
+  'Ratifier':       { cls:'background:var(--p50);color:var(--p600);border:1px solid rgba(168,85,247,.2)',         label:'Ratifier' },
+  'User':           { cls:'background:var(--s100);color:var(--s600);border:1px solid var(--s200)',                label:'User' },
+};
+const BG_MEMBERSHIPS = {
+  'Sub-Zero Group Inc.': {
+    IT: { members: [
+      { name:'Brandon Joyce',title:'VP of IT',role:'Champion',score:88 },
+      { name:'Kara Hensley',title:'IT Director',role:'Influencer',score:71 },
+      { name:'Derek Matz',title:'IT Manager',role:'User',score:58 },
+    ]},
+    HR: null, CRM: null, Security: null, Finance: null,
+  },
+  'Paylocity Corporation': {
+    IT: { members: [
+      { name:'Sarah Mitchell',title:'CIO',role:'Economic Buyer',score:91 },
+      { name:'James Liu',title:'VP of IT',role:'Champion',score:84 },
+      { name:'Dana Park',title:'Solution Consultant',role:'Influencer',score:72 },
+    ]},
+    HR: null, CRM: null, Security: null, Finance: null,
+  },
+  'GATX Corporation': {
+    IT: { members: [
+      { name:'Michael Chang',title:'VP of IT',role:'Economic Buyer',score:87 },
+      { name:'Liz Vargas',title:'CSM',role:'Influencer',score:65 },
+    ]},
+    HR: null, CRM: null, Security: null, Finance: null,
+  },
+  'Crash Champions': {
+    IT: { members: [
+      { name:'Lisa Park',title:'CHRO',role:'Economic Buyer',score:82 },
+    ]},
+    HR: null, CRM: null, Security: null, Finance: null,
+  },
+  'Eversana': {
+    Security: { members: [
+      { name:'Priya Nair',title:'CISO',role:'Economic Buyer',score:90 },
+    ]},
+    IT: null, HR: null, CRM: null, Finance: null,
+  },
+  'Kirkland & Ellis LLP': {
+    IT: { members: [
+      { name:'Jennifer Torres',title:'IT Director',role:'Champion',score:79 },
+    ]},
+    HR: null, CRM: null, Security: null, Finance: null,
+  },
+  'Sargento Foods Inc.': {
+    IT: { members: [
+      { name:'Kevin Ostrander',title:'IT Director',role:'Champion',score:83 },
+    ]},
+    HR: null, CRM: null, Security: null, Finance: null,
+  },
 };
 
 const TIMELINE_TEMPLATES = {
@@ -1032,7 +1122,7 @@ function renderPage() {
         </div>
       </div>
       <div class="rec-acts">
-        <button class="btn btn-g btn-sm">↗ Add to Sequence</button>
+        <button class="btn btn-g btn-sm">↗ Add to Prospecting</button>
         <button class="btn btn-w btn-sm">⬆ Import to Outreach</button>
       </div>
     </div>
@@ -1230,18 +1320,8 @@ function renderPage() {
       </div>
 
       <div class="panel">
-        <div class="panel-hd"><span class="panel-title">Buying Groups</span><span class="panel-act">+ Add</span></div>
-        <div class="bu-strip">
-          <div class="bu-tag bu-active">🖥️ IT</div>
-          <div class="bu-tag bu-inactive">👥 HR</div>
-          <div class="bu-tag bu-inactive">💼 CRM</div>
-          <div class="bu-tag bu-inactive">🔒 Security</div>
-          <div class="bu-tag bu-inactive">💰 Finance</div>
-        </div>
-        <div class="fg" style="border:none">
-          <div class="fr"><span class="fl">Most Recent BU</span><span class="fv"><span style="display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;background:${BU_BG[l.mostRecentBU]||'var(--s100)'};color:${BU_COLORS[l.mostRecentBU]||'var(--s600)'}">${l.mostRecentBU}</span></span></div>
-          <div class="fr"><span class="fl">Product Interest</span><span class="fv" style="font-size:11px;color:var(--s500)">${l.product}</span></div>
-        </div>
+        <div class="panel-hd"><span class="panel-title">Buying Groups</span><button class="panel-act" onclick="openAssignModal()">+ Assign</button></div>
+        <div id="bu-strip-panel">${renderBUStrip(l)}</div>
       </div>
 
       <div class="panel">
@@ -1323,9 +1403,11 @@ function renderPage() {
           <button class="btn btn-g btn-sm" style="margin-left:6px">+ Log Activity</button>
         </div>
         <div class="tl-compose">
-          <input class="compose-in" type="text" placeholder="Add a note about ${l.name.split(' ')[0]}…">
-          <button class="btn btn-p btn-sm">Post</button>
+          <input class="compose-in" id="tl-note-input" type="text" placeholder="Add a note about ${l.name.split(' ')[0]}…" onkeydown="if(event.key==='Enter')postNote()">
+          <button class="pin-toggle" id="pin-toggle" onclick="togglePin()" title="Pin this note to the top">📌</button>
+          <button class="btn btn-p btn-sm" onclick="postNote()">Post</button>
         </div>
+        <div class="pinned-notes" id="pinned-notes"></div>
         <div class="tl-items">
           ${Object.entries(grouped).map(([date, items]) => `
             <div>
@@ -1784,6 +1866,275 @@ function openInMail() {
   var subj = encodeURIComponent(document.getElementById('email-subject').value);
   var body = encodeURIComponent(document.getElementById('email-body').value);
   window.open('mailto:' + (l ? l.email : '') + '?subject=' + subj + '&body=' + body);
+}
+
+// ── PINNED NOTES ──────────────────────────────────────────────────────────
+var pinnedNotes = [];
+var pinActive = false;
+
+function togglePin() {
+  pinActive = !pinActive;
+  var btn = document.getElementById('pin-toggle');
+  if (btn) btn.classList.toggle('on', pinActive);
+}
+
+function postNote() {
+  var input = document.getElementById('tl-note-input');
+  if (!input || !input.value.trim()) return;
+  var text = input.value.trim();
+  var l = window._currentLead;
+
+  if (pinActive) {
+    // Detect note type from keywords
+    var lower = text.toLowerCase();
+    var type = 'general';
+    if (lower.includes('do not contact') || lower.includes('dnc') || lower.includes('do not call') || lower.includes('do not email') || lower.includes('opted out') || lower.includes('unsubscribe') || lower.includes('cease') || lower.includes('stop')) type = 'warning';
+    else if (lower.includes('important') || lower.includes('heads up') || lower.includes('watch out') || lower.includes('flag') || lower.includes('alert') || lower.includes('caution') || lower.includes('note:') || lower.includes('fyi')) type = 'info';
+
+    pinnedNotes.push({
+      id: Date.now(),
+      text: text,
+      type: type,
+      author: 'Jacob Rubis',
+      date: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}),
+      time: new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'}),
+    });
+    renderPinnedNotes();
+    pinActive = false;
+    var btn = document.getElementById('pin-toggle');
+    if (btn) btn.classList.remove('on');
+  }
+
+  input.value = '';
+  // Toast
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--white);padding:10px 18px;border-radius:8px;font-size:12px;font-weight:600;z-index:2000;box-shadow:0 4px 16px rgba(0,0,0,.2);display:flex;align-items:center;gap:8px;animation:fadeIn .2s ease;';
+  t.innerHTML = '<span style="color:var(--wasabi)">\u2713</span> Note ' + (pinnedNotes.length && pinnedNotes[pinnedNotes.length-1].id === (Date.now() | 0) ? 'pinned' : 'posted');
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 2500);
+}
+
+function renderPinnedNotes() {
+  var container = document.getElementById('pinned-notes');
+  if (!container) return;
+  container.innerHTML = pinnedNotes.map(function(n) {
+    var icon = n.type === 'warning' ? '🚫' : n.type === 'info' ? '⚠️' : '📌';
+    return '<div class="pinned-note ' + n.type + '">' +
+      '<span class="pinned-note-pin">' + icon + '</span>' +
+      '<div class="pinned-note-body">' +
+        '<div class="pinned-note-text">' + n.text + '</div>' +
+        '<div class="pinned-note-meta"><span>' + n.author + '</span><span>\u00b7</span><span>' + n.date + ' at ' + n.time + '</span></div>' +
+      '</div>' +
+      '<button class="pinned-note-remove" onclick="removePinnedNote(' + n.id + ')" title="Unpin">\u2715</button>' +
+    '</div>';
+  }).join('');
+}
+
+function removePinnedNote(id) {
+  pinnedNotes = pinnedNotes.filter(function(n){ return n.id !== id; });
+  renderPinnedNotes();
+}
+
+// ── BUYING GROUP FUNCTIONS ─────────────────────────────────────────────────
+function renderBUStrip(l) {
+  var companyBGs = BG_MEMBERSHIPS[l.company] || {};
+  var keys = ['IT','HR','CRM','Security','Finance'];
+  var tags = keys.map(function(k) {
+    var cfg = BG_CONFIG[k];
+    var anyMember = companyBGs[k] && companyBGs[k].members && companyBGs[k].members.length > 0;
+    var cls = anyMember ? 'bu-active' : 'bu-inactive';
+    return '<div class="bu-tag ' + cls + '" onclick="openBGModal(\'' + k + '\')" title="View ' + k + ' buying group">' + cfg.icon + ' ' + cfg.label + '</div>';
+  }).join('');
+  var assignedBGs = keys.filter(function(k) {
+    var d = companyBGs[k];
+    return d && d.members && d.members.some(function(m) { return m.name === l.name; });
+  });
+  var assignPrompt = assignedBGs.length === 0
+    ? '<div style="padding:9px 15px;border-top:1px solid var(--s100);background:rgba(3,45,66,.02)"><span style="font-size:10px;color:var(--s400);margin-right:8px">' + l.name.split(' ')[0] + ' not in any buying group</span><button class="bg-assign-btn" onclick="openAssignModal()">+ Assign to Buying Group</button></div>'
+    : '';
+  // Build role assignments for this lead
+  var roleEntries = [];
+  keys.forEach(function(k) {
+    var d = companyBGs[k];
+    if (d && d.members) {
+      d.members.forEach(function(m) {
+        if (m.name === l.name) {
+          var rs = ROLE_STYLES[m.role] || ROLE_STYLES['User'];
+          roleEntries.push('<div style="display:flex;align-items:center;gap:6px;padding:3px 0">' +
+            '<span style="font-size:11px;font-weight:600;color:var(--s700);min-width:60px">' + BG_CONFIG[k].icon + ' ' + k + ':</span>' +
+            '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;' + rs.cls + '">' + rs.label + '</span></div>');
+        }
+      });
+    }
+  });
+  var rolesHtml = roleEntries.length > 0
+    ? '<div style="padding:8px 15px;border-bottom:1px solid var(--s100)">' + roleEntries.join('') + '</div>'
+    : '';
+
+  return '<div class="bu-strip">' + tags + '</div>' + rolesHtml +
+    '<div class="fg" style="border:none">' +
+      '<div class="fr"><span class="fl">Most Recent BU</span><span class="fv"><span style="display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;background:' + (BU_BG[l.mostRecentBU]||'var(--s100)') + ';color:' + (BU_COLORS[l.mostRecentBU]||'var(--s600)') + '">' + l.mostRecentBU + '</span></span></div>' +
+      '<div class="fr"><span class="fl">Product Interest</span><span class="fv" style="font-size:11px;color:var(--s500)">' + l.product + '</span></div>' +
+    '</div>' + assignPrompt;
+}
+
+function openBGModal(bgKey) {
+  var l = window._currentLead;
+  var cfg = BG_CONFIG[bgKey];
+  if (!cfg) return;
+  var companyBGs = BG_MEMBERSHIPS[l.company] || {};
+  var bgData = companyBGs[bgKey];
+  var members = (bgData && bgData.members) ? bgData.members : [];
+  var memberRows = members.map(function(m) {
+    var rs = ROLE_STYLES[m.role] || ROLE_STYLES['User'];
+    var initials = m.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2);
+    var hue = m.name.charCodeAt(0) * 13 % 360;
+    return '<div class="bg-member-row">' +
+      '<div class="bg-member-av" style="background:hsl(' + hue + ',55%,38%)">' + initials + '</div>' +
+      '<div><div style="font-size:12px;font-weight:600;color:var(--s800)">' + m.name + '</div>' +
+      '<div style="font-size:10px;color:var(--s400)">' + m.title + ' · Score: ' + m.score + '</div></div>' +
+      '<span class="bg-member-role" style="' + rs.cls + '">' + rs.label + '</span></div>';
+  }).join('');
+  var html = '<div class="bg-modal-overlay" onclick="if(event.target===this)closeBGModal()">' +
+    '<div class="bg-modal">' +
+      '<div class="bg-modal-hdr">' +
+        '<button class="bg-modal-close" onclick="closeBGModal()">\u00d7</button>' +
+        '<div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--wasabi);opacity:.8;margin-bottom:4px">Buying Group</div>' +
+        '<div style="font-size:20px;font-weight:700;color:var(--white);margin-bottom:2px">' + cfg.icon + ' ' + cfg.label + '</div>' +
+        '<div style="font-size:12px;color:rgba(255,255,255,.5)">' + l.company + ' \u00b7 ' + cfg.product + '</div>' +
+      '</div>' +
+      '<div class="bg-modal-body">' +
+        '<div class="bg-modal-stat-row">' +
+          '<div class="bg-modal-stat"><div class="bg-modal-stat-num">' + members.length + '</div><div class="bg-modal-stat-lbl">Members</div></div>' +
+          '<div class="bg-modal-stat"><div class="bg-modal-stat-num" style="color:' + (members.length ? 'var(--g600)' : 'var(--r500)') + '">' + (members.length ? 'Active' : 'Empty') + '</div><div class="bg-modal-stat-lbl">Status</div></div>' +
+          '<div class="bg-modal-stat"><div class="bg-modal-stat-num">' + (members.filter(function(m){return m.role==='Economic Buyer';}).length > 0 ? '\u2713' : '\u2014') + '</div><div class="bg-modal-stat-lbl">Econ. Buyer</div></div>' +
+        '</div>' +
+        '<div class="bg-modal-section"><div class="bg-modal-section-title">Members</div>' +
+          (members.length ? memberRows : '<div style="padding:14px;text-align:center;font-size:12px;color:var(--s400);background:var(--s50);border-radius:var(--rmd);border:1px solid var(--s100)">No contacts assigned to this buying group yet.</div>') +
+          '<button style="width:100%;margin-top:8px;display:flex;align-items:center;gap:8px;padding:9px 11px;border:1.5px dashed var(--s300);border-radius:var(--rmd);cursor:pointer;font-size:12px;color:var(--s500);font-weight:500;background:transparent;font-family:inherit" onclick="closeBGModal();openAssignModal(\'' + bgKey + '\')"><span style="font-size:14px">+</span> Add ' + l.name.split(' ')[0] + ' as a member</button>' +
+        '</div>' +
+        '<div class="bg-modal-section"><div class="bg-modal-section-title">Products in Scope</div>' +
+          '<div style="font-size:12px;color:var(--s600);padding:10px 12px;background:var(--s50);border-radius:var(--rmd);border:1px solid var(--s100)">' + cfg.product + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="padding:12px 16px;border-top:1px solid var(--s200);background:var(--s50);border-radius:0 0 var(--rlg) var(--rlg)">' +
+        '<a href="buying-groups.html" style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--ink);text-decoration:none" onmouseover="this.style.color=\'var(--b600)\'" onmouseout="this.style.color=\'var(--ink)\'"><span style="font-size:14px">\u2192</span> Open Full Buying Group Page<span style="margin-left:auto;font-size:10px;color:var(--s400)">\u2197</span></a>' +
+      '</div>' +
+    '</div></div>';
+  document.getElementById('modal-root').innerHTML = html;
+}
+function closeBGModal() { document.getElementById('modal-root').innerHTML = ''; }
+
+function openAssignModal(preselectedBG) {
+  var l = window._currentLead;
+  var bu = l.mostRecentBU.toLowerCase();
+  var defaultBG = preselectedBG || (bu.includes('employee') || bu.includes('hr') ? 'HR' : bu.includes('security') || bu.includes('risk') || bu.includes('veza') ? 'Security' : bu.includes('crm') || bu.includes('customer') ? 'CRM' : bu.includes('finance') ? 'Finance' : 'IT');
+  var isCLevel = /cio|cto|ciso|ceo|chief|president|evp|chro/i.test(l.title);
+  var isVP = /\bvp\b|vice president|svp/i.test(l.title);
+  var context = isCLevel
+    ? l.title + ' title is a strong Economic Buyer or Champion candidate. C-suite engagement at this stage signals active budget discussion.'
+    : isVP
+    ? l.title + ' title typically owns evaluation criteria and internal advocacy. Strong Champion or Influencer candidate.'
+    : l.title + ' title is a direct match for the ' + defaultBG + ' buying group. High engagement via ' + l.campaign + ' suggests active involvement.';
+  var ROLES = [
+    { key:'Champion',       desc:'Internal advocate driving the purchase decision' },
+    { key:'Economic Buyer', desc:'Final budget authority and commercial sign-off' },
+    { key:'Influencer',     desc:'Shapes requirements and influences evaluation criteria' },
+    { key:'Ratifier',       desc:'Reviews and approves the decision (Legal, Procurement, Exec)' },
+    { key:'User',           desc:'Day-to-day platform user whose buy-in matters' },
+  ];
+  var companyBGs = BG_MEMBERSHIPS[l.company] || {};
+  var bgData = (companyBGs[defaultBG] && companyBGs[defaultBG].members) || [];
+  var currentMap = {};
+  bgData.forEach(function(m) { currentMap[m.role] = m.name; });
+  var bgOptions = Object.keys(BG_CONFIG).map(function(k) {
+    var cfg = BG_CONFIG[k];
+    return '<option value="' + k + '"' + (k === defaultBG ? ' selected' : '') + '>' + cfg.icon + ' ' + cfg.label + '</option>';
+  }).join('');
+  var roleOptions = ROLES.map(function(r) {
+    return '<div class="role-option" onclick="selectAssignRole(this,\'' + r.key + '\')" data-role="' + r.key + '">' +
+      '<div class="role-radio"></div>' +
+      '<div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--s800)">' + r.key +
+        (currentMap[r.key] ? ' <span style="font-size:11px;font-weight:400;color:var(--s400)">(currently: ' + currentMap[r.key] + ')</span>' : '') +
+      '</div><div style="font-size:11px;color:var(--s500);line-height:1.45;margin-top:3px">' + r.desc + '</div></div></div>';
+  }).join('');
+  var html = '<div class="bg-modal-overlay" onclick="if(event.target===this)closeAssignModal()">' +
+    '<div class="bg-modal" style="width:min(520px,96vw)">' +
+      '<div class="bg-modal-hdr">' +
+        '<button class="bg-modal-close" onclick="closeAssignModal()">\u00d7</button>' +
+        '<div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:5px">Assign Buying Group Role</div>' +
+        '<div style="font-size:22px;font-weight:700;color:var(--white);margin-bottom:2px">' + l.name + '</div>' +
+        '<div style="font-size:12px;color:rgba(255,255,255,.5)">' + l.title + ' \u00b7 ' + l.company + '</div>' +
+      '</div>' +
+      '<div class="bg-modal-body">' +
+        '<div style="font-size:13px;color:var(--s600);line-height:1.6;padding:13px 15px;background:var(--s50);border-radius:var(--rmd);border:1px solid var(--s200);margin-bottom:16px">' + context + '</div>' +
+        '<div style="margin-bottom:14px"><label style="font-size:11px;font-weight:700;color:var(--s700);display:block;margin-bottom:6px">Buying Group</label>' +
+          '<select id="assign-bg-select" onchange="updateAssignBG()" style="width:100%;padding:8px 11px;border:1px solid var(--s200);border-radius:7px;font-size:13px;font-family:inherit;color:var(--s800)">' + bgOptions + '</select>' +
+        '</div>' +
+        '<div style="font-size:11px;font-weight:700;color:var(--s700);margin-bottom:10px">Select a role for this contact:</div>' +
+        '<div style="display:flex;flex-direction:column;gap:7px" id="assign-role-options">' + roleOptions + '</div>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;padding:13px 20px;border-top:1px solid var(--s200);background:var(--s50);border-radius:0 0 var(--rlg) var(--rlg)">' +
+        '<button class="btn btn-g" onclick="closeAssignModal()">Cancel</button>' +
+        '<button class="btn btn-p" id="assign-submit-btn" onclick="submitAssignment()" disabled style="opacity:.4;cursor:not-allowed">Add to Buying Group</button>' +
+      '</div>' +
+    '</div></div>';
+  document.getElementById('modal-root').innerHTML = html;
+  window._assignSelectedRole = null;
+}
+
+function selectAssignRole(el, role) {
+  document.querySelectorAll('.role-option').forEach(function(o) { o.classList.remove('selected'); });
+  el.classList.add('selected');
+  window._assignSelectedRole = role;
+  var btn = document.getElementById('assign-submit-btn');
+  if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; }
+}
+
+function updateAssignBG() {
+  // Refresh current holders when BG dropdown changes
+  var bgKey = document.getElementById('assign-bg-select').value;
+  var l = window._currentLead;
+  var companyBGs = BG_MEMBERSHIPS[l.company] || {};
+  var bgData = (companyBGs[bgKey] && companyBGs[bgKey].members) || [];
+  var currentMap = {};
+  bgData.forEach(function(m) { currentMap[m.role] = m.name; });
+  document.querySelectorAll('.role-option').forEach(function(opt) {
+    var role = opt.getAttribute('data-role');
+    var titleEl = opt.querySelector('div > div:first-child');
+    if (titleEl) {
+      titleEl.innerHTML = role + (currentMap[role] ? ' <span style="font-size:11px;font-weight:400;color:var(--s400)">(currently: ' + currentMap[role] + ')</span>' : '');
+    }
+    opt.classList.remove('selected');
+  });
+  window._assignSelectedRole = null;
+  var btn = document.getElementById('assign-submit-btn');
+  if (btn) { btn.disabled = true; btn.style.opacity = '.4'; btn.style.cursor = 'not-allowed'; }
+}
+
+function closeAssignModal() { document.getElementById('modal-root').innerHTML = ''; }
+
+function submitAssignment() {
+  var role = window._assignSelectedRole;
+  if (!role) return;
+  var bgKey = document.getElementById('assign-bg-select').value;
+  var l = window._currentLead;
+  var cfg = BG_CONFIG[bgKey];
+  // Add to in-memory data
+  if (!BG_MEMBERSHIPS[l.company]) BG_MEMBERSHIPS[l.company] = {};
+  if (!BG_MEMBERSHIPS[l.company][bgKey]) BG_MEMBERSHIPS[l.company][bgKey] = { members: [] };
+  BG_MEMBERSHIPS[l.company][bgKey].members = BG_MEMBERSHIPS[l.company][bgKey].members.filter(function(m) { return m.name !== l.name; });
+  BG_MEMBERSHIPS[l.company][bgKey].members.push({ name: l.name, title: l.title, role: role, score: Math.floor(70 + Math.random() * 20) });
+  closeAssignModal();
+  // Toast
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--white);padding:10px 18px;border-radius:8px;font-size:12px;font-weight:600;z-index:2000;box-shadow:0 4px 16px rgba(0,0,0,.2);display:flex;align-items:center;gap:8px;animation:fadeIn .2s ease;';
+  t.innerHTML = '<span style="color:var(--wasabi)">\u2713</span> ' + l.name.split(' ')[0] + ' added as ' + role + ' in ' + cfg.label + ' buying group';
+  document.body.appendChild(t);
+  setTimeout(function() { t.remove(); }, 3000);
+  // Refresh BU strip
+  var strip = document.getElementById('bu-strip-panel');
+  if (strip) strip.innerHTML = renderBUStrip(l);
 }
 
 renderPage();
