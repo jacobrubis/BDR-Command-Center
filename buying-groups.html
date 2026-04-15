@@ -1475,7 +1475,15 @@ function toast(msg, type) {
 }
 
 // ── INIT ───────────────────────────────────────────────────────────────────
-renderListView();
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var openBG = params.get('openBG');
+  if (openBG) {
+    openDetail(openBG);
+  } else {
+    renderListView();
+  }
+})();
 </script>
 </body>
 </html>
