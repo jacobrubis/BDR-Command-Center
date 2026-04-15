@@ -444,6 +444,25 @@ button{font-family:inherit;}
 .email-body{width:100%;min-height:200px;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--s800);line-height:1.7;resize:none;background:transparent;}
 .email-actions{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid var(--s200);background:var(--s50);}
 
+/* SEQUENCE PREVIEW MODAL */
+.seq-modal{position:fixed;inset:0;background:rgba(0,0,0,.52);display:flex;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(4px);}
+.seq-card{background:var(--white);border-radius:var(--rlg);width:min(640px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.28);animation:fadeIn .18s ease;}
+.seq-hdr{background:linear-gradient(135deg,var(--ink) 0%,#054060 100%);padding:18px 20px 16px;border-radius:var(--rlg) var(--rlg) 0 0;position:relative;}
+.seq-close{position:absolute;top:13px;right:14px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}.seq-close:hover{background:rgba(255,255,255,.22);}
+.seq-step{border:1px solid var(--s200);border-radius:var(--rmd);margin-bottom:10px;overflow:hidden;transition:.12s;}
+.seq-step-hd{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none;}.seq-step-hd:hover{background:var(--s50);}
+.seq-step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.seq-step-email .seq-step-num{background:var(--b50);color:var(--b600);}
+.seq-step-call .seq-step-num{background:var(--g50);color:var(--g600);}
+.seq-step-title{font-size:13px;font-weight:600;color:var(--s800);flex:1;}
+.seq-step-day{font-size:10px;font-weight:600;color:var(--s400);padding:2px 8px;border-radius:4px;background:var(--s50);border:1px solid var(--s100);}
+.seq-step-arrow{font-size:11px;color:var(--s400);transition:transform .15s;}.seq-step.open .seq-step-arrow{transform:rotate(180deg);}
+.seq-step-body{display:none;padding:0 14px 14px;border-top:1px solid var(--s100);}.seq-step.open .seq-step-body{display:block;}
+.seq-subj{font-size:11px;color:var(--s500);padding:8px 0 6px;}.seq-subj strong{color:var(--s700);}
+.seq-email-body{font-size:12px;color:var(--s700);line-height:1.7;white-space:pre-wrap;background:var(--s50);padding:12px 14px;border-radius:var(--rmd);border:1px solid var(--s100);width:100%;resize:none;font-family:'DM Sans',sans-serif;outline:none;cursor:default;overflow:hidden;}.seq-email-body.editing{cursor:text;resize:vertical;border-color:var(--ink);background:var(--white);box-shadow:0 0 0 2px rgba(3,45,66,.08);overflow:auto;}
+.seq-call-body{font-size:12px;color:var(--s700);line-height:1.6;padding:10px 0;}
+.seq-tags{display:flex;flex-wrap:wrap;gap:5px;margin:12px 0 0;}.seq-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;}
+
 /* LEAD SOURCE CARD */
 .src-card-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
 
@@ -539,6 +558,7 @@ const AE_STYLES = {
   Seamus:  {bg:'rgba(26,122,0,0.1)',  color:'#1a7a00', hex:'#1a7a00'},
   Mikaela: {bg:'rgba(3,105,161,0.1)', color:'#0369A1', hex:'#0369A1'},
 };
+const AE_NAMES = {Tony:'Tony Riebel',Jeff:'Jeff Wuestenfeld',Riley:'Riley Scott',Katie:'Katie Schneider',Brian:'Brian Disher',Seamus:'Seamus Donovan',Mikaela:'Mikaela Youpa'};
 
 const LEADS = [
   {id:'LD-48291', name:'Brandon Joyce',     title:'VP of IT',            company:'Sub-Zero Group Inc.',       source:'Webinar',    campaign:'HRSD K25 Demo',       product:'HR Service Delivery',      slaHours:5,   ae:'Tony',    status:'critical', received:'Apr 10', email:'brandon.joyce@subzero.com',            phone:'+1 608-271-2233', state:'WI - Wisconsin', territory:'COMMIDW-TER-1', leadRating:'MQL', memberStatus:'Attended',      mostRecentBU:'Employee Workflows',  parentAccount:'Sub-Zero Group',                notes:'Attended HRSD live demo at K25. 3 email opens on follow-up sequence. High engagement. Sub-Zero is a customer — expansion opportunity.'},
@@ -561,43 +581,43 @@ const PRODUCT_PORTFOLIO = {
     {bu:'ITOM',                   cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
     {bu:'Asset Management',        cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
     {bu:'Security',               cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
-    {bu:'HR Service Delivery',    cacv:0,    nnacv:180, util:0,   pkg:'—',   renewal:'—'},
-    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:95,  util:0,   pkg:'—',   renewal:'—'},
+    {bu:'HR Service Delivery',    cacv:0,    nnacv:180, util:0,   pkg:'—',   renewal:'—', stage:5},
+    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:95,  util:0,   pkg:'—',   renewal:'—', stage:2},
     {bu:'Creator App Engine',      cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
   ],
   'Paylocity Corporation': [
     {bu:'ITSM',                   cacv:410,  nnacv:-50, util:87,  pkg:'Pro', renewal:'14-Jun-26', renewalAlert:false},
     {bu:'ITOM',                   cacv:120,  nnacv:0,   util:63,  pkg:'Std', renewal:'14-Jun-26', renewalAlert:false},
     {bu:'Asset Management',        cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
-    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:220, util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:220, util:0,   pkg:'—',   renewal:'—', stage:3},
     {bu:'AI Platform Foundations', cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
   ],
   'GATX Corporation': [
-    {bu:'ITSM',                   cacv:1240, nnacv:180, util:133, pkg:'Pro', renewal:'14-Mar-27', renewalAlert:false},
-    {bu:'ITOM',                   cacv:380,  nnacv:350, util:91,  pkg:'Pro', renewal:'14-Mar-27', renewalAlert:false},
+    {bu:'ITSM',                   cacv:1240, nnacv:180, util:133, pkg:'Pro', renewal:'14-Mar-27', renewalAlert:false, stage:4},
+    {bu:'ITOM',                   cacv:380,  nnacv:350, util:91,  pkg:'Pro', renewal:'14-Mar-27', renewalAlert:false, stage:3},
     {bu:'Asset Management',        cacv:210,  nnacv:0,   util:0,   pkg:'Std', renewal:'14-Dec-25', renewalAlert:true},
     {bu:'Security',               cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
-    {bu:'Creator App Engine',      cacv:8,    nnacv:6,   util:0,   pkg:'Std', renewal:'14-Mar-27', renewalAlert:false},
+    {bu:'Creator App Engine',      cacv:8,    nnacv:6,   util:0,   pkg:'Std', renewal:'14-Mar-27', renewalAlert:false, stage:2},
     {bu:'AI Platform Foundations', cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
   ],
   'Crash Champions': [
     {bu:'ITSM',                   cacv:95,   nnacv:0,   util:87,  pkg:'Std', renewal:'14-Jan-27', renewalAlert:false},
-    {bu:'HR Service Delivery',    cacv:0,    nnacv:140, util:0,   pkg:'—',   renewal:'—'},
-    {bu:'Now Assist for HR',       cacv:0,    nnacv:85,  util:0,   pkg:'—',   renewal:'—'},
+    {bu:'HR Service Delivery',    cacv:0,    nnacv:140, util:0,   pkg:'—',   renewal:'—', stage:3},
+    {bu:'Now Assist for HR',       cacv:0,    nnacv:85,  util:0,   pkg:'—',   renewal:'—', stage:2},
   ],
   'Eversana': [
     {bu:'ITSM',                   cacv:320,  nnacv:0,   util:104, pkg:'Pro', renewal:'14-Sep-26', renewalAlert:false},
-    {bu:'Security',               cacv:0,    nnacv:190, util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Security',               cacv:0,    nnacv:190, util:0,   pkg:'—',   renewal:'—', stage:3},
     {bu:'Now Assist for ITSM',    cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
   ],
   'Kirkland & Ellis LLP': [
     {bu:'ITSM',                   cacv:480,  nnacv:0,   util:96,  pkg:'Pro', renewal:'14-May-27', renewalAlert:false},
-    {bu:'Legal and Contract Ops', cacv:0,    nnacv:210, util:0,   pkg:'—',   renewal:'—'},
-    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:120, util:0,   pkg:'—',   renewal:'—'},
+    {bu:'Legal and Contract Ops', cacv:0,    nnacv:210, util:0,   pkg:'—',   renewal:'—', stage:2},
+    {bu:'Now Assist for ITSM',    cacv:0,    nnacv:120, util:0,   pkg:'—',   renewal:'—', stage:2},
   ],
   'Sargento Foods Inc.': [
     {bu:'ITSM',                   cacv:175,  nnacv:0,   util:78,  pkg:'Std', renewal:'14-Aug-26', renewalAlert:false},
-    {bu:'Asset Management',        cacv:80,   nnacv:160, util:0,   pkg:'Std', renewal:'14-Aug-26', renewalAlert:false},
+    {bu:'Asset Management',        cacv:80,   nnacv:160, util:0,   pkg:'Std', renewal:'14-Aug-26', renewalAlert:false, stage:3},
     {bu:'ITOM',                   cacv:0,    nnacv:0,   util:0,   pkg:'—',   renewal:'—'},
   ],
 };
@@ -799,6 +819,7 @@ function getTalkingPoints(l) {
   const hasActiveOpp = !!activeOppRow;
   const activeOppBU  = activeOppRow ? activeOppRow.bu : null;
   const activeOppAmt = activeOppRow ? activeOppRow.nnacv : 0;
+  const activeOppStage = activeOppRow && activeOppRow.stage ? activeOppRow.stage : null;
 
   // ── 3. Title seniority ─────────────────────────────────────────────────
   const t = l.title;
@@ -897,7 +918,7 @@ function getTalkingPoints(l) {
   }
 
   const valueProp = getValueProp(l.mostRecentBU, l.title, l.product);
-  return { isCustomer, hasActiveOpp, activeOppBU, activeOppAmt, ownedProds, opener, pokeBear, questions, metricsCaresAbout, valueProp };
+  return { isCustomer, hasActiveOpp, activeOppBU, activeOppAmt, activeOppStage, ownedProds, opener, pokeBear, questions, metricsCaresAbout, valueProp };
 }
 
 // ── HELPERS ────────────────────────────────────────────────────────────────
@@ -1095,7 +1116,7 @@ function renderPage() {
       ? `<span class="sit-chip sit-customer">🏢 Existing Customer</span>`
       : `<span class="sit-chip sit-newlogo">🆕 New Logo</span>`,
     tp.hasActiveOpp
-      ? `<span class="sit-chip sit-opp-active">⚡ Active Opp: ${tp.activeOppBU}</span>`
+      ? `<span class="sit-chip sit-opp-active">⚡ ${tp.activeOppStage && tp.activeOppStage >= 4 ? 'Active Stage ' + tp.activeOppStage + ' Opp' : 'Active Opp'}: ${tp.activeOppBU}</span>`
       : '',
     `<span class="sit-chip sit-source">${l.memberStatus === 'Attended' ? '🎙 Event Attendee' : l.memberStatus === 'Visited Booth' ? '🏪 Booth Visitor' : l.memberStatus === 'Downloaded' ? '⬇ Content Download' : '📬 Inbound Inquiry'}</span>`,
     tp.isCustomer && tp.ownedProds.length
@@ -1123,6 +1144,7 @@ function renderPage() {
       </div>
       <div class="rec-acts">
         <button class="btn btn-g btn-sm">↗ Add to Prospecting</button>
+        <button class="btn btn-p btn-sm" onclick="openInboundSequence()">📨 Add to Inbound Follow Up</button>
         <button class="btn btn-w btn-sm">⬆ Import to Outreach</button>
       </div>
     </div>
@@ -1866,6 +1888,282 @@ function openInMail() {
   var subj = encodeURIComponent(document.getElementById('email-subject').value);
   var body = encodeURIComponent(document.getElementById('email-body').value);
   window.open('mailto:' + (l ? l.email : '') + '?subject=' + subj + '&body=' + body);
+}
+
+// ── INBOUND FOLLOW-UP SEQUENCE ─────────────────────────────────────────────
+function generateInboundSequence(l) {
+  var first = l.name.split(' ')[0];
+  var OWNED = {'Sub-Zero Group Inc.':['ITSM'],'Paylocity Corporation':['ITSM Pro','ITOM'],'GATX Corporation':['ITSM Enterprise','ITOM Health','CMDB'],'Crash Champions':['ITSM Standard'],'Eversana':['ITSM Pro'],'Kirkland & Ellis LLP':['ITSM Pro'],'Sargento Foods Inc.':['ITSM','Asset Management']};
+  var owned = OWNED[l.company] || [];
+  var isCustomer = owned.length > 0;
+  var isCLevel = /cio|cto|ciso|ceo|chief|president|evp|chro/i.test(l.title);
+  var isVP = /\bvp\b|vice president|svp/i.test(l.title);
+  var ae = l.ae;
+  var portfolio = PRODUCT_PORTFOLIO[l.company] || [];
+
+  var titleBU = /ciso|security/i.test(l.title) ? 'Security' : /chro|hr|people/i.test(l.title) ? 'HR' : /cfo|finance/i.test(l.title) ? 'Finance' : 'IT';
+  var engagedBU = l.mostRecentBU.toLowerCase();
+  var isCrossBU = (titleBU === 'IT' && (engagedBU.includes('employee') || engagedBU.includes('hr'))) ||
+    (titleBU === 'IT' && engagedBU.includes('security')) ||
+    (titleBU === 'HR' && !engagedBU.includes('employee') && !engagedBU.includes('hr')) ||
+    (titleBU === 'Security' && !engagedBU.includes('security'));
+  var engLabel = engagedBU.includes('employee') || engagedBU.includes('hr') ? 'HR' : engagedBU.includes('security') ? 'Security' : l.mostRecentBU;
+
+  var activeOpps = portfolio.filter(function(r) { return r.nnacv > 0; });
+  var matchingOpp = activeOpps.find(function(r) {
+    var rbu = r.bu.toLowerCase();
+    return l.product.toLowerCase().split(/[\s+]+/).some(function(k) { return k.length > 3 && rbu.includes(k); }) ||
+      engagedBU.split(/\s+/).some(function(k) { return rbu.includes(k); });
+  });
+
+  var engHook = {
+    'Attended': 'you attended our ' + l.campaign + ' session',
+    'Visited Booth': 'we connected at ' + l.campaign,
+    'Downloaded': 'you downloaded our ' + l.campaign + ' content',
+    'Contact Us': 'you reached out through our website'
+  }[l.memberStatus] || 'you recently engaged with ServiceNow';
+
+  // ── EMAIL 1: White glove check-in (<125 words) ──
+  var e1Lines = ['Hi ' + first + ',', '', 'Reaching out because ' + engHook + '. I hope it covered what you were looking for.'];
+  if (isCrossBU) e1Lines.push('', 'Noticed you come from an ' + titleBU + ' background but attended an ' + engLabel + ' session. That is usually intentional. Curious whether you are seeing overlap between departments or if something specific is driving that.');
+  if (matchingOpp && matchingOpp.stage >= 4) e1Lines.push('', 'There is also an active ' + matchingOpp.bu + ' conversation at ' + l.company + ' right now. Want to make sure this connects rather than runs in parallel.');
+  else if (matchingOpp) e1Lines.push('', 'There is an early ' + matchingOpp.bu + ' conversation happening at ' + l.company + '. If this connects to that, I want to coordinate.');
+  if (isCustomer) e1Lines.push('', 'Since ' + l.company + ' already runs ' + owned.join(' and ') + ' with us, happy to help you navigate what else is available.');
+  e1Lines.push('', 'Is there anything specific from the session you want to go deeper on, or any resources I can send your way?', '', 'Best,', 'Jacob Rubis', 'Business Development Representative, ServiceNow');
+
+  // ── CALL 1 ──
+  var c1Cross = isCrossBU
+    ? ' You attended an ' + engLabel + ' session but sit on the ' + titleBU + ' side. Is something connecting those two right now?'
+    : ' Was there anything from the session that stuck, or more exploration?';
+  var call1 = 'Goal: Check in, not sell. Surface the cross-BU angle if relevant.\n\n"Hi ' + first + ', Jacob from ServiceNow. Sent a note after ' + l.campaign + ' and wanted to make sure everything landed.' + c1Cross + '"';
+
+  // ── EMAIL 2: Insight (<125 words) ──
+  var e2Lines = ['Hi ' + first + ',', '', 'Quick follow-up thought.'];
+  if (isCrossBU && matchingOpp) {
+    e2Lines.push('', titleBU + ' leaders are getting pulled into ' + engLabel + ' conversations more often because the technology decisions overlap. ' + l.company + ' already has a ' + matchingOpp.bu + ' conversation in progress. There may be an opportunity to align rather than run parallel.');
+  } else if (isCrossBU) {
+    e2Lines.push('', titleBU + ' leaders are leaning into ' + engLabel + ' more often because the technology decisions overlap. When both sides run on the same platform, the handoff problems disappear.');
+  } else if (matchingOpp && matchingOpp.stage >= 4) {
+    e2Lines.push('', 'Wanted to flag that ' + l.company + ' has a ' + matchingOpp.bu + ' evaluation in progress. Your engagement with ' + l.campaign + ' may connect directly to that.');
+  } else {
+    e2Lines.push('', 'Teams engaging with ' + l.product + ' content usually have a problem in mind but are not sure if it is big enough to act on. Happy to share what similar companies are doing so you can benchmark.');
+  }
+  e2Lines.push('', isCLevel ? 'Worth a conversation with ' + ae + '? If timing is off, no problem.' : 'Would 20 minutes be useful? Happy to bring ' + ae + ' if it makes sense.');
+  e2Lines.push('', 'Best,', 'Jacob Rubis', 'Business Development Representative, ServiceNow');
+
+  // ── CALL 2 ──
+  var call2 = 'Goal: Voicemail referencing Email 2. Give them a reason to reply even if the answer is no.\n\n"Hi ' + first + ', Jacob Rubis from ServiceNow. Sent a note about ' +
+    (isCrossBU ? 'the ' + titleBU + ' and ' + engLabel + ' overlap' : l.product) +
+    (matchingOpp ? ' and the ' + matchingOpp.bu + ' conversation at ' + l.company : '') +
+    '. Worth connecting or is the timing off? Let me know either way. My number is on the email."';
+
+  // ── EMAIL 3: Graceful close (<125 words) ──
+  var e3Lines = ['Hi ' + first + ',', '', 'Reached out a couple times and want to respect your time.', '', 'If this is not a priority right now, completely understand. I will step back.'];
+  if (isCustomer) e3Lines.push('', 'Since ' + l.company + ' is already on the platform, the door is always open.');
+  e3Lines.push('', 'Before I close the loop, is this something worth revisiting later this quarter, or should I leave it here?', '', 'Best,', 'Jacob Rubis', 'Business Development Representative, ServiceNow');
+
+  return [
+    { type:'email', day:'Day 1', title:'Email 1 — White glove check-in',
+      subject: 'Following up from ' + l.campaign + (isCrossBU ? ' — curious about something' : ''),
+      body: e1Lines.join('\n') },
+    { type:'call', day:'Day 2', title:'Call 1 — Helpful check-in',
+      script: call1 },
+    { type:'email', day:'Day 4', title:'Email 2 — Insight + connect the dots',
+      subject: isCrossBU ? titleBU + ' and ' + engLabel + ' at ' + l.company : 'A thought on ' + l.product + ' at ' + l.company,
+      body: e2Lines.join('\n') },
+    { type:'call', day:'Day 6', title:'Call 2 — Voicemail + pivot',
+      script: call2 },
+    { type:'email', day:'Day 9', title:'Email 3 — Graceful close',
+      subject: 'Closing the loop, ' + first,
+      body: e3Lines.join('\n') },
+  ];
+}
+
+function openInboundSequence() {
+  var l = window._currentLead;
+  if (!l) return;
+
+  // Show loading screen first
+  var loadingMsgs = [
+    '📋 Reading lead context and engagement history',
+    '🏢 Checking ' + l.company + ' product usage and pipeline',
+    '🔍 Detecting cross-BU signals',
+    '✍️ Writing personalized sequence'
+  ];
+  var loadingHtml = '<div class="seq-modal">' +
+    '<div class="seq-card" style="width:min(440px,90vw)">' +
+      '<div class="seq-hdr" style="padding:24px 24px 20px">' +
+        '<div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--wasabi);opacity:.8;margin-bottom:6px">Generating Sequence</div>' +
+        '<div style="font-size:18px;font-weight:700;color:var(--white)">' + l.name + '</div>' +
+        '<div style="font-size:12px;color:rgba(255,255,255,.5)">' + l.title + ' \u00b7 ' + l.company + '</div>' +
+      '</div>' +
+      '<div style="padding:28px 24px">' +
+        '<div id="seq-loading-steps" style="display:flex;flex-direction:column;gap:14px">' +
+          loadingMsgs.map(function(msg, i) {
+            return '<div class="seq-load-step" id="seq-load-' + i + '" style="display:flex;align-items:center;gap:12px;opacity:0.25;transition:opacity .3s,transform .3s;transform:translateY(4px)">' +
+              '<div style="width:22px;height:22px;border-radius:50%;border:2px solid var(--s200);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all .3s" id="seq-load-icon-' + i + '"></div>' +
+              '<span style="font-size:13px;color:var(--s500);transition:color .3s" id="seq-load-text-' + i + '">' + msg + '</span>' +
+            '</div>';
+          }).join('') +
+        '</div>' +
+        '<div style="margin-top:20px;height:3px;background:var(--s100);border-radius:2px;overflow:hidden"><div id="seq-load-bar" style="height:100%;width:0%;background:var(--wasabi);border-radius:2px;transition:width .3s ease"></div></div>' +
+      '</div>' +
+    '</div></div>';
+
+  document.getElementById('modal-root').innerHTML = loadingHtml;
+
+  // Animate steps with staggered timing
+  var stepDelays = [300, 1500, 2900, 4200];
+  stepDelays.forEach(function(delay, i) {
+    setTimeout(function() {
+      var step = document.getElementById('seq-load-' + i);
+      var icon = document.getElementById('seq-load-icon-' + i);
+      var text = document.getElementById('seq-load-text-' + i);
+      if (step) { step.style.opacity = '1'; step.style.transform = 'translateY(0)'; }
+      if (icon) { icon.style.borderColor = 'var(--wasabi)'; icon.style.background = 'rgba(99,223,78,.1)'; icon.innerHTML = '<span style="color:var(--wasabi);font-size:9px">\\u2713</span>'; }
+      if (text) { text.style.color = 'var(--s800)'; }
+      var bar = document.getElementById('seq-load-bar');
+      if (bar) bar.style.width = ((i + 1) / loadingMsgs.length * 100) + '%';
+    }, delay);
+  });
+
+  // After 3.4s, show the actual sequence
+  setTimeout(function() {
+    showInboundSequence(l);
+  }, 5200);
+}
+
+function showInboundSequence(l) {
+  var seq = generateInboundSequence(l);
+  var OWNED = {'Sub-Zero Group Inc.':['ITSM'],'Paylocity Corporation':['ITSM Pro','ITOM'],'GATX Corporation':['ITSM Enterprise','ITOM Health','CMDB'],'Crash Champions':['ITSM Standard'],'Eversana':['ITSM Pro'],'Kirkland & Ellis LLP':['ITSM Pro'],'Sargento Foods Inc.':['ITSM','Asset Management']};
+  var isCustomer = (OWNED[l.company] || []).length > 0;
+  var isCLevel = /cio|cto|ciso|ceo|chief|president|evp|chro/i.test(l.title);
+  var isVP = /\bvp\b|vice president|svp/i.test(l.title);
+  var level = isCLevel ? 'C-Level' : isVP ? 'VP' : /director|head of/i.test(l.title) ? 'Director' : 'Manager';
+
+  var stepsHtml = seq.map(function(s, i) {
+    var stepCls = s.type === 'email' ? 'seq-step-email' : 'seq-step-call';
+    var icon = s.type === 'email' ? '✉️' : '📞';
+    var bodyHtml = '';
+    if (s.type === 'email') {
+      bodyHtml = '<div class="seq-subj"><strong>Subject:</strong> <input type="text" value="' + s.subject.replace(/"/g,'&quot;') + '" id="seq-subj-' + i + '" readonly style="border:none;outline:none;font-size:11px;color:var(--s700);background:transparent;width:70%;font-family:inherit"></div>' +
+        '<textarea class="seq-email-body" id="seq-body-' + i + '" readonly>' + s.body + '</textarea>' +
+        '<div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-g btn-sm" id="seq-edit-btn-' + i + '" onclick="toggleSeqEdit(' + i + ')">✏️ Edit</button><button class="btn btn-g btn-sm" onclick="copySeqEmail(' + i + ')">📋 Copy</button></div>';
+    } else {
+      bodyHtml = '<div class="seq-call-body">' + s.script.replace(/\n/g, '<br>') + '</div>';
+    }
+    return '<div class="seq-step ' + stepCls + (i === 0 ? ' open' : '') + '" id="seq-step-' + i + '">' +
+      '<div class="seq-step-hd" onclick="toggleSeqStep(' + i + ')">' +
+        '<div class="seq-step-num">' + icon + '</div>' +
+        '<div class="seq-step-title">' + s.title + '</div>' +
+        '<div class="seq-step-day">' + s.day + '</div>' +
+        '<span class="seq-step-arrow">▾</span>' +
+      '</div>' +
+      '<div class="seq-step-body">' + bodyHtml + '</div>' +
+    '</div>';
+  }).join('');
+
+  var tags = [
+    '<span class="seq-tag" style="background:' + (isCustomer ? 'var(--g50);color:var(--g600)' : 'var(--b50);color:var(--b600)') + '">' + (isCustomer ? '🏢 Customer' : '🆕 New Logo') + '</span>',
+    '<span class="seq-tag" style="background:rgba(3,45,66,.06);color:var(--ink)">' + level + '</span>',
+    '<span class="seq-tag" style="background:var(--p50);color:var(--p600)">' + l.memberStatus + '</span>',
+    '<span class="seq-tag" style="background:var(--a50);color:var(--a600)">' + l.product + '</span>',
+  ].join('');
+
+  var html = '<div class="seq-modal" onclick="if(event.target===this)closeSeqModal()">' +
+    '<div class="seq-card">' +
+      '<div class="seq-hdr">' +
+        '<button class="seq-close" onclick="closeSeqModal()">\u00d7</button>' +
+        '<div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--wasabi);opacity:.8;margin-bottom:4px">Inbound Follow-Up Sequence</div>' +
+        '<div style="font-size:20px;font-weight:700;color:var(--white);margin-bottom:2px">' + l.name + '</div>' +
+        '<div style="font-size:12px;color:rgba(255,255,255,.5)">' + l.title + ' \u00b7 ' + l.company + ' \u00b7 via ' + l.campaign + '</div>' +
+      '</div>' +
+      '<div style="padding:16px 20px">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">' +
+          '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--s400)">Personalized based on</div>' +
+        '</div>' +
+        '<div class="seq-tags" style="margin:0 0 16px">' + tags + '</div>' +
+        '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:10px 14px;background:linear-gradient(135deg,rgba(3,45,66,.03),rgba(99,223,78,.05));border:1px solid rgba(99,223,78,.2);border-radius:var(--rmd)">' +
+          '<span style="font-size:16px">📨</span>' +
+          '<div><div style="font-size:12px;font-weight:600;color:var(--s800)">3 emails + 2 calls over 9 days</div><div style="font-size:11px;color:var(--s500)">White glove check-in \u2192 Insight \u2192 Graceful close</div></div>' +
+        '</div>' +
+        stepsHtml +
+      '</div>' +
+      '<div style="padding:14px 20px;border-top:1px solid var(--s200);background:var(--s50);border-radius:0 0 var(--rlg) var(--rlg);display:flex;align-items:center;justify-content:space-between">' +
+        '<button class="btn btn-g" onclick="closeSeqModal()">Cancel</button>' +
+        '<button class="btn btn-w" onclick="enrollInboundSequence()">📨 Add to Inbound Follow Up</button>' +
+      '</div>' +
+    '</div></div>';
+
+  document.getElementById('modal-root').innerHTML = html;
+  window._currentSequence = seq;
+  // Auto-size all email textareas to fit content
+  setTimeout(function() {
+    document.querySelectorAll('.seq-email-body').forEach(function(ta) {
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+    });
+  }, 10);
+}
+
+function toggleSeqStep(i) {
+  var el = document.getElementById('seq-step-' + i);
+  if (el) {
+    el.classList.toggle('open');
+    // Auto-size textarea if just opened
+    if (el.classList.contains('open')) {
+      var ta = el.querySelector('.seq-email-body');
+      if (ta) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+    }
+  }
+}
+
+function toggleSeqEdit(i) {
+  var body = document.getElementById('seq-body-' + i);
+  var subj = document.getElementById('seq-subj-' + i);
+  var btn = document.getElementById('seq-edit-btn-' + i);
+  if (!body || !btn) return;
+  var isEditing = body.classList.contains('editing');
+  if (isEditing) {
+    body.readOnly = true;
+    body.classList.remove('editing');
+    if (subj) { subj.readOnly = true; subj.style.background = 'transparent'; subj.style.borderBottom = 'none'; }
+    btn.innerHTML = '✏️ Edit';
+  } else {
+    body.readOnly = false;
+    body.classList.add('editing');
+    body.focus();
+    if (subj) { subj.readOnly = false; subj.style.background = 'var(--white)'; subj.style.borderBottom = '1px solid var(--s300)'; }
+    btn.innerHTML = '✓ Done';
+    btn.style.background = 'rgba(22,163,74,.08)';
+    btn.style.color = 'var(--g600)';
+    btn.style.borderColor = 'rgba(22,163,74,.25)';
+  }
+}
+
+function copySeqEmail(i) {
+  var subj = document.getElementById('seq-subj-' + i);
+  var body = document.getElementById('seq-body-' + i);
+  if (!subj || !body) return;
+  navigator.clipboard.writeText('Subject: ' + subj.value + '\n\n' + body.value).then(function() {
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--white);padding:10px 18px;border-radius:8px;font-size:12px;font-weight:600;z-index:2000;box-shadow:0 4px 16px rgba(0,0,0,.2);animation:fadeIn .2s ease;';
+    t.innerHTML = '<span style="color:var(--wasabi)">\u2713</span> Email copied to clipboard';
+    document.body.appendChild(t);
+    setTimeout(function(){ t.remove(); }, 2500);
+  });
+}
+
+function closeSeqModal() { document.getElementById('modal-root').innerHTML = ''; }
+
+function enrollInboundSequence() {
+  var l = window._currentLead;
+  closeSeqModal();
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#16a34a;color:var(--white);padding:12px 20px;border-radius:8px;font-size:12px;font-weight:600;z-index:2000;box-shadow:0 4px 16px rgba(0,0,0,.2);display:flex;align-items:center;gap:8px;animation:fadeIn .2s ease;';
+  t.innerHTML = '<span style="font-size:15px">\u2713</span> ' + l.name.split(' ')[0] + ' enrolled in Inbound Follow Up \u2192 Prospecting';
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 3500);
 }
 
 // ── PINNED NOTES ──────────────────────────────────────────────────────────
