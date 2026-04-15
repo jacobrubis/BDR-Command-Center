@@ -631,6 +631,74 @@ let selectedBG = null;
 let mlStates = {}; // {mlId: 'pending'|'accepted'|'denied'}
 let roleAssignments = {}; // {mlId: {roleKey, name, title}}
 
+// Map BG member names to lead record IDs for navigation
+const LEAD_LOOKUP = {
+  'Brandon Joyce':'LD-48291','Dylan Blumenberg':'LD-48302','Sarah Mitchell':'LD-48315',
+  'Marcus Webb':'LD-48327','Kevin Ostrander':'LD-48338','Priya Nair':'LD-48341',
+  'Robert Kim':'LD-48352','Jennifer Torres':'LD-48101','Michael Chang':'LD-48112',
+  'Lisa Park':'LD-47981','Amanda Foster':'LD-48201','Eric Sandoval':'LD-48281',
+  'Alex Morris':'LD-49000',
+  'Amy Chen':'LD-49001',
+  'Angela Ferris':'LD-49002',
+  'Anita Nair':'LD-49003',
+  'Brad Lester':'LD-49004',
+  'Brian Holcomb':'LD-49005',
+  'Carolyn Hughes':'LD-49006',
+  'Carter Voss':'LD-49007',
+  'Claire Desjardins':'LD-49008',
+  'Daniel Kim':'LD-49009',
+  'Darin Wolf':'LD-49010',
+  'David Blasdell':'LD-49011',
+  'Derek Okafor':'LD-49012',
+  'Diane Tremblay':'LD-49013',
+  'Dianne Park':'LD-49014',
+  'Drew Holland':'LD-49015',
+  'Emma Mitchell':'LD-49016',
+  'Grace Turner':'LD-49017',
+  'James Ford':'LD-49018',
+  'James Liu':'LD-49019',
+  'Jim Cienkus':'LD-49020',
+  'Kim Nakamura':'LD-49021',
+  'Kyle Ramos':'LD-49022',
+  'Laura Shin':'LD-49023',
+  'Leah Brennan':'LD-49024',
+  'Marcus Tran':'LD-49025',
+  'Mark Albright':'LD-49026',
+  'Mark Osei':'LD-49027',
+  'Mouli Venkatesan':'LD-49028',
+  'Nicholas Parker':'LD-49029',
+  'Patricia Emmons':'LD-49030',
+  'Patrick Sullivan':'LD-49031',
+  'Rachel Green':'LD-49032',
+  'Rafee Doodekula':'LD-49033',
+  'Ramprasad Kalan':'LD-49034',
+  'Ron Yuen':'LD-49035',
+  'Ryan Cassidy':'LD-49036',
+  'Sam Keating':'LD-49037',
+  'Samuel Paschka':'LD-49038',
+  'Sandra Coates':'LD-49039',
+  'Sandra Lewis':'LD-49040',
+  'Sarah Chen':'LD-49041',
+  'Scott Flanagan':'LD-49042',
+  'Suresh Patel':'LD-49043',
+  'Terry Vance':'LD-49044',
+  'Tina Walsh':'LD-49045',
+  'Tom Breckenridge':'LD-49046',
+  'Tomas Rivera':'LD-49047',
+  'Vanessa Kim':'LD-49048',
+  'Vijay Reddy':'LD-49049',
+  'Wei Park':'LD-49050'
+};
+function viewLead(name) {
+  var leadId = LEAD_LOOKUP[name];
+  var bgId = selectedBG ? selectedBG.id : '';
+  if (leadId) {
+    window.location.href = 'lead-detail.html?id=' + leadId + '&from=bg&bgId=' + bgId;
+  } else {
+    toast(name + ' does not have a lead record yet', '');
+  }
+}
+
 // ── HELPERS ───────────────────────────────────────────────────────────────
 function aeBubble(ae) {
   const s = AE_STYLES[ae] || {bg:'rgba(100,116,139,.1)',color:'#475569'};
@@ -841,7 +909,7 @@ function renderDetailView() {
          <button class="deny-btn" style="margin-left:5px" onclick="mlAction('${m.id}','denied')">✗ Deny</button>`;
     return `<tr class="${state==='denied'?'':''}">
       <td>
-        <div style="font-size:12px;font-weight:600;color:${state==='denied'?'var(--s400)':'var(--b600)'}">${m.name}</div>
+        <div style="font-size:12px;font-weight:600;color:${state==='denied'?'var(--s400)':'var(--b600)'};cursor:pointer" onclick="viewLead('${m.name}')">${m.name}</div>
         ${m.handraisersType ? `<span class="${m.handraisersType==='Contact Us'?'hr-contact-us':'hr-get-pricing'}" style="margin-top:4px;display:inline-flex">${m.handraisersType==='Contact Us'?'✉':'💲'} ${m.handraisersType}</span>` : ''}
         <div style="font-size:10px;color:var(--s400);margin-top:2px">Last signal: ${m.lastSignal||'—'}</div>
       </td>
@@ -967,7 +1035,7 @@ function renderDetailView() {
           </tr></thead>
           <tbody>
             ${allConfirmed.map(m => `<tr>
-              <td><span style="font-size:12px;font-weight:600;color:var(--b600);cursor:pointer">${m.name}</span></td>
+              <td><span style="font-size:12px;font-weight:600;color:var(--b600);cursor:pointer" onclick="viewLead('${m.name}')">${m.name}</span></td>
               <td style="color:var(--s600)">${m.title}</td>
               <td><span style="font-size:11px;font-weight:600;color:var(--s700)">${m.level}</span></td>
               <td>${rolePill(m.role)}</td>
@@ -977,7 +1045,7 @@ function renderDetailView() {
               <td><span style="font-size:11px;color:var(--s600)">${m.seq}</span></td>
               <td>${m.sla?`<span class="sla-warn">${m.sla}</span>`:'<span style="color:var(--s400);font-size:11px">—</span>'}</td>
               <td><span style="font-size:11px;color:var(--s500)">${m.lastSignal}</span></td>
-              <td><button class="view-lead-btn">View Lead</button></td>
+              <td><button class="view-lead-btn" onclick="viewLead('${m.name}')">View Lead</button></td>
             </tr>`).join('')}
           </tbody>
         </table>
@@ -1051,7 +1119,7 @@ function mlAction(mlId, action) {
            <button class="deny-btn" style="margin-left:5px" onclick="mlAction('${m.id}','denied')">✗ Deny</button>`;
       return `<tr>
         <td>
-          <div style="font-size:12px;font-weight:600;color:${state==='denied'?'var(--s400)':'var(--b600)'}">${m.name}</div>
+          <div style="font-size:12px;font-weight:600;color:${state==='denied'?'var(--s400)':'var(--b600)'};cursor:pointer" onclick="viewLead('${m.name}')">${m.name}</div>
           ${m.handraisersType ? `<span class="${m.handraisersType==='Contact Us'?'hr-contact-us':'hr-get-pricing'}" style="margin-top:4px;display:inline-flex">${m.handraisersType==='Contact Us'?'✉':'💲'} ${m.handraisersType}</span>` : ''}
           <div style="font-size:10px;color:var(--s400);margin-top:2px">Last signal: ${m.lastSignal||'—'}</div>
         </td>
