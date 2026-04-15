@@ -925,7 +925,8 @@ function renderDetailView() {
     </tr>`;
   }
 
-  const pendingCount = (detail.mlMembers||[]).filter(m => (mlStates[m.id]||m.state||'pending')==='pending').length;
+  const visibleMlMembers = (detail.mlMembers||[]).filter(m => (mlStates[m.id]||m.state||'pending') !== 'accepted');
+  const pendingCount = visibleMlMembers.filter(m => (mlStates[m.id]||m.state||'pending')==='pending').length;
 
   let html = `
     <!-- BACK BUTTON -->
@@ -1058,7 +1059,7 @@ function renderDetailView() {
         <div class="members-title">🔍 Recommended Potential Members <span class="pending-badge">${pendingCount} pending</span></div>
         <div style="font-size:11px;color:var(--s400)">Review signals · assign a role · add to buying group</div>
       </div>
-      ${detail.mlMembers && detail.mlMembers.length ? `
+      ${visibleMlMembers && visibleMlMembers.length ? `
       <div style="background:var(--white);border:1px solid var(--s200);border-radius:10px;overflow:hidden;overflow-x:auto">
         <table class="mtable">
           <thead><tr>
@@ -1066,7 +1067,7 @@ function renderDetailView() {
             <th>Engagement</th><th>Status</th><th>Reasoning</th><th>Score</th><th>Action</th>
           </tr></thead>
           <tbody id="mlTableBody">
-            ${detail.mlMembers.map(m => mlRow(m)).join('')}
+            ${visibleMlMembers.map(m => mlRow(m)).join('')}
           </tbody>
         </table>
       </div>` : `<div style="padding:30px;text-align:center;color:var(--s400);font-size:12px;background:var(--white);border:1px solid var(--s200);border-radius:10px">No recommendations yet. The system will surface potential members as signals come in.</div>`}
