@@ -1128,8 +1128,13 @@ function renderPage() {
   document.getElementById('recHdr').innerHTML = `
     <div class="rec-hdr-top">
       <div class="breadcrumb">
-        <a href="leads.html">Leads</a>
-        <span class="sep">/</span>
+        ${(function(){
+          var p = new URLSearchParams(window.location.search);
+          if (p.get('from') === 'bg') {
+            return '<a href="buying-groups.html">Buying Groups</a><span class="sep">/</span><a href="buying-groups.html">' + (l.company||'Detail') + '</a><span class="sep">/</span>';
+          }
+          return '<a href="leads.html">Leads</a><span class="sep">/</span>';
+        })()}
         <span style="color:var(--s600)">${l.name}</span>
       </div>
       <div style="display:flex;align-items:center;gap:10px;flex:1;padding-left:8px">
