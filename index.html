@@ -386,6 +386,18 @@ button{font-family:inherit;}
 .prep-ftr-note{font-size:10px;color:var(--s400);display:flex;align-items:center;gap:4px;}
 .prep-pulse{width:6px;height:6px;background:var(--wasabi);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
 
+/* START YOUR DAY */
+.start-bar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:6px;}
+.start-card{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:10px;border:1.5px solid;cursor:pointer;transition:.12s;text-decoration:none;}
+.start-card:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.08);}
+.start-card.urgent{background:linear-gradient(135deg,#fff1f2,#ffe4e6);border-color:rgba(220,38,38,.3);}.start-card.urgent:hover{border-color:rgba(220,38,38,.5);}
+.start-card.primary{background:linear-gradient(135deg,var(--ink),#054060);border-color:var(--ink);}.start-card.primary:hover{background:linear-gradient(135deg,#054060,var(--ink));}
+.start-card.active{background:linear-gradient(135deg,rgba(99,223,78,.06),rgba(99,223,78,.12));border-color:rgba(99,223,78,.35);}.start-card.active:hover{border-color:rgba(99,223,78,.55);}
+.start-ic{font-size:22px;flex-shrink:0;}
+.start-title{font-size:13px;font-weight:700;line-height:1.3;}
+.start-sub{font-size:11px;margin-top:2px;line-height:1.3;}
+.start-arrow{margin-left:auto;font-size:16px;flex-shrink:0;opacity:.5;}
+
 /* FADE */
 .fu{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;}
 </style>
@@ -522,16 +534,29 @@ button{font-family:inherit;}
       </div>
     </div>
 
-    <!-- SINCE YESTERDAY -->
-    <div class="since">
-      <span style="color:var(--s400)">Since Yesterday ·</span>
-      <span class="sr">⚠ 8 SLA Critical Leads</span>
-      <span class="ss">·</span>
-      <span class="sa">3 BG Signals Overnight</span>
-      <span class="ss">·</span>
-      <span class="sg">2 Opty Stage Movements</span>
-      <span class="ss">·</span>
-      <span>100 Tasks Due Today</span>
+    <!-- START YOUR DAY -->
+    <div class="start-bar">
+      <a href="leads.html" class="start-card urgent">
+        <div>
+          <div class="start-title" style="color:var(--r600)">Work SLA Leads First</div>
+          <div class="start-sub" style="color:var(--r500)">7 leads need action before SLA expires. 2 are Contact Us forms.</div>
+        </div>
+        <span class="start-arrow" style="color:var(--r400)">→</span>
+      </a>
+      <a href="#activitiesSection" class="start-card primary" onclick="event.preventDefault();document.getElementById('activitiesSection').scrollIntoView({behavior:'smooth'})">
+        <div>
+          <div class="start-title" style="color:var(--white)">Execute Today's Tasks</div>
+          <div class="start-sub" style="color:rgba(255,255,255,.6)">50 calls, 30 emails, 20 tasks queued. Start with high priority.</div>
+        </div>
+        <span class="start-arrow" style="color:rgba(255,255,255,.3)">→</span>
+      </a>
+      <a href="buying-groups.html" class="start-card active">
+        <div>
+          <div class="start-title" style="color:var(--ink)">Review BG Signals</div>
+          <div class="start-sub" style="color:var(--s500)">3 new buying group signals overnight. 14 members pending review.</div>
+        </div>
+        <span class="start-arrow" style="color:var(--s400)">→</span>
+      </a>
     </div>
 
     <!-- PAGE TABS -->
@@ -651,68 +676,6 @@ button{font-family:inherit;}
               <button class="tom-x" onclick="removeTOMNote('tom-3')" title="Delete">✕</button>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- RECOMMENDED ACTIONS -->
-      <div class="fu">
-        <div class="rec-hdr">
-          <div class="rec-lbl">Recommended actions ✦ <span class="rec-lbl-m">Last refreshed 1m ago</span></div>
-          <a href="#" style="font-size:12px;color:var(--b600);font-weight:500">View all →</a>
-        </div>
-        <div class="rec-filters">
-          <span class="fl">Filter by</span>
-          <button class="fchip">Category ▼</button>
-          <button class="fchip">Closing by month ▼</button>
-          <span class="fl">Sort by</span>
-          <button class="fchip">Recently Viewed ▼</button>
-        </div>
-        <div class="rec-grid">
-          <div class="rec-card">
-            <div class="rc-title">Follow-up with Leads</div>
-            <div class="rc-sub">SLA nearing expiry for 2 contact us form interactions. 6 hours remain to be compliant.</div>
-            <div class="rc-dates">
-              <div class="rc-di"><div class="rc-dl">Status</div><div class="rc-dv">Due today</div></div>
-              <div class="rc-di"><div class="rc-dl">Due Date</div><div class="rc-dv">2026-04-10</div></div>
-            </div>
-            <div class="rc-opty">OPTY-0000456 · Alectri</div>
-            <button class="rc-cta pri">🤖 Take action</button>
-          </div>
-          <div class="rec-card">
-            <div class="rc-title">BDR Meeting for Intuit</div>
-            <div class="rc-sub">Your BDR meeting with Intuit's IT buying group is coming soon.</div>
-            <div class="rc-dates">
-              <div class="rc-di"><div class="rc-dl">Status</div><div class="rc-dv">Due today</div></div>
-              <div class="rc-di"><div class="rc-dl">Due Date</div><div class="rc-dv">2026-04-10</div></div>
-            </div>
-            <div class="rc-opty">OPTY-0005521 · Intuit</div>
-            <button class="rc-cta pri">🤖 Take action</button>
-          </div>
-          <div class="rec-card">
-            <div class="rc-title">10X Genomics — Engagement Surge</div>
-            <div class="rc-sub">Surge in digital signals and uptick of 10 points in Engagement Score.</div>
-            <div class="rc-dates">
-              <div class="rc-di"><div class="rc-dl">Status</div><div class="rc-dv">Due today</div></div>
-              <div class="rc-di"><div class="rc-dl">Due Date</div><div class="rc-dv">2026-04-10</div></div>
-            </div>
-            <div class="rc-opty">OPTY-0005521 · Intuit</div>
-            <button class="rc-cta" style="border-color:var(--b100);color:var(--b600)">View Buying Group</button>
-          </div>
-          <div class="rec-card">
-            <div class="rc-title">BDR Meeting Prep Required</div>
-            <div class="rc-sub">Your BDR meeting is coming soon and requires preparation.</div>
-            <div class="rc-dates">
-              <div class="rc-di"><div class="rc-dl">Status</div><div class="rc-dv">Due today</div></div>
-              <div class="rc-di"><div class="rc-dl">Due Date</div><div class="rc-dv">2026-04-10</div></div>
-            </div>
-            <div class="rc-opty">OPTY-0005521 · Intuit</div>
-            <button class="rc-cta pri">🤖 Take action</button>
-          </div>
-        </div>
-        <div class="rec-dots">
-          <div class="rdot on"></div>
-          <div class="rdot"></div>
-          <div class="rdot"></div>
         </div>
       </div>
 
@@ -841,40 +804,6 @@ button{font-family:inherit;}
 
     <!-- RIGHT PANEL -->
     <div class="body-side">
-      <span class="side-lbl">SLA Due Today (6)</span>
-      <div class="side-card">
-        <div class="sc-hdr">
-          <span class="sc-title">SLA Due Today</span>
-          <a href="leads.html" class="sc-link">View All</a>
-        </div>
-        <div class="si">
-          <div><div class="si-name">David Blasdell</div><div class="si-co">Sterling Manufacturing</div></div>
-          <span class="si-r">5h left</span>
-        </div>
-        <div class="si">
-          <div><div class="si-name">Rashmi Jayarama</div><div class="si-co">NovaTech Systems</div></div>
-          <span class="si-r">6h left</span>
-        </div>
-        <div class="si">
-          <div><div class="si-name">Paul Carter</div><div class="si-co">LumaCore Solutions</div></div>
-          <span class="si-a">7h left</span>
-        </div>
-      </div>
-
-      <div class="side-card">
-        <div class="sc-hdr">
-          <span class="sc-title">Activities Due Today</span>
-          <a href="#" class="sc-link">View All</a>
-        </div>
-        <div class="stabs" id="actTabs">
-          <div class="stab on" onclick="switchTab(this,'actTabs')">Email (3)</div>
-          <div class="stab" onclick="switchTab(this,'actTabs')">Phone Call (12)</div>
-          <div class="stab" onclick="switchTab(this,'actTabs')">Tasks (7)</div>
-        </div>
-        <div class="sact"><strong>David Blasdell</strong><br>Sterling Manufacturing<br><span style="color:var(--s400)">Opportunity Team Member</span></div>
-        <div class="sact" style="margin-top:5px"><strong>Rashmi Jayarama</strong><br>NovaTech Systems<br><span style="color:var(--s400)">Opportunity Task OPTASK0</span></div>
-      </div>
-
       <div class="side-card">
         <div class="sc-hdr">
           <span class="sc-title">Meetings This Week</span>
@@ -882,55 +811,79 @@ button{font-family:inherit;}
         </div>
         <div class="si" style="align-items:center;">
           <div style="flex:1">
-            <div class="si-name">David Blasdell</div>
-            <div class="si-co">Sterling Manufacturing · ITOM AIOps</div>
+            <div class="si-name">Lisa Park</div>
+            <div class="si-co">Crash Champions · Now Assist HR Demo</div>
           </div>
           <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
-            <span class="si-g">Today 2pm</span>
-            <button onclick="openPrepModal('david')" style="font-family:inherit;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;white-space:nowrap;">📋 Prep</button>
+            <span class="si-g">Apr 17 10am</span>
+            <button onclick="openPrepModal('lisa')" style="font-family:inherit;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;white-space:nowrap;">Prep</button>
           </div>
         </div>
         <div class="si" style="align-items:center;">
           <div style="flex:1">
-            <div class="si-name">Rashmi Jayarama</div>
-            <div class="si-co">NovaTech Systems · Now Assist</div>
+            <div class="si-name">Michael Chang</div>
+            <div class="si-co">GATX Corporation · ITOM AIOps Discovery</div>
           </div>
           <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
-            <span class="si-g">Today 3pm</span>
-            <button onclick="openPrepModal('rashmi')" style="font-family:inherit;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;white-space:nowrap;">📋 Prep</button>
+            <span class="si-g">Apr 18 2pm</span>
+            <button onclick="openPrepModal('michael')" style="font-family:inherit;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;white-space:nowrap;">Prep</button>
           </div>
         </div>
         <div class="si" style="align-items:center;">
           <div style="flex:1">
-            <div class="si-name">Paul Carter</div>
-            <div class="si-co">LumaCore Solutions · ITSM</div>
+            <div class="si-name">Jennifer Torres</div>
+            <div class="si-co">Kirkland & Ellis · ITSM Pro Intro</div>
           </div>
           <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
-            <span class="si-s">Tomorrow 10am</span>
-            <button onclick="openPrepModal('paul')" style="font-family:inherit;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;border:1px solid var(--s300);background:var(--white);color:var(--s600);cursor:pointer;white-space:nowrap;">📋 Prep</button>
+            <span class="si-s">Apr 21 11am</span>
+            <button onclick="openPrepModal('jennifer')" style="font-family:inherit;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;border:1px solid var(--s300);background:var(--white);color:var(--s600);cursor:pointer;white-space:nowrap;">Prep</button>
           </div>
         </div>
       </div>
 
-      <span class="side-lbl" style="margin-top:4px">Latest Updates</span>
-      <div class="nfeed">
+      <span class="side-lbl" style="margin-top:4px">Account Insights</span>
+      <div class="nfeed" style="max-height:420px;overflow-y:auto">
         <div class="ni">
-          <div class="ni-top"><span class="ntag promo">Promotion</span><span class="nmeta">4hrs ago</span></div>
-          <div class="ntitle">John Smith → CTO at Alectri</div>
-          <div class="ndesc">New decision maker identified. Consider technical outreach.</div>
-          <button class="nai">🤖 Ask AI</button>
+          <div class="ni-top"><span class="ntag promo" style="background:var(--b50);color:var(--b600)">New Hire</span><span class="nmeta">2hrs ago</span></div>
+          <div class="ntitle">Sub-Zero Group hired a new CHRO</div>
+          <div class="ndesc">Michelle Torres joined as Chief Human Resources Officer from Whirlpool. Brandon Joyce attended HRSD Demo last week. New HR leadership could accelerate the conversation.</div>
+          <a href="lead-detail.html?id=LD-48291" class="nai">Open Lead</a>
         </div>
         <div class="ni">
-          <div class="ni-top"><span class="ntag promo">Promotion</span><span class="nmeta">4hrs ago</span></div>
-          <div class="ntitle">Sarah Chen promoted at Echo Global</div>
-          <div class="ndesc">VP IT promotion. Key ITOM champion — re-engage now.</div>
-          <button class="nai">🤖 Ask AI</button>
+          <div class="ni-top"><span class="ntag breach">Data Breach</span><span class="nmeta">6hrs ago</span></div>
+          <div class="ntitle">Eversana disclosed a security incident</div>
+          <div class="ndesc">SEC filing revealed unauthorized access to employee data systems. Priya Nair (CISO) attended Veza Security webinar this week. Timing is relevant for Security Ops outreach.</div>
+          <a href="lead-detail.html?id=LD-48341" class="nai">Open Lead</a>
         </div>
         <div class="ni">
-          <div class="ni-top"><span class="ntag breach">Data Breach</span><span class="nmeta">2hrs ago</span></div>
-          <div class="ntitle">Pitch Risk based on Data Breach news</div>
-          <div class="ndesc">Automated Threat Detection. Reduce response times with automated workflows...</div>
-          <button class="nai">🤖 Ask AI</button>
+          <div class="ni-top"><span class="ntag promo" style="background:var(--a50);color:var(--a600)">Job Postings</span><span class="nmeta">1d ago</span></div>
+          <div class="ntitle">GATX posting for IT Operations Manager</div>
+          <div class="ndesc">LinkedIn job posting for IT Ops Manager focused on monitoring and incident management. Signals headcount investment in the same area as the ITOM AIOps conversation.</div>
+          <a href="buying-groups.html?openBG=bg-012" class="nai">View Buying Group</a>
+        </div>
+        <div class="ni">
+          <div class="ni-top"><span class="ntag promo" style="background:var(--g50);color:var(--g600)">Earnings</span><span class="nmeta">2d ago</span></div>
+          <div class="ntitle">Paylocity Q3 earnings beat — revenue up 18%</div>
+          <div class="ndesc">CEO cited "operational efficiency" and "platform consolidation" as priorities. Sarah Mitchell (CIO) requested Now Assist demo. Budget cycle aligns with expansion.</div>
+          <a href="lead-detail.html?id=LD-48315" class="nai">Open Lead</a>
+        </div>
+        <div class="ni">
+          <div class="ni-top"><span class="ntag promo" style="background:var(--p50);color:var(--p600)">M&A</span><span class="nmeta">3d ago</span></div>
+          <div class="ntitle">Crash Champions acquired 14 new locations</div>
+          <div class="ndesc">Expansion to 640+ sites. Every acquisition adds onboarding complexity. CHRO Lisa Park has meeting booked Apr 17 for Now Assist HR. Scale argument strengthens.</div>
+          <a href="lead-detail.html?id=LD-47981" class="nai">Open Lead</a>
+        </div>
+        <div class="ni">
+          <div class="ni-top"><span class="ntag promo" style="background:var(--b50);color:var(--b600)">New Hire</span><span class="nmeta">4d ago</span></div>
+          <div class="ntitle">Kirkland & Ellis hired new CIO from Baker McKenzie</div>
+          <div class="ndesc">David Park joined as CIO. Jennifer Torres (IT Director) replied to ITSM Pro sequence. New CIO could be the Economic Buyer for the expansion play.</div>
+          <a href="lead-detail.html?id=LD-48101" class="nai">Open Lead</a>
+        </div>
+        <div class="ni">
+          <div class="ni-top"><span class="ntag promo" style="background:var(--a50);color:var(--a600)">Job Postings</span><span class="nmeta">5d ago</span></div>
+          <div class="ntitle">FTI Consulting posting for 3 IT Service Desk roles</div>
+          <div class="ndesc">Hiring signal suggests platform pain or growth. Dylan Blumenberg (Dir IT Ops) attended IT Leader Webinar. Service desk hiring + webinar attendance = active evaluation.</div>
+          <a href="lead-detail.html?id=LD-48302" class="nai">Open Lead</a>
         </div>
       </div>
     </div><!-- /body-side -->
@@ -944,8 +897,8 @@ button{font-family:inherit;}
     <div class="prep-modal-hdr">
       <div class="prep-modal-hdr-l">
         <div class="prep-badge"><div class="prep-pulse"></div>✦ AI Generated · Now Assist</div>
-        <div class="prep-modal-name" id="prepName">David Blasdell</div>
-        <div class="prep-modal-sub" id="prepSub">Sterling Manufacturing · ITOM AIOps Discovery · 2:00pm · AE: Brian Disher</div>
+        <div class="prep-modal-name" id="prepName">Lisa Park</div>
+        <div class="prep-modal-sub" id="prepSub">Crash Champions · Now Assist HR Demo · Apr 17 10:00am · AE: Brian Disher</div>
       </div>
       <button class="prep-close" onclick="closePrepModal()">×</button>
     </div>
@@ -1105,12 +1058,12 @@ var ACT_DATA = [
   {type:'call',  contact:'Dylan Blumenberg', company:'FTI Consulting',           subject:'Cold call — IT Webinar follow-up',             pri:'high', due:'3h left',  ae:'JW',  aeColor:'#044355'},
   {type:'call',  contact:'Sarah Chen',       company:'Echo Global Logistics',    subject:'ITOM AIOps champion call — post field demo',   pri:'high', due:'4h left',  ae:'TR',  aeColor:'#032D42'},
   {type:'email', contact:'Mark Osei',        company:'BlueCross Illinois',       subject:'HRSD Webinar registrant — intro outreach',     pri:'med',  due:'5h left',  ae:'KS',  aeColor:'#5B21B6'},
-  {type:'call',  contact:'David Blasdell',   company:'Sterling Manufacturing',   subject:'SLA follow-up: Contact Us form — Day 1',       pri:'high', due:'5h left',  ae:'BD',  aeColor:'#D93025'},
-  {type:'call',  contact:'Rashmi Jayarama',  company:'NovaTech Systems',         subject:'Inbound demo request follow-up',               pri:'med',  due:'6h left',  ae:'RS',  aeColor:'#B45309'},
-  {type:'task',  contact:'Paul Carter',      company:'LumaCore Solutions',       subject:'Research: Map buying committee ahead of call', pri:'med',  due:'7h left',  ae:'SD',  aeColor:'#1a7a00'},
-  {type:'email', contact:'Jenna Walsh',      company:'Meridian Health Partners', subject:'Sequence Touch 3 — CSM ROI angle',            pri:'low',  due:'8h left',  ae:'MY',  aeColor:'#0369A1'},
-  {type:'call',  contact:'Chris Nakamura',   company:'Apex Industrial Group',    subject:'Cold call — ITSM modernization play',         pri:'low',  due:'9h left',  ae:'TR',  aeColor:'#032D42'},
-  {type:'task',  contact:'Alectri — Team',   company:'Alectri',                  subject:'Update OPTY notes after discovery call recap', pri:'med',  due:'EOD',      ae:'JW',  aeColor:'#044355'},
+  {type:'call',  contact:'Kevin Ostrander',  company:'Sargento Foods',           subject:'SLA follow-up: ITAM whitepaper download',      pri:'high', due:'5h left',  ae:'TR',  aeColor:'#032D42'},
+  {type:'call',  contact:'Priya Nair',       company:'Eversana',                 subject:'Veza Security Brief attendee — CISO outreach', pri:'med',  due:'6h left',  ae:'SD',  aeColor:'#1a7a00'},
+  {type:'task',  contact:'Lisa Park',        company:'Crash Champions',          subject:'Meeting prep: Now Assist HR demo Apr 17',      pri:'med',  due:'7h left',  ae:'BD',  aeColor:'#D93025'},
+  {type:'email', contact:'Amanda Foster',    company:'Quinnox Inc.',             subject:'Sequence Touch 3 — EW HR angle',              pri:'low',  due:'8h left',  ae:'JW',  aeColor:'#044355'},
+  {type:'call',  contact:'Robert Kim',       company:'DMI Inc.',                 subject:'SLA expired — SecOps inbound inquiry',        pri:'high', due:'Overdue',  ae:'SD',  aeColor:'#1a7a00'},
+  {type:'task',  contact:'Michael Chang',    company:'GATX Corporation',         subject:'Update OPTY notes after AIOps discovery',     pri:'med',  due:'EOD',      ae:'RS',  aeColor:'#B45309'},
 ];
 
 var currentActFilter = 'all';
@@ -1237,60 +1190,60 @@ function saveTOM(){
 }
 // ── AI PREP MODAL ──────────────────────────────────────────────────────
 var PREP_DATA = {
-  david: {
-    name: 'David Blasdell',
-    sub: 'Sterling Manufacturing · ITOM AIOps Discovery · Today 2:00pm · AE: Brian Disher',
-    focus: 'Uncover the current state of IT operations at Sterling Manufacturing — specifically alert noise, incident triage, and visibility across distributed plant systems — and establish whether the pain is acute enough to drive a near-term evaluation of ITOM AIOps.',
-    about_company: 'Sterling Manufacturing is a mid-market industrial manufacturer with 2,000+ employees across multiple production facilities in the Midwest. Their IT team manages a complex, distributed environment spanning plant floor OT systems, ERP infrastructure, and corporate IT — all with a lean operations team. They\'ve grown through acquisition, leaving them with fragmented monitoring tools and inconsistent visibility across sites.',
-    servicenow_relationship: 'Customer since 2021. Currently owns ITSM Pro and CSM. Expansion opportunity: ITOM AIOps — no current ServiceNow footprint in IT operations monitoring.',
-    opty_history: 'Prior ITOM conversation in Q3 2024 with a previous IT contact (now departed). Opportunity stalled at discovery — budget freeze due to ERP migration. That migration is now complete as of Q1 2026, making this a re-engagement with improved timing. Brian Disher flagged this account as a priority reopen.',
-    cares: ['Reducing MTTR/MTTD across plant and corporate IT systems', 'Consolidating 4–5 monitoring tools into a single pane of glass without adding headcount', 'Eliminating alert fatigue — his team is triaging 200+ alerts/day manually with no correlation engine', 'Protecting manufacturing uptime — every hour of unplanned downtime costs $50K+ in lost output'],
+  lisa: {
+    name: 'Lisa Park',
+    sub: 'Crash Champions · Now Assist HR Demo · Apr 17 10:00am · AE: Brian Disher',
+    focus: 'Validate whether Crash Champions is ready to move from manual HR service delivery to an automated model. Lisa is CHRO and the VP IT is co-attending. Understand the current state of employee requests, onboarding, and where the HR team is losing time.',
+    about_company: 'Crash Champions is one of the largest collision repair companies in the US with 600+ locations and rapid growth through acquisition. Their HR team supports a distributed hourly workforce across hundreds of sites. Current HR intake is email and phone based with no centralized portal.',
+    servicenow_relationship: 'Customer since 2024. Currently owns ITSM Standard. This is an expansion play into HR Service Delivery and Now Assist for HR. Active pipeline: HRSD $140K, Now Assist for HR $85K.',
+    opty_history: 'Brian Disher flagged this as a priority expansion after Lisa attended the Now Assist HR demo and requested a follow-up with VP IT. Both confirmed for April 17. No prior HR conversations in CRM.',
+    cares: ['Reducing the volume of repetitive HR inquiries hitting her team directly', 'Standardizing onboarding across 600+ locations acquired at different maturity levels', 'Giving employees a single place to get answers without calling regional HR', 'Demonstrating operational efficiency gains to the CFO to justify the investment'],
     spiced: {
-      situation: 'How is your team currently managing incident detection and response across your facilities — what tools are you running, and how centralized is visibility today?\n\nHow many people are actively involved in IT ops monitoring, and roughly how many alerts or incidents are you triaging per day?',
-      problem: 'When something goes wrong in the environment, what does the process look like to identify root cause — and how long does that typically take?\n\nHow much of your team\'s time would you say goes toward manually correlating alerts versus actually resolving issues?',
-      implication: 'When a network or infrastructure issue hits during production, what\'s the downstream impact — are we talking hours of exposure, and what does that cost the business?\n\nIf this stays the way it is for another 12 months, what does that mean for your team\'s capacity and the reliability commitments you\'ve made to the business?',
-      critical_event: 'Has there been a specific incident recently that made leadership start asking harder questions about visibility and response time?\n\nIs there a deadline — a budget cycle, an audit, or a production peak window — where having better observability would really matter?',
-      decision: 'Beyond yourself, who else would be involved in evaluating and signing off on something like this?\n\nIf this looks like the right fit after today, what would a realistic evaluation and decision timeline look like on your end?'
+      situation: 'How does an employee at a Crash Champions location get an HR question answered today? Walk me through the typical flow.\n\nHow many people on your HR team are handling employee requests, and roughly what does volume look like across 600+ locations?',
+      problem: 'Where is your team spending the most time on things that should probably be self-service or automated?\n\nWith the acquisition growth, are you seeing inconsistency in how onboarding or HR requests are handled site to site?',
+      implication: 'If the current approach stays in place for another year while you keep acquiring, what does that mean for your team\'s capacity?\n\nIs the CEO or CFO asking questions about HR operational efficiency as you scale?',
+      critical_event: 'What made you attend the Now Assist HR demo and bring your VP IT to this conversation? Was there a specific trigger?\n\nIs there a budget cycle or initiative window where getting this in place would matter most?',
+      decision: 'Beyond yourself and the VP IT, who else needs to weigh in on this?\n\nIf today goes well, what would the path to a decision look like on your end?'
     }
   },
-  rashmi: {
-    name: 'Rashmi Jayarama',
-    sub: 'NovaTech Systems · Now Assist for ITSM Intro · Today 3:00pm · AE: Riley Scott',
-    focus: 'Establish NovaTech\'s current ITSM maturity and AI readiness, surface where agent and analyst time is being wasted on repetitive tasks, and position Now Assist as a measurable productivity lever tied to their growth goals.',
-    about_company: 'NovaTech Systems is a mid-market technology services company with approximately 1,200 employees. They run ServiceNow ITSM Pro and have a growing IT team supporting both internal operations and client-facing service delivery. As they scale, manual ticket handling and repetitive L1 work are creating bottlenecks that leadership wants to address.',
-    servicenow_relationship: 'Customer since 2023. Currently owns ITSM Pro. Inbound demo request submitted through servicenow.com — Rashmi self-identified interest in AI automation for IT. Expansion opportunity: Now Assist for ITSM.',
-    opty_history: 'No prior expansion conversations. This is a net new expansion from an inbound signal — Rashmi registered for the Now Assist IT webinar and submitted a demo request the same day. High intent. Riley Scott flagged as a warm intro opportunity with no competitive noise.',
-    cares: ['Reducing L1 ticket volume and freeing analysts for higher-value work', 'Improving mean time to resolution without adding headcount', 'Demonstrating AI ROI to leadership with measurable productivity metrics', 'Ensuring AI adoption is practical — not just a pilot that sits unused after launch'],
+  michael: {
+    name: 'Michael Chang',
+    sub: 'GATX Corporation · ITOM AIOps Discovery · Apr 18 2:00pm · AE: Riley Scott',
+    focus: 'GATX is already on ITSM Enterprise and ITOM Health. Michael flagged alert fatigue in rail operations. Understand the scope of the alert noise problem, validate whether AIOps correlation is the right next step, and establish budget and timeline.',
+    about_company: 'GATX Corporation is a global railcar lessor with 130,000+ railcars and a complex IT infrastructure spanning rail operations, logistics, and corporate systems. They have been a ServiceNow customer since 2017 and run ITSM Enterprise, ITOM Health, and Asset Management.',
+    servicenow_relationship: 'Customer since 2017. Current CACV: $1.8M+. Owns ITSM Enterprise ($1.2M), ITOM Health ($380K), Asset Management ($210K). Active pipeline: ITSM expansion $180K, ITOM AIOps $350K. Stage 3 opportunity.',
+    opty_history: 'Michael responded to MidwestTech Summit outreach with a direct reply about alert fatigue: "3,000 alerts a day across our operations centers." Riley Scott confirmed this is a real budget conversation tied to rail ops reliability. Stage 3 opty at $350K.',
+    cares: ['Reducing the 3,000+ daily alerts to actionable incidents his team can actually respond to', 'Improving MTTR across distributed rail operations without adding headcount', 'Getting correlated incident context so engineers stop starting from scratch on every page', 'Justifying the investment to the CIO (Claire Desjardins) who controls the budget'],
     spiced: {
-      situation: 'Can you walk me through how your IT team is structured today — how many analysts, and what does a typical day look like in terms of ticket volume and types?\n\nYou came in through our Now Assist webinar — what was the specific thing that caught your attention and made you want to see more?',
-      problem: 'What percentage of your ticket volume would you say is repetitive, predictable work that your team handles the same way every time?\n\nWhere are the biggest bottlenecks right now — is it response time, resolution time, or just the sheer volume your team is absorbing?',
-      implication: 'If ticket volume continues to grow at the current rate, what does that mean for your team\'s capacity and your ability to maintain SLAs?\n\nHas leadership put any pressure around efficiency or headcount — is "do more with the same team" an active conversation?',
-      critical_event: 'Is there a specific milestone — a product launch, a contract renewal, or a business expansion — where having this working would be particularly meaningful?\n\nHave you had any incidents recently where slow IT response had a visible downstream impact on the business?',
-      decision: 'How does a decision like this typically get evaluated at NovaTech — is this primarily your call, or does it go broader?\n\nWhat would you need to see in a demo or pilot to feel confident bringing this forward to the rest of your team?'
+      situation: 'You mentioned 3,000 alerts a day across your operations centers. Can you break that down? How many of those actually require action versus noise?\n\nHow is your team currently triaging alerts? Is there any correlation in place, or are they working raw events?',
+      problem: 'When a real incident hits across your rail operations infrastructure, what does the process look like from detection to resolution? Where does it break down?\n\nHow much of your team\'s time goes to investigating alerts that turn out to be noise versus actual incidents?',
+      implication: 'What does unplanned downtime look like for GATX? Every hour of rail ops disruption has a cost. Is leadership quantifying that?\n\nIf alert fatigue continues at this rate, can your team maintain the reliability commitments you have made?',
+      critical_event: 'Has there been a specific incident recently where alert noise delayed your response to something that actually mattered?\n\nIs there a budget or planning cycle where having AIOps in place would align? Riley mentioned this is an active conversation.',
+      decision: 'Michael, beyond yourself, who else needs to be part of this evaluation? Claire Desjardins on the budget side?\n\nIf this looks right after today, what does the timeline look like to move to a technical validation?'
     }
   },
-  paul: {
-    name: 'Paul Carter',
-    sub: 'LumaCore Solutions · ITSM Qualification · Tomorrow 10:00am · AE: Seamus Donovan',
-    focus: 'Qualify LumaCore\'s ITSM pain and buying readiness — understand their current ticketing environment, validate the economic buyer, and determine whether there\'s a real business case to build a Stage 2 opportunity around.',
-    about_company: 'LumaCore Solutions is a professional services firm with roughly 600 employees operating across consulting and managed services verticals. Their IT team is lean — estimated 8–10 people — managing a growing infrastructure as the firm expands. Current ticketing environment is fragmented, with a mix of email-based support and a legacy ITSM tool that lacks automation or reporting.',
-    servicenow_relationship: 'Net new prospect. No prior ServiceNow relationship. Paul came in through a ZoomInfo outbound sequence targeting Director-level IT contacts at professional services firms in the Midwest. Opened 3 emails, clicked the ITSM overview link twice. Seamus Donovan engaged via LinkedIn before the meeting was set.',
-    opty_history: 'No prior CRM history. This is a first conversation. Territory target account — flagged by Seamus as a strategic net new in the professional services segment. No competitive intelligence yet.',
-    cares: ['Replacing a legacy ticketing tool that the team has outgrown', 'Getting visibility into ticket trends and SLA performance for leadership reporting', 'Reducing the IT team\'s reliance on email and Slack for support requests', 'Keeping implementation simple — professional services firms move fast and don\'t have long IT project runways'],
+  jennifer: {
+    name: 'Jennifer Torres',
+    sub: 'Kirkland & Ellis LLP · ITSM Pro Intro · Apr 21 11:00am · AE: Riley Scott',
+    focus: 'Jennifer replied to sequence Email 1 expressing interest in ITSM Pro for legal workflow automation. Kirkland is a customer on ITSM Pro already. Understand whether this is an expansion within IT or a new use case for legal operations.',
+    about_company: 'Kirkland & Ellis is one of the largest law firms in the world with 6,500+ employees. Their IT team supports both corporate technology and legal-specific workflow automation needs. They have been a ServiceNow customer since 2018 running ITSM Pro.',
+    servicenow_relationship: 'Customer since 2018. Currently owns ITSM Pro ($480K CACV). Active pipeline: Legal and Contract Ops $210K, Now Assist for ITSM $120K. Jennifer is the IT Director and responded to outreach about ITSM Pro for legal workflows.',
+    opty_history: 'Jennifer replied to the Legal IT Webinar sequence: "Interested in how you handle matter management integrations — can we set up 20 minutes?" This is a warm intro from an inbound signal. Riley Scott confirmed as the follow-up.',
+    cares: ['Extending ITSM workflows to handle legal-specific service requests and matter intake', 'Automating legal operations processes that currently run through email and spreadsheets', 'Integrating with existing matter management and document systems', 'Keeping implementation scoped and practical for a law firm IT team'],
     spiced: {
-      situation: 'Can you give me a quick picture of how IT support works at LumaCore today — what tools are you running, and roughly how does work get logged and routed to your team?\n\nHow many people are actively managing IT operations day to day, and what does your support volume look like on a typical week?',
-      problem: 'What\'s the biggest frustration with the way things work today — is it visibility, response time, the tool itself, or something else?\n\nIf I asked your analysts what slows them down the most, what would they say?',
-      implication: 'As LumaCore grows, does the current approach scale — or is there a point where it breaks?\n\nIs the lack of reporting and visibility creating any friction with leadership or clients who want to understand IT performance?',
-      critical_event: 'What\'s prompting the conversation now — has something recently made the current setup feel more urgent to address?\n\nIs there a renewal coming up on your current tool, or a headcount or expansion milestone that\'s creating a natural window to make a change?',
-      decision: 'Who else would be involved in evaluating and approving a move like this — is this your decision, or does it require broader buy-in?\n\nAssuming today goes well, what would a realistic timeline look like for you to move forward?'
+      situation: 'Jennifer, you mentioned matter management integrations. Can you walk me through the current workflow? How do legal service requests come in and get handled today?\n\nHow does the IT team currently support legal operations? Is it through the existing ITSM instance, or is it separate?',
+      problem: 'Where are the biggest gaps in how legal requests get routed and resolved? Is it visibility, speed, or just that the workflow lives outside the system?\n\nWhat is the most frustrating part of the current process for your legal colleagues?',
+      implication: 'If legal operations continues to run outside the platform, what does that mean for reporting and compliance visibility?\n\nIs there pressure from firm leadership to modernize how internal services are delivered to attorneys?',
+      critical_event: 'What prompted your reply to our outreach? Was there a specific trigger or conversation internally that made this relevant now?\n\nIs there a fiscal year, partner meeting, or initiative deadline where having this in place would matter?',
+      decision: 'Beyond yourself, who else needs to be involved? Is this an IT decision or does it need buy-in from legal operations leadership?\n\nIf the conversation goes well, what would next steps look like on your side?'
     }
   }
 };
 
-var currentPrepKey = 'david';
+var currentPrepKey = 'lisa';
 
 function openPrepModal(key){
-  currentPrepKey = key || 'david';
+  currentPrepKey = key || 'lisa';
   var d = PREP_DATA[currentPrepKey];
   var bg = document.getElementById('prepModalBg');
   document.getElementById('prepName').textContent = d.name;
