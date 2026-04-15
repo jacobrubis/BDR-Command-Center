@@ -155,6 +155,15 @@ button{font-family:inherit;}
 /* ── DETAIL VIEW ────────────────────────────────────────────────── */
 .detail-back{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--s500);cursor:pointer;margin-bottom:14px;padding:8px 12px;border-radius:8px;width:fit-content;}
 .detail-back:hover{background:var(--s100);color:var(--s800);}
+.bg-cat-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.bg-cat-tab{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--s200);background:var(--white);color:var(--s500);transition:.12s;}
+.bg-cat-tab:hover{border-color:var(--s300);background:var(--s50);color:var(--s700);}
+.bg-cat-tab.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.bg-cat-tab.active:hover{background:var(--ink-mid);}
+.bg-cat-tab.has-bg{color:var(--s700);border-color:var(--s300);}
+.bg-cat-tab .cat-icon{font-size:14px;}
+.bg-cat-tab .cat-count{font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;background:rgba(255,255,255,.15);}.bg-cat-tab.active .cat-count{background:rgba(255,255,255,.2);}
+.bg-cat-tab:not(.active) .cat-count{background:var(--s100);color:var(--s500);}
 .detail-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
 .detail-title{font-size:20px;font-weight:700;color:var(--s900);letter-spacing:-.02em;}
 .detail-sub{font-size:12px;color:var(--s500);margin-top:3px;}
@@ -932,6 +941,42 @@ function renderDetailView() {
     <!-- BACK BUTTON -->
     <div class="detail-back fade-in" onclick="backToList()">← Back to Buying Groups</div>
 
+    <!-- BG CATEGORY TABS -->
+    <div class="bg-cat-tabs fade-in">
+      ${(function() {
+        var cats = [
+          {key:'IT',       icon:'🖥️', label:'IT'},
+          {key:'HR',       icon:'👥', label:'HR'},
+          {key:'CRM',      icon:'💼', label:'CRM'},
+          {key:'Security', icon:'🔒', label:'Security & Risk'},
+          {key:'Finance',  icon:'💰', label:'Finance & Supply Chain'},
+        ];
+        var accountBGs = BG_LIST.filter(function(b) { return b.account === bg.account; });
+        return cats.map(function(cat) {
+          var match = accountBGs.find(function(b) {
+            var n = b.name.toLowerCase();
+            if (cat.key === 'IT') return n.includes('- it') || n.includes('- platform') || n.includes('- itam') || n.includes('- now assist');
+            if (cat.key === 'HR') return n.includes('- hr') || n.includes('- ew');
+            if (cat.key === 'Security') return n.includes('- security') || n.includes('- irm');
+            if (cat.key === 'CRM') return n.includes('- crm') || n.includes('- csm');
+            if (cat.key === 'Finance') return n.includes('- finance') || n.includes('- spm');
+            return false;
+          });
+          var isActive = match && match.id === bg.id;
+          var hasBG = !!match;
+          var memberCount = hasBG ? match.members : 0;
+          var cls = isActive ? 'bg-cat-tab active' : hasBG ? 'bg-cat-tab has-bg' : 'bg-cat-tab';
+          var action = isActive ? '' : match
+            ? 'onclick="openDetail(\'' + match.id + '\')"'
+            : 'onclick="openEmptyCategory(\'' + cat.key + '\')"';
+          return '<div class="' + cls + '" ' + action + ' style="cursor:pointer">' +
+            '<span class="cat-icon">' + cat.icon + '</span>' + cat.label +
+            (hasBG ? '<span class="cat-count">' + memberCount + '</span>' : '') +
+          '</div>';
+        }).join('');
+      })()}
+    </div>
+
     <!-- DETAIL HEADER -->
     <div class="detail-hd fade-in">
       <div>
@@ -1147,6 +1192,31 @@ function backToList() {
   currentView = 'list';
   selectedBG = null;
   renderListView();
+}
+
+function openEmptyCategory(catKey) {
+  var src = selectedBG;
+  if (!src) return;
+  var catLabels = {IT:'IT',HR:'HR',CRM:'CRM',Security:'Security',Finance:'Finance'};
+  var shortName = src.account.split(/,|\s+LLC|\s+Inc|\s+Corp|\s+Assoc/)[0].trim();
+  var tempId = 'bg-tmp-' + catKey.toLowerCase() + '-' + Date.now();
+  var tempBG = {
+    id: tempId,
+    name: shortName + ' - ' + (catLabels[catKey] || catKey),
+    account: src.account,
+    accountType: src.accountType || 'customer',
+    ae: src.ae || '',
+    stage: 'Targeted & Engaged',
+    tab: 'targeted',
+    members: 0,
+    handraiser: false,
+    lastSignal: 'New',
+    signalType: 'Category created',
+  };
+  BG_LIST.push(tempBG);
+  selectedBG = tempBG;
+  currentView = 'detail';
+  renderDetailView();
 }
 
 // ── TAB SWITCH ─────────────────────────────────────────────────────────────
