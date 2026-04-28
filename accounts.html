@@ -148,40 +148,8 @@ tbody tr:hover td{background:var(--s50);}
 .ntab.on .ntab-ct{background:var(--ink);color:var(--white);}
 </style>
 </head>
-<script src="nav.js"></script>
-</body>
-
-<nav class="gnav">
-  <div class="gnav-logo">
-    <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="5" fill="#63DF4E"/><rect x="7" y="7" width="18" height="18" rx="3" fill="#032D42"/><rect x="11" y="11" width="10" height="10" rx="1.5" fill="#63DF4E"/></svg>
-  </div>
-  <div class="gnav-tabs">
-    <span class="gnav-tab">Favorites</span><span class="gnav-tab">History</span><span class="gnav-tab">Workspaces</span>
-  </div>
-  <div class="gnav-pill-wrap">
-    <div class="gnav-pill"><div class="gnav-pill-dot"></div>GBA Commercial Illinois &amp; Midwest · Q2 FY26</div>
-  </div>
-  <div class="gnav-r">
-    <button class="gnav-btn">🔍</button><button class="gnav-btn">🔔</button><button class="gnav-btn">⚙️</button>
-    <div class="gnav-av">JR</div>
-  </div>
-</nav>
-
-<aside class="sbar">
-  <div class="sbar-sec">
-    <a href="index.html"            class="sbar-item"    ><span class="sbar-ic">⌂</span>Command Center</a>
-    <a href="campaigns.html"        class="sbar-item"    ><span class="sbar-ic">📣</span>Prospecting<span class="sb">5</span></a>
-    <a href="buying-groups.html"    class="sbar-item"    ><span class="sbar-ic">🎯</span>Buying Groups<span class="sb">12</span></a>
-    <a href="leads.html"            class="sbar-item"    ><span class="sbar-ic">👤</span>Leads<span class="sb r">39</span></a>
-    <a href="territory-leads.html"    class="sbar-item"    ><span class="sbar-ic">🗺</span>Territory Leads<span class="sb">200</span></a>
-    <a href="accounts.html"         class="sbar-item on" ><span class="sbar-ic">🏢</span>Accounts<span class="sb">340</span></a>
-    <a href="opportunities.html"    class="sbar-item"    ><span class="sbar-ic">💼</span>Opportunities</a>
-    <a href="book-of-business.html" class="sbar-item"    ><span class="sbar-ic">📖</span>Book of Business</a>
-    <a href="ae-alignment.html"     class="sbar-item"    ><span class="sbar-ic">🤝</span>AE Alignment</a>
-  </div>
-  <div class="sbar-footer">ServiceNow Confidential</div>
-</aside>
-
+<body>
+<div class="app-shell">
 <div class="main">
   <div class="page-hdr">
     <div class="phdr-top">
@@ -401,5 +369,7 @@ renderKPIs();
 renderAEChips();
 render();
 </script>
+</div><!-- /.app-shell -->
+<script src="nav.js"></script>
 </body>
 </html>
