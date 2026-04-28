@@ -1,0 +1,82 @@
+/* ─────────────────────────────────────────────────────
+   ServiceNow BDR Command Center — Shared Navigation
+   Drop this in /nav/nav.css and link from every page.
+   ───────────────────────────────────────────────────── */
+
+:root{
+  --nav-ink:#032D42;
+  --nav-ink-nav:#01161f;
+  --nav-wasabi:#63DF4E;
+  --nav-wdk:#4ab83a;
+  --nav-white:#fff;
+  --nav-bg:#f1f5f9;
+  --nav-s50:#f8fafc;
+  --nav-s100:#f1f5f9;
+  --nav-s200:#e2e8f0;
+  --nav-s300:#cbd5e1;
+  --nav-s400:#94a3b8;
+  --nav-s500:#64748b;
+  --nav-s700:#334155;
+  --nav-s800:#1e293b;
+  --nav-s900:#0f172a;
+  --nav-r600:#dc2626;
+}
+
+/* ─── GLOBAL TOP NAV ─── */
+.gnav{height:44px;background:var(--nav-ink-nav);display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:300;border-bottom:1px solid rgba(255,255,255,.06);font-family:'DM Sans',sans-serif;}
+.gnav-logo{display:flex;align-items:center;padding:0 14px;height:44px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.gnav-tabs{display:flex;align-items:center;}
+.gnav-tab{display:flex;align-items:center;height:44px;padding:0 13px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.gnav-tab:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);}
+.gnav-pill-wrap{flex:1;display:flex;justify-content:center;}
+.gnav-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);cursor:pointer;}
+.gnav-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--nav-wasabi);}
+.gnav-r{display:flex;align-items:center;gap:2px;padding:0 10px;}
+.gnav-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:rgba(255,255,255,.45);cursor:pointer;font-size:13px;border:none;background:transparent;}
+.gnav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);}
+.gnav-av{width:28px;height:28px;background:var(--nav-wasabi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--nav-ink);cursor:pointer;margin-left:4px;}
+
+/* ─── LEFT SIDEBAR ─── */
+.sbar{position:fixed;top:44px;left:0;bottom:0;width:44px;background:#0d1f2b;border-right:1px solid rgba(255,255,255,.05);z-index:200;display:flex;flex-direction:column;overflow:hidden;transition:width .22s cubic-bezier(.4,0,.2,1);font-family:'DM Sans',sans-serif;}
+.sbar:hover{width:180px;box-shadow:4px 0 20px rgba(0,0,0,.25);}
+.sbar-sec{padding:10px 0 4px;}
+.sbar-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.50);border-left:2px solid transparent;transition:background .12s,color .12s;text-decoration:none;white-space:nowrap;cursor:pointer;}
+.sbar-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.sbar-item.on{color:var(--nav-wasabi);border-left-color:var(--nav-wasabi);background:rgba(99,223,78,.06);font-weight:500;}
+.sbar-item.aicoach{color:rgba(99,223,78,.65);}
+.sbar-item.aicoach:hover{color:var(--nav-wasabi);background:rgba(99,223,78,.08);}
+.sbar-ic{width:16px;min-width:16px;text-align:center;font-size:15px;flex-shrink:0;}
+.sb{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.40);opacity:0;transition:opacity .1s;flex-shrink:0;}
+.sbar:hover .sb{opacity:1;}
+.sb.r{background:rgba(239,68,68,.20);color:#fca5a5;}
+.sdivider{height:1px;background:rgba(255,255,255,.06);margin:6px 12px;}
+
+/* ─── TOP TAB STRIP (above greeting) ─── */
+.ptabs{display:flex;align-items:flex-end;border-bottom:1px solid var(--nav-s200);overflow-x:auto;padding:6px 18px 0;background:var(--nav-s50);min-height:38px;gap:2px;font-family:'DM Sans',sans-serif;}
+.ptabs::-webkit-scrollbar{height:0;}
+.ptab{display:flex;align-items:center;gap:6px;padding:7px 10px 7px 14px;font-size:12px;font-weight:500;color:var(--nav-s500);background:transparent;border:1px solid transparent;border-bottom:none;border-radius:7px 7px 0 0;white-space:nowrap;cursor:pointer;transition:.1s;text-decoration:none;position:relative;top:1px;max-width:200px;}
+.ptab:hover{color:var(--nav-s700);background:rgba(255,255,255,.6);}
+.ptab.on{color:var(--nav-s900);background:var(--nav-white);border-color:var(--nav-s200);font-weight:600;}
+.ptab.on::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--nav-white);}
+.ptab-ic{font-size:11px;color:var(--nav-s400);margin-right:1px;}
+.ptab.on .ptab-ic{color:var(--nav-ink);}
+.ptab-ct{font-size:10px;font-weight:600;padding:1px 6px;border-radius:8px;background:var(--nav-s100);color:var(--nav-s500);}
+.ptab.on .ptab-ct{background:var(--nav-ink);color:var(--nav-white);}
+.ptab-ct.r{background:rgba(220,38,38,.12);color:var(--nav-r600);}
+.ptab-x{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:4px;border:none;background:transparent;color:var(--nav-s400);cursor:pointer;font-size:13px;line-height:1;margin-left:2px;flex-shrink:0;}
+.ptab-x:hover{background:var(--nav-s200);color:var(--nav-s700);}
+.ptab.on .ptab-x:hover{background:rgba(0,0,0,.06);}
+.ptab-add{width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:none;background:transparent;color:var(--nav-s400);cursor:pointer;font-size:15px;font-weight:600;flex-shrink:0;margin-left:4px;align-self:center;margin-bottom:5px;}
+.ptab-add:hover{background:var(--nav-s200);color:var(--nav-s700);}
+.ptab-menu{position:fixed;background:#fff;border:1px solid var(--nav-s200);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.15),0 4px 8px rgba(0,0,0,.05);min-width:240px;z-index:300;padding:5px 0;display:none;}
+.ptab-menu.open{display:block;}
+.ptab-menu-lbl{font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--nav-s400);padding:6px 12px 4px;}
+.ptab-menu-item{display:flex;align-items:center;gap:8px;padding:7px 12px;font-size:12px;color:var(--nav-s700);cursor:pointer;transition:.1s;}
+.ptab-menu-item:hover{background:var(--nav-s50);color:var(--nav-s900);}
+.ptab-menu-item .ic{font-size:13px;flex-shrink:0;width:16px;text-align:center;}
+.ptab-menu-item .ct{margin-left:auto;font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;background:var(--nav-s100);color:var(--nav-s500);}
+.ptab-menu-item .ct.r{background:rgba(220,38,38,.12);color:var(--nav-r600);}
+.ptab-menu-divider{height:1px;background:var(--nav-s100);margin:4px 0;}
+
+/* ─── PAGE CONTENT WRAPPER (offset for fixed nav + sidebar) ─── */
+.app-shell{margin-top:44px;margin-left:44px;min-height:calc(100vh - 44px);}
